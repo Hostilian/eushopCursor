@@ -1,0 +1,5 @@
+{
+  "extends": "@eushop/config/tsconfig.base",
+  "compilerOptions": { "resolveJsonModule": true },
+  "include": ["src/**/*"]
+}
