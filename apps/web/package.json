@@ -1,0 +1,52 @@
+{
+  "name": "@eushop/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --port 3000 --turbo",
+    "build": "next build",
+    "start": "next start --port 3000",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@eushop/api-router": "workspace:*",
+    "@eushop/auth": "workspace:*",
+    "@eushop/catalog-data": "workspace:*",
+    "@eushop/design-tokens": "workspace:*",
+    "@eushop/i18n": "workspace:*",
+    "@eushop/validators": "workspace:*",
+    "@radix-ui/react-dialog": "^1.1.4",
+    "@radix-ui/react-dropdown-menu": "^2.1.4",
+    "@radix-ui/react-slot": "^1.1.1",
+    "@radix-ui/react-tabs": "^1.1.2",
+    "@tanstack/react-query": "^5.62.7",
+    "@trpc/client": "^11.0.0-rc.660",
+    "@trpc/react-query": "^11.0.0-rc.660",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.15.0",
+    "lucide-react": "^0.469.0",
+    "next": "^15.1.3",
+    "next-intl": "^3.26.3",
+    "next-themes": "^0.4.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "superjson": "^2.2.1",
+    "tailwind-merge": "^2.6.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@eushop/config": "workspace:*",
+    "@tailwindcss/postcss": "^4.0.0-beta.8",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "eslint": "^9.17.0",
+    "eslint-config-next": "^15.1.3",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^4.0.0-beta.8",
+    "typescript": "^5.7.2"
+  }
+}

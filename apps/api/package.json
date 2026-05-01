@@ -1,0 +1,35 @@
+{
+  "name": "@eushop/api-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsx src/build.ts",
+    "start": "node dist/server.js",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "search:index": "tsx src/jobs/reindex.ts"
+  },
+  "dependencies": {
+    "@eushop/api-router": "workspace:*",
+    "@eushop/auth": "workspace:*",
+    "@eushop/catalog-data": "workspace:*",
+    "@eushop/db": "workspace:*",
+    "@eushop/geo": "workspace:*",
+    "@eushop/validators": "workspace:*",
+    "@hono/node-server": "^1.13.7",
+    "@hono/trpc-server": "^0.3.4",
+    "@trpc/server": "^11.0.0-rc.660",
+    "dotenv": "^16.4.7",
+    "hono": "^4.6.14",
+    "inngest": "^3.27.4",
+    "meilisearch": "^0.45.0"
+  },
+  "devDependencies": {
+    "@eushop/config": "workspace:*",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

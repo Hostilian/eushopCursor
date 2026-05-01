@@ -1,0 +1,33 @@
+{
+  "name": "@eushop/api-router",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./router": "./src/router.ts",
+    "./context": "./src/context.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@eushop/auth": "workspace:*",
+    "@eushop/catalog-data": "workspace:*",
+    "@eushop/db": "workspace:*",
+    "@eushop/geo": "workspace:*",
+    "@eushop/validators": "workspace:*",
+    "@trpc/server": "^11.0.0-rc.660",
+    "drizzle-orm": "^0.36.4",
+    "meilisearch": "^0.45.0",
+    "superjson": "^2.2.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@eushop/config": "workspace:*",
+    "typescript": "^5.7.2"
+  }
+}

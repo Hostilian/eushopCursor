@@ -1,0 +1,9 @@
+{
+  "extends": "@eushop/config/tsconfig.base",
+  "compilerOptions": {
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
+  },
+  "include": ["src/**/*"]
+}
