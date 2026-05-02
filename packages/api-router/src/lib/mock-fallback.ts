@@ -132,7 +132,12 @@ export function fallbackItems(predicate?: (s: (typeof FOOD_ITEMS)[number]) => bo
     descriptionTranslated: {} as Record<string, string>,
     tags: it.tags ?? [],
     defaultImageUrl: null as string | null,
-    imageVariants: null as null | { thumb?: string; small?: string; large?: string },
+    imageVariants: {} as {
+      thumb?: string;
+      small?: string;
+      large?: string;
+      source?: 'off' | 'r2' | 'user';
+    },
     barcode: null as string | null,
     openFoodFactsId: null as string | null,
     verifiedAt: null as Date | null,

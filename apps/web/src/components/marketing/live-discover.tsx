@@ -37,7 +37,7 @@ export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
             </Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="/trips/new">Post an upcoming trip</Link>
+            <Link href="/requests/new">Post a request</Link>
           </Button>
         </div>
       </section>

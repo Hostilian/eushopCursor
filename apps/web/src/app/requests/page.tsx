@@ -163,7 +163,7 @@ function EmptyRequests() {
           </Link>
         </Button>
         <Button asChild variant="outline">
-          <Link href="/trips">Browse upcoming trips</Link>
+          <Link href="/discover">Browse discover</Link>
         </Button>
       </div>
     </div>

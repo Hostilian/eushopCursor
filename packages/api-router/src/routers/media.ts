@@ -24,11 +24,20 @@ export const mediaRouter = router({
     const publicUrlBase = process.env.R2_PUBLIC_URL ?? 'https://media.eushop.eu';
 
     if (!bucket || !accountId || !accessKeyId || !secretAccessKey) {
-      // Dev fallback: hand back a placeholder URL the client can echo back to mock a successful upload.
+      // Dev fallback. Returns a no-op PUT URL and a transparent 1×1 SVG so the
+      // form flow can be exercised end-to-end without R2 credentials. This URL
+      // is served via `data:` and is therefore safe in `next/image` and CSP
+      // (img-src includes `data:`). It is *visually* obvious that there's no
+      // real image, which is what we want during local development.
+      const transparentSvg =
+        'data:image/svg+xml;utf8,' +
+        encodeURIComponent(
+          `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><rect width="1" height="1" fill="#FAF7F2"/></svg>`,
+        );
       return {
         method: 'PUT' as const,
         uploadUrl: `data:dev-noop;key=${encodeURIComponent(key)}`,
-        publicUrl: `https://placehold.co/1200x1200/FAF7F2/3B2F22?text=${encodeURIComponent(key)}`,
+        publicUrl: transparentSvg,
         key,
         headers: { 'Content-Type': input.contentType },
       };

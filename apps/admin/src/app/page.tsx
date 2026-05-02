@@ -33,7 +33,7 @@ export default async function AdminHome() {
   }
 
   return (
-    <main className="mx-auto max-w-6xl p-10">
+    <div className="mx-auto max-w-6xl p-6 md:p-10">
       <p className="text-ash text-xs tracking-widest uppercase">Eushop · Admin</p>
       <h1 className="text-ink mt-2 font-serif text-4xl">Catalog overview</h1>
       <p className="text-ink/70 mt-3">
@@ -101,7 +101,7 @@ export default async function AdminHome() {
           ))}
         </ul>
       </section>
-    </main>
+    </div>
   );
 }
 

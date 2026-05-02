@@ -1,4 +1,3 @@
-import { SAMPLE_LISTINGS } from '@eushop/mock-data';
 import { countryPalette } from '@eushop/design-tokens';
 import { Surface } from '@eushop/ui-mobile';
 import { Image } from 'expo-image';
@@ -9,31 +8,18 @@ import { EmptyState } from '../../src/components/EmptyState';
 import { KpiTile } from '../../src/components/KpiTile';
 import { trpc } from '../../src/lib/trpc';
 
-function mockHeroListings() {
-  return SAMPLE_LISTINGS.slice(0, 3).map((l) => ({
-    id: l.id,
-    freeformName: l.freeformName,
-    approximateCity: l.approximateCity,
-    countryIso2: l.countryIso2,
-    finderFee: l.finderFee,
-    photos: l.photos,
-  }));
-}
-
 export default function TodayScreen() {
   const router = useRouter();
   const recent = trpc.listings.recent.useQuery({ limit: 12 }, { retry: false });
   const rows =
-    recent.data && recent.data.length > 0
-      ? recent.data.slice(0, 3).map((r) => ({
-          id: r.id,
-          freeformName: r.freeformName,
-          approximateCity: r.approximateCity,
-          countryIso2: r.countryIso2,
-          finderFee: r.finderFee,
-          photos: r.photos,
-        }))
-      : mockHeroListings();
+    recent.data?.slice(0, 3).map((r) => ({
+      id: r.id,
+      freeformName: r.freeformName,
+      approximateCity: r.approximateCity,
+      countryIso2: r.countryIso2,
+      finderFee: r.finderFee,
+      photos: r.photos,
+    })) ?? [];
 
   return (
     <ScrollView className="bg-paper flex-1" contentContainerStyle={{ paddingBottom: 88 }}>
@@ -41,10 +27,10 @@ export default function TodayScreen() {
         <Text className="text-ash text-xs tracking-widest uppercase">Today near you</Text>
         <Text className="text-ink mt-2 font-serif text-4xl">Fresh in your cell.</Text>
         <Text className="text-ink/70 mt-2 text-sm">
-          Munich · Lisbon · Stockholm — demo listings stay live even when the DB is empty.
+          Real listings within a 5 km cell of where you are. Pull to refresh.
         </Text>
         <View className="mt-5 flex-row gap-2">
-          <KpiTile label="Live" value={recent.data?.length ?? SAMPLE_LISTINGS.length} />
+          <KpiTile label="Live" value={rows.length} />
           <KpiTile label="Cell" value="5 km" />
           <KpiTile label="Handoff" value="Public" />
         </View>
@@ -53,8 +39,8 @@ export default function TodayScreen() {
       <View className="px-6">
         {rows.length === 0 ? (
           <EmptyState
-            title="Nothing posted yet"
-            hint="Pull to refresh or share from your last trip home."
+            title="Quiet in your cell"
+            hint="Be the first to share — or post a request and we'll ping you when a matching listing or trip lands."
           />
         ) : (
           rows.map((l) => {
