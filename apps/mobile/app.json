@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Eushop",
+    "description": "City-to-city marketplace for spare luggage capacity on your trips (fixed price or bids) and finder-fee requests — location-first, profile-forward.",
     "slug": "eushop",
     "scheme": "eushop",
     "version": "0.1.0",
@@ -15,8 +16,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "eu.eushop.app",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "We use your approximate location (5 km cell only) to show nearby listings — your precise address is never sent to anyone.",
-        "NSCameraUsageDescription": "Take photos of the items you brought back to share in your listings."
+        "NSLocationWhenInUseUsageDescription": "We use your approximate location (5 km cell only) for city- and route-based discovery — your precise address is never sent to anyone.",
+        "NSCameraUsageDescription": "Take photos for your profile, trip listings, and items you offer or request."
       }
     },
     "android": {

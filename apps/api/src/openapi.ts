@@ -8,7 +8,7 @@ export const openApiDocument = {
     title: 'Eushop API',
     version: '0.1.0',
     description:
-      'Hono + tRPC + Better Auth. JSON-RPC style tRPC at /trpc; session cookies on /api/auth/*.',
+      'Hono + tRPC + Better Auth for Eushop (trips, luggage capacity, listings, requests, chat). JSON-RPC style tRPC at /trpc; session cookies on /api/auth/*.',
   },
   servers: [{ url: '/', description: 'Current host' }],
   paths: {
