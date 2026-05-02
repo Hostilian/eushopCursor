@@ -23,6 +23,7 @@ Copy from [`.env.example`](../../.env.example) and set **real** values per deplo
 | `R2_*` / `R2_PUBLIC_URL` | Media uploads; align `NEXT_PUBLIC_MEDIA_HOSTNAME` with `next/image` remote patterns if needed. |
 | `PARTYKIT_HOST` | Production PartyKit URL; match `NEXT_PUBLIC_PARTYKIT_HOST` on web/mobile. |
 | `EXPO_PUSH_ACCESS_TOKEN` | Expo push for mobile prod. |
+| `EXPO_PUBLIC_SITE_URL` | Mobile → web deep links (e.g. payment completion); match `NEXT_PUBLIC_SITE_URL` per environment ([mobile-payments-parity.md](./mobile-payments-parity.md)). |
 
 ## Optional / feature flags
 

@@ -6,7 +6,7 @@
 
 Product UX that often stays English until translated:
 
-- Chat input placeholder (`chat-view.tsx`, mobile `chat/[id].tsx`).
+- ~~Chat input placeholder (`chat-view.tsx`)~~ — uses `chat.placeholder` / `chat.placeholderUnavailable` (mobile `chat/[id].tsx` still EN-only).
 - ~~Search bar placeholder (`search-client.tsx`)~~ — uses `search.placeholder` and `search.inputAriaLabel` from i18n.
 - `ProductPicker` placeholders (web + mobile).
 - Trip / listing / request form hints and placeholders (domain-specific examples).

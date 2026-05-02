@@ -7,7 +7,7 @@
     "dev": "next dev --port 3002 --turbo",
     "build": "node ./scripts/run-next-build.mjs",
     "start": "next start --port 3002",
-    "lint": "next lint",
+    "lint": "node ../../node_modules/eslint/bin/eslint.js -c eslint.config.mjs .",
     "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit"
   },
   "dependencies": {

@@ -3,6 +3,7 @@
 import { MESSAGING_SAFE_TEMPLATES as SAFE_TEMPLATES } from '@eushop/validators';
 import { TRPCClientError } from '@trpc/client';
 import { Send, UserX } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { trpc } from '../../lib/trpc';
 import { Button } from '../ui/button';
@@ -45,7 +46,7 @@ export function ChatView({ conversationId }: { conversationId: string }) {
     if (scrollerRef.current) scrollerRef.current.scrollTop = scrollerRef.current.scrollHeight;
   }, [data?.messages.length]);
 
-  if (me.isLoading || isLoading) return <p className="text-ash">Loading…</p>;
+  if (me.isLoading || isLoading) return <p className="text-ash">{t('loading')}</p>;
   if (!me.data) {
     return (
       <div className="border-ink/10 bg-porcelain rounded-3xl border p-12 text-center">
@@ -177,7 +178,7 @@ export function ChatView({ conversationId }: { conversationId: string }) {
             value={body}
             onChange={(e) => setBody(e.target.value)}
             disabled={!canSend}
-            placeholder={canSend ? 'Type a message' : 'Messaging unavailable'}
+            placeholder={canSend ? t('placeholder') : t('placeholderUnavailable')}
             className="border-ink/10 bg-paper focus:border-saffron-500 flex-1 rounded-2xl border px-4 py-3 text-sm focus:outline-none disabled:opacity-50"
           />
           <Button type="submit" size="icon" aria-label="Send" disabled={!canSend}>

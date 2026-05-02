@@ -56,7 +56,7 @@ export function NotificationsPanel() {
   return (
     <div className="mt-10 space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-ink/70 text-sm">
+        <p className="text-ink/70 text-sm" aria-live="polite">
           {unread > 0 ? (
             <span>
               <span className="text-ink font-medium">{unread}</span> unread

@@ -30,11 +30,7 @@
     "trips": "Trajets",
     "requests": "Recherches",
     "notifications": "Notifications",
-    "listings": "Mes annonces",
-    "messages": "Messages",
-    "profile": "Profil",
     "pitch": "Pitch",
-    "press": "Presse",
     "roadmap": "Feuille de route",
     "changelog": "Journal des versions",
     "manifesto": "Manifeste",
@@ -46,36 +42,11 @@
     "signIn": "Se connecter",
     "signUp": "Rejoindre",
     "postListing": "Partager vos provisions",
-    "postRequest": "Dites ce dont vous avez besoin",
-    "message": "Message",
-    "viewAll": "Tout voir"
+    "postRequest": "Dites ce dont vous avez besoin"
   },
   "search": {
     "placeholder": "Aliments, trajets ou villes…",
     "inputAriaLabel": "Rechercher dans le catalogue"
-  },
-  "country": {
-    "intro": "Faites venir le goût de {country} chez vous."
-  },
-  "listing": {
-    "finderFee": "Frais de recherche",
-    "freshness": {
-      "today": "À consommer aujourd'hui",
-      "3-days": "Sous 3 jours",
-      "week": "Cette semaine",
-      "month": "Ce mois-ci",
-      "shelf-stable": "Longue conservation"
-    },
-    "qty": "{qty} disponibles",
-    "distance": "À {km} km"
-  },
-  "request": {
-    "title": "Recherche {item}"
-  },
-  "empty": {
-    "listings": "Pas encore de partages locaux dans cette cellule—soyez le premier.",
-    "requests": "Pas encore de demandes ouvertes dans votre rayon.",
-    "search": "Rien trouvé pour « {q} »."
   },
   "footer": {
     "privacy": "Confidentialité",
@@ -144,9 +115,6 @@
     "signedOut": "Déconnecté.",
     "welcome": "Content de vous revoir, {name}"
   },
-  "lang": {
-    "switch": "Langue"
-  },
   "signInForm": {
     "emailLabel": "Email",
     "emailPlaceholder": "vous@exemple.eu",
@@ -209,6 +177,14 @@
     "deletePermanently": "Supprimer définitivement",
     "deleting": "Suppression…"
   },
+  "discover": {
+    "metaTitle": "Découvrir près de chez vous · Eushop",
+    "metaDescription": "Annonces dans une maille de 25 km. Les repères sont légèrement décalés dans leur maille de 5 km — les adresses exactes restent privées.",
+    "eyebrow": "Autour de vous",
+    "heading": "Dans une maille de 25 km.",
+    "intro": "Les repères sont légèrement décalés dans leur maille de 5 km — nous ne montrons jamais d’adresse exacte. Touchez une fiche pour écrire.",
+    "mapExampleLabel": "Exemple : centre de Berlin"
+  },
   "trips": {
     "metaTitle": "Trips · Diaspora marketplace",
     "metaDescription": "Reserve a slot in a diaspora traveller’s suitcase. Trips between EU cities, every week.",
@@ -251,7 +227,8 @@
     "summaryPending": "Pending",
     "summaryConfirmed": "Confirmed",
     "summaryCompleted": "Completed",
-    "summaryCancelled": "Cancelled"
+    "summaryCancelled": "Cancelled",
+    "verifiedBringer": "Bringer vérifié"
   },
   "tripForm": {
     "metaTitle": "Post a trip · Eushop",
@@ -331,5 +308,13 @@
     "confirmCancel": "Cancel this reservation? The traveller will be notified.",
     "confirmComplete": "Mark this reservation as complete? This releases payment to the traveller.",
     "errorGeneric": "Could not save. Please retry."
+  },
+  "chat": {
+    "loading": "Chargement…",
+    "placeholder": "Écrire un message",
+    "placeholderUnavailable": "Messagerie indisponible"
+  },
+  "trip": {
+    "verifiedBringer": "Voyageur vérifié"
   }
 }

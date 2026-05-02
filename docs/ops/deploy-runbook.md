@@ -5,8 +5,9 @@ High-level steps for shipping Eushop (Coolify, Docker, or similar). Adjust names
 ## Pre-deploy
 
 1. Confirm [environment.md](./environment.md) is satisfied for the target environment.
-2. **Never** rely on the admin build script’s injected `BETTER_AUTH_SECRET` in production—set the real secret in the orchestrator.
-3. Run `pnpm verify` on a release branch (or rely on CI on `main`).
+2. **Never** rely on the admin build script’s injected `BETTER_AUTH_SECRET` in production—set the real secret in the orchestrator (see admin README / environment matrix).
+3. **Database backups**: confirm scheduled snapshots and a recent **restore drill** for production `DATABASE_URL`.
+4. Run `pnpm verify` on a release branch (or rely on CI on `main`).
 
 ## Deploy sequence
 
@@ -28,7 +29,8 @@ High-level steps for shipping Eushop (Coolify, Docker, or similar). Adjust names
 - `GET {API}/health` → `ok`.
 - `GET {WEB}/` and `/sources` render.
 - Sign-in magic link (or OAuth) end-to-end in staging before promoting.
-- Optional: Stripe webhook endpoint reachable (see [stripe-connect.md](./stripe-connect.md)).
+- **Stripe**: Dashboard → Webhooks → `POST {API}/webhooks/stripe` delivers test events; `STRIPE_WEBHOOK_SECRET` matches (see [stripe-connect.md](./stripe-connect.md) and [stripe-e2e-matrix.md](./stripe-e2e-matrix.md)).
+- **Legal**: `/imprint` and `/press` show production `NEXT_PUBLIC_LEGAL_*` / press email ([legal-launch-checklist.md](./legal-launch-checklist.md)).
 
 ## GitHub Actions
 

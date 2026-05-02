@@ -1,6 +1,7 @@
 import { COUNTRIES } from '@eushop/catalog-data';
 import type { Metadata } from 'next';
-import { ArrowRight, MapPin, Plane, Users } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
+import { ArrowRight, BadgeCheck, MapPin, Plane, Users } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Footer } from '../../../../components/layout/footer';
@@ -39,6 +40,10 @@ export async function generateMetadata({
 
 export default async function TripDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const tDetail = await getTranslations('tripDetail');
+  const tNav = await getTranslations('nav');
+  const tTrips = await getTranslations('trips');
+
   let bundle: Awaited<ReturnType<Awaited<ReturnType<typeof api>>['trips']['byId']>> | null = null;
   let outageMessage: string | null = null;
   try {
@@ -46,10 +51,7 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
     bundle = await trpc.trips.byId({ id });
   } catch (e) {
     if (e instanceof Error && /NOT_FOUND/.test(e.message)) notFound();
-    outageMessage =
-      e instanceof Error && e.message
-        ? e.message
-        : 'We could not load this trip. The catalogue service may be reloading — try again in a moment.';
+    outageMessage = e instanceof Error && e.message ? e.message : tDetail('outageDescription');
   }
 
   if (outageMessage) {
@@ -57,11 +59,11 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
       <>
         <Nav />
         <main id="main-content" className="container-editorial pt-12 pb-32">
-          <h1 className="text-ink font-serif text-3xl">Trip temporarily unavailable</h1>
+          <h1 className="text-ink font-serif text-3xl">{tDetail('outageTitle')}</h1>
           <p className="text-ash mt-3 max-w-xl text-sm">{outageMessage}</p>
           <div className="mt-6 flex gap-3">
             <Button asChild variant="primary">
-              <Link href="/trips">Back to all trips</Link>
+              <Link href="/trips">{tDetail('back')}</Link>
             </Button>
           </div>
         </main>
@@ -76,6 +78,7 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
   const summary = bundle.viewerIsSeller ? null : bundle.reservationSummary;
   const from = COUNTRIES.find((c) => c.iso2 === trip.originCountryIso2);
   const to = COUNTRIES.find((c) => c.iso2 === trip.destinationCountryIso2);
+  const verifiedBringer = trip.sellerBadges?.includes('verified_bringer') ?? false;
 
   return (
     <>
@@ -85,7 +88,7 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
           <ol className="flex items-center gap-2">
             <li>
               <Link href="/trips" className="hover:text-ink underline-offset-2 hover:underline">
-                Trips
+                {tNav('trips')}
               </Link>
             </li>
             <li aria-hidden="true">/</li>
@@ -106,14 +109,29 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
               </span>
             </div>
             <p className="text-ash mt-3 text-sm">
-              Departs {formatDate(trip.departAt)} · returns{' '}
-              {trip.returnAt ? formatDate(trip.returnAt) : '—'}
+              {tDetail('departs', { when: formatDate(trip.departAt) })} ·{' '}
+              {tDetail('returns', {
+                when: trip.returnAt ? formatDate(trip.returnAt) : '—',
+              })}
             </p>
             <div className="text-ash mt-6 flex flex-wrap items-center gap-2 text-xs">
               <Badge variant="soft">
-                <Users className="h-3 w-3" /> {trip.slotsAvailable}/{trip.slotsTotal} slots
+                <Users className="h-3 w-3" />{' '}
+                {tTrips('slotsBadge', {
+                  available: trip.slotsAvailable,
+                  total: trip.slotsTotal,
+                })}
               </Badge>
-              <Badge variant="accent">€{Number(trip.defaultPerSlotFee).toFixed(2)} per slot</Badge>
+              <Badge variant="accent">
+                {tTrips('feePerSlot', {
+                  fee: Number(trip.defaultPerSlotFee).toFixed(2),
+                })}
+              </Badge>
+              {verifiedBringer ? (
+                <Badge variant="outline" className="border-saffron-400 text-saffron-800">
+                  <BadgeCheck className="h-3 w-3" /> {tDetail('verifiedBringer')}
+                </Badge>
+              ) : null}
               <Badge variant="outline">
                 <MapPin className="h-3 w-3" /> {to?.name}
               </Badge>

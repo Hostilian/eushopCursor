@@ -32,6 +32,11 @@ Implemented in [`packages/api-router/src/routers/payments.ts`](../../packages/ap
 
 Input: `connectOnboardingInput` from `@eushop/validators` (country ISO2, return/refresh URLs).
 
+## Web UI (buyer + seller)
+
+- **Profile:** [`apps/web/src/components/profile/profile-payouts-card.tsx`](../../apps/web/src/components/profile/profile-payouts-card.tsx) calls `startConnectOnboarding` / `myConnectAccount` so sellers can finish Express onboarding and refresh status.
+- **Reservation checkout:** when `trips.reserve` returns `paymentClientSecret`, [`apps/web/src/components/trips/reservation-payment-step.tsx`](../../apps/web/src/components/trips/reservation-payment-step.tsx) mounts Stripe `Elements` + `PaymentElement` and confirms the PaymentIntent (`NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` required in the browser).
+
 ## Trips: money flow
 
 Implemented in [`packages/api-router/src/routers/trips.ts`](../../packages/api-router/src/routers/trips.ts):

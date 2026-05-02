@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { trpc } from '../../lib/trpc';
 import { Button } from '../ui/button';
 
@@ -22,6 +23,7 @@ export function ReservationActions({
   reservationId: string;
   status: ReservationActionStatus;
 }) {
+  const t = useTranslations('reservationActions');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [confirming, setConfirming] = useState<'cancel' | 'complete' | null>(null);
@@ -46,7 +48,7 @@ export function ReservationActions({
       setConfirming(null);
       refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not cancel');
+      setError(e instanceof Error ? e.message : t('errorGeneric'));
     }
   }
   async function runComplete() {
@@ -56,7 +58,7 @@ export function ReservationActions({
       setConfirming(null);
       refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not mark complete');
+      setError(e instanceof Error ? e.message : t('errorGeneric'));
     }
   }
 
@@ -69,22 +71,26 @@ export function ReservationActions({
         aria-live="polite"
       >
         <p className="text-ink font-medium">
-          {isCancel
-            ? 'Cancel this reservation? The slot is released back to the trip.'
-            : 'Mark this reservation as completed? Both you and the traveller will see it as done.'}
+          {isCancel ? t('confirmCancel') : t('confirmComplete')}
         </p>
         {error ? <p className="text-danger mt-2">{error}</p> : null}
         <div className="mt-3 flex flex-wrap gap-2">
           <Button
             type="button"
-            variant={isCancel ? 'primary' : 'primary'}
+            variant="primary"
             onClick={isCancel ? runCancel : runComplete}
             disabled={busy}
           >
-            {busy ? 'Working…' : isCancel ? 'Yes, cancel' : 'Yes, complete'}
+            {isCancel
+              ? busy
+                ? t('cancelling')
+                : t('cancel')
+              : busy
+                ? t('completing')
+                : t('complete')}
           </Button>
           <Button type="button" variant="ghost" onClick={() => setConfirming(null)} disabled={busy}>
-            Back
+            {t('cancel')}
           </Button>
         </div>
       </div>
@@ -98,10 +104,10 @@ export function ReservationActions({
           type="button"
           variant="primary"
           onClick={() => setConfirming('complete')}
-          aria-label="Mark this reservation completed"
+          aria-label={t('complete')}
           disabled={busy}
         >
-          Mark received
+          {t('complete')}
         </Button>
       ) : null}
       {canCancel ? (
@@ -109,10 +115,10 @@ export function ReservationActions({
           type="button"
           variant="ghost"
           onClick={() => setConfirming('cancel')}
-          aria-label="Cancel this reservation"
+          aria-label={t('cancel')}
           disabled={busy}
         >
-          Cancel
+          {t('cancel')}
         </Button>
       ) : null}
     </div>

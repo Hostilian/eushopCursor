@@ -61,8 +61,8 @@ regulated payments.
 
 **Roadmap (direction of travel)**
 
-- **Stripe Connect** wire-up so platform fees actually collect on confirmation.
-- **Verified-bringer badge** (Veriff/Onfido passport-country attestation).
+- **Stripe Connect** — trip reservations mint manual-capture PaymentIntents when the seller has charges enabled; see [`docs/ops/stripe-connect.md`](docs/ops/stripe-connect.md). Listing checkout and mobile card capture remain roadmap.
+- **Verified-bringer badge** (Veriff/Onfido passport-country attestation); badge surfaces on trip detail when `verified_bringer` is in profile badges.
 - **Group-buys**, restock alerts, pickup hubs, multilingual catalog search,
   city leaderboards. Tracked in `[/roadmap](apps/web/src/app/(marketing)/roadmap/page.tsx)`.
 

@@ -10,7 +10,8 @@
     "./router": "./src/router.ts",
     "./context": "./src/context.ts",
     "./lib/stripe": "./src/lib/stripe.ts",
-    "./lib/stripe-webhook-financial-kind": "./src/lib/stripe-webhook-financial-kind.ts"
+    "./lib/stripe-webhook-financial-kind": "./src/lib/stripe-webhook-financial-kind.ts",
+    "./lib/stripe-webhook-idempotency": "./src/lib/stripe-webhook-idempotency.ts"
   },
   "scripts": {
     "lint": "node ../../node_modules/eslint/bin/eslint.js -c ../config/eslint.config.js .",

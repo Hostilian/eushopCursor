@@ -3,8 +3,7 @@
 ## Sentry (optional)
 
 - Set `SENTRY_DSN` on API and `NEXT_PUBLIC_SENTRY_DSN` on web/admin if using Sentry’s Next SDK in the browser.
-- Web includes a stub [`apps/web/src/instrumentation.ts`](../../apps/web/src/instrumentation.ts) hook — replace the log line with `@sentry/nextjs` `Sentry.init` when you add the dependency.
-- Scrub PII (emails, tokens) in `beforeSend`; EU region if required by DPA.
+- Web [`instrumentation.ts`](../../apps/web/src/instrumentation.ts) calls `Sentry.init` on the **Node** runtime when `SENTRY_DSN` is set and `@sentry/nextjs` is installed (otherwise logs a one-line hint). Add the dependency to `apps/web` when you enable it; tune `beforeSend` for PII and use the EU DSN/host if required by your DPA.
 
 ## PostHog (optional)
 
@@ -24,3 +23,8 @@
 ## Status page
 
 Optional: external status (e.g. Better Stack, Instatus) listing API + web + PartyKit components.
+
+## CI and lint migration
+
+- Run **`pnpm verify`** at the repo root before merging substantive changes (format, typecheck, lint, unit tests, build).
+- Moving off `next lint` is tracked in [`docs/eslint-next-migration.md`](../eslint-next-migration.md).

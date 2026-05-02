@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2 — 2026-05-02 — Launch docs and product hardening
+
+- Rewrote **[`docs/ops/stripe-connect.md`](docs/ops/stripe-connect.md)** and added **[`docs/ops/stripe-e2e-matrix.md`](docs/ops/stripe-e2e-matrix.md)**, **[`docs/ops/legal-launch-checklist.md`](docs/ops/legal-launch-checklist.md)**, **[`docs/ops/investor-access.md`](docs/ops/investor-access.md)**, **[`docs/ops/mobile-payments-parity.md`](docs/ops/mobile-payments-parity.md)**, **[`docs/roadmap-epics.md`](docs/roadmap-epics.md)**; expanded deploy runbook and workflow notes.
+- **Web**: verified-bringer badge on trip detail; chat placeholders via **next-intl**; notifications status **`aria-live`**; **`/messages`** on sitemap; ESLint via **`eslint.config.mjs`** (not `next lint`); Sentry hook in **`instrumentation.ts`** when `@sentry/nextjs` is installed.
+- **Mobile**: **`EXPO_PUBLIC_SITE_URL`** in **`eas.json`**; post-reserve prompt when **`paymentClientSecret`** is returned; verified-bringer label on trip screen.
+- **API**: Stripe webhook financial kind mapping shared in **`@eushop/api-router/lib/stripe-webhook-financial-kind`** with unit tests.
+
 ## 0.2.1 — 2026-05-02 — Sell-ready cleanup
 
 - **Staging demo (opt-in)**: when **`ENABLE_DEMO_MODE=1`**, `?demo=1` / `?demo=0` in [`apps/web/src/middleware.ts`](apps/web/src/middleware.ts) toggles a labelled showcase cookie for **empty** marketplace pages only; **`/traction` stays real DB metrics**. Omit the env var in production.

@@ -340,8 +340,10 @@ export function TripOfferForm() {
                   type="button"
                   onClick={() => setIntended((prev) => prev.filter((_, i) => i !== idx))}
                   className="text-ash hover:text-ink"
+                  aria-label={`Remove ${it.freeformName}`}
+                  title="Remove item"
                 >
-                  ×
+                  <span aria-hidden="true">×</span>
                 </button>
               </li>
             ))}

@@ -71,3 +71,6 @@ jobs:
       - name: Smoke — admin (optional)
         if: inputs.admin_base_url != ''
         run: curl -fsSI "${{ inputs.admin_base_url }}" | head -n 5
+
+      # Add Coolify webhooks, SSH, or registry push steps above when wiring prod.
+      # Stripe: confirm live/test webhook URL and signing secret in Dashboard after API URL changes.

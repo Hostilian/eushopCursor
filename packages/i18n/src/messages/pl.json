@@ -30,11 +30,7 @@
     "countries": "Kraje",
     "requests": "Poszukiwania",
     "notifications": "Powiadomienia",
-    "listings": "Moje ogłoszenia",
-    "messages": "Wiadomości",
-    "profile": "Profil",
     "pitch": "Pitch",
-    "press": "Media",
     "roadmap": "Roadmapa",
     "changelog": "Dziennik zmian",
     "manifesto": "Manifest",
@@ -46,36 +42,11 @@
     "signIn": "Zaloguj się",
     "signUp": "Dołącz",
     "postListing": "Podziel się tym, co masz",
-    "postRequest": "Powiedz, czego szukasz",
-    "message": "Wiadomość",
-    "viewAll": "Zobacz wszystko"
+    "postRequest": "Powiedz, czego szukasz"
   },
   "search": {
     "placeholder": "Szukaj jedzenia, tras lub miast…",
     "inputAriaLabel": "Szukaj w katalogu"
-  },
-  "country": {
-    "intro": "Sprowadź do siebie smak {country}."
-  },
-  "listing": {
-    "finderFee": "Opłata znalazcy",
-    "freshness": {
-      "today": "Najlepiej dziś",
-      "3-days": "W 3 dni",
-      "week": "W tym tygodniu",
-      "month": "W tym miesiącu",
-      "shelf-stable": "Długi termin"
-    },
-    "qty": "{qty} dostępnych",
-    "distance": "{km} km stąd"
-  },
-  "request": {
-    "title": "Szukam: {item}"
-  },
-  "empty": {
-    "listings": "Brak lokalnych udostępnień w tej komórce—zacznij pierwszy.",
-    "requests": "Brak otwartych poszukiwań w Twoim promieniu.",
-    "search": "Nic nie znaleziono dla „{q}\"."
   },
   "footer": {
     "privacy": "Prywatność",
@@ -144,9 +115,6 @@
     "signedOut": "Wylogowano.",
     "welcome": "Witaj z powrotem, {name}"
   },
-  "lang": {
-    "switch": "Język"
-  },
   "signInForm": {
     "emailLabel": "E-mail",
     "emailPlaceholder": "ty@przyklad.eu",
@@ -209,6 +177,14 @@
     "deletePermanently": "Usuń na stałe",
     "deleting": "Usuwanie…"
   },
+  "discover": {
+    "metaTitle": "Odkrywaj w pobliżu · Eushop",
+    "metaDescription": "Ogłoszenia w komórce 25 km. Pinezki są lekko przesunięte w komórce 5 km — dokładne adresy pozostają prywatne.",
+    "eyebrow": "Wokół Ciebie",
+    "heading": "W obrębie komórki 25 km.",
+    "intro": "Pinezki są lekko przesunięte w komórce 5 km — nigdy nie pokazujemy dokładnych adresów. Dotknij karty, aby napisać.",
+    "mapExampleLabel": "Przykład: centrum Berlina"
+  },
   "trips": {
     "metaTitle": "Trips · Diaspora marketplace",
     "metaDescription": "Reserve a slot in a diaspora traveller’s suitcase. Trips between EU cities, every week.",
@@ -251,7 +227,8 @@
     "summaryPending": "Pending",
     "summaryConfirmed": "Confirmed",
     "summaryCompleted": "Completed",
-    "summaryCancelled": "Cancelled"
+    "summaryCancelled": "Cancelled",
+    "verifiedBringer": "Zweryfikowany bringer"
   },
   "tripForm": {
     "metaTitle": "Post a trip · Eushop",
@@ -331,5 +308,13 @@
     "confirmCancel": "Cancel this reservation? The traveller will be notified.",
     "confirmComplete": "Mark this reservation as complete? This releases payment to the traveller.",
     "errorGeneric": "Could not save. Please retry."
+  },
+  "chat": {
+    "loading": "Ładowanie…",
+    "placeholder": "Napisz wiadomość",
+    "placeholderUnavailable": "Wiadomości niedostępne"
+  },
+  "trip": {
+    "verifiedBringer": "Zweryfikowany podróżnik"
   }
 }

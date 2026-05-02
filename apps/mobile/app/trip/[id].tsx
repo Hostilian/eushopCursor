@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import * as Linking from 'expo-linking';
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -66,14 +67,31 @@ export default function TripDetailScreen() {
           style: 'default',
           onPress: async () => {
             try {
-              await reserve.mutateAsync({
+              const result = await reserve.mutateAsync({
                 tripOfferId: trip.id,
                 foodItemId: picker.foodItemId,
                 freeformText: picker.freeformName!.trim(),
                 qty: Number(qty) || 1,
                 agreedFinderFee: agreedFee,
               });
-              Alert.alert('Slot reserved', 'The traveller has been notified.');
+              const webBase = process.env.EXPO_PUBLIC_SITE_URL ?? 'https://eushop.eu';
+              if (result.paymentClientSecret) {
+                Alert.alert(
+                  'Complete payment',
+                  'This trip uses a card hold. Open the site to finish authorization.',
+                  [
+                    { text: 'Later', style: 'cancel' },
+                    {
+                      text: 'Open site',
+                      onPress: () => {
+                        void Linking.openURL(`${webBase}/reservations`);
+                      },
+                    },
+                  ],
+                );
+              } else {
+                Alert.alert('Slot reserved', 'The traveller has been notified.');
+              }
             } catch (e) {
               Alert.alert('Could not reserve', e instanceof Error ? e.message : 'Try again.');
             }
@@ -95,6 +113,11 @@ export default function TripDetailScreen() {
         Departs {new Date(trip.departAt).toLocaleDateString()} · {trip.slotsAvailable}/
         {trip.slotsTotal} slots
       </Text>
+      {trip.sellerBadges?.includes('verified_bringer') ? (
+        <Text className="text-saffron-700 mt-2 text-xs font-semibold tracking-wide uppercase">
+          Verified bringer
+        </Text>
+      ) : null}
       {trip.notes ? <Text className="text-ink/80 mt-4">{trip.notes}</Text> : null}
 
       <View className="mt-8" style={{ gap: 12 }}>

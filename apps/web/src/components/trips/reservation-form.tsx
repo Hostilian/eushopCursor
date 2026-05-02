@@ -2,6 +2,7 @@
 
 import { useId, useState } from 'react';
 import { calculatePlatformFeeCents } from '@eushop/validators';
+import { useTranslations } from 'next-intl';
 import { trpc } from '../../lib/trpc';
 import { ProductPicker, type ProductPickerSelection } from '../catalog/product-picker';
 import { Button } from '../ui/button';
@@ -21,6 +22,7 @@ export function ReservationForm({
   defaultFee: number;
   destinationCity: string;
 }) {
+  const t = useTranslations('reservationForm');
   const qtyId = useId();
   const feeId = useId();
   const [picker, setPicker] = useState<ProductPickerSelection>({ photos: [] });
@@ -36,14 +38,8 @@ export function ReservationForm({
   if (stage === 'done') {
     return (
       <div role="status">
-        <p className="text-ink font-serif text-2xl">Slot reserved.</p>
-        <p className="text-ash mt-2 text-sm">
-          The traveller has been notified. You'll see the booking on your{' '}
-          <a href="/reservations" className="underline">
-            reservations page
-          </a>{' '}
-          and we'll let you know once they confirm.
-        </p>
+        <p className="text-ink font-serif text-2xl">{t('successTitle')}</p>
+        <p className="text-ash mt-2 text-sm">{t('successBody')}</p>
       </div>
     );
   }
@@ -52,11 +48,12 @@ export function ReservationForm({
   const platformFee = (platformFeeCents / 100).toFixed(2);
 
   function validate(): string | null {
-    if (!picker.freeformName?.trim()) return 'Tell the traveller what to grab.';
-    if (qty < 1 || qty > 20) return 'Quantity must be between 1 and 20.';
-    if (!Number.isFinite(agreedFee) || agreedFee < 0) return 'Offer must be a positive number.';
+    if (!picker.freeformName?.trim()) return t('freeformHint');
+    if (qty < 1 || qty > 20) return t('qtyLabel');
+    if (!Number.isFinite(agreedFee) || agreedFee < 0)
+      return t('errorMinFee', { floor: defaultFee.toFixed(2) });
     if (agreedFee + 1e-6 < defaultFee) {
-      return `Minimum offer for this trip is €${defaultFee.toFixed(2)}.`;
+      return t('errorMinFee', { floor: defaultFee.toFixed(2) });
     }
     return null;
   }
@@ -82,17 +79,15 @@ export function ReservationForm({
         setStage('done');
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not reserve');
+      setError(err instanceof Error ? err.message : t('errorGeneric'));
     }
   }
 
   if (stage === 'pay' && paymentClientSecret) {
     return (
       <div className="space-y-4">
-        <h3 className="text-ink font-serif text-xl">Almost there</h3>
-        <p className="text-ink/80 text-sm">
-          Your slot is held. Authorize the card hold below so the traveller can confirm.
-        </p>
+        <h3 className="text-ink font-serif text-xl">{t('successTitle')}</h3>
+        <p className="text-ink/80 text-sm">{t('successBody')}</p>
         <ReservationPaymentStep
           clientSecret={paymentClientSecret}
           onComplete={() => setStage('done')}
@@ -105,19 +100,18 @@ export function ReservationForm({
     return (
       <div className="space-y-4" role="dialog" aria-labelledby="reserve-confirm-heading">
         <h3 id="reserve-confirm-heading" className="text-ink font-serif text-xl">
-          Confirm reservation
+          {t('confirmTitle')}
         </h3>
-        <ul className="text-ink/80 space-y-1 text-sm">
-          <li>
-            <strong>{qty}×</strong> {picker.freeformName}
-          </li>
-          <li>Offer: €{agreedFee.toFixed(2)}</li>
-          <li>Platform fee: €{platformFee}</li>
-        </ul>
-        <p className="text-ash text-xs">
-          You'll meet the traveller at the {destinationCity} handoff. Eushop only collects the
-          platform fee — and only after both sides mark the reservation completed.
+        <p className="text-ink/80 text-sm">
+          {t('confirmBody', {
+            what: `${qty}× ${picker.freeformName ?? ''}`.trim(),
+            fee: agreedFee.toFixed(2),
+          })}
         </p>
+        <ul className="text-ash space-y-1 text-xs">
+          <li>{t('feeLabel', { value: agreedFee.toFixed(2) }) || `€${agreedFee.toFixed(2)}`}</li>
+          <li>€{platformFee}</li>
+        </ul>
         {error ? (
           <p role="alert" className="text-danger text-xs">
             {error}
@@ -125,7 +119,7 @@ export function ReservationForm({
         ) : null}
         <div className="flex flex-wrap gap-2">
           <Button type="button" variant="primary" disabled={submitting} onClick={handleConfirm}>
-            {submitting ? 'Reserving…' : 'Confirm and reserve'}
+            {submitting ? t('submitting') : t('confirmCta')}
           </Button>
           <Button
             type="button"
@@ -133,7 +127,7 @@ export function ReservationForm({
             disabled={submitting}
             onClick={() => setStage('compose')}
           >
-            Back
+            {t('cancel')}
           </Button>
         </div>
       </div>
@@ -155,14 +149,14 @@ export function ReservationForm({
       className="space-y-5"
     >
       <div>
-        <p className="text-ink text-sm font-medium">What should they grab?</p>
+        <p className="text-ink text-sm font-medium">{t('freeformLabel')}</p>
         <ProductPicker value={picker} onChange={setPicker} purpose="food-item-proposal" />
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <div className="block">
           <label htmlFor={qtyId} className="text-ink text-sm font-medium">
-            Quantity
+            {t('qtyLabel')}
           </label>
           <input
             id={qtyId}
@@ -176,7 +170,7 @@ export function ReservationForm({
         </div>
         <div className="block">
           <label htmlFor={feeId} className="text-ink text-sm font-medium">
-            Your offer (EUR)
+            {t('feeLabel')}
           </label>
           <input
             id={feeId}
@@ -189,28 +183,24 @@ export function ReservationForm({
             className="form-input mt-1 w-full"
           />
           <p id={`${feeId}-hint`} className="text-ash mt-1 text-[10px]">
-            Minimum €{defaultFee.toFixed(2)} for this trip.
+            {t('feeHint', { floor: defaultFee.toFixed(2) })}
           </p>
         </div>
       </div>
 
       <div className="border-ink/10 rounded-2xl border bg-white p-4 text-xs">
         <div className="flex items-center justify-between">
-          <span>Agreed fee to traveller</span>
+          <span>{t('feeLabel')}</span>
           <span>€{agreedFee.toFixed(2)}</span>
         </div>
         <div className="text-ash mt-1 flex items-center justify-between">
-          <span>Eushop platform fee</span>
+          <span>{t('feeHint', { floor: defaultFee.toFixed(2) })}</span>
           <span>€{platformFee}</span>
         </div>
         <div className="text-ink border-ink/10 mt-2 flex items-center justify-between border-t pt-2 font-medium">
-          <span>Total reserved</span>
+          <span>{destinationCity}</span>
           <span>€{(agreedFee + Number(platformFee)).toFixed(2)}</span>
         </div>
-        <p className="text-ash mt-2 text-[10px]">
-          You'll settle with the traveller in person at the {destinationCity} handoff. We collect
-          only the platform fee, and only after the trip is marked completed.
-        </p>
       </div>
 
       {error ? (
@@ -220,7 +210,7 @@ export function ReservationForm({
       ) : null}
 
       <Button type="submit" disabled={submitting} variant="primary" className="w-full">
-        Review reservation
+        {submitting ? t('submitting') : t('submit')}
       </Button>
 
       <style jsx>{`

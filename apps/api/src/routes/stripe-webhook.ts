@@ -8,6 +8,7 @@ import {
 } from '@eushop/db';
 import { verifyWebhookSignature } from '@eushop/api-router/lib/stripe';
 import { mapStripeEventTypeToFinancialKind } from '@eushop/api-router/lib/stripe-webhook-financial-kind';
+import { shouldProcessStripeWebhookEvent } from '@eushop/api-router/lib/stripe-webhook-idempotency';
 import { eq } from 'drizzle-orm';
 import type { Context } from 'hono';
 
@@ -48,7 +49,7 @@ export async function handleStripeWebhook(c: Context): Promise<Response> {
     .from(financialEvents)
     .where(eq(financialEvents.stripeEventId, event.id))
     .limit(1);
-  if (existing.length > 0) {
+  if (!shouldProcessStripeWebhookEvent(existing.length)) {
     return c.json({ received: true, idempotent: true });
   }
 

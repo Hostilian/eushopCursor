@@ -32,7 +32,30 @@ type ReservationRow = {
   createdAt: Date | string;
 };
 
+function statusLabel(
+  t: Awaited<ReturnType<typeof getTranslations<'reservations'>>>,
+  status: ReservationActionStatus,
+): string {
+  switch (status) {
+    case 'pending':
+      return t('statusPending');
+    case 'confirmed':
+      return t('statusConfirmed');
+    case 'completed':
+      return t('statusCompleted');
+    case 'cancelled':
+      return t('statusCancelled');
+    case 'refunded':
+      return t('statusRefunded');
+    case 'seller-rejected':
+      return t('statusSellerRejected');
+    default:
+      return String(status);
+  }
+}
+
 export default async function ReservationsPage() {
+  const t = await getTranslations('reservations');
   let rows: ReservationRow[] = [];
   let needsAuth = false;
   let outage: string | null = null;
@@ -43,7 +66,7 @@ export default async function ReservationsPage() {
     if (e instanceof Error && /UNAUTHORIZED/.test(e.message)) {
       needsAuth = true;
     } else {
-      outage = e instanceof Error ? e.message : 'Could not load your reservations.';
+      outage = e instanceof Error ? e.message : t('errorDescription');
     }
   }
 
@@ -53,45 +76,45 @@ export default async function ReservationsPage() {
       <main id="main-content" className="container-editorial pt-12 pb-32">
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <p className="text-ash text-xs tracking-widest uppercase">Buyer dashboard</p>
-            <h1 className="text-ink mt-3 font-serif text-5xl">Your reservations.</h1>
-            <p className="text-ink/70 mt-3 max-w-xl text-lg">
-              Track confirmation, departure, and handoff. Cancel anytime before the traveller
-              confirms.
-            </p>
+            <p className="text-ash text-xs tracking-widest uppercase">{t('heading')}</p>
+            <h1 id="reservations-heading" className="text-ink mt-3 font-serif text-5xl">
+              {t('heading')}
+            </h1>
+            <p className="text-ink/70 mt-3 max-w-xl text-lg">{t('intro')}</p>
           </div>
           <Button asChild variant="primary">
             <Link href="/trips">
-              Browse upcoming trips <ArrowRight className="ml-1 h-4 w-4" />
+              {t('browseTrips')} <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </Button>
         </div>
 
+        <div aria-live="polite" className="sr-only" id="reservations-status" />
+
         {outage ? (
           <div
             role="alert"
+            aria-live="assertive"
             className="border-danger/30 bg-danger/5 text-danger mt-8 rounded-2xl border p-4 text-sm"
           >
-            {outage}
+            <p className="font-medium">{t('errorTitle')}</p>
+            <p className="mt-1">{outage}</p>
           </div>
         ) : null}
 
         {needsAuth ? (
           <div className="border-ink/10 bg-porcelain mt-12 rounded-3xl border p-12 text-center">
-            <p className="text-ink font-serif text-2xl">Sign in to see your reservations.</p>
+            <p className="text-ink font-serif text-2xl">{t('signInTitle')}</p>
             <Button asChild variant="primary" className="mt-4">
-              <Link href="/sign-in">Sign in</Link>
+              <Link href="/sign-in">{t('signInCta')}</Link>
             </Button>
           </div>
         ) : rows.length === 0 && !outage ? (
           <div className="border-ink/10 bg-porcelain mt-12 flex flex-col items-center gap-6 rounded-3xl border px-6 py-20 text-center">
             <Plane className="text-saffron-600 h-10 w-10" />
             <div className="max-w-xl">
-              <h2 className="text-ink font-serif text-3xl">No reservations yet.</h2>
-              <p className="text-ink/70 mt-3">
-                Browse trips from the country you miss and reserve a slot — or post a request and
-                we'll match you to the next traveller.
-              </p>
+              <h2 className="text-ink font-serif text-3xl">{t('emptyTitle')}</h2>
+              <p className="text-ink/70 mt-3">{t('emptyDescription')}</p>
             </div>
           </div>
         ) : (
@@ -99,27 +122,30 @@ export default async function ReservationsPage() {
             aria-labelledby="reservations-heading"
             className="border-ink/10 mt-12 divide-y rounded-3xl border bg-white"
           >
-            <li className="sr-only" id="reservations-heading">
-              Your active and historical reservations
-            </li>
             {rows.map((r) => (
               <li
                 key={r.id}
                 className="flex flex-wrap items-center justify-between gap-3 px-6 py-4"
-                aria-label={`Reservation for ${r.qty} ${r.freeformText}, status ${r.status}`}
+                aria-label={t('qty', { qty: r.qty }) + ' — ' + statusLabel(t, r.status)}
               >
                 <div className="min-w-0">
                   <Link href={`/trips/${r.tripOfferId}`} className="text-ink truncate font-medium">
                     {r.qty}× {r.freeformText}
                   </Link>
                   <p className="text-ash mt-1 text-xs">
-                    Booked {new Date(r.createdAt).toLocaleDateString()}
+                    {new Date(r.createdAt).toLocaleDateString()}
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="soft">€{Number(r.agreedFinderFee).toFixed(2)}</Badge>
-                  <Badge variant="outline">+ €{Number(r.platformFee).toFixed(2)} fee</Badge>
-                  <Badge variant={r.status === 'confirmed' ? 'accent' : 'soft'}>{r.status}</Badge>
+                  <Badge variant="soft">
+                    {t('feeLabel', { fee: Number(r.agreedFinderFee).toFixed(2) })}
+                  </Badge>
+                  <Badge variant="outline">
+                    {t('platformFeeLabel', { fee: Number(r.platformFee).toFixed(2) })}
+                  </Badge>
+                  <Badge variant={r.status === 'confirmed' ? 'accent' : 'soft'}>
+                    {statusLabel(t, r.status)}
+                  </Badge>
                   <ReservationActions reservationId={r.id} status={r.status} />
                 </div>
               </li>

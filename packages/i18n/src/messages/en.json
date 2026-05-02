@@ -30,11 +30,7 @@
     "trips": "Trips",
     "requests": "Requests",
     "notifications": "Notifications",
-    "listings": "My listings",
-    "messages": "Messages",
-    "profile": "Profile",
     "pitch": "Pitch",
-    "press": "Press",
     "roadmap": "Roadmap",
     "changelog": "Changelog",
     "manifesto": "Manifesto",
@@ -46,36 +42,11 @@
     "signIn": "Sign in",
     "signUp": "Join Eushop",
     "postListing": "Share what you brought",
-    "postRequest": "Say what you need",
-    "message": "Message",
-    "viewAll": "View all"
+    "postRequest": "Say what you need"
   },
   "search": {
     "placeholder": "Search foods, routes, or cities…",
     "inputAriaLabel": "Search the catalog"
-  },
-  "country": {
-    "intro": "Bring a taste of {country} to your doorstep."
-  },
-  "listing": {
-    "finderFee": "Finder's fee",
-    "freshness": {
-      "today": "Best today",
-      "3-days": "Within 3 days",
-      "week": "This week",
-      "month": "This month",
-      "shelf-stable": "Shelf-stable"
-    },
-    "qty": "{qty} available",
-    "distance": "{km} km away"
-  },
-  "request": {
-    "title": "Looking for {item}"
-  },
-  "empty": {
-    "listings": "No local shares in this cell yet—be the first.",
-    "requests": "No open asks in your radius yet.",
-    "search": "We couldn't find anything for \"{q}\"."
   },
   "footer": {
     "privacy": "Privacy",
@@ -144,9 +115,6 @@
     "signedOut": "You're signed out.",
     "welcome": "Welcome back, {name}"
   },
-  "lang": {
-    "switch": "Language"
-  },
   "signInForm": {
     "emailLabel": "Email",
     "emailPlaceholder": "you@example.eu",
@@ -166,6 +134,14 @@
     "terms": "Terms",
     "privacy": "Privacy",
     "and": "and"
+  },
+  "discover": {
+    "metaTitle": "Discover near you · Eushop",
+    "metaDescription": "Listings within a 25 km cell. Pins are jittered inside their 5 km cell — exact addresses stay private.",
+    "eyebrow": "Around you",
+    "heading": "Within a 25 km cell.",
+    "intro": "Pins are jittered inside their 5 km cell — we never reveal exact addresses. Tap a card to message.",
+    "mapExampleLabel": "Example: Berlin centre"
   },
   "trips": {
     "metaTitle": "Trips · Diaspora marketplace",
@@ -210,7 +186,8 @@
     "summaryPending": "Pending",
     "summaryConfirmed": "Confirmed",
     "summaryCompleted": "Completed",
-    "summaryCancelled": "Cancelled"
+    "summaryCancelled": "Cancelled",
+    "verifiedBringer": "Verified bringer"
   },
   "tripForm": {
     "metaTitle": "Post a trip · Eushop",
@@ -332,5 +309,13 @@
     "cancel": "Cancel",
     "deletePermanently": "Permanently delete",
     "deleting": "Deleting…"
+  },
+  "chat": {
+    "loading": "Loading…",
+    "placeholder": "Type a message",
+    "placeholderUnavailable": "Messaging unavailable"
+  },
+  "trip": {
+    "verifiedBringer": "Verified bringer"
   }
 }

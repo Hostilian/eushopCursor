@@ -30,11 +30,7 @@
     "countries": "Países",
     "requests": "Búsquedas",
     "notifications": "Avisos",
-    "listings": "Mis anuncios",
-    "messages": "Mensajes",
-    "profile": "Perfil",
     "pitch": "Pitch",
-    "press": "Prensa",
     "roadmap": "Hoja de ruta",
     "changelog": "Historial de cambios",
     "manifesto": "Manifiesto",
@@ -46,36 +42,11 @@
     "signIn": "Iniciar sesión",
     "signUp": "Unirse",
     "postListing": "Comparte lo que trajiste",
-    "postRequest": "Di qué necesitas",
-    "message": "Mensaje",
-    "viewAll": "Ver todo"
+    "postRequest": "Di qué necesitas"
   },
   "search": {
     "placeholder": "Busca comidas, rutas o ciudades…",
     "inputAriaLabel": "Buscar en el catálogo"
-  },
-  "country": {
-    "intro": "Trae el sabor de {country} a tu puerta."
-  },
-  "listing": {
-    "finderFee": "Tarifa de búsqueda",
-    "freshness": {
-      "today": "Mejor hoy",
-      "3-days": "En 3 días",
-      "week": "Esta semana",
-      "month": "Este mes",
-      "shelf-stable": "Larga duración"
-    },
-    "qty": "{qty} disponibles",
-    "distance": "A {km} km"
-  },
-  "request": {
-    "title": "Buscando {item}"
-  },
-  "empty": {
-    "listings": "Aún no hay compartidos locales en esta celda—sé el primero.",
-    "requests": "Aún no hay pedidos abiertos en tu radio.",
-    "search": "Nada encontrado para «{q}»."
   },
   "footer": {
     "privacy": "Privacidad",
@@ -144,9 +115,6 @@
     "signedOut": "Sesión cerrada.",
     "welcome": "Bienvenido de nuevo, {name}"
   },
-  "lang": {
-    "switch": "Idioma"
-  },
   "signInForm": {
     "emailLabel": "Correo electrónico",
     "emailPlaceholder": "tu@ejemplo.eu",
@@ -209,6 +177,14 @@
     "deletePermanently": "Eliminar permanentemente",
     "deleting": "Eliminando…"
   },
+  "discover": {
+    "metaTitle": "Descubre cerca de ti · Eushop",
+    "metaDescription": "Anuncios en una celda de 25 km. Los pins se desplazan ligeramente dentro de su celda de 5 km: las direcciones exactas siguen siendo privadas.",
+    "eyebrow": "A tu alrededor",
+    "heading": "Dentro de una celda de 25 km.",
+    "intro": "Los pins se desplazan ligeramente dentro de su celda de 5 km: nunca mostramos direcciones exactas. Toca una tarjeta para escribir.",
+    "mapExampleLabel": "Ejemplo: centro de Berlín"
+  },
   "trips": {
     "metaTitle": "Trips · Diaspora marketplace",
     "metaDescription": "Reserve a slot in a diaspora traveller’s suitcase. Trips between EU cities, every week.",
@@ -251,7 +227,8 @@
     "summaryPending": "Pending",
     "summaryConfirmed": "Confirmed",
     "summaryCompleted": "Completed",
-    "summaryCancelled": "Cancelled"
+    "summaryCancelled": "Cancelled",
+    "verifiedBringer": "Bringer verificado"
   },
   "tripForm": {
     "metaTitle": "Post a trip · Eushop",
@@ -331,5 +308,13 @@
     "confirmCancel": "Cancel this reservation? The traveller will be notified.",
     "confirmComplete": "Mark this reservation as complete? This releases payment to the traveller.",
     "errorGeneric": "Could not save. Please retry."
+  },
+  "chat": {
+    "loading": "Cargando…",
+    "placeholder": "Escribe un mensaje",
+    "placeholderUnavailable": "Mensajería no disponible"
+  },
+  "trip": {
+    "verifiedBringer": "Viajero verificado"
   }
 }

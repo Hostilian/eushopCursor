@@ -25,6 +25,9 @@ Dependency updates: [`.github/dependabot.yml`](../.github/dependabot.yml) (weekl
 
 - [Environment variables](ops/environment.md) — full matrix from `.env.example`
 - [Deploy runbook](ops/deploy-runbook.md) — migrate, search index, smoke checks
-- [Stripe Connect](ops/stripe-connect.md) — platform fees, webhooks
+- **Payments**: [Stripe Connect](ops/stripe-connect.md) (API + webhooks), [E2E / reconciliation matrix](ops/stripe-e2e-matrix.md), [mobile parity](ops/mobile-payments-parity.md)
+- [Legal launch checklist](ops/legal-launch-checklist.md) — imprint, Terms/Privacy for payments + KYC
+- [Investor access tokens](ops/investor-access.md) — `INVESTOR_ACCESS_TOKENS` rotation
 - [Verified bringer / KYC](ops/verified-bringer-kyc.md)
 - [Observability](ops/observability.md) — Sentry, PostHog, runbooks
+- [Roadmap epics](roadmap-epics.md) — Q1–Q4 planning buckets

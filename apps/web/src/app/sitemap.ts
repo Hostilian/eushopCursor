@@ -26,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/listings/new',
     '/requests/new',
     '/notifications',
+    '/messages',
     '/trips',
     '/trips/new',
     '/reservations',
