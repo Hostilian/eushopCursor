@@ -113,6 +113,10 @@ packages/
 
 For merge-safe multi-agent queues, hotspot files, and claim templates, use **[docs/cursor-parallel-backlog.md](docs/cursor-parallel-backlog.md)**. Editing lanes and verify cadence: **[AGENTS.md](AGENTS.md)**.
 
+## Security
+
+Report vulnerabilities per **[SECURITY.md](SECURITY.md)** (contact, scope, and ops references).
+
 ## Production & operations
 
 Start at **[docs/README.md](docs/README.md)** for the full index. Essentials:

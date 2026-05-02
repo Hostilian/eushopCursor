@@ -24,6 +24,17 @@ High-level steps for shipping Eushop (Coolify, Docker, or similar). Adjust names
 7. **Inngest**: Register/sync functions; confirm signing key and production app URL.
 8. **Mobile**: Build with EAS using production `EXPO_PUBLIC_*` (see `apps/mobile/eas.json`).
 
+## Rollback (per service)
+
+- **Web / admin (Next.js):** Redeploy the previous image or Git ref; no DB migration rollback required for app-only fixes. Clear CDN cache if you serve stale HTML.
+- **API:** Roll back to the prior container/version. If a bad migration already ran, **do not** roll back the API without a DB plan—coordinate a forward migration or restore from backup.
+- **Database:** Migrations are forward-only in normal operations. For a failed migration, restore from snapshot to a point before the migration, then re-apply a fixed migration on a branch—or add a corrective migration forward. Document the incident.
+- **Meilisearch:** Reindex from Postgres after restoring DB or changing index settings (`pnpm search:index` with prod env).
+- **PartyKit:** Roll back the worker version in the PartyKit dashboard; clients reconnect automatically.
+- **Mobile:** Store releases cannot be “rolled back”; ship a corrective build and use phased rollout where the store allows.
+
+Optional deep health check: set `HEALTHCHECK_DEEP=1` on the API and call `GET /health?deep=1` to ping Postgres (503 if the DB check fails). Default `/health` stays cheap for load balancers.
+
 ## Post-deploy smoke
 
 - `GET {API}/health` → `ok`.

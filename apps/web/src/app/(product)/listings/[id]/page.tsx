@@ -35,13 +35,21 @@ export async function generateMetadata({
   const { data } = await fetchListing(id);
   if (!data) return { title: 'Listing', description: 'Listing on Eushop.' };
   const title = data.freeformName ?? 'Listing';
+  const description = `${title} in ${data.approximateCity} (${data.countryIso2}). Finder's fee \u20ac${data.finderFee}.`;
+  const ogImages = data.photos[0]?.url ? [{ url: data.photos[0].url }] : undefined;
   return {
     title: `${title} \u00b7 ${data.approximateCity}`,
-    description: `${title} in ${data.approximateCity} (${data.countryIso2}). Finder's fee \u20ac${data.finderFee}.`,
+    description,
     openGraph: {
       title: `${title} \u00b7 Eushop`,
       description: `${title} in ${data.approximateCity}. Finder's fee \u20ac${data.finderFee}.`,
-      images: data.photos[0]?.url ? [{ url: data.photos[0].url }] : undefined,
+      images: ogImages,
+    },
+    twitter: {
+      card: ogImages ? 'summary_large_image' : 'summary',
+      title: `${title} \u00b7 Eushop`,
+      description,
+      images: ogImages ? [ogImages[0]!.url] : undefined,
     },
   };
 }

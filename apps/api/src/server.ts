@@ -3,6 +3,8 @@ import { serve } from '@hono/node-server';
 import { trpcServer } from '@hono/trpc-server';
 import { appRouter, createContext } from '@eushop/api-router';
 import { auth } from '@eushop/auth';
+import { db } from '@eushop/db';
+import { sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
@@ -43,7 +45,20 @@ app.use('/health', healthLimiter);
 app.use('/openapi.json', healthLimiter);
 
 app.get('/', (c) => c.json({ name: 'eushop-api', ok: true }));
-app.get('/health', (c) => c.json({ ok: true, ts: Date.now() }));
+app.get('/health', async (c) => {
+  const ts = Date.now();
+  const deep = c.req.query('deep') === '1';
+  const deepEnabled = process.env.HEALTHCHECK_DEEP === '1';
+  if (!deep || !deepEnabled) {
+    return c.json({ ok: true, ts });
+  }
+  try {
+    await db.execute(sql`select 1`);
+    return c.json({ ok: true, ts, checks: { database: 'ok' as const } });
+  } catch {
+    return c.json({ ok: false, ts, checks: { database: 'fail' as const } }, 503);
+  }
+});
 app.get('/openapi.json', (c) => c.json(openApiDocument));
 
 // Better Auth handler — exposes /api/auth/*

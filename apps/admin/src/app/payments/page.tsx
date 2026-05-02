@@ -1,7 +1,25 @@
 import Link from 'next/link';
 import { api } from '../../lib/trpc-server';
 
-export default async function AdminPaymentsPage() {
+const STATUS_PRESETS = [
+  '',
+  'requires_payment_method',
+  'requires_confirmation',
+  'requires_action',
+  'processing',
+  'requires_capture',
+  'succeeded',
+  'canceled',
+] as const;
+
+export default async function AdminPaymentsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string }>;
+}) {
+  const sp = await searchParams;
+  const statusFilter = sp.status?.trim() || undefined;
+
   let reservationRows: Awaited<
     ReturnType<Awaited<ReturnType<typeof api>>['payments']['adminListReservationPayments']>
   > = [];
@@ -12,7 +30,9 @@ export default async function AdminPaymentsPage() {
   try {
     const trpc = await api();
     [reservationRows, payoutRows] = await Promise.all([
-      trpc.payments.adminListReservationPayments(),
+      trpc.payments.adminListReservationPayments(
+        statusFilter ? { status: statusFilter, limit: 200 } : { limit: 200 },
+      ),
       trpc.payments.adminListPayouts(),
     ]);
   } catch (e) {
@@ -29,6 +49,40 @@ export default async function AdminPaymentsPage() {
           with <Link href="/audit">Audit log</Link>, <code>financial_events</code>, and the ops
           runbook <code className="text-ink">docs/ops/stripe-reconciliation-repair.md</code>.
         </p>
+
+        <form
+          method="get"
+          className="border-ink/10 bg-porcelain/60 flex flex-wrap items-end gap-3 rounded-2xl border p-4"
+        >
+          <label className="text-ash flex flex-col gap-1 text-xs">
+            Stripe PI status
+            <select
+              name="status"
+              defaultValue={statusFilter ?? ''}
+              className="border-ink/15 bg-paper text-ink rounded-lg border px-3 py-2 text-sm"
+            >
+              {STATUS_PRESETS.map((v) => (
+                <option key={v || 'all'} value={v}>
+                  {v === '' ? 'All statuses' : v}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            type="submit"
+            className="bg-ink text-paper rounded-lg px-4 py-2 text-sm font-medium"
+          >
+            Apply filter
+          </button>
+          {statusFilter ? (
+            <Link
+              href="/payments"
+              className="text-saffron-700 text-sm underline underline-offset-2"
+            >
+              Clear
+            </Link>
+          ) : null}
+        </form>
 
         {loadError ? (
           <div className="border-danger/30 bg-danger/5 text-danger rounded-2xl border p-4 text-sm">

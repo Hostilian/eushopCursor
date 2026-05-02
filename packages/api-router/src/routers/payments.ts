@@ -1,5 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { and, desc, eq } from 'drizzle-orm';
+import { z } from 'zod';
 import { connectAccounts, kycSessions, payouts, reservationPayments, users } from '@eushop/db';
 import { connectOnboardingInput } from '@eushop/validators';
 import {
@@ -168,14 +169,25 @@ export const paymentsRouter = router({
   }),
 
   /** Admin: per-reservation payment ledger. */
-  adminListReservationPayments: adminProcedure.query(async ({ ctx }) => {
-    const rows = await ctx.db
-      .select()
-      .from(reservationPayments)
-      .orderBy(desc(reservationPayments.createdAt))
-      .limit(200);
-    return rows;
-  }),
+  adminListReservationPayments: adminProcedure
+    .input(
+      z
+        .object({
+          status: z.string().trim().min(1).max(64).optional(),
+          limit: z.number().int().min(1).max(500).optional(),
+        })
+        .optional(),
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input?.limit ?? 200;
+      const base = ctx.db.select().from(reservationPayments);
+      const rows = await (
+        input?.status ? base.where(eq(reservationPayments.status, input.status)) : base
+      )
+        .orderBy(desc(reservationPayments.createdAt))
+        .limit(limit);
+      return rows;
+    }),
 
   /** Admin: trip payout rows (Stripe transfer id vs Dashboard). */
   adminListPayouts: adminProcedure.query(async ({ ctx }) => {

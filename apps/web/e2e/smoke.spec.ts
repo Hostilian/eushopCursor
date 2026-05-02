@@ -45,4 +45,12 @@ test.describe('public marketplace surface', () => {
     // Better Auth magic-link form has a single email input.
     await expect(page.locator('input[type="email"]').first()).toBeVisible();
   });
+
+  test('/imprint and /changelog render', async ({ page }) => {
+    for (const path of ['/imprint', '/changelog']) {
+      const res = await page.goto(path);
+      expect(res?.ok(), `${path} should respond 2xx/3xx`).toBeTruthy();
+      await expect(page.getByRole('main')).toBeVisible();
+    }
+  });
 });

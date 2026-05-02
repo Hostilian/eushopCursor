@@ -23,7 +23,7 @@
 
 ## Status page
 
-Optional: external status (e.g. Better Stack, Instatus) listing API + web + PartyKit components.
+Optional: external status (e.g. Better Stack, Instatus) listing **API** (`/health`), **web**, **admin**, **PartyKit**, and **email** (Resend) as separate components. Link it from `/press` or the footer only after the page is live—avoid broken promises during private beta.
 
 ## CI and lint migration
 

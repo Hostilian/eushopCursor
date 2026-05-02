@@ -1,4 +1,6 @@
 # Weekly dependency updates; CI on PRs validates the lockfile.
+# Policy: merge grouped minor/patch PRs weekly; review major bumps individually
+# (Next, Expo, Drizzle) and run `pnpm verify` before merge.
 version: 2
 updates:
   - package-ecosystem: npm

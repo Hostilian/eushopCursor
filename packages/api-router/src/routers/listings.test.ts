@@ -55,6 +55,27 @@ describe('listingsRouter public queries', () => {
     expect(ctx.db.query.listings.findFirst).toHaveBeenCalledTimes(1);
   });
 
+  it('byId returns NOT_FOUND when a removed listing row is returned (defensive guard)', async () => {
+    const row = baseListingRow({ status: 'removed' });
+    const ctx = {
+      db: {
+        query: {
+          listings: {
+            findFirst: vi.fn(async () => row),
+          },
+          foodItems: {
+            findFirst: vi.fn(async () => null),
+          },
+        },
+      },
+      enqueueEvent: vi.fn(),
+    } as any;
+    const caller = callerFactory(ctx);
+    await expect(caller.byId({ id: LISTING_ID })).rejects.toMatchObject({
+      code: 'NOT_FOUND',
+    });
+  });
+
   it('byId returns NOT_FOUND when no live listing matches (e.g. removed or missing)', async () => {
     const ctx = {
       db: {

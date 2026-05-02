@@ -82,7 +82,7 @@ export const listingsRouter = router({
         .where(and(...conditions))
         .orderBy(desc(listings.createdAt))
         .limit(input.limit);
-      return rows.map(publicListing);
+      return rows.filter((r) => r.status === 'live').map(publicListing);
     } catch (e) {
       // DB unreachable in development. Real users see no synthetic listings —
       // the surfaces are responsible for showing inviting empty states. We
@@ -96,7 +96,7 @@ export const listingsRouter = router({
     const row = await ctx.db.query.listings.findFirst({
       where: and(eq(listings.id, input.id), eq(listings.status, 'live' as const)),
     });
-    if (!row) throw new TRPCError({ code: 'NOT_FOUND' });
+    if (!row || row.status !== 'live') throw new TRPCError({ code: 'NOT_FOUND' });
     let item = null;
     if (row.foodItemId) {
       item = await ctx.db.query.foodItems.findFirst({
@@ -197,7 +197,7 @@ export const listingsRouter = router({
         .where(eq(listings.status, 'live'))
         .orderBy(desc(listings.createdAt))
         .limit(limit);
-      return rows.map(publicListing);
+      return rows.filter((r) => r.status === 'live').map(publicListing);
     } catch (e) {
       console.error('[listings.recent] DB read failed', e);
       return [];
@@ -212,7 +212,7 @@ export const listingsRouter = router({
         .where(and(eq(listings.status, 'live'), eq(listings.countryIso2, input.iso2)))
         .orderBy(asc(listings.createdAt))
         .limit(input.limit);
-      return rows.map(publicListing);
+      return rows.filter((r) => r.status === 'live').map(publicListing);
     } catch (e) {
       console.error('[listings.byCountry] DB read failed', e);
       return [];

@@ -16,3 +16,7 @@ Product UX that often stays English until translated:
 ## Policy
 
 Either migrate strings to `packages/i18n` keys for all six locales, or document here that a surface is **EN-only by choice** to avoid duplicate translation work for internal tools.
+
+## Admin app (`apps/admin`)
+
+The operator console is **English-only by product choice**: moderation, payments reconciliation, and audit copy stay in `apps/admin` source until there is a concrete need for localized operator UIs. Do not block shipping translated consumer surfaces on admin translation.

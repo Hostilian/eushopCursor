@@ -310,6 +310,54 @@
   "trip": {
     "verifiedBringer": "Portatore verificato"
   },
+  "tripDetailMobile": {
+    "pickItemTitle": "Pick an item",
+    "pickItemBody": "Tell the traveller what to grab.",
+    "belowMinTitle": "Below minimum",
+    "belowMinBody": "Minimum slot fee for this trip is €{min}.",
+    "confirmTitle": "Confirm reservation",
+    "confirmBody": "{qty}× {item}: €{slotFee} slot fee + €{platformFee} platform fee.",
+    "back": "Back",
+    "reserve": "Reserve",
+    "paymentHoldTitle": "Complete payment",
+    "paymentHoldBody": "This trip uses a card hold. Open the site to finish authorization.",
+    "later": "Later",
+    "openSite": "Open site",
+    "slotReservedTitle": "Slot reserved",
+    "slotReservedBody": "The traveller has been notified.",
+    "reserveErrorTitle": "Could not reserve",
+    "reserveErrorBody": "Try again.",
+    "notFound": "Trip not found.",
+    "platformFeeLabel": "Platform fee (Eushop)",
+    "minFeeHint": "Minimum for this trip: €{min}",
+    "reserveSectionTitle": "Reserve a slot",
+    "qtyShort": "Qty",
+    "feeInputLabel": "Your offer (EUR)",
+    "agreedSlotFeeLabel": "Agreed slot fee",
+    "platformFeeShortLabel": "Eushop platform fee",
+    "feeFootnote": "Charged when the seller confirms your reservation. Card holds and Stripe checkout are on the web today when Connect is enabled for the route.",
+    "reserveCta": "Reserve this slot",
+    "reserving": "Reserving…"
+  },
+  "changelog": {
+    "metaTitle": "Changelog · Eushop",
+    "metaDescription": "High-signal product releases for operators and investors.",
+    "eyebrow": "Changelog",
+    "title": "Product log",
+    "subtitle": "High-signal releases for operators and investors.",
+    "entries": [
+      {
+        "date": "2026-05-02",
+        "title": "Trip marketplace + sell-ready surface",
+        "body": "Trip offers and reservations, platform-fee logic, and operator tooling. Marketplace pages use live data; optional ENABLE_DEMO_MODE + labelled showcase for empty staging hosts. Curated catalog static fallback in API for unseeded dev. Operations docs under docs/ops/. Shared design tokens, marketing home, admin shell, mobile onboarding, OG image, expanded sitemap."
+      },
+      {
+        "date": "2026-04-01",
+        "title": "Open beta scaffolding",
+        "body": "Next.js web, Expo mobile, Hono API, Drizzle schema, Meili search, PartyKit stub, i18n package."
+      }
+    ]
+  },
   "productPicker": {
     "searchPlaceholder": "Krówki Mleczne, Mastiha of Chios, Manner Original…",
     "catalogMatch": "Match nel catalogo",

@@ -50,6 +50,13 @@ Document any staging-only URLs or CLI commands in your team wiki; keep this matr
 | `NEXT_PUBLIC_PRESS_EMAIL` | Press contact shown on `/press`; defaults to `press@eushop.eu` if unset. |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`, Apple vars | Social login when enabled. |
 
+## Health checks
+
+| Mode | When to use |
+|------|----------------|
+| `GET /health` | Default load-balancer probe; returns `{ ok: true, ts }`. |
+| `GET /health?deep=1` with `HEALTHCHECK_DEEP=1` on the API | Optional dependency check: runs `select 1` against `DATABASE_URL`; returns **503** with `{ checks: { database: 'fail' } }` if Postgres is unreachable. Leave `HEALTHCHECK_DEEP` unset unless you intentionally want probes to hit the DB. |
+
 ## CI reference
 
 GitHub Actions [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) sets a **non-secret** `BETTER_AUTH_SECRET` for builds only. Production values must come from your secret store, not from CI defaults.
