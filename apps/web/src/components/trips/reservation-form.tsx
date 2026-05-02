@@ -5,6 +5,7 @@ import { calculatePlatformFeeCents } from '@eushop/validators';
 import { trpc } from '../../lib/trpc';
 import { ProductPicker, type ProductPickerSelection } from '../catalog/product-picker';
 import { Button } from '../ui/button';
+import { ReservationPaymentStep } from './reservation-payment-step';
 
 /**
  * Buyer-side composer that books a slot on a specific trip. Mirrors the
@@ -25,7 +26,8 @@ export function ReservationForm({
   const [picker, setPicker] = useState<ProductPickerSelection>({ photos: [] });
   const [qty, setQty] = useState(1);
   const [agreedFee, setAgreedFee] = useState(defaultFee);
-  const [stage, setStage] = useState<'compose' | 'confirm' | 'done'>('compose');
+  const [stage, setStage] = useState<'compose' | 'confirm' | 'pay' | 'done'>('compose');
+  const [paymentClientSecret, setPaymentClientSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const reserve = trpc.trips.reserve.useMutation();
@@ -62,17 +64,41 @@ export function ReservationForm({
   async function handleConfirm() {
     setError(null);
     try {
-      await reserve.mutateAsync({
+      const result = await reserve.mutateAsync({
         tripOfferId,
         foodItemId: picker.foodItemId,
         freeformText: picker.freeformName!.trim(),
         qty,
         agreedFinderFee: agreedFee,
       });
-      setStage('done');
+      const secret =
+        result && typeof result === 'object' && 'paymentClientSecret' in result
+          ? (result as { paymentClientSecret?: string | null }).paymentClientSecret
+          : null;
+      if (secret) {
+        setPaymentClientSecret(secret);
+        setStage('pay');
+      } else {
+        setStage('done');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not reserve');
     }
+  }
+
+  if (stage === 'pay' && paymentClientSecret) {
+    return (
+      <div className="space-y-4">
+        <h3 className="text-ink font-serif text-xl">Almost there</h3>
+        <p className="text-ink/80 text-sm">
+          Your slot is held. Authorize the card hold below so the traveller can confirm.
+        </p>
+        <ReservationPaymentStep
+          clientSecret={paymentClientSecret}
+          onComplete={() => setStage('done')}
+        />
+      </div>
+    );
   }
 
   if (stage === 'confirm') {

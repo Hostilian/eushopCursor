@@ -7,6 +7,7 @@ import {
   tripReservations,
 } from '@eushop/db';
 import { verifyWebhookSignature } from '@eushop/api-router/lib/stripe';
+import { mapStripeEventTypeToFinancialKind } from '@eushop/api-router/lib/stripe-webhook-financial-kind';
 import { eq } from 'drizzle-orm';
 import type { Context } from 'hono';
 
@@ -51,57 +52,13 @@ export async function handleStripeWebhook(c: Context): Promise<Response> {
     return c.json({ received: true, idempotent: true });
   }
 
-  let kind: typeof financialEvents.kind.dataType | null = null;
+  const kind = mapStripeEventTypeToFinancialKind(event.type);
+  if (!kind) {
+    console.info('[stripe webhook] unhandled', event.type);
+  }
   let amountCents: string | null = null;
   let currency: string | null = null;
   let reservationId: string | null = null;
-
-  switch (event.type) {
-    case 'payment_intent.created':
-      kind = 'payment_intent.created';
-      break;
-    case 'payment_intent.requires_action':
-      kind = 'payment_intent.requires_action';
-      break;
-    case 'payment_intent.succeeded':
-    case 'payment_intent.amount_capturable_updated':
-      kind = 'payment_intent.succeeded';
-      break;
-    case 'payment_intent.canceled':
-      kind = 'payment_intent.canceled';
-      break;
-    case 'charge.captured':
-    case 'charge.succeeded':
-      kind = 'charge.captured';
-      break;
-    case 'charge.refunded':
-      kind = 'charge.refunded';
-      break;
-    case 'charge.dispute.created':
-      kind = 'charge.dispute.created';
-      break;
-    case 'charge.dispute.closed':
-      kind = 'charge.dispute.closed';
-      break;
-    case 'transfer.created':
-      kind = 'transfer.created';
-      break;
-    case 'transfer.failed':
-      kind = 'transfer.failed';
-      break;
-    case 'payout.paid':
-      kind = 'payout.paid';
-      break;
-    case 'payout.failed':
-      kind = 'payout.failed';
-      break;
-    case 'account.updated':
-      kind = 'connect.account.updated';
-      break;
-    default:
-      // Unknown event type — we still record it as raw so we can audit later.
-      console.info('[stripe webhook] unhandled', event.type);
-  }
 
   // Pull amount/currency from the Stripe object when present.
   if (typeof obj.amount === 'number') amountCents = String(obj.amount);

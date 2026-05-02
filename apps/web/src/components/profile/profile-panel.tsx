@@ -9,6 +9,8 @@ import { useState } from 'react';
 import { trpc } from '../../lib/trpc';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
+import { ProfileKycCard } from './profile-kyc-card';
+import { ProfilePayoutsCard } from './profile-payouts-card';
 
 export function ProfilePanel() {
   const t = useTranslations('profilePanel');
@@ -193,6 +195,8 @@ export function ProfilePanel() {
       </section>
 
       <aside className="space-y-6">
+        <ProfilePayoutsCard countryIso2={profile?.currentCountry ?? profile?.homeCountry} />
+        <ProfileKycCard hasVerifiedBadge={Boolean(profile?.badges?.includes('verified_bringer'))} />
         <div className="border-ink/10 bg-porcelain rounded-3xl border p-6">
           <p className="text-ash text-xs tracking-widest uppercase">{t('inboxEyebrow')}</p>
           <p className="text-ink/80 mt-2 text-sm">{t('inboxBody')}</p>

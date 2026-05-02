@@ -1,6 +1,7 @@
 import { COUNTRIES } from '@eushop/catalog-data';
 import { EmptyState, ErrorState } from '@eushop/ui-web';
 import { ArrowRight, MapPin, Plane, Users } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { Footer } from '../../../components/layout/footer';
 import { Nav } from '../../../components/layout/nav';
@@ -10,16 +11,17 @@ import { api } from '../../../lib/trpc-server';
 import { isDemoModeEnabled } from '../../../lib/demo-mode';
 import { showcaseTrips as showcaseTripOffers } from '../../../lib/showcase';
 
-export const metadata = {
-  title: 'Trips · Diaspora marketplace',
-  description:
-    'Reserve a slot in a diaspora traveller’s suitcase. Trips between EU cities, every week.',
-  openGraph: {
-    title: 'Upcoming diaspora trips · Eushop',
-    description:
-      'Reserve a slot in a diaspora traveller’s suitcase. Trips between EU cities, every week.',
-  },
-};
+export async function generateMetadata() {
+  const t = await getTranslations('trips');
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+    openGraph: {
+      title: t('metaTitle'),
+      description: t('metaDescription'),
+    },
+  };
+}
 
 type TripRow = {
   id: string;
@@ -34,9 +36,13 @@ type TripRow = {
   notes: string | null;
   spareWeightKg: number | null;
   spareVolumeLiters: number | null;
+  sellerBadges?: string[];
 };
 
+type TripsT = Awaited<ReturnType<typeof getTranslations<'trips'>>>;
+
 export default async function TripsPage() {
+  const t = await getTranslations('trips');
   let trips: TripRow[] = [];
   let serviceError = false;
   try {
@@ -57,90 +63,83 @@ export default async function TripsPage() {
       <main id="main-content" className="container-editorial pt-12 pb-32">
         <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <p className="text-ash text-xs tracking-widest uppercase">
-              Suitcase capacity is the new last-mile
-            </p>
-            <h1 className="text-ink mt-3 font-serif text-5xl md:text-6xl">
-              Upcoming diaspora trips.
-            </h1>
-            <p className="text-ink/70 mt-4 max-w-2xl text-lg">
-              A diaspora traveller flying home next week posts the spare slots in their carry-on.
-              Reserve one for the jar of Krówki, the Manchego wheel, the Mastiha bottle. We charge a
-              small platform fee on each confirmed reservation; everything else stays between you
-              and the traveller.
-            </p>
+            <p className="text-ash text-xs tracking-widest uppercase">{t('eyebrow')}</p>
+            <h1 className="text-ink mt-3 font-serif text-5xl md:text-6xl">{t('heading')}</h1>
+            <p className="text-ink/70 mt-4 max-w-2xl text-lg">{t('intro')}</p>
           </div>
           <Button asChild variant="primary" size="lg">
             <Link href="/trips/new">
-              Post a trip <ArrowRight className="ml-1 h-4 w-4" />
+              {t('postTrip')} <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </Button>
         </div>
 
         {trips.length > 0 ? (
           <ul className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {trips.map((t) => (
+            {trips.map((trip) => (
               <TripCard
-                key={t.id}
-                id={t.id}
-                fromIso={t.originCountryIso2}
-                fromCity={t.originCity}
-                toIso={t.destinationCountryIso2}
-                toCity={t.destinationCity}
-                departText={formatDeparture(t.departAt)}
-                slotsTotal={t.slotsTotal}
-                slotsAvailable={t.slotsAvailable}
-                feePerSlot={Number(t.defaultPerSlotFee)}
-                notes={t.notes}
-                spareWeightKg={t.spareWeightKg}
-                spareVolumeLiters={t.spareVolumeLiters}
+                key={trip.id}
+                id={trip.id}
+                fromIso={trip.originCountryIso2}
+                fromCity={trip.originCity}
+                toIso={trip.destinationCountryIso2}
+                toCity={trip.destinationCity}
+                departText={formatDeparture(trip.departAt, t)}
+                slotsTotal={trip.slotsTotal}
+                slotsAvailable={trip.slotsAvailable}
+                feePerSlot={Number(trip.defaultPerSlotFee)}
+                notes={trip.notes}
+                spareWeightKg={trip.spareWeightKg}
+                spareVolumeLiters={trip.spareVolumeLiters}
+                verifiedBringerLabel={
+                  trip.sellerBadges?.includes('verified_bringer') ? t('verifiedBringer') : null
+                }
+                reserveCta={t('reserveCta')}
+                showcaseCta={t('showcaseCta')}
               />
             ))}
           </ul>
         ) : demoTrips.length > 0 ? (
           <ul className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {demoTrips.map((t) => (
+            {demoTrips.map((trip) => (
               <TripCard
-                key={t.id}
-                id={t.id}
-                fromIso={t.originCountryIso2}
-                fromCity={t.originCity}
-                toIso={t.destinationCountryIso2}
-                toCity={t.destinationCity}
-                departText={formatDeparture(t.departAt)}
-                slotsTotal={t.slotsTotal}
-                slotsAvailable={t.slotsAvailable}
-                feePerSlot={Number(t.defaultPerSlotFee)}
-                notes={t.notes}
-                spareWeightKg={t.spareWeightKg}
-                spareVolumeLiters={t.spareVolumeLiters}
+                key={trip.id}
+                id={trip.id}
+                fromIso={trip.originCountryIso2}
+                fromCity={trip.originCity}
+                toIso={trip.destinationCountryIso2}
+                toCity={trip.destinationCity}
+                departText={formatDeparture(trip.departAt, t)}
+                slotsTotal={trip.slotsTotal}
+                slotsAvailable={trip.slotsAvailable}
+                feePerSlot={Number(trip.defaultPerSlotFee)}
+                notes={trip.notes}
+                spareWeightKg={trip.spareWeightKg}
+                spareVolumeLiters={trip.spareVolumeLiters}
                 demoShowcase
+                reserveCta={t('reserveCta')}
+                showcaseCta={t('showcaseCta')}
               />
             ))}
           </ul>
         ) : serviceError ? (
           <ErrorState
             className="mt-12"
-            title="Trips service is offline."
-            description={
-              <>
-                We couldn&rsquo;t reach the trips service. Try again in a moment, or browse open
-                requests in the meantime.
-              </>
-            }
+            title={t('errorTitle')}
+            description={t('errorDescription')}
             actions={
               <>
                 <Button asChild variant="primary">
-                  <Link href="/trips">Retry</Link>
+                  <Link href="/trips">{t('retry')}</Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link href="/requests">Browse requests</Link>
+                  <Link href="/requests">{t('browseRequestsAlt')}</Link>
                 </Button>
               </>
             }
           />
         ) : (
-          <EmptyTrips />
+          <EmptyTrips t={t} />
         )}
       </main>
       <Footer />
@@ -162,6 +161,9 @@ function TripCard({
   spareWeightKg,
   spareVolumeLiters,
   demoShowcase,
+  verifiedBringerLabel,
+  reserveCta,
+  showcaseCta,
 }: {
   id: string;
   fromIso: string;
@@ -176,6 +178,9 @@ function TripCard({
   spareWeightKg?: number | null;
   spareVolumeLiters?: number | null;
   demoShowcase?: boolean;
+  verifiedBringerLabel?: string | null;
+  reserveCta: string;
+  showcaseCta: string;
 }) {
   const from = COUNTRIES.find((c) => c.iso2 === fromIso);
   const to = COUNTRIES.find((c) => c.iso2 === toIso);
@@ -190,7 +195,12 @@ function TripCard({
           {to?.flagEmoji} {toCity}
         </span>
       </div>
-      <p className="text-ash text-sm">Departs {departText}</p>
+      <p className="text-ash text-sm">{departText}</p>
+      {verifiedBringerLabel ? (
+        <Badge variant="accent" className="w-fit text-[10px]">
+          {verifiedBringerLabel}
+        </Badge>
+      ) : null}
       {spareWeightKg != null || spareVolumeLiters != null ? (
         <p className="text-ink/60 text-xs">
           {spareWeightKg != null ? `~${spareWeightKg} kg spare` : null}
@@ -210,34 +220,29 @@ function TripCard({
       </div>
       <Button asChild variant={demoShowcase ? 'outline' : 'primary'}>
         <Link href={demoShowcase ? '/trips' : `/trips/${id}`}>
-          {demoShowcase ? 'Showcase trip' : 'Reserve a slot'}
+          {demoShowcase ? showcaseCta : reserveCta}
         </Link>
       </Button>
     </li>
   );
 }
 
-function EmptyTrips() {
+function EmptyTrips({ t }: { t: TripsT }) {
   return (
     <EmptyState
       className="mt-12"
       icon={<Plane className="text-saffron-600 mx-auto h-10 w-10" />}
-      title="No trips posted yet."
-      description={
-        <>
-          Eushop is brand new and the trip board is quiet. Be the first traveller to advertise spare
-          slots &mdash; or post a request and we&rsquo;ll notify you when a matching route appears.
-        </>
-      }
+      title={t('emptyTitle')}
+      description={<>{t('emptyDescription')}</>}
       actions={
         <>
           <Button asChild variant="primary" size="lg">
             <Link href="/trips/new">
-              Post the first trip <ArrowRight className="ml-1 h-4 w-4" />
+              {t('postFirstTrip')} <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="/requests">Browse open requests</Link>
+            <Link href="/requests">{t('browseRequests')}</Link>
           </Button>
         </>
       }
@@ -245,13 +250,13 @@ function EmptyTrips() {
   );
 }
 
-function formatDeparture(d: Date | string): string {
+function formatDeparture(d: Date | string, t: TripsT): string {
   const date = d instanceof Date ? d : new Date(d);
   const ms = date.getTime() - Date.now();
-  if (ms <= 0) return 'today';
+  if (ms <= 0) return t('today');
   const days = Math.round(ms / (1000 * 60 * 60 * 24));
-  if (days === 0) return 'today';
-  if (days === 1) return 'tomorrow';
-  if (days < 14) return `in ${days} days`;
+  if (days === 0) return t('today');
+  if (days === 1) return t('tomorrow');
+  if (days < 14) return t('inDays', { days });
   return date.toLocaleDateString(undefined, { day: '2-digit', month: 'short' });
 }

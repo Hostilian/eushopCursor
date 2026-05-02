@@ -5,6 +5,7 @@ import { z } from 'zod';
 import {
   conversations,
   kycSessions,
+  listings,
   moderationActions,
   profiles,
   reports,
@@ -339,6 +340,35 @@ export const trustRouter = router({
           status: input.status,
           rejectionReason: input.rejectionReason ?? null,
         },
+      });
+      return { ok: true as const };
+    }),
+
+  /** Remove a pantry listing from public surfaces (operator safety). */
+  adminRemoveListing: adminProcedure
+    .input(
+      z.object({
+        listingId: z.string().uuid(),
+        note: z.string().max(500).optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const row = await ctx.db.query.listings.findFirst({
+        where: eq(listings.id, input.listingId),
+      });
+      if (!row) throw new TRPCError({ code: 'NOT_FOUND', message: 'Listing not found' });
+      if (row.status === 'removed') {
+        return { ok: true as const, alreadyRemoved: true as const };
+      }
+      await ctx.db
+        .update(listings)
+        .set({ status: 'removed', updatedAt: new Date() })
+        .where(eq(listings.id, input.listingId));
+      await ctx.db.insert(moderationActions).values({
+        actorId: ctx.user.id,
+        action: 'remove_listing',
+        note: input.note?.trim() || 'Admin removed listing from public feed',
+        metadata: { listingId: input.listingId, sellerId: row.sellerId },
       });
       return { ok: true as const };
     }),

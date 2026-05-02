@@ -2,7 +2,7 @@
 
 ## 0.2.1 — 2026-05-02 — Sell-ready cleanup
 
-- Removed optional `?demo=1` cookie, middleware, demo banner, and `showcase.ts` — customer pages show **live DB data only**; empty states stay honest.
+- **Staging demo (opt-in)**: when **`ENABLE_DEMO_MODE=1`**, `?demo=1` / `?demo=0` in [`apps/web/src/middleware.ts`](apps/web/src/middleware.ts) toggles a labelled showcase cookie for **empty** marketplace pages only; **`/traction` stays real DB metrics**. Omit the env var in production.
 - Renamed `packages/api-router/src/lib/mock-fallback.ts` → **`catalog-fallback.ts`** (curated catalog static fallbacks before seed only).
 - Grouped operations docs under **`docs/ops/`** with **`docs/README.md`** as the index; updated cross-links across the repo.
 
@@ -22,7 +22,7 @@ items at an agreed finder's fee, and the platform charges
 - `catalog-fallback.ts` (then named `mock-fallback.ts`) kept only for the curated catalog (countries, categories,
   brands, items). User-generated endpoints now return real data or `[]` — never
   synthetic rows.
-- ~~`?demo=1` showcase cookie~~ **removed in 0.2.1** — live data only on product pages.
+- **Demo cookie**: production should leave **`ENABLE_DEMO_MODE` unset**; optional staging-only showcase when the flag is on (see 0.2.1 above).
 - Honest empty states everywhere: home, discover, requests, listings, admin
   moderation queue, mobile today screen.
 

@@ -24,6 +24,7 @@ import {
   connectAccounts,
   financialEvents,
   payouts,
+  profiles,
   reservationPayments,
   tripOffers,
   tripReservations,
@@ -53,11 +54,11 @@ import { protectedProcedure, publicProcedure, router } from '../trpc';
 type TripOfferRow = typeof tripOffers.$inferSelect;
 
 /** Strip precise geography; expose jittered public points plus all other trip fields. */
-function publicTrip(row: TripOfferRow) {
+function publicTrip(row: TripOfferRow, sellerBadges: string[] | null = null) {
   const { originLocation: _ol, destinationLocation: _dl, ...rest } = row;
   const originPoint = publicPoint(rest.cellGeohashOrigin, `${rest.id}-origin`);
   const destinationPoint = publicPoint(rest.cellGeohashDestination, `${rest.id}-destination`);
-  return { ...rest, originPoint, destinationPoint };
+  return { ...rest, originPoint, destinationPoint, sellerBadges: sellerBadges ?? [] };
 }
 
 export const tripsRouter = router({
@@ -81,12 +82,13 @@ export const tripsRouter = router({
       if (input.departToMs) conditions.push(lte(tripOffers.departAt, new Date(input.departToMs)));
 
       const rows = await ctx.db
-        .select()
+        .select({ offer: tripOffers, sellerBadges: profiles.badges })
         .from(tripOffers)
+        .leftJoin(profiles, eq(profiles.userId, tripOffers.sellerId))
         .where(and(...conditions))
         .orderBy(asc(tripOffers.departAt))
         .limit(input.limit);
-      return rows.map(publicTrip);
+      return rows.map(({ offer, sellerBadges }) => publicTrip(offer, sellerBadges));
     } catch {
       return [];
     }
@@ -99,8 +101,9 @@ export const tripsRouter = router({
       const cellCol =
         input.side === 'origin' ? tripOffers.cellGeohashOrigin : tripOffers.cellGeohashDestination;
       const rows = await ctx.db
-        .select()
+        .select({ offer: tripOffers, sellerBadges: profiles.badges })
         .from(tripOffers)
+        .leftJoin(profiles, eq(profiles.userId, tripOffers.sellerId))
         .where(
           and(
             eq(tripOffers.status, 'open' as const),
@@ -110,7 +113,7 @@ export const tripsRouter = router({
         )
         .orderBy(asc(tripOffers.departAt))
         .limit(input.limit);
-      return rows.map(publicTrip);
+      return rows.map(({ offer, sellerBadges }) => publicTrip(offer, sellerBadges));
     } catch {
       return [];
     }
@@ -121,6 +124,11 @@ export const tripsRouter = router({
       where: eq(tripOffers.id, input.id),
     });
     if (!trip) throw new TRPCError({ code: 'NOT_FOUND' });
+
+    const sellerProfile = await ctx.db.query.profiles.findFirst({
+      where: eq(profiles.userId, trip.sellerId),
+    });
+    const sellerBadges = sellerProfile?.badges ?? [];
 
     const isSeller = ctx.user?.id === trip.sellerId;
     if (isSeller) {
@@ -138,7 +146,7 @@ export const tripsRouter = router({
         .where(eq(tripReservations.tripOfferId, trip.id))
         .orderBy(desc(tripReservations.createdAt));
       return {
-        trip: publicTrip(trip),
+        trip: publicTrip(trip, sellerBadges),
         viewerIsSeller: true as const,
         reservations,
       };
@@ -184,7 +192,7 @@ export const tripsRouter = router({
       : [];
 
     return {
-      trip: publicTrip(trip),
+      trip: publicTrip(trip, sellerBadges),
       viewerIsSeller: false as const,
       reservationSummary: summary,
       ownReservations,
@@ -194,12 +202,13 @@ export const tripsRouter = router({
   recent: publicProcedure.input(tripsRecentInput).query(async ({ ctx, input }) => {
     try {
       const rows = await ctx.db
-        .select()
+        .select({ offer: tripOffers, sellerBadges: profiles.badges })
         .from(tripOffers)
+        .leftJoin(profiles, eq(profiles.userId, tripOffers.sellerId))
         .where(and(eq(tripOffers.status, 'open'), gte(tripOffers.departAt, new Date())))
         .orderBy(asc(tripOffers.departAt))
         .limit(input?.limit ?? 12);
-      return rows.map(publicTrip);
+      return rows.map(({ offer, sellerBadges }) => publicTrip(offer, sellerBadges));
     } catch {
       return [];
     }
