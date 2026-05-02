@@ -75,7 +75,8 @@ export default function ManifestoPage() {
         <p>
           Post-Brexit re-shoring. Inflation that turned a €4 import into a €19 import. Open Food
           Facts maturing into a serious commons. The first cohort of European founders comfortable
-          building a marketplace that is small, polite, and unapologetically EU-first.
+          building a marketplace that is small, polite, rooted in European trust norms—and built to
+          work anywhere people already travel.
         </p>
         <p>The neighbour with the suitcase is already there. We are just turning on the light.</p>
 

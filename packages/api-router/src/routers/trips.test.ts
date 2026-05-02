@@ -51,12 +51,21 @@ interface Stubs {
   insertedPayouts: any[];
   /** Rejects the reservation insert if true. */
   reservationInsertThrows: Error | null;
+  /** Seller profile badges returned from `profiles.findFirst` in `byId`. */
+  sellerProfileBadges: string[];
 }
 
 function makeDb(stubs: Stubs) {
   const queryStub = {
     tripOffers: { findFirst: vi.fn(async () => stubs.trip) },
     tripReservations: { findFirst: vi.fn(async () => stubs.reservation) },
+    profiles: {
+      findFirst: vi.fn(async () =>
+        stubs.sellerProfileBadges.length
+          ? { badges: stubs.sellerProfileBadges }
+          : { badges: [] as string[] },
+      ),
+    },
   };
 
   // Each chain method just returns `this` until a terminator (returning,
@@ -151,6 +160,7 @@ function makeCtx(over: Partial<{ user: { id: string; role: string } | null }> = 
     insertedFinancialEvents: [],
     insertedPayouts: [],
     reservationInsertThrows: null,
+    sellerProfileBadges: [],
   };
   const db = makeDb(stubs);
   const ctx = {
@@ -327,6 +337,15 @@ describe('tripsRouter.byId', () => {
     const res = (await caller.byId({ id: baseTrip.id })) as any;
     expect(res.viewerIsSeller).toBe(true);
     expect(Array.isArray(res.reservations)).toBe(true);
+  });
+
+  it('embeds seller badges on the public trip payload', async () => {
+    const { ctx, stubs } = makeCtx();
+    stubs.trip = { ...baseTrip };
+    stubs.sellerProfileBadges = ['verified_bringer'];
+    const caller = callerFactory(ctx as any);
+    const res = (await caller.byId({ id: baseTrip.id })) as any;
+    expect(res.trip.sellerBadges).toEqual(['verified_bringer']);
   });
 });
 

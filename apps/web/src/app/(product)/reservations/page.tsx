@@ -1,4 +1,5 @@
 import { ArrowRight, Plane } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { Footer } from '../../../components/layout/footer';
 import { Nav } from '../../../components/layout/nav';
@@ -12,10 +13,13 @@ import { api } from '../../../lib/trpc-server';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-  title: 'My reservations',
-  description: 'Slots you have reserved on diaspora trips.',
-};
+export async function generateMetadata() {
+  const t = await getTranslations('reservations');
+  return {
+    title: t('metaTitle'),
+    description: t('intro'),
+  };
+}
 
 type ReservationRow = {
   id: string;
