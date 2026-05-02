@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, gte } from 'drizzle-orm';
 import { z } from 'zod';
 import { connectAccounts, kycSessions, payouts, reservationPayments, users } from '@eushop/db';
 import { connectOnboardingInput } from '@eushop/validators';
@@ -174,18 +174,26 @@ export const paymentsRouter = router({
       z
         .object({
           status: z.string().trim().min(1).max(64).optional(),
+          /** Inclusive lower bound on `updated_at` (e.g. rows touched since a date). */
+          updatedAfter: z.coerce.date().optional(),
           limit: z.number().int().min(1).max(500).optional(),
         })
         .optional(),
     )
     .query(async ({ ctx, input }) => {
       const limit = input?.limit ?? 200;
+      const conditions = [];
+      if (input?.status) conditions.push(eq(reservationPayments.status, input.status));
+      if (input?.updatedAfter)
+        conditions.push(gte(reservationPayments.updatedAt, input.updatedAfter));
       const base = ctx.db.select().from(reservationPayments);
-      const rows = await (
-        input?.status ? base.where(eq(reservationPayments.status, input.status)) : base
-      )
-        .orderBy(desc(reservationPayments.createdAt))
-        .limit(limit);
+      const rows =
+        conditions.length === 0
+          ? await base.orderBy(desc(reservationPayments.createdAt)).limit(limit)
+          : await base
+              .where(and(...conditions))
+              .orderBy(desc(reservationPayments.createdAt))
+              .limit(limit);
       return rows;
     }),
 

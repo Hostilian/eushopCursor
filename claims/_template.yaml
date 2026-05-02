@@ -1,0 +1,16 @@
+# Copy to claims/EUSHOP-<lane>-<nnn>.yaml (filename must match `id`).
+# See claims/README.md for lifecycle and hotspot rules.
+
+id: EUSHOP-A-001
+lane: A
+sub_lane: null
+branch: agent/a-001-slug
+owner: <cursor-session-or-handle>
+status: claimed # queued | claimed | in_review | done
+touches:
+  - apps/web/src/app/(product)/discover/page.tsx
+hotspot_sub_lane: null # H1-router | H2-context | H3-schema | H4-i18n | H5-shell | H6-deps (optional; must match touches)
+depends_on: []
+verify: pnpm verify
+notes: >
+  One sentence on intent and why touches is disjoint from other open claims.

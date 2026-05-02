@@ -77,6 +77,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Claims overlap check
+        run: pnpm claims:check
+
       - name: Unit tests
         run: pnpm test:unit
 

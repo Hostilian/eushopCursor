@@ -9,6 +9,10 @@ High-level steps for shipping Eushop (Coolify, Docker, or similar). Adjust names
 3. **Database backups**: confirm scheduled snapshots and a recent **restore drill** for production `DATABASE_URL`.
 4. Run `pnpm verify` on a release branch (or rely on CI on `main`).
 
+## Build and runtime commands
+
+See **[hosting-contract.md](./hosting-contract.md)** for exact `pnpm --filter … build` / `start` commands, ports, and Docker image build lines. Optional deep health: `GET /health?deep=1` with `HEALTHCHECK_DEEP=1` on the API ([environment.md](./environment.md)).
+
 ## Deploy sequence
 
 1. **Database**: Apply migrations:  

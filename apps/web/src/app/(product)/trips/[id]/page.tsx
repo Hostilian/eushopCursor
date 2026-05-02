@@ -25,12 +25,19 @@ export async function generateMetadata({
     const from = COUNTRIES.find((c) => c.iso2 === bundle.trip.originCountryIso2)?.name;
     const to = COUNTRIES.find((c) => c.iso2 === bundle.trip.destinationCountryIso2)?.name;
     const route = `${bundle.trip.originCity}, ${from ?? bundle.trip.originCountryIso2} \u2192 ${bundle.trip.destinationCity}, ${to ?? bundle.trip.destinationCountryIso2}`;
+    const description = `${bundle.trip.slotsAvailable} of ${bundle.trip.slotsTotal} bag slots available on this Eushop trip.`;
+    const ogDescription = `${bundle.trip.slotsAvailable}/${bundle.trip.slotsTotal} slots, \u20ac${Number(bundle.trip.defaultPerSlotFee).toFixed(2)} per slot.`;
     return {
       title: `Trip ${route}`,
-      description: `${bundle.trip.slotsAvailable} of ${bundle.trip.slotsTotal} bag slots available on this Eushop trip.`,
+      description,
       openGraph: {
         title: `Trip ${route} \u00b7 Eushop`,
-        description: `${bundle.trip.slotsAvailable}/${bundle.trip.slotsTotal} slots, \u20ac${Number(bundle.trip.defaultPerSlotFee).toFixed(2)} per slot.`,
+        description: ogDescription,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `Trip ${route} \u00b7 Eushop`,
+        description: ogDescription,
       },
     };
   } catch {

@@ -85,6 +85,17 @@ export async function handleStripeWebhook(c: Context): Promise<Response> {
     if (pay) reservationId = pay.reservationId;
   }
 
+  console.info(
+    '[stripe webhook]',
+    JSON.stringify({
+      type: event.type,
+      evt: event.id,
+      stripeObjectId,
+      reservationId,
+      financialKind: kind ?? null,
+    }),
+  );
+
   // Side effects per type.
   try {
     if (event.type === 'account.updated' && typeof obj.id === 'string') {
