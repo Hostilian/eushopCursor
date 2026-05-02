@@ -281,6 +281,40 @@ export const catalogSearchWithSuggestionsInput = z.object({
 });
 export type CatalogSearchWithSuggestionsInput = z.infer<typeof catalogSearchWithSuggestionsInput>;
 
+/** Admin catalog UGC queues (candidates + pending image proposals). */
+export const adminCatalogUgcQueueInput = z.object({
+  candidateLimit: z.number().int().min(1).max(100).default(40),
+  imageProposalLimit: z.number().int().min(1).max(100).default(40),
+});
+export type AdminCatalogUgcQueueInput = z.infer<typeof adminCatalogUgcQueueInput>;
+
+export const adminReviewFoodItemCandidateInput = z
+  .object({
+    id: z.string().uuid(),
+    status: z.enum(['approved', 'rejected', 'duplicate']),
+    mergedIntoItemId: z.string().uuid().optional(),
+    moderatorNote: z.string().max(500).optional(),
+  })
+  .superRefine((val, ctx) => {
+    if (val.status === 'duplicate' && !val.mergedIntoItemId) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'mergedIntoItemId is required when marking duplicate',
+        path: ['mergedIntoItemId'],
+      });
+    }
+  });
+export type AdminReviewFoodItemCandidateInput = z.infer<typeof adminReviewFoodItemCandidateInput>;
+
+export const adminReviewFoodItemImageProposalInput = z.object({
+  id: z.string().uuid(),
+  status: z.enum(['approved', 'rejected']),
+  moderatorNote: z.string().max(500).optional(),
+});
+export type AdminReviewFoodItemImageProposalInput = z.infer<
+  typeof adminReviewFoodItemImageProposalInput
+>;
+
 // ---------- Trip marketplace -------------------------------------------------
 
 export const createTripOfferInput = z.object({

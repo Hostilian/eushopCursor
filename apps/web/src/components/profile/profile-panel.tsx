@@ -1,12 +1,15 @@
 'use client';
 
 import { COUNTRIES } from '@eushop/catalog-data';
+import { SUPPORTED_LOCALES, localeMeta } from '@eushop/i18n';
 import { Download, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { trpc } from '../../lib/trpc';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
+
+const DELETE_CONFIRM_PHRASE = 'delete';
 
 export function ProfilePanel() {
   const me = trpc.profile.me.useQuery(undefined, { retry: false });
@@ -23,16 +26,58 @@ export function ProfilePanel() {
   const [home, setHome] = useState('');
   const [current, setCurrent] = useState('');
   const [city, setCity] = useState('');
+  const [locale, setLocale] = useState('');
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deletePhrase, setDeletePhrase] = useState('');
+  const [exportError, setExportError] = useState<string | null>(null);
 
-  if (me.isLoading) return <p className="text-ash mt-12">Loading…</p>;
+  if (me.isLoading) {
+    return (
+      <p className="text-ash mt-12" role="status">
+        Loading…
+      </p>
+    );
+  }
   if (me.error || !me.data) {
     return (
       <div className="border-ink/10 bg-porcelain mt-12 rounded-3xl border p-12 text-center">
         <p className="text-ink font-serif text-2xl">Sign in to view your profile</p>
+        <Button asChild className="mt-6">
+          <Link href="/sign-in">Sign in</Link>
+        </Button>
       </div>
     );
   }
   const profile = me.data.profile;
+  const saveDisabled = upsert.isPending;
+
+  const onExport = async () => {
+    setExportError(null);
+    try {
+      const data = await exportData.refetch();
+      if (data.error) throw data.error;
+      const blob = new Blob([JSON.stringify(data.data, null, 2)], {
+        type: 'application/json',
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `eushop-export-${Date.now()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setExportError(err instanceof Error ? err.message : 'Export failed.');
+    }
+  };
+
+  const onDelete = () => {
+    if (deletePhrase.trim().toLowerCase() !== DELETE_CONFIRM_PHRASE) return;
+    deleteAcct.mutate(undefined, {
+      onSuccess: () => {
+        globalThis.location?.assign('/');
+      },
+    });
+  };
 
   return (
     <div className="mt-12 grid gap-12 md:grid-cols-3">
@@ -44,6 +89,7 @@ export function ProfilePanel() {
             onChange={(e) => setName(e.target.value)}
             className="form-input"
             placeholder="Anna K."
+            aria-label="Display name"
           />
         </Field>
         <div className="grid gap-6 sm:grid-cols-2">
@@ -52,6 +98,7 @@ export function ProfilePanel() {
               defaultValue={profile?.homeCountry ?? ''}
               onChange={(e) => setHome(e.target.value)}
               className="form-input"
+              aria-label="Home country"
             >
               <option value="">—</option>
               {COUNTRIES.map((c) => (
@@ -66,6 +113,7 @@ export function ProfilePanel() {
               defaultValue={profile?.currentCountry ?? ''}
               onChange={(e) => setCurrent(e.target.value)}
               className="form-input"
+              aria-label="Current country"
             >
               <option value="">—</option>
               {COUNTRIES.map((c) => (
@@ -82,20 +130,50 @@ export function ProfilePanel() {
             onChange={(e) => setCity(e.target.value)}
             className="form-input"
             placeholder="Munich Glockenbach"
+            aria-label="Approximate city"
           />
         </Field>
-        <Button
-          onClick={() =>
-            upsert.mutate({
-              displayName: name || undefined,
-              homeCountry: home || undefined,
-              currentCountry: current || undefined,
-              currentCity: city || undefined,
-            })
-          }
-        >
-          Save profile
-        </Button>
+        <Field label="Preferred language" hint="Used in emails and the default UI locale.">
+          <select
+            defaultValue={profile?.preferredLocale ?? ''}
+            onChange={(e) => setLocale(e.target.value)}
+            className="form-input"
+            aria-label="Preferred language"
+          >
+            <option value="">—</option>
+            {SUPPORTED_LOCALES.map((code) => (
+              <option key={code} value={code}>
+                {localeMeta[code].native} ({code.toUpperCase()})
+              </option>
+            ))}
+          </select>
+        </Field>
+        <div className="flex items-center gap-3">
+          <Button
+            disabled={saveDisabled}
+            onClick={() =>
+              upsert.mutate({
+                displayName: name || undefined,
+                homeCountry: home || undefined,
+                currentCountry: current || undefined,
+                currentCity: city || undefined,
+                preferredLocale: locale || undefined,
+              })
+            }
+          >
+            {saveDisabled ? 'Saving…' : 'Save profile'}
+          </Button>
+          {upsert.isSuccess ? (
+            <span className="text-ash text-sm" role="status">
+              Saved.
+            </span>
+          ) : null}
+          {upsert.error ? (
+            <span className="text-danger text-sm" role="alert">
+              {upsert.error.message}
+            </span>
+          ) : null}
+        </div>
 
         <style jsx>{`
           :global(.form-input) {
@@ -182,33 +260,74 @@ export function ProfilePanel() {
             <Button
               variant="outline"
               size="sm"
-              onClick={async () => {
-                const data = await exportData.refetch();
-                const blob = new Blob([JSON.stringify(data.data, null, 2)], {
-                  type: 'application/json',
-                });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `eushop-export-${Date.now()}.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-              }}
+              disabled={exportData.isFetching}
+              onClick={() => void onExport()}
             >
-              <Download className="mr-1 h-4 w-4" /> Export my data
+              <Download className="mr-1 h-4 w-4" />
+              {exportData.isFetching ? 'Preparing…' : 'Export my data'}
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-danger hover:bg-danger/10"
-              onClick={() => {
-                if (confirm('Delete your Eushop account permanently?')) {
-                  deleteAcct.mutate();
-                }
-              }}
-            >
-              <Trash2 className="mr-1 h-4 w-4" /> Delete account
+            <Button asChild variant="ghost" size="sm">
+              <Link href="/data-export">View export details</Link>
             </Button>
+            {exportError ? (
+              <p className="text-danger text-xs" role="alert">
+                {exportError}
+              </p>
+            ) : null}
+
+            {confirmingDelete ? (
+              <div className="border-danger/30 bg-danger/5 mt-2 space-y-2 rounded-2xl border p-3">
+                <label className="text-ink/80 block text-xs">
+                  Type <span className="font-mono font-semibold">{DELETE_CONFIRM_PHRASE}</span> to
+                  confirm permanent deletion.
+                  <input
+                    value={deletePhrase}
+                    onChange={(e) => setDeletePhrase(e.target.value)}
+                    className="form-input mt-2"
+                    aria-label={`Type ${DELETE_CONFIRM_PHRASE} to confirm`}
+                  />
+                </label>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setConfirmingDelete(false);
+                      setDeletePhrase('');
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    className="bg-danger text-paper hover:bg-danger/90"
+                    disabled={
+                      deleteAcct.isPending ||
+                      deletePhrase.trim().toLowerCase() !== DELETE_CONFIRM_PHRASE
+                    }
+                    onClick={onDelete}
+                  >
+                    {deleteAcct.isPending ? 'Deleting…' : 'Permanently delete'}
+                  </Button>
+                </div>
+                {deleteAcct.error ? (
+                  <p className="text-danger text-xs" role="alert">
+                    {deleteAcct.error.message}
+                  </p>
+                ) : null}
+              </div>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-danger hover:bg-danger/10"
+                onClick={() => setConfirmingDelete(true)}
+              >
+                <Trash2 className="mr-1 h-4 w-4" /> Delete account
+              </Button>
+            )}
           </div>
         </div>
       </aside>

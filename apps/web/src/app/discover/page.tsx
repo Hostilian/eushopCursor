@@ -3,6 +3,16 @@ import { Nav } from '../../components/layout/nav';
 import { DiscoverFeed } from '../../components/discover/discover-feed';
 import { MapPreview } from '../../components/discover/map-preview';
 
+export const metadata = {
+  title: 'Discover near you',
+  description:
+    'Listings within a 25 km cell. Pins are jittered inside their 5 km cell — exact addresses stay private.',
+  openGraph: {
+    title: 'Discover near you · Eushop',
+    description: 'Listings within a 25 km cell. Privacy-first map.',
+  },
+};
+
 export default function DiscoverPage() {
   return (
     <>

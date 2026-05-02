@@ -1,4 +1,5 @@
 import { COUNTRIES } from '@eushop/catalog-data';
+import { EmptyState, ErrorState } from '@eushop/ui-web';
 import { ArrowRight, MapPin, Plane, Users } from 'lucide-react';
 import Link from 'next/link';
 import { Footer } from '../../components/layout/footer';
@@ -13,27 +14,35 @@ export const metadata = {
   title: 'Trips · Diaspora marketplace',
   description:
     'Reserve a slot in a diaspora traveller’s suitcase. Trips between EU cities, every week.',
+  openGraph: {
+    title: 'Upcoming diaspora trips · Eushop',
+    description:
+      'Reserve a slot in a diaspora traveller’s suitcase. Trips between EU cities, every week.',
+  },
+};
+
+type TripRow = {
+  id: string;
+  originCountryIso2: string;
+  originCity: string;
+  destinationCountryIso2: string;
+  destinationCity: string;
+  departAt: Date | string;
+  slotsAvailable: number;
+  slotsTotal: number;
+  defaultPerSlotFee: string;
+  notes: string | null;
 };
 
 export default async function TripsPage() {
   const demo = await isDemoModeEnabled();
-  let trips: Array<{
-    id: string;
-    originCountryIso2: string;
-    originCity: string;
-    destinationCountryIso2: string;
-    destinationCity: string;
-    departAt: Date | string;
-    slotsAvailable: number;
-    slotsTotal: number;
-    defaultPerSlotFee: string;
-    notes: string | null;
-  }> = [];
+  let trips: TripRow[] = [];
+  let serviceError = false;
   try {
     const trpc = await api();
-    trips = (await trpc.trips.recent({ limit: 24 })) as typeof trips;
+    trips = (await trpc.trips.recent({ limit: 24 })) as TripRow[];
   } catch {
-    /* DB offline */
+    serviceError = true;
   }
 
   const showcase = trips.length === 0 && demo ? showcaseTrips() : [];
@@ -101,6 +110,27 @@ export default async function TripsPage() {
               />
             ))}
           </ul>
+        ) : serviceError ? (
+          <ErrorState
+            className="mt-12"
+            title="Trips service is offline."
+            description={
+              <>
+                We couldn&rsquo;t reach the trips service. Try again in a moment, or browse open
+                requests in the meantime.
+              </>
+            }
+            actions={
+              <>
+                <Button asChild variant="primary">
+                  <Link href="/trips">Retry</Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link href="/requests">Browse requests</Link>
+                </Button>
+              </>
+            }
+          />
         ) : (
           <EmptyTrips />
         )}
@@ -170,26 +200,29 @@ function TripCard({
 
 function EmptyTrips() {
   return (
-    <div className="border-ink/10 bg-porcelain mt-12 flex flex-col items-center gap-6 rounded-3xl border px-6 py-20 text-center">
-      <Plane className="text-saffron-600 h-10 w-10" />
-      <div className="max-w-xl">
-        <h2 className="text-ink font-serif text-3xl">No trips posted yet.</h2>
-        <p className="text-ink/70 mt-3">
+    <EmptyState
+      className="mt-12"
+      icon={<Plane className="text-saffron-600 mx-auto h-10 w-10" />}
+      title="No trips posted yet."
+      description={
+        <>
           Eushop is brand new and the trip board is quiet. Be the first traveller to advertise spare
-          slots — or post a request and we'll notify you when a matching route appears.
-        </p>
-      </div>
-      <div className="flex flex-wrap justify-center gap-3">
-        <Button asChild variant="primary" size="lg">
-          <Link href="/trips/new">
-            Post the first trip <ArrowRight className="ml-1 h-4 w-4" />
-          </Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link href="/requests">Browse open requests</Link>
-        </Button>
-      </div>
-    </div>
+          slots &mdash; or post a request and we&rsquo;ll notify you when a matching route appears.
+        </>
+      }
+      actions={
+        <>
+          <Button asChild variant="primary" size="lg">
+            <Link href="/trips/new">
+              Post the first trip <ArrowRight className="ml-1 h-4 w-4" />
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/requests">Browse open requests</Link>
+          </Button>
+        </>
+      }
+    />
   );
 }
 

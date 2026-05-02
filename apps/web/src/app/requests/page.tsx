@@ -1,5 +1,6 @@
 import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
 import { countryPalette } from '@eushop/design-tokens';
+import { EmptyState, ErrorState } from '@eushop/ui-web';
 import { ArrowRight, MapPin, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { Footer } from '../../components/layout/footer';
@@ -10,16 +11,28 @@ import { isDemoModeEnabled } from '../../lib/demo-mode';
 import { showcaseRequests } from '../../lib/showcase';
 import { api } from '../../lib/trpc-server';
 
+export const metadata = {
+  title: 'Open requests',
+  description: 'See what your neighbours are asking for. Match on next trip or listing.',
+  openGraph: {
+    title: 'Open requests · Eushop',
+    description: 'See what your neighbours are asking for. Match on next trip or listing.',
+  },
+};
+
+type RequestRow = {
+  id: string;
+  freeformText: string;
+  approximateCity: string;
+  countryIso2: string;
+  radiusKm: number;
+  maxFinderFee: string | null;
+};
+
 export default async function RequestsPage() {
   const demo = await isDemoModeEnabled();
-  let liveRequests: Array<{
-    id: string;
-    freeformText: string;
-    approximateCity: string;
-    countryIso2: string;
-    radiusKm: number;
-    maxFinderFee: string | null;
-  }> = [];
+  let liveRequests: RequestRow[] = [];
+  let serviceError = false;
   try {
     const trpc = await api();
     const rows = await trpc.requests.feed({ limit: 40 });
@@ -32,7 +45,7 @@ export default async function RequestsPage() {
       maxFinderFee: r.maxFinderFee,
     }));
   } catch {
-    /* DB unreachable; fall through to empty state */
+    serviceError = true;
   }
 
   const showcase = liveRequests.length === 0 && demo ? showcaseRequests() : [];
@@ -90,6 +103,22 @@ export default async function RequestsPage() {
               />
             ))}
           </ul>
+        ) : serviceError ? (
+          <ErrorState
+            className="mt-12"
+            title="Requests service is offline."
+            description="We couldn't reach the requests feed. Try again in a moment."
+            actions={
+              <>
+                <Button asChild variant="primary">
+                  <Link href="/requests">Retry</Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <Link href="/discover">Browse discover</Link>
+                </Button>
+              </>
+            }
+          />
         ) : (
           <EmptyRequests />
         )}
@@ -147,25 +176,29 @@ function RequestCard({
 
 function EmptyRequests() {
   return (
-    <div className="border-ink/10 bg-porcelain mt-12 flex flex-col items-center gap-6 rounded-3xl border px-6 py-20 text-center">
-      <Sparkles className="text-saffron-600 h-10 w-10" />
-      <div className="max-w-xl">
-        <h2 className="text-ink font-serif text-3xl">Be the first to ask.</h2>
-        <p className="text-ink/70 mt-3">
-          No open requests near you yet. Post yours — we'll ping every diaspora traveller in your
-          radius and surface it on the next matching trip from your country of origin.
-        </p>
-      </div>
-      <div className="flex flex-wrap justify-center gap-3">
-        <Button asChild variant="primary" size="lg">
-          <Link href="/requests/new">
-            Post the first request <ArrowRight className="ml-1 h-4 w-4" />
-          </Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link href="/discover">Browse discover</Link>
-        </Button>
-      </div>
-    </div>
+    <EmptyState
+      className="mt-12"
+      icon={<Sparkles className="text-saffron-600 mx-auto h-10 w-10" />}
+      title="Be the first to ask."
+      description={
+        <>
+          No open requests near you yet. Post yours &mdash; we&rsquo;ll ping every diaspora
+          traveller in your radius and surface it on the next matching trip from your country of
+          origin.
+        </>
+      }
+      actions={
+        <>
+          <Button asChild variant="primary" size="lg">
+            <Link href="/requests/new">
+              Post the first request <ArrowRight className="ml-1 h-4 w-4" />
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/discover">Browse discover</Link>
+          </Button>
+        </>
+      }
+    />
   );
 }

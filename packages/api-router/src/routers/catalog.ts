@@ -1,5 +1,8 @@
 import { searchOpenFoodFacts } from '@eushop/catalog-data';
 import {
+  adminCatalogUgcQueueInput,
+  adminReviewFoodItemCandidateInput,
+  adminReviewFoodItemImageProposalInput,
   catalogQuery,
   catalogSearchWithSuggestionsInput,
   proposeFoodItemImageInput,
@@ -30,7 +33,48 @@ import {
   withFallback,
   withListFallback,
 } from '../lib/mock-fallback';
-import { protectedProcedure, publicProcedure, router } from '../trpc';
+import { adminProcedure, protectedProcedure, publicProcedure, router } from '../trpc';
+import type { Context } from '../context';
+
+type CatalogImageVariantSource = 'off' | 'r2' | 'user';
+
+function baseSlugFromName(name: string): string {
+  const s = name
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80);
+  return s.length >= 2 ? s : 'food-item';
+}
+
+/** Accepts root `db` or a transaction client — same query surface for reads/writes used here. */
+async function uniqueFoodItemSlug(db: Context['db'], name: string): Promise<string> {
+  const stem = baseSlugFromName(name);
+  for (let n = 0; n < 500; n++) {
+    const slug = (n === 0 ? stem : `${stem}-${n}`).slice(0, 96);
+    const taken = await db.query.foodItems.findFirst({
+      where: eq(foodItems.slug, slug),
+      columns: { id: true },
+    });
+    if (!taken) return slug;
+  }
+  throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Could not allocate slug' });
+}
+
+function imageVariantSourceFromProposedTag(tag: string | undefined): CatalogImageVariantSource {
+  const t = tag?.toLowerCase();
+  if (t === 'off') return 'off';
+  if (t === 'r2') return 'r2';
+  return 'user';
+}
+
+function imageVariantSourceFromProposalSource(source: string): CatalogImageVariantSource {
+  if (source === 'off') return 'off';
+  if (source === 'r2') return 'r2';
+  return 'user';
+}
 
 export const catalogRouter = router({
   countries: publicProcedure.query(async ({ ctx }) =>
@@ -513,5 +557,202 @@ export const catalogRouter = router({
       } catch {
         return [];
       }
+    }),
+
+  /* -------------------------------------------------------------- *
+   * Admin: UGC moderation queues + review actions.                 *
+   * -------------------------------------------------------------- */
+
+  adminCatalogUgcQueue: adminProcedure
+    .input(adminCatalogUgcQueueInput)
+    .query(async ({ ctx, input }) => {
+      const candidates = await ctx.db
+        .select()
+        .from(foodItemCandidates)
+        .where(eq(foodItemCandidates.status, 'pending'))
+        .orderBy(asc(foodItemCandidates.createdAt))
+        .limit(input.candidateLimit);
+
+      const imageProposals = await ctx.db
+        .select({
+          proposal: foodItemImageProposals,
+          itemName: foodItems.name,
+          itemSlug: foodItems.slug,
+        })
+        .from(foodItemImageProposals)
+        .innerJoin(foodItems, eq(foodItemImageProposals.foodItemId, foodItems.id))
+        .where(eq(foodItemImageProposals.status, 'pending'))
+        .orderBy(desc(foodItemImageProposals.votes), asc(foodItemImageProposals.createdAt))
+        .limit(input.imageProposalLimit);
+
+      return { candidates, imageProposals };
+    }),
+
+  adminReviewFoodItemCandidate: adminProcedure
+    .input(adminReviewFoodItemCandidateInput)
+    .mutation(async ({ ctx, input }) => {
+      const candidate = await ctx.db.query.foodItemCandidates.findFirst({
+        where: eq(foodItemCandidates.id, input.id),
+      });
+      if (!candidate) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (candidate.status !== 'pending') {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Candidate is not pending' });
+      }
+
+      const now = new Date();
+      const modPatch = {
+        status: input.status,
+        moderatorId: ctx.user.id,
+        moderatorNote: input.moderatorNote ?? null,
+        updatedAt: now,
+        mergedIntoItemId: null as string | null,
+      };
+
+      if (input.status === 'duplicate') {
+        const merged = await ctx.db.query.foodItems.findFirst({
+          where: eq(foodItems.id, input.mergedIntoItemId!),
+        });
+        if (!merged)
+          throw new TRPCError({ code: 'BAD_REQUEST', message: 'mergedIntoItemId not found' });
+        modPatch.mergedIntoItemId = merged.id;
+        await ctx.db
+          .update(foodItemCandidates)
+          .set(modPatch)
+          .where(eq(foodItemCandidates.id, input.id));
+        return { ok: true as const, action: 'duplicate' as const, mergedIntoItemId: merged.id };
+      }
+
+      if (input.status === 'rejected') {
+        await ctx.db
+          .update(foodItemCandidates)
+          .set(modPatch)
+          .where(eq(foodItemCandidates.id, input.id));
+        return { ok: true as const, action: 'rejected' as const };
+      }
+
+      const country = await ctx.db.query.countries.findFirst({
+        where: eq(countries.iso2, candidate.originCountryIso2.toUpperCase()),
+      });
+      if (!country) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: `Unknown country ISO2: ${candidate.originCountryIso2}`,
+        });
+      }
+
+      const cat = await ctx.db.query.categories.findFirst({
+        where: eq(categories.slug, candidate.categorySlug),
+      });
+      if (!cat) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: `Unknown category slug: ${candidate.categorySlug}`,
+        });
+      }
+
+      const firstImg = candidate.proposedImages[0];
+      const defaultImageUrl = firstImg?.url ?? null;
+      const variantSource = imageVariantSourceFromProposedTag(firstImg?.source);
+      const imageVariants = defaultImageUrl
+        ? ({ large: defaultImageUrl, source: variantSource } as const)
+        : ({} as { large?: string; source?: CatalogImageVariantSource });
+
+      const created = await ctx.db.transaction(async (tx) => {
+        const slug = await uniqueFoodItemSlug(tx, candidate.name);
+        const [row] = await tx
+          .insert(foodItems)
+          .values({
+            slug,
+            name: candidate.name,
+            aka: candidate.aka,
+            originCountryIso2: country.iso2,
+            categoryId: cat.id,
+            description: candidate.description?.trim() || 'No description provided.',
+            defaultImageUrl: defaultImageUrl ?? undefined,
+            imageVariants,
+            verifiedAt: now,
+            submittedById: candidate.submittedById,
+          })
+          .returning();
+        if (!row) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Insert failed' });
+
+        await tx
+          .update(foodItemCandidates)
+          .set({
+            status: 'approved',
+            moderatorId: ctx.user.id,
+            moderatorNote: input.moderatorNote ?? null,
+            updatedAt: now,
+            mergedIntoItemId: null,
+          })
+          .where(eq(foodItemCandidates.id, input.id));
+        return row;
+      });
+
+      await ctx.enqueueEvent({ name: 'catalog.reindex', data: {} });
+
+      return {
+        ok: true as const,
+        action: 'approved' as const,
+        foodItemId: created.id,
+        slug: created.slug,
+      };
+    }),
+
+  adminReviewFoodItemImageProposal: adminProcedure
+    .input(adminReviewFoodItemImageProposalInput)
+    .mutation(async ({ ctx, input }) => {
+      const proposal = await ctx.db.query.foodItemImageProposals.findFirst({
+        where: eq(foodItemImageProposals.id, input.id),
+      });
+      if (!proposal) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (proposal.status !== 'pending') {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Proposal is not pending' });
+      }
+
+      if (input.status === 'rejected') {
+        await ctx.db
+          .update(foodItemImageProposals)
+          .set({
+            status: 'rejected',
+            moderatorId: ctx.user.id,
+            moderatorNote: input.moderatorNote ?? null,
+          })
+          .where(eq(foodItemImageProposals.id, input.id));
+        return { ok: true as const, action: 'rejected' as const };
+      }
+
+      const item = await ctx.db.query.foodItems.findFirst({
+        where: eq(foodItems.id, proposal.foodItemId),
+      });
+      if (!item) throw new TRPCError({ code: 'NOT_FOUND', message: 'Food item missing' });
+
+      const variantSource = imageVariantSourceFromProposalSource(proposal.source);
+
+      const patch: Partial<typeof foodItems.$inferInsert> = {};
+      if (!item.defaultImageUrl) {
+        patch.defaultImageUrl = proposal.url;
+        patch.imageVariants = { large: proposal.url, source: variantSource };
+        patch.updatedAt = new Date();
+      }
+
+      if (Object.keys(patch).length > 0) {
+        await ctx.db.update(foodItems).set(patch).where(eq(foodItems.id, item.id));
+      }
+
+      await ctx.db
+        .update(foodItemImageProposals)
+        .set({
+          status: 'approved',
+          moderatorId: ctx.user.id,
+          moderatorNote: input.moderatorNote ?? null,
+        })
+        .where(eq(foodItemImageProposals.id, input.id));
+
+      if (Object.keys(patch).length > 0) {
+        await ctx.enqueueEvent({ name: 'catalog.reindex', data: {} });
+      }
+
+      return { ok: true as const, action: 'approved' as const };
     }),
 });

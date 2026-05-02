@@ -1,4 +1,5 @@
 import { COUNTRIES } from '@eushop/catalog-data';
+import type { Metadata } from 'next';
 import { ArrowRight, MapPin, Plane, Users } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -10,6 +11,31 @@ import { ReservationForm } from '../../../components/trips/reservation-form';
 import { api } from '../../../lib/trpc-server';
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const trpc = await api();
+    const bundle = await trpc.trips.byId({ id });
+    const from = COUNTRIES.find((c) => c.iso2 === bundle.trip.originCountryIso2)?.name;
+    const to = COUNTRIES.find((c) => c.iso2 === bundle.trip.destinationCountryIso2)?.name;
+    const route = `${bundle.trip.originCity}, ${from ?? bundle.trip.originCountryIso2} \u2192 ${bundle.trip.destinationCity}, ${to ?? bundle.trip.destinationCountryIso2}`;
+    return {
+      title: `Trip ${route}`,
+      description: `${bundle.trip.slotsAvailable} of ${bundle.trip.slotsTotal} suitcase slots available on this Eushop trip.`,
+      openGraph: {
+        title: `Trip ${route} \u00b7 Eushop`,
+        description: `${bundle.trip.slotsAvailable}/${bundle.trip.slotsTotal} slots, \u20ac${Number(bundle.trip.defaultPerSlotFee).toFixed(2)} per slot.`,
+      },
+    };
+  } catch {
+    return { title: 'Trip details', description: 'Diaspora trip on Eushop.' };
+  }
+}
 
 export default async function TripDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -31,9 +57,19 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
     <>
       <Nav />
       <main id="main-content" className="container-editorial pt-12 pb-32">
-        <Link href="/trips" className="text-ash text-xs underline-offset-2 hover:underline">
-          ← All trips
-        </Link>
+        <nav aria-label="Breadcrumb" className="text-ash text-xs">
+          <ol className="flex items-center gap-2">
+            <li>
+              <Link href="/trips" className="hover:text-ink underline-offset-2 hover:underline">
+                Trips
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li className="text-ink/70" aria-current="page">
+              {trip.originCity} → {trip.destinationCity}
+            </li>
+          </ol>
+        </nav>
         <div className="mt-4 grid gap-12 md:grid-cols-12">
           <section className="md:col-span-7">
             <div className="text-ink flex flex-wrap items-center gap-3 font-serif text-4xl md:text-5xl">

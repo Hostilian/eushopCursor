@@ -2,6 +2,7 @@
 
 import { COUNTRIES } from '@eushop/catalog-data';
 import { countryPalette } from '@eushop/design-tokens';
+import { EmptyState as SharedEmptyState, ErrorState, LoadingState } from '@eushop/ui-web';
 import { ArrowRight, Filter, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -94,45 +95,66 @@ export function DiscoverFeed() {
           </Button>
         </div>
 
-        {items.length > 0 ? (
-          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-            {items.map((item) => (
-              <ListingCard key={item.id} listing={item} />
-            ))}
-          </ul>
-        ) : (
-          <EmptyState />
-        )}
+        {renderFeed()}
       </div>
     </div>
   );
-}
 
-function EmptyState() {
-  return (
-    <div className="border-ink/10 bg-porcelain flex flex-col items-center gap-6 rounded-3xl border px-6 py-20 text-center">
-      <div className="bg-saffron-100 text-saffron-700 grid h-14 w-14 place-items-center rounded-full">
-        <MapPin className="h-6 w-6" />
-      </div>
-      <div className="max-w-xl">
-        <h3 className="text-ink font-serif text-2xl">Nothing in your radius — yet.</h3>
-        <p className="text-ash mt-2 text-sm">
-          The map is quiet here. Widen your radius, browse upcoming trips from a country you miss,
-          or post a request so the next diaspora traveller knows to grab it for you.
-        </p>
-      </div>
-      <div className="flex flex-wrap justify-center gap-3">
-        <Button asChild variant="primary">
-          <Link href="/requests/new">
-            Post a request <ArrowRight className="ml-1 h-4 w-4" />
-          </Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link href="/discover">Browse discover</Link>
-        </Button>
-      </div>
-    </div>
-  );
+  function renderFeed() {
+    if (query.isLoading) {
+      return <LoadingState label="Searching nearby listings…" />;
+    }
+    if (query.error) {
+      return (
+        <ErrorState
+          title="Listings service is unreachable."
+          description="We couldn't load nearby listings. Try again, or widen your radius."
+          actions={
+            <Button onClick={() => query.refetch()} variant="primary">
+              Retry
+            </Button>
+          }
+        />
+      );
+    }
+    if (items.length === 0) {
+      return (
+        <SharedEmptyState
+          icon={
+            <div className="bg-saffron-100 text-saffron-700 mx-auto grid h-14 w-14 place-items-center rounded-full">
+              <MapPin className="h-6 w-6" />
+            </div>
+          }
+          title="Nothing in your radius — yet."
+          description={
+            <>
+              The map is quiet here. Widen your radius, browse upcoming trips from a country you
+              miss, or post a request so the next diaspora traveller knows to grab it for you.
+            </>
+          }
+          actions={
+            <>
+              <Button asChild variant="primary">
+                <Link href="/requests/new">
+                  Post a request <ArrowRight className="ml-1 h-4 w-4" />
+                </Link>
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/discover">Browse discover</Link>
+              </Button>
+            </>
+          }
+        />
+      );
+    }
+    return (
+      <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        {items.map((item) => (
+          <ListingCard key={item.id} listing={item} />
+        ))}
+      </ul>
+    );
+  }
 }
 
 function FilterBlock({ label, children }: { label: string; children: React.ReactNode }) {

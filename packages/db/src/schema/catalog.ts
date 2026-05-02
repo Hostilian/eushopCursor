@@ -203,6 +203,8 @@ export const foodItemImageProposals = pgTable(
       .references(() => users.id, { onDelete: 'cascade' }),
     status: foodItemImageProposalStatus('status').notNull().default('pending'),
     votes: integer('votes').notNull().default(0),
+    moderatorId: uuid('moderator_id').references(() => users.id, { onDelete: 'set null' }),
+    moderatorNote: text('moderator_note'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => ({

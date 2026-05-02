@@ -1,5 +1,6 @@
 import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
 import { countryPalette } from '@eushop/design-tokens';
+import type { Metadata } from 'next';
 import { ArrowRight, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -11,6 +12,25 @@ import { CountryHero } from '../../../components/country/country-hero';
 
 export function generateStaticParams() {
   return COUNTRIES.map((c) => ({ iso2: c.iso2.toLowerCase() }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ iso2: string }>;
+}): Promise<Metadata> {
+  const { iso2 } = await params;
+  const country = COUNTRIES.find((c) => c.iso2.toLowerCase() === iso2.toLowerCase());
+  if (!country) return { title: 'Country' };
+  const items = FOOD_ITEMS.filter((i) => i.originCountryIso2 === country.iso2);
+  return {
+    title: `${country.name} \u2014 ${items.length} catalog items`,
+    description: `Eushop's editorial guide to niche ${country.name} foods. ${items.length} canonical items.`,
+    openGraph: {
+      title: `${country.name} \u00b7 Eushop`,
+      description: `Niche regional foods from ${country.name}. ${items.length} items in the catalog.`,
+    },
+  };
 }
 
 export default async function CountryPage({ params }: { params: Promise<{ iso2: string }> }) {
