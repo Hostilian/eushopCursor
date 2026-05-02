@@ -1,0 +1,99 @@
+/**
+ * Shared Eushop theme — imported by Next.js apps before `@import 'tailwindcss'`.
+ * Canonical palette mirrors `packages/design-tokens/src/index.ts`.
+ */
+
+@theme {
+  --color-paper: #faf7f2;
+  --color-parchment: #f2ece1;
+  --color-bone: #e8e0d0;
+  --color-fog: #d6ccbb;
+  --color-ash: #9a9081;
+  --color-espresso: #3b2f22;
+  --color-ink: #1a1612;
+  --color-porcelain: #fffefb;
+  --color-burgundy: #6b1f2a;
+  --color-forest: #274d3a;
+  --color-oxide: #b0432f;
+
+  --color-saffron-50: #fff8ec;
+  --color-saffron-100: #ffefd0;
+  --color-saffron-200: #ffdc9a;
+  --color-saffron-300: #ffc55f;
+  --color-saffron-400: #ffae2e;
+  --color-saffron-500: #f2960c;
+  --color-saffron-600: #c97700;
+  --color-saffron-700: #9c5c03;
+  --color-saffron-800: #704208;
+  --color-saffron-900: #4a2d08;
+
+  --font-serif: var(--font-fraunces, 'Fraunces'), 'EB Garamond', Georgia, serif;
+  --font-sans: var(--font-inter, 'Inter Variable'), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --bg: var(--color-paper);
+    --fg: var(--color-ink);
+    --muted: var(--color-ash);
+    --accent: var(--color-saffron-600);
+    --rule: rgba(26, 22, 18, 0.08);
+  }
+
+  .dark {
+    color-scheme: dark;
+    --bg: #100d0a;
+    --fg: #f4ede0;
+    --muted: #97907f;
+    --accent: var(--color-saffron-400);
+    --rule: rgba(244, 237, 224, 0.08);
+  }
+
+  html {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-feature-settings: 'ss01', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--color-saffron-300) 60%, transparent);
+    color: var(--color-ink);
+  }
+
+  h1,
+  h2,
+  h3,
+  .editorial {
+    font-family: var(--font-serif);
+    letter-spacing: -0.02em;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--color-ash) 30%, transparent);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklch, var(--color-espresso) 50%, transparent);
+  background-clip: padding-box;
+}

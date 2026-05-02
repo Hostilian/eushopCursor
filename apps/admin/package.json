@@ -15,6 +15,8 @@
     "@eushop/auth": "workspace:*",
     "@eushop/catalog-data": "workspace:*",
     "@eushop/db": "workspace:*",
+    "@eushop/design-tokens": "workspace:*",
+    "@eushop/ui-web": "workspace:*",
     "@tanstack/react-query": "^5.62.7",
     "@trpc/client": "^11.0.0-rc.660",
     "@trpc/react-query": "^11.0.0-rc.660",
