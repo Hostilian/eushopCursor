@@ -1,5 +1,6 @@
 import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
 import { countryPalette } from '@eushop/design-tokens';
+import { EmptyState } from '@eushop/ui-web';
 import type { Metadata } from 'next';
 import { ArrowRight, MapPin } from 'lucide-react';
 import Link from 'next/link';
@@ -73,6 +74,24 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
     <>
       <Nav />
       <main id="main-content">
+        <div className="container-editorial pt-8">
+          <nav aria-label="Breadcrumb" className="text-ash text-xs">
+            <ol className="flex items-center gap-2">
+              <li>
+                <Link
+                  href="/countries"
+                  className="hover:text-ink underline-offset-2 hover:underline"
+                >
+                  Countries
+                </Link>
+              </li>
+              <li aria-hidden="true">/</li>
+              <li className="text-ink/70" aria-current="page">
+                {country.name}
+              </li>
+            </ol>
+          </nav>
+        </div>
         <CountryHero country={country} palette={palette} count={items.length} />
 
         <section className="container-editorial mt-24">
@@ -90,36 +109,60 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
             </Button>
           </div>
 
-          <ul className="mt-10 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
-            {items.map((item) => (
-              <li key={item.slug}>
-                <Link href={`/items/${item.slug}`} className="group block">
-                  <div
-                    className="border-ink/10 relative aspect-[4/5] overflow-hidden rounded-3xl border"
-                    style={{
-                      background: `linear-gradient(180deg, ${palette.primary}22, ${palette.primary}55)`,
-                    }}
-                  >
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-7xl opacity-30">{country.flagEmoji}</span>
+          {items.length === 0 ? (
+            <EmptyState
+              className="mt-10"
+              icon={<span className="text-5xl">{country.flagEmoji}</span>}
+              title="No canonical items yet."
+              description={
+                <>
+                  We haven&rsquo;t indexed niche foods for {country.name} in the curated catalog
+                  yet. Browse discover for live listings, or search the global catalog.
+                </>
+              }
+              actions={
+                <>
+                  <Button asChild variant="primary">
+                    <Link href="/discover">Open discover</Link>
+                  </Button>
+                  <Button asChild variant="outline">
+                    <Link href="/search">Search catalog</Link>
+                  </Button>
+                </>
+              }
+            />
+          ) : (
+            <ul className="mt-10 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
+              {items.map((item) => (
+                <li key={item.slug}>
+                  <Link href={`/items/${item.slug}`} className="group block">
+                    <div
+                      className="border-ink/10 relative aspect-[4/5] overflow-hidden rounded-3xl border"
+                      style={{
+                        background: `linear-gradient(180deg, ${palette.primary}22, ${palette.primary}55)`,
+                      }}
+                    >
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-7xl opacity-30">{country.flagEmoji}</span>
+                      </div>
+                      <div className="absolute top-4 left-4">
+                        <Badge variant="solid">{item.categorySlug}</Badge>
+                      </div>
                     </div>
-                    <div className="absolute top-4 left-4">
-                      <Badge variant="solid">{item.categorySlug}</Badge>
-                    </div>
-                  </div>
-                  <p className="text-ink group-hover:text-saffron-700 mt-4 font-serif text-lg transition-colors">
-                    {item.name}
-                  </p>
-                  <p className="text-ash mt-1 line-clamp-2 text-sm">{item.description}</p>
-                  {item.aka?.length ? (
-                    <p className="text-ash/60 mt-1 text-xs tracking-widest uppercase">
-                      aka {item.aka[0]}
+                    <p className="text-ink group-hover:text-saffron-700 mt-4 font-serif text-lg transition-colors">
+                      {item.name}
                     </p>
-                  ) : null}
-                </Link>
-              </li>
-            ))}
-          </ul>
+                    <p className="text-ash mt-1 line-clamp-2 text-sm">{item.description}</p>
+                    {item.aka?.length ? (
+                      <p className="text-ash/60 mt-1 text-xs tracking-widest uppercase">
+                        aka {item.aka[0]}
+                      </p>
+                    ) : null}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
 
         <section
@@ -133,8 +176,8 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
             Heading home to {country.name} soon? Pre-list what you'll bring.
           </h2>
           <p className="mt-3 max-w-2xl opacity-80">
-            Set a finder's fee, mark when you're back, and your neighbours will reserve before the
-            suitcase even closes.
+            Name a small finder&apos;s fee on the listing, mark when you&apos;re back, and
+            neighbours can reserve before the suitcase even closes.
           </p>
           <Button asChild variant="accent" size="lg" className="mt-8">
             <Link href="/listings/new">

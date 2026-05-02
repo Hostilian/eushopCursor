@@ -6,10 +6,17 @@ import {
   PRECISION_INDEX,
   roughCatalogCountryIso2FromLatLng,
 } from '@eushop/geo';
-import { createListingInput, listingSearchInput, updateListingInput } from '@eushop/validators';
+import {
+  createListingInput,
+  listingByCountryFeedInput,
+  listingByPublicIdInput,
+  listingFeedLimitInput,
+  listingSearchInput,
+  updateListingInput,
+  uuidIdParam,
+} from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
 import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
-import { z } from 'zod';
 import { brands, categories, foodItems, listings } from '@eushop/db';
 import { protectedProcedure, publicProcedure, router } from '../trpc';
 
@@ -83,7 +90,7 @@ export const listingsRouter = router({
     }
   }),
 
-  byId: publicProcedure.input(z.object({ id: z.string().min(1) })).query(async ({ ctx, input }) => {
+  byId: publicProcedure.input(listingByPublicIdInput).query(async ({ ctx, input }) => {
     const row = await ctx.db.query.listings.findFirst({ where: eq(listings.id, input.id) });
     if (!row) throw new TRPCError({ code: 'NOT_FOUND' });
     let item = null;
@@ -169,52 +176,42 @@ export const listingsRouter = router({
     return publicListing(updated);
   }),
 
-  remove: protectedProcedure
-    .input(z.object({ id: z.string().uuid() }))
-    .mutation(async ({ ctx, input }) => {
-      const existing = await ctx.db.query.listings.findFirst({ where: eq(listings.id, input.id) });
-      if (!existing) throw new TRPCError({ code: 'NOT_FOUND' });
-      if (existing.sellerId !== ctx.user.id) throw new TRPCError({ code: 'FORBIDDEN' });
-      await ctx.db.update(listings).set({ status: 'removed' }).where(eq(listings.id, input.id));
-      return { ok: true };
-    }),
+  remove: protectedProcedure.input(uuidIdParam).mutation(async ({ ctx, input }) => {
+    const existing = await ctx.db.query.listings.findFirst({ where: eq(listings.id, input.id) });
+    if (!existing) throw new TRPCError({ code: 'NOT_FOUND' });
+    if (existing.sellerId !== ctx.user.id) throw new TRPCError({ code: 'FORBIDDEN' });
+    await ctx.db.update(listings).set({ status: 'removed' }).where(eq(listings.id, input.id));
+    return { ok: true };
+  }),
 
-  recent: publicProcedure
-    .input(z.object({ limit: z.number().int().min(1).max(40).default(12) }).optional())
-    .query(async ({ ctx, input }) => {
-      const limit = input?.limit ?? 12;
-      try {
-        const rows = await ctx.db
-          .select()
-          .from(listings)
-          .where(eq(listings.status, 'live'))
-          .orderBy(desc(listings.createdAt))
-          .limit(limit);
-        return rows.map(publicListing);
-      } catch {
-        return [];
-      }
-    }),
+  recent: publicProcedure.input(listingFeedLimitInput).query(async ({ ctx, input }) => {
+    const limit = input?.limit ?? 12;
+    try {
+      const rows = await ctx.db
+        .select()
+        .from(listings)
+        .where(eq(listings.status, 'live'))
+        .orderBy(desc(listings.createdAt))
+        .limit(limit);
+      return rows.map(publicListing);
+    } catch {
+      return [];
+    }
+  }),
 
-  byCountry: publicProcedure
-    .input(
-      z.object({ iso2: z.string().length(2), limit: z.number().int().min(1).max(40).default(12) }),
-    )
-    .query(async ({ ctx, input }) => {
-      try {
-        const rows = await ctx.db
-          .select()
-          .from(listings)
-          .where(
-            and(eq(listings.status, 'live'), eq(listings.countryIso2, input.iso2.toUpperCase())),
-          )
-          .orderBy(asc(listings.createdAt))
-          .limit(input.limit);
-        return rows.map(publicListing);
-      } catch {
-        return [];
-      }
-    }),
+  byCountry: publicProcedure.input(listingByCountryFeedInput).query(async ({ ctx, input }) => {
+    try {
+      const rows = await ctx.db
+        .select()
+        .from(listings)
+        .where(and(eq(listings.status, 'live'), eq(listings.countryIso2, input.iso2)))
+        .orderBy(asc(listings.createdAt))
+        .limit(input.limit);
+      return rows.map(publicListing);
+    } catch {
+      return [];
+    }
+  }),
 });
 
 async function inferCountryFromLatLng(p: { lat: number; lng: number }): Promise<string | null> {

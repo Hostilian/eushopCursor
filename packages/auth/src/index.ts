@@ -2,43 +2,23 @@ import { db } from '@eushop/db/client';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { magicLink } from 'better-auth/plugins';
+import { sendMagicLinkEmail } from './send-magic-link-email';
 
 const baseURL = process.env.BETTER_AUTH_URL ?? 'http://localhost:3001';
-/** ≥32 chars so Better Auth does not warn in dev when `.env` is missing. */
-const secret =
-  process.env.BETTER_AUTH_SECRET ??
+
+const DEV_FALLBACK_SECRET =
   'dev-only-not-for-production-openssl-rand-base64-32-chars-min-ok-xxxxxxxx';
 
-function escapeHtmlAttr(value: string): string {
-  return value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
+const envSecret = process.env.BETTER_AUTH_SECRET;
+if (process.env.NODE_ENV === 'production') {
+  if (!envSecret || envSecret.length < 32 || envSecret === DEV_FALLBACK_SECRET) {
+    throw new Error(
+      'BETTER_AUTH_SECRET must be set to a random value of at least 32 characters in production (not the dev fallback).',
+    );
+  }
 }
 
-async function sendMagicLinkEmail(to: string, url: string): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.info(`[magic-link] ${to} → ${url}`);
-    return;
-  }
-  const from = process.env.EMAIL_FROM ?? 'Eushop <onboarding@resend.dev>';
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from,
-      to: [to],
-      subject: 'Sign in to Eushop',
-      html: `<p><a href="${escapeHtmlAttr(url)}">Sign in to Eushop</a></p><p>If you did not request this, you can ignore this email.</p>`,
-    }),
-  });
-  if (!res.ok) {
-    const body = await res.text();
-    console.error('[magic-link] Resend error', res.status, body);
-    throw new Error(`Magic link email failed (${res.status})`);
-  }
-}
+const secret = envSecret ?? DEV_FALLBACK_SECRET;
 
 /**
  * Better Auth instance shared across the API server, the web app's server

@@ -62,6 +62,74 @@ export type ProfileUpdateInput = z.infer<typeof profileUpdateInput>;
 export const blockUserInput = z.object({ userId: z.string().uuid() });
 export type BlockUserInput = z.infer<typeof blockUserInput>;
 
+/** tRPC: any row addressed by a UUID primary key in the URL/body. */
+export const uuidIdParam = z.object({ id: z.string().uuid() });
+export type UuidIdParam = z.infer<typeof uuidIdParam>;
+
+/** tRPC: optional limit for `trips.recent`. */
+export const tripsRecentInput = z
+  .object({ limit: z.number().int().min(1).max(40).default(12) })
+  .optional();
+export type TripsRecentInput = z.infer<typeof tripsRecentInput>;
+
+/** tRPC: traction weekly growth window. */
+export const tractionWeeklyGrowthInput = z
+  .object({ weeks: z.number().int().min(1).max(52).default(12) })
+  .optional();
+export type TractionWeeklyGrowthInput = z.infer<typeof tractionWeeklyGrowthInput>;
+
+/** tRPC: listing detail by public id (UUID or legacy slug fragment). */
+export const listingByPublicIdInput = z.object({ id: z.string().min(1) });
+export type ListingByPublicIdInput = z.infer<typeof listingByPublicIdInput>;
+
+/** tRPC: optional limit for listing feeds. */
+export const listingFeedLimitInput = z
+  .object({ limit: z.number().int().min(1).max(40).default(12) })
+  .optional();
+export type ListingFeedLimitInput = z.infer<typeof listingFeedLimitInput>;
+
+/** tRPC: conversation row by UUID. */
+export const conversationUuidInput = z.object({ id: z.string().uuid() });
+export type ConversationUuidInput = z.infer<typeof conversationUuidInput>;
+
+/** tRPC: paginate messages inside a conversation. */
+export const conversationMessagesInput = z.object({ conversationId: z.string().uuid() });
+export type ConversationMessagesInput = z.infer<typeof conversationMessagesInput>;
+
+/** tRPC: request by opaque id (may be non-UUID in older rows). */
+export const requestByPublicIdInput = z.object({ id: z.string().min(1) });
+export type RequestByPublicIdInput = z.infer<typeof requestByPublicIdInput>;
+
+export const requestIdFieldInput = z.object({ requestId: z.string().uuid() });
+export type RequestIdFieldInput = z.infer<typeof requestIdFieldInput>;
+
+export const listingByCountryFeedInput = z.object({
+  iso2: z
+    .string()
+    .length(2)
+    .transform((s) => s.toUpperCase())
+    .pipe(isoCountry),
+  limit: z.number().int().min(1).max(40).default(12),
+});
+export type ListingByCountryFeedInput = z.infer<typeof listingByCountryFeedInput>;
+
+export const requestsFeedInput = z.object({
+  countryIso2: z
+    .string()
+    .length(2)
+    .transform((s) => s.toUpperCase())
+    .pipe(isoCountry)
+    .optional(),
+  limit: z.number().int().min(1).max(40).default(20),
+});
+export type RequestsFeedInput = z.infer<typeof requestsFeedInput>;
+
+export const requestsNearInput = latLng.extend({
+  radiusKm: z.number().min(1).max(500).default(50),
+  limit: z.number().int().min(1).max(40).default(20),
+});
+export type RequestsNearInput = z.infer<typeof requestsNearInput>;
+
 // ---------- Catalog ----------------------------------------------------------
 
 export const catalogQuery = z.object({
@@ -167,7 +235,7 @@ export const MESSAGING_SAFE_TEMPLATES = [
   'Hi! Is your stash still available?',
   'Could we meet near a metro stop you like? Privacy first.',
   'What freshness window works for the handoff?',
-  'Happy with the finder\u2019s fee — do you accept Revolut/cash on pickup?',
+  'Happy with the agreed fee — do you accept Revolut/cash on pickup?',
 ] as const;
 
 // ---------- Reviews ---------------------------------------------------------
@@ -395,7 +463,7 @@ export type CancelReservationInput = z.infer<typeof cancelReservationInput>;
  *   platformFee = min(€1.50, 12% × finderFee)
  *
  * Implemented in cents to avoid float drift; callers convert back to euros
- * for display. The cap keeps small finder-fee trips investor-friendly; the
+ * for display. The cap keeps small reservation amounts investor-friendly; the
  * proportional slice applies on larger fees.
  */
 export const PLATFORM_FEE_CAP_CENTS = 150;

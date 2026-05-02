@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "De la place dans vos bagages — et des frais de recherche pour ce que vous voulez.",
+  "tagline": "Créneaux voyage, annonces près de vous et demandes ouvertes — un seul réseau.",
   "hero": {
-    "eyebrow": "Capacité en route · demandes avec frais de recherche",
-    "body": "Sur un même marché vous listez la place libre dans vos bagages sur les trajets que vous faites déjà, et vous fixez des frais de recherche pour que quelqu’un près de vous — ou sur la bonne route — trouve ce qu’il vous faut et vous le remette. Même carte centrée sur les villes, mêmes profils clairs, même chemin direct vers l’accord.",
+    "eyebrow": "Routes & créneaux · Garde-manger · Demandes",
+    "body": "Publiez la capacité libre sur les trajets que vous faites déjà, partagez les restes ramenés de chez vous dans une cellule de 5 km, ou ouvrez une demande pour que trajets et annonces correspondants vous trouvent. Même carte centrée sur les villes, profils clairs, chat jusqu’au point de remise concret.",
     "discoverCta": "Découvrir près de chez vous",
     "favsLabel": "Sélection du catalogue"
   },
@@ -14,12 +14,12 @@
     "categoriesEyebrow": "Par envie",
     "categoriesHeading": "Catégories.",
     "editorialEyebrow": "Deux côtés, un réseau",
-    "editorialTitle": "Capacité libre et frais de recherche au même endroit.",
-    "editorialBody": "Eushop relie les trajets à la demande. Quelqu’un à côté n’a besoin que de ce que vous ramenez dans un tote ; quelqu’un qui traverse des fuseaux vend le kilo libre en soute. Nous misons sur les mises en relation, une identité visible et un chat qui mène à une prochaine étape claire.",
+    "editorialTitle": "Trois façons d’échanger, un seul réseau.",
+    "editorialBody": "Offres de trajet avec créneaux réservables, demandes ouvertes et annonces de proximité partagent la même grille. À côté, on veut ce que vous ramenez dans un tote ; sur la route, on vend le kilo libre en soute. D’abord la mise en relation — le règlement reste entre vous tant que les paiements in-app réglementés n’existent pas.",
     "pillar1Title": "Lieu et trajet d’abord.",
     "pillar1Body": "La découverte s’appuie sur les villes, les corridors et les points de remise—pas seulement sur un drapeau pays sur la carte.",
     "pillar2Title": "Deux façons d’échanger.",
-    "pillar2Body": "Publiez la capacité bagage sur les voyages que vous faites déjà, ou lancez une recherche avec frais de recherche pour un produit précis. Prix fixe d’abord ; enchères compétitives ensuite sur la feuille de route, là où nous pouvons les livrer proprement.",
+    "pillar2Body": "Publiez la capacité bagage sur les voyages que vous faites déjà, ou ouvrez une demande pour laisser trajets et annonces matcher. Le garde-manger garde des « frais de recherche » ; les trajets utilisent un prix par créneau convenu. Prix fixe d’abord ; enchères ensuite sur la feuille de route, là où nous pouvons les livrer proprement.",
     "pillar3Title": "Le règlement reste entre vous.",
     "pillar3Body": "Vous convenez dans le chat et réglez en personne ou hors plateforme tant que les paiements in-app réglementés n’existent pas. Nous ne touchons pas à votre argent aujourd’hui.",
     "ctaBandBody": "Partagez vos provisions, lancez une recherche ou préparez la publication de capacité voyage au fil des mises en ligne—toujours dans une cellule de 5 km pour garder des remises praticables."
@@ -39,7 +39,8 @@
     "changelog": "Journal des versions",
     "manifesto": "Manifeste",
     "investors": "Investisseurs",
-    "traction": "Traction"
+    "traction": "Traction",
+    "sources": "Sources"
   },
   "cta": {
     "signIn": "Se connecter",
@@ -93,14 +94,17 @@
     "press": "Presse",
     "roadmap": "Feuille de route",
     "changelog": "Journal des versions",
-    "dataExport": "Export des données (RGPD)"
+    "dataExport": "Export des données (RGPD)",
+    "sources": "Sources"
   },
   "kpi": {
     "euCountries": "Pays UE",
     "categories": "Catégories",
     "catalogItems": "Articles du catalogue",
     "brands": "Marques",
-    "showcaseListings": "Annonces vitrine"
+    "showcaseListings": "Annonces vitrine",
+    "stripFootnote": "Ces chiffres décrivent le catalogue embarqué (et éventuellement la vitrine démo), pas le GMV ni les inscriptions en production.",
+    "stripFootnoteSources": "Sources historiques sur les migrations :"
   },
   "mobile": {
     "onboardingEyebrow": "Eushop",
@@ -139,5 +143,67 @@
   },
   "lang": {
     "switch": "Langue"
+  },
+  "signInForm": {
+    "emailLabel": "Email",
+    "emailPlaceholder": "vous@exemple.eu",
+    "sendMagicLink": "Envoyer le lien magique",
+    "sending": "Envoi…",
+    "checkInbox": "Vérifiez votre boîte mail.",
+    "linkOnWay": "Un lien magique est en route vers {email}.",
+    "localDevHint": "En local : sans Resend, le lien est journalisé dans la console API (et visible dans Mailhog sur :8025).",
+    "mailhogLink": "Mailhog sur :8025",
+    "useDifferentEmail": "Utiliser une autre adresse",
+    "invalidEmail": "Veuillez saisir une adresse e-mail valide.",
+    "errorTooMany": "Trop de requêtes. Réessayez dans une minute.",
+    "errorServer": "Le service d’authentification est indisponible. Réessayez.",
+    "errorSend": "Impossible d’envoyer le lien. Vérifiez l’adresse et réessayez.",
+    "errorGeneric": "Échec",
+    "termsLead": "En continuant, vous acceptez nos",
+    "terms": "Conditions",
+    "privacy": "Confidentialité",
+    "and": "et"
+  },
+  "profilePanel": {
+    "loading": "Chargement…",
+    "gateTitle": "Connectez-vous pour voir votre profil",
+    "gateCta": "Se connecter",
+    "identityTitle": "Identité",
+    "displayName": "Nom affiché",
+    "displayNamePlaceholder": "Anna K.",
+    "homeCountry": "Pays d’origine",
+    "currentCountry": "Pays actuel",
+    "approxCity": "Ville approximative",
+    "approxCityHint": "Stockée en cellule 5 km — jamais l’adresse exacte.",
+    "approxCityPlaceholder": "Paris 11e",
+    "preferredLanguage": "Langue préférée",
+    "preferredLanguageHint": "Pour les e-mails et la langue d’interface par défaut.",
+    "saveProfile": "Enregistrer le profil",
+    "saving": "Enregistrement…",
+    "saved": "Enregistré.",
+    "inboxEyebrow": "Boîte de réception",
+    "inboxBody": "Correspondances, trajets et messages au même endroit.",
+    "openNotifications": "Ouvrir les notifications",
+    "trustEyebrow": "Confiance",
+    "exchanges": "{count} échanges",
+    "verifiedEmail": "E-mail vérifié",
+    "blockedEyebrow": "Comptes bloqués",
+    "blockedBody": "Les personnes bloquées ne peuvent pas vous écrire, et vous non plus.",
+    "blockedLoading": "Chargement…",
+    "blockedNone": "Vous n’avez bloqué personne.",
+    "unblock": "Débloquer",
+    "gdprEyebrow": "RGPD",
+    "gdprBody": "Exportez toutes vos données ou supprimez votre compte à tout moment.",
+    "exportData": "Exporter mes données",
+    "exportPreparing": "Préparation…",
+    "exportDetails": "Voir les détails d’export",
+    "exportFailed": "Échec de l’export.",
+    "deleteAccount": "Supprimer le compte",
+    "deleteIntro": "Tapez {phrase} pour confirmer la suppression définitive.",
+    "deletePhrase": "delete",
+    "deletePhraseLabel": "Phrase de confirmation",
+    "cancel": "Annuler",
+    "deletePermanently": "Supprimer définitivement",
+    "deleting": "Suppression…"
   }
 }

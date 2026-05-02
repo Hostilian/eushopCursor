@@ -10,4 +10,5 @@
 | Admin | `apps/admin/src/app/**` | Cockpit | Moderation copy |
 | Validators | `packages/validators/src/index.ts` | Chat template | User-visible string |
 | Root | `README.md`, `package.json` | Product + stack | Opening paragraph; no uncited millions |
-| Citations | `apps/web/src/app/sources/page.tsx`, `docs/pre-2008-sources.md` | Bibliography | Pre-2008 official sources only |
+| Citations | `apps/web/src/app/sources/page.tsx`, `docs/pre-2008-sources.md` | Bibliography | Pre-2008 official sources; Eurostat 2007 ref. via 2008 SiF where noted |
+| Home KPI | `apps/web/src/components/marketing/kpi-strip.tsx` | Product counts | Footnote links `/traction` and `/sources` |

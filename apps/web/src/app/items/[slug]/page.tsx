@@ -173,8 +173,9 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
           <div>
             <p className="text-ash text-xs tracking-widest uppercase">How to get it</p>
             <p className="text-ink/80 mt-3 text-pretty">
-              Search nearby listings, message the seller, agree on a finder's fee and a meet-up
-              spot. Cash or app — your choice; we don't take a cut.
+              Search nearby listings or matching trips, message the other party, agree on a pantry
+              finder&apos;s fee or a trip slot fee, and pick a meet-up spot. Cash or app — your
+              choice; we don&apos;t take a cut on the goods themselves today.
             </p>
             <Button asChild variant="link" className="mt-2">
               <Link href={`/discover?item=${item.slug}`}>

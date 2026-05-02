@@ -2,25 +2,32 @@
 
 > **Suitcase capacity is the new last-mile.**
 
-Eushop is the diaspora trip & errand marketplace for the EU. Two hundred million
-Europeans live somewhere other than where they grew up — and most of them are flying
-home in the next ninety days with three empty kilos in their checked bag. We are the
-coordination layer that turns those wasted kilos into cravings finally met.
+Eushop is the EU-first diaspora **trip**, **request**, and **pantry** marketplace: reservable
+suitcase slots on routes you already fly, open asks that notify matching supply, and
+nearby listings with a finder’s fee—discovery, identity, and chat first; settlement stays
+between the parties until regulated in-app payments ship.
+
+Large-scale cross-border mobility in Europe is a long-standing statistical fact, not a
+vendor TAM we invent here. When we mention that context in marketing copy, we point to
+official sources from **2007 or earlier** (plus Eurostat’s first 2007 headline release,
+documented in 2008)—see **[docs/pre-2008-sources.md](docs/pre-2008-sources.md)** and the
+public web bibliography at **`/sources`**.
 
 Three primitives, one network:
 
 1. **Trip offers** — a verified diaspora user announces a trip ("Munich → Warsaw,
    May 14, 6 suitcase slots, here's what I'll grab"), each slot reservable at an
-   agreed finder's fee. *Reservations are the monetisable event.*
+   **agreed fee per slot**. *Reservations are the monetisable event.*
 2. **Open requests** — a buyer posts what they want; matching trips and listings
    in the same corridor or 5 km cell light it up automatically.
 3. **Pantry listings** — neighbourhood-scale finder-fee posts ("half a tin of
    Krówki, €3, pickup at Goetheplatz") with privacy-preserving geohash discovery.
 
 We charge a small platform fee on each confirmed reservation:
-`platformFee = min(€1.50, 12% × finderFee)`. Settlement of the goods themselves stays
-between the parties — we are introductions, identity, and chat, not customs, freight,
-or regulated payments.
+`platformFee = min(€1.50, 12% × finderFee)` (the Zod field name is historical; trip UI
+calls this an **agreed slot fee**). Settlement of the goods themselves stays between
+the parties — we are introductions, identity, and chat, not customs, freight, or
+regulated payments.
 
 > Discovery is tied to **places, routes, and corridors**. Profiles are photo-forward
 > and trust-graphed. Listings and trips render with a 5 km privacy cell and
@@ -149,7 +156,7 @@ Then open:
 The seed catalog (`packages/catalog-data`) still powers **niche EU foods** and country
 editorial pages—Krówki, Stroopwafels, Mastiha, Liverwurst, Sült, Halloumi, and many more.
 That remains useful for finder-fee “taste of home” listings; **trip / luggage** surfaces
-are orthogonal and keyed off routes and capacity metadata.
+are orthogonal and keyed off routes and **slot** metadata.
 
 |              |                                      |
 | ------------ | ------------------------------------ |
@@ -187,6 +194,17 @@ PartyKit DO (chat) · Inngest workflows · Cloudflare R2 (media)
 Each module under `packages/api-router/src/routers/*` is microservice-ready: own
 domain boundaries, exposed via tRPC, can be split out into its own service when load
 demands. We start as a modular monolith — the productive default in 2026.
+
+## Historic statistics (citations)
+
+Used for **editorial / mobility context** only—not as implied revenue market size:
+
+1. United Nations, DESA, Population Division (2006). *International Migration Report 2006*.  
+   https://www.un.org/en/development/desa/population/publications/pdf/migration/migration-report2006.pdf  
+2. OECD (2007). *International Migration Outlook 2007* (SOPEMI).  
+   https://www.oecd.org/migration/imo/  
+3. Eurostat (2008; reference period 2007). *Population in Europe 2007: first results* (KS-SF-08-081).  
+   https://ec.europa.eu/eurostat/en/web/products-statistics-in-focus/-/ks-sf-08-081  
 
 ## License
 

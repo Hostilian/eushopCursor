@@ -1,5 +1,6 @@
 import { STATS } from '@eushop/catalog-data';
 import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 import { isDemoModeEnabled } from '../../lib/demo-mode';
 import { showcaseStats } from '../../lib/showcase';
 
@@ -16,6 +17,7 @@ import { showcaseStats } from '../../lib/showcase';
  */
 export async function KpiStrip() {
   const t = await getTranslations('kpi');
+  const tNav = await getTranslations('nav');
   const demo = await isDemoModeEnabled();
   const baseTiles = [
     { label: t('euCountries'), value: STATS.countries },
@@ -36,6 +38,17 @@ export async function KpiStrip() {
           </div>
         ))}
       </div>
+      <p className="text-ink/55 container-editorial -mt-4 pb-10 text-center text-xs md:text-left">
+        {t('stripFootnote')}{' '}
+        <Link href="/traction" className="text-ink underline underline-offset-4">
+          /traction
+        </Link>
+        . {t('stripFootnoteSources')}{' '}
+        <Link href="/sources" className="text-ink underline underline-offset-4">
+          {tNav('sources')}
+        </Link>
+        .
+      </p>
     </section>
   );
 }

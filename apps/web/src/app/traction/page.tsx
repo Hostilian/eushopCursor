@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { EditorialPageLayout } from '../../components/marketing/editorial-page';
+import { MarketingSourcesStrip } from '../../components/marketing/marketing-sources-strip';
 import { api } from '../../lib/trpc-server';
 
 export const metadata = {
@@ -67,7 +68,7 @@ export default async function TractionPage() {
       caption: `${formatInt(counts.reservationsCompleted)} completed handoffs`,
     },
     {
-      label: 'GMV (agreed finder fees)',
+      label: 'GMV (agreed reservation amounts)',
       value: formatEuros(counts.gmvCents),
       caption: `${formatEuros(counts.platformFeeCents)} platform fees`,
     },
@@ -150,6 +151,8 @@ export default async function TractionPage() {
           </Link>
           .
         </p>
+
+        <MarketingSourcesStrip />
       </section>
     </EditorialPageLayout>
   );

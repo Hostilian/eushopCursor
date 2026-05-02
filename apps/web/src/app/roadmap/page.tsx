@@ -14,7 +14,7 @@ const PHASES = [
   {
     q: 'Q3 2026',
     title: 'Payments (where legal)',
-    body: 'Optional in-app settlement for finder fees and trip capacity; fixed price first, then pilot auctions where regulation allows.',
+    body: 'Optional in-app settlement for pantry finder fees and trip slot fees; fixed price first, then pilot auctions where regulation allows.',
   },
   {
     q: 'Q4 2026',

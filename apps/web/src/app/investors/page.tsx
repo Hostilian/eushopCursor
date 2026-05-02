@@ -100,6 +100,43 @@ export default async function InvestorsPage({ searchParams }: InvestorsPageProps
           The pitch deck file is missing on this deployment. Ping the founding team.
         </p>
       )}
+      <section className="text-ink/70 border-ink/10 mt-16 max-w-2xl space-y-4 border-t pt-10 text-sm">
+        <h2 className="text-ink font-serif text-2xl">References (historic statistics)</h2>
+        <p>
+          Same bibliography as the public <Link href="/sources">/sources</Link> page—used only for
+          population and migration <em>context</em>, not as implied specialty-grocery TAM.
+        </p>
+        <ol className="list-decimal space-y-3 pl-5">
+          <li>
+            UN DESA Population Division (2006). <em>International Migration Report 2006</em>.{' '}
+            <Link
+              href="https://www.un.org/en/development/desa/population/publications/pdf/migration/migration-report2006.pdf"
+              className="underline underline-offset-4"
+            >
+              PDF
+            </Link>
+          </li>
+          <li>
+            OECD (2007). <em>International Migration Outlook 2007</em>.{' '}
+            <Link
+              href="https://www.oecd.org/migration/imo/"
+              className="underline underline-offset-4"
+            >
+              OECD migration outlook
+            </Link>
+          </li>
+          <li>
+            Eurostat (2008; ref. 2007). <em>Population in Europe 2007: first results</em>{' '}
+            (KS-SF-08-081).{' '}
+            <Link
+              href="https://ec.europa.eu/eurostat/en/web/products-statistics-in-focus/-/ks-sf-08-081"
+              className="underline underline-offset-4"
+            >
+              Eurostat product page
+            </Link>
+          </li>
+        </ol>
+      </section>
       <p className="text-ink/50 mt-12 max-w-xl text-xs">
         This page is gated by a per-investor token. Please do not share it. We rotate tokens monthly
         and log access timestamps for our own diligence.

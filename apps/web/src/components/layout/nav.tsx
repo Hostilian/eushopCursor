@@ -21,6 +21,7 @@ const investorLinks = [
   { href: '/investors', key: 'nav.investors' as const },
   { href: '/pitch', key: 'nav.pitch' as const },
   { href: '/roadmap', key: 'nav.roadmap' as const },
+  { href: '/sources', key: 'nav.sources' as const },
   { href: '/changelog', key: 'nav.changelog' as const },
 ] as const;
 

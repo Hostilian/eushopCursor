@@ -1,29 +1,31 @@
 import { EditorialPageLayout } from '../../components/marketing/editorial-page';
+import { MarketingSourcesStrip } from '../../components/marketing/marketing-sources-strip';
 
 export default function AboutPage() {
   return (
     <EditorialPageLayout
       eyebrow="About"
       title="The neighbour with the suitcase, found."
-      subtitle="Sixteen million EU citizens live outside their birth country. Eushop exists for the small cravings in between visits home."
+      subtitle="Cross-border mobility inside Europe has run at very large scale for decades—official statistics from the 1990s and 2000s documented millions on the move long before this app existed."
     >
       <article className="text-ink/80 max-w-2xl space-y-6 text-lg leading-relaxed text-pretty">
         <p>
-          Sixteen million EU citizens live in a member state other than the one they were born in.
-          Almost all of them carry the same small ache: the chocolate that doesn&apos;t taste quite
-          right anywhere else, the curd-cheese bar from grandma&apos;s fridge, the precise brand of
-          sausage that means &quot;Sunday&quot; to them.
+          Eushop exists for the small cravings between visits home: the chocolate that doesn&apos;t
+          taste quite right anywhere else, the cheese bar from grandma&apos;s fridge, the brand of
+          sausage that means &quot;Sunday&quot; to you.
         </p>
         <p>
-          Eushop exists to scratch that itch. Not by importing, packaging, shipping. By making the
-          introduction. Someone in your city brought back a tin of Wedel, a wheel of Manchego, a
-          tube of Aromat. We just put you in touch.
+          We are not an importer, a warehouse, or a courier. We are introductions: trip offers with
+          reservable suitcase slots, open requests, and nearby pantry listings—discovery, identity
+          you can see, and chat that leads to a clear handoff. Settlement stays between you until
+          regulated in-app payments exist.
         </p>
         <p>
-          We are tiny on purpose. No payments. No commercial sellers. No bulk imports. Just
-          neighbours, finder&apos;s fees, and a coffee-shop handoff.
+          We are tiny on purpose. No commercial sellers in the loop today. Meet in public, use your
+          judgement, and keep portions neighbour-sized.
         </p>
       </article>
+      <MarketingSourcesStrip />
     </EditorialPageLayout>
   );
 }

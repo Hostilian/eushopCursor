@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Spazio libero nel tuo viaggio — e un compenso ricerca per ciò che vuoi.",
+  "tagline": "Slot viaggio, annunci vicino a te e richieste aperte — una sola rete.",
   "hero": {
-    "eyebrow": "Posto in valigia · richieste con compenso ricerca",
-    "body": "Nello stesso mercato elenchi lo spazio avanzo nei bagagli sui viaggi che già fai e fissi un compenso ricerca perché qualcuno vicino — o sulla rotta giusta — trovi ciò che ti serve e te lo consegni. Stessa mappa incentrata sulla città, stessi profili chiari, stesso percorso diretto all’accordo.",
+    "eyebrow": "Rotte e slot · Dispensa · Richieste",
+    "body": "Pubblica capacità libera sui viaggi che fai già, condividi ciò che porti da casa in una cella di 5 km o apri una richiesta perché viaggi e annunci corrispondenti ti trovino. Stessa mappa incentrata sulla città, profili chiari, chat fino a un punto di passaggio concreto.",
     "discoverCta": "Scopri vicino a te",
     "favsLabel": "In evidenza dal catalogo"
   },
@@ -14,12 +14,12 @@
     "categoriesEyebrow": "Per voglia",
     "categoriesHeading": "Categorie.",
     "editorialEyebrow": "Due lati, una rete",
-    "editorialTitle": "Capacità libera e compenso ricerca nello stesso posto.",
-    "editorialBody": "Eushop collega viaggi e domanda. Qualcuno vicino vuole solo ciò che riporti in una borsa; qualcuno che attraversa fusi orari vende il chilo libero in stiva. Punto su presentazioni, identità visibile e chat che porta a un passo successivo chiaro.",
+    "editorialTitle": "Tre modi di scambiare, una sola rete.",
+    "editorialBody": "Offerte di viaggio con slot prenotabili, richieste aperte e annunci di dispensa condividono la stessa griglia. Accanto serve ciò che riporti in una borsa; in rotta si vende il chilo libero in stiva. Prima le presentazioni — il pagamento resta tra voi finché non arrivano pagamenti in-app regolamentati.",
     "pillar1Title": "Luogo e percorso prima di tutto.",
     "pillar1Body": "La scoperta si basa su città, corridoi e punti di consegna—non solo su una bandiera paese sulla mappa.",
     "pillar2Title": "Due modi di scambiare.",
-    "pillar2Body": "Pubblica capacità bagaglio sui viaggi che fai già, o apri una richiesta con compenso per qualcosa di specifico. Prezzo fisso per primo; aste competitive dopo, nella roadmap dove possiamo implementarle bene.",
+    "pillar2Body": "Pubblica capacità bagaglio sui viaggi che fai già, o apri una richiesta perché viaggi e annunci facciano match. La dispensa resta con «compenso ricerca»; i viaggi usano una tariffa per slot concordata. Prezzo fisso per primo; aste dopo, nella roadmap dove possiamo implementarle bene.",
     "pillar3Title": "Il pagamento resta tra voi.",
     "pillar3Body": "Vi accordate in chat e regolate di persona o fuori app finché non arrivano pagamenti in-app regolamentati. Oggi non tocchiamo i vostri soldi.",
     "ctaBandBody": "Condividi le scorte, pubblica una richiesta o preparati a postare capacità viaggio man mano che i flussi escono—sempre in una cella di 5 km così i passaggi restano pratici."
@@ -39,7 +39,8 @@
     "changelog": "Changelog",
     "manifesto": "Manifesto",
     "investors": "Investitori",
-    "traction": "Trazione"
+    "traction": "Trazione",
+    "sources": "Fonti"
   },
   "cta": {
     "signIn": "Accedi",
@@ -93,14 +94,17 @@
     "press": "Stampa",
     "roadmap": "Roadmap",
     "changelog": "Changelog",
-    "dataExport": "Esportazione dati (GDPR)"
+    "dataExport": "Esportazione dati (GDPR)",
+    "sources": "Fonti"
   },
   "kpi": {
     "euCountries": "Paesi UE",
     "categories": "Categorie",
     "catalogItems": "Articoli in catalogo",
     "brands": "Marchi",
-    "showcaseListings": "Annunci showcase"
+    "showcaseListings": "Annunci showcase",
+    "stripFootnote": "Questi numeri descrivono il catalogo incluso nel pacchetto (e facoltativamente tile demo), non GMV o iscrizioni in produzione.",
+    "stripFootnoteSources": "Citazioni storiche sulle migrazioni:"
   },
   "mobile": {
     "onboardingEyebrow": "Eushop",
@@ -109,7 +113,7 @@
     "onboardingDiscoverTitle": "Scopri",
     "onboardingDiscoverBody": "Sfoglia paesi e annunci nel tuo raggio: i pin restano in una cella di 5 km.",
     "onboardingShareTitle": "Condividi",
-    "onboardingShareBody": "Pubblica cosa hai portato da casa. Imposta una piccola ricompensa e incontrati in pubblico.",
+    "onboardingShareBody": "Condividi ciò che porti da casa con un piccolo compenso ricerca per il ritiro; i viaggi usano a parte una tariffa per slot quando pubblichi capacità.",
     "onboardingMeetTitle": "Incontra",
     "onboardingMeetBody": "Messaggi in app, appuntamento al bar o in stazione, pagamento di persona. Non tocchiamo i soldi.",
     "onboardingCta": "Entra nell’app →",
@@ -139,5 +143,67 @@
   },
   "lang": {
     "switch": "Lingua"
+  },
+  "signInForm": {
+    "emailLabel": "Email",
+    "emailPlaceholder": "tu@esempio.eu",
+    "sendMagicLink": "Invia link magico",
+    "sending": "Invio…",
+    "checkInbox": "Controlla la posta in arrivo.",
+    "linkOnWay": "Un link magico è in arrivo a {email}.",
+    "localDevHint": "In locale: senza Resend, il link è nei log dell’API (visibile in",
+    "mailhogLink": "Mailhog su :8025",
+    "useDifferentEmail": "Usa un’altra email",
+    "invalidEmail": "Inserisci un indirizzo email valido.",
+    "errorTooMany": "Troppe richieste. Riprova tra un minuto.",
+    "errorServer": "Il servizio di autenticazione non è raggiungibile. Riprova.",
+    "errorSend": "Impossibile inviare il link. Controlla l’indirizzo e riprova.",
+    "errorGeneric": "Errore",
+    "termsLead": "Continuando accetti i nostri",
+    "terms": "Termini",
+    "privacy": "Privacy",
+    "and": "e"
+  },
+  "profilePanel": {
+    "loading": "Caricamento…",
+    "gateTitle": "Accedi per vedere il profilo",
+    "gateCta": "Accedi",
+    "identityTitle": "Identità",
+    "displayName": "Nome visualizzato",
+    "displayNamePlaceholder": "Anna K.",
+    "homeCountry": "Paese di origine",
+    "currentCountry": "Paese attuale",
+    "approxCity": "Città approssimativa",
+    "approxCityHint": "Salvata come cella da 5 km — mai l’indirizzo esatto.",
+    "approxCityPlaceholder": "Milano Navigli",
+    "preferredLanguage": "Lingua preferita",
+    "preferredLanguageHint": "Per le email e la lingua predefinita dell’interfaccia.",
+    "saveProfile": "Salva profilo",
+    "saving": "Salvataggio…",
+    "saved": "Salvato.",
+    "inboxEyebrow": "Posta",
+    "inboxBody": "Match, viaggi e messaggi in un unico posto.",
+    "openNotifications": "Apri notifiche",
+    "trustEyebrow": "Fiducia",
+    "exchanges": "{count} scambi",
+    "verifiedEmail": "Email verificata",
+    "blockedEyebrow": "Account bloccati",
+    "blockedBody": "Chi blocchi non può scriverti e tu non puoi scrivere a loro.",
+    "blockedLoading": "Caricamento…",
+    "blockedNone": "Non hai bloccato nessuno.",
+    "unblock": "Sblocca",
+    "gdprEyebrow": "GDPR",
+    "gdprBody": "Puoi esportare tutti i dati o eliminare l’account in qualsiasi momento.",
+    "exportData": "Esporta i miei dati",
+    "exportPreparing": "Preparazione…",
+    "exportDetails": "Dettagli esportazione",
+    "exportFailed": "Esportazione non riuscita.",
+    "deleteAccount": "Elimina account",
+    "deleteIntro": "Digita {phrase} per confermare l’eliminazione permanente.",
+    "deletePhrase": "delete",
+    "deletePhraseLabel": "Frase di conferma",
+    "cancel": "Annulla",
+    "deletePermanently": "Elimina definitivamente",
+    "deleting": "Eliminazione…"
   }
 }

@@ -105,7 +105,7 @@ export function ReservationForm({
 
       <div className="border-ink/10 rounded-2xl border bg-white p-4 text-xs">
         <div className="flex items-center justify-between">
-          <span>Finder's fee to traveller</span>
+          <span>Agreed fee to traveller</span>
           <span>€{agreedFee.toFixed(2)}</span>
         </div>
         <div className="text-ash mt-1 flex items-center justify-between">

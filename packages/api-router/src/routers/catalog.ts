@@ -33,10 +33,14 @@ import {
   withFallback,
   withListFallback,
 } from '../lib/mock-fallback';
+import type { DB } from '@eushop/db/client';
 import { adminProcedure, protectedProcedure, publicProcedure, router } from '../trpc';
 import type { Context } from '../context';
 
 type CatalogImageVariantSource = 'off' | 'r2' | 'user';
+
+/** Root DB handle or an in-flight transaction — both expose the query API used for slug checks. */
+type FoodItemSlugDb = DB | Parameters<Parameters<DB['transaction']>[0]>[0];
 
 function baseSlugFromName(name: string): string {
   const s = name
@@ -50,7 +54,7 @@ function baseSlugFromName(name: string): string {
 }
 
 /** Accepts root `db` or a transaction client — same query surface for reads/writes used here. */
-async function uniqueFoodItemSlug(db: Context['db'], name: string): Promise<string> {
+async function uniqueFoodItemSlug(db: FoodItemSlugDb, name: string): Promise<string> {
   const stem = baseSlugFromName(name);
   for (let n = 0; n < 500; n++) {
     const slug = (n === 0 ? stem : `${stem}-${n}`).slice(0, 96);

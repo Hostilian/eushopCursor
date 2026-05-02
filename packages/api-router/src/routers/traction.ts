@@ -1,5 +1,5 @@
+import { tractionWeeklyGrowthInput } from '@eushop/validators';
 import { sql } from 'drizzle-orm';
-import { z } from 'zod';
 import { listings, profiles, requests, tripOffers, tripReservations, users } from '@eushop/db';
 import { publicProcedure, router } from '../trpc';
 
@@ -69,17 +69,15 @@ export const tractionRouter = router({
   }),
 
   /** Last-N-days roll-up for sparkline rendering. */
-  weeklyGrowth: publicProcedure
-    .input(z.object({ weeks: z.number().int().min(1).max(52).default(12) }).optional())
-    .query(async ({ ctx, input }) => {
-      const weeks = input?.weeks ?? 12;
-      try {
-        const rows = await ctx.db.execute<{
-          week: string;
-          signups: number;
-          trips: number;
-          reservations: number;
-        }>(sql`
+  weeklyGrowth: publicProcedure.input(tractionWeeklyGrowthInput).query(async ({ ctx, input }) => {
+    const weeks = input?.weeks ?? 12;
+    try {
+      const rows = await ctx.db.execute<{
+        week: string;
+        signups: number;
+        trips: number;
+        reservations: number;
+      }>(sql`
           WITH series AS (
             SELECT generate_series(
               date_trunc('week', now()) - (${weeks - 1} || ' weeks')::interval,
@@ -95,26 +93,26 @@ export const tractionRouter = router({
           FROM series s
           ORDER BY s.week ASC
         `);
-        const list =
-          (
-            rows as unknown as {
-              rows: Array<{ week: string; signups: number; trips: number; reservations: number }>;
-            }
-          ).rows ??
-          (rows as unknown as Array<{
-            week: string;
-            signups: number;
-            trips: number;
-            reservations: number;
-          }>);
-        return Array.isArray(list) ? list : [];
-      } catch {
-        return Array.from({ length: weeks }, (_v, i) => ({
-          week: `w${i + 1}`,
-          signups: 0,
-          trips: 0,
-          reservations: 0,
-        }));
-      }
-    }),
+      const list =
+        (
+          rows as unknown as {
+            rows: Array<{ week: string; signups: number; trips: number; reservations: number }>;
+          }
+        ).rows ??
+        (rows as unknown as Array<{
+          week: string;
+          signups: number;
+          trips: number;
+          reservations: number;
+        }>);
+      return Array.isArray(list) ? list : [];
+    } catch {
+      return Array.from({ length: weeks }, (_v, i) => ({
+        week: `w${i + 1}`,
+        signups: 0,
+        trips: 0,
+        reservations: 0,
+      }));
+    }
+  }),
 });

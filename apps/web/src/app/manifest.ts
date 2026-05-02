@@ -2,10 +2,10 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Eushop — Luggage space & finder fees',
+    name: 'Eushop — Trip slots & pantry',
     short_name: 'Eushop',
     description:
-      'City-to-city marketplace: sell spare bag capacity on your routes (fixed price or bids) or post requests with a finder’s fee. Rich profiles, low-friction deals.',
+      'Reservable suitcase slots on trips you take, open requests, and nearby pantry listings—profiles, chat, public handoffs.',
     start_url: '/',
     display: 'standalone',
     background_color: '#FAF7F2',

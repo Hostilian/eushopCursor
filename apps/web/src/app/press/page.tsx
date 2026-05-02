@@ -10,9 +10,10 @@ export default function PressPage() {
       <div className="text-ink/80 max-w-2xl space-y-8 text-lg leading-relaxed">
         <p>
           <strong className="text-ink">Boilerplate:</strong> Eushop is a city- and route-first peer
-          marketplace for spare luggage capacity on real journeys and for finder-fee requests when
-          someone wants something specific. Discovery is place-based; settlement and logistics stay
-          between the parties unless regulated in-app payments are offered later.
+          marketplace for reservable suitcase slots on real journeys, open requests, and finder-fee
+          pantry listings when someone wants something specific. Discovery is place-based;
+          settlement and logistics stay between the parties unless regulated in-app payments are
+          offered later.
         </p>
         <p>
           <strong className="text-ink">Logo:</strong> Use the wordmark &quot;Eushop&quot; in

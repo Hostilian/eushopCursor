@@ -14,10 +14,11 @@ import {
   reserveSlotInput,
   tripFeedNearInput,
   tripSearchInput,
+  tripsRecentInput,
+  uuidIdParam,
 } from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
 import { and, asc, desc, eq, gte, inArray, lte, sql } from 'drizzle-orm';
-import { z } from 'zod';
 import { tripOffers, tripReservations } from '@eushop/db';
 import { protectedProcedure, publicProcedure, router } from '../trpc';
 
@@ -100,7 +101,7 @@ export const tripsRouter = router({
     }
   }),
 
-  byId: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
+  byId: publicProcedure.input(uuidIdParam).query(async ({ ctx, input }) => {
     const trip = await ctx.db.query.tripOffers.findFirst({
       where: eq(tripOffers.id, input.id),
     });
@@ -121,21 +122,19 @@ export const tripsRouter = router({
     return { trip: publicTrip(trip), reservations };
   }),
 
-  recent: publicProcedure
-    .input(z.object({ limit: z.number().int().min(1).max(40).default(12) }).optional())
-    .query(async ({ ctx, input }) => {
-      try {
-        const rows = await ctx.db
-          .select()
-          .from(tripOffers)
-          .where(and(eq(tripOffers.status, 'open'), gte(tripOffers.departAt, new Date())))
-          .orderBy(asc(tripOffers.departAt))
-          .limit(input?.limit ?? 12);
-        return rows.map(publicTrip);
-      } catch {
-        return [];
-      }
-    }),
+  recent: publicProcedure.input(tripsRecentInput).query(async ({ ctx, input }) => {
+    try {
+      const rows = await ctx.db
+        .select()
+        .from(tripOffers)
+        .where(and(eq(tripOffers.status, 'open'), gte(tripOffers.departAt, new Date())))
+        .orderBy(asc(tripOffers.departAt))
+        .limit(input?.limit ?? 12);
+      return rows.map(publicTrip);
+    } catch {
+      return [];
+    }
+  }),
 
   mineAsSeller: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db
@@ -186,15 +185,13 @@ export const tripsRouter = router({
     return publicTrip(created);
   }),
 
-  close: protectedProcedure
-    .input(z.object({ id: z.string().uuid() }))
-    .mutation(async ({ ctx, input }) => {
-      const trip = await ctx.db.query.tripOffers.findFirst({ where: eq(tripOffers.id, input.id) });
-      if (!trip) throw new TRPCError({ code: 'NOT_FOUND' });
-      if (trip.sellerId !== ctx.user.id) throw new TRPCError({ code: 'FORBIDDEN' });
-      await ctx.db.update(tripOffers).set({ status: 'closed' }).where(eq(tripOffers.id, input.id));
-      return { ok: true };
-    }),
+  close: protectedProcedure.input(uuidIdParam).mutation(async ({ ctx, input }) => {
+    const trip = await ctx.db.query.tripOffers.findFirst({ where: eq(tripOffers.id, input.id) });
+    if (!trip) throw new TRPCError({ code: 'NOT_FOUND' });
+    if (trip.sellerId !== ctx.user.id) throw new TRPCError({ code: 'FORBIDDEN' });
+    await ctx.db.update(tripOffers).set({ status: 'closed' }).where(eq(tripOffers.id, input.id));
+    return { ok: true };
+  }),
 
   reserve: protectedProcedure.input(reserveSlotInput).mutation(async ({ ctx, input }) => {
     const trip = await ctx.db.query.tripOffers.findFirst({

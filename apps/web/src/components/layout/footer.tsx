@@ -58,6 +58,9 @@ export function Footer() {
             <li>
               <Link href="/changelog">{tc('changelog')}</Link>
             </li>
+            <li>
+              <Link href="/sources">{tc('sources')}</Link>
+            </li>
           </ul>
         </div>
 

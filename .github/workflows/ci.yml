@@ -23,7 +23,7 @@ jobs:
           POSTGRES_USER: eushop
           POSTGRES_PASSWORD: eushop
           POSTGRES_DB: eushop
-        ports: ["5432:5432"]
+        ports: ['5432:5432']
         options: >-
           --health-cmd "pg_isready -U eushop"
           --health-interval 5s
@@ -68,6 +68,9 @@ jobs:
 
       - name: Lint
         run: pnpm lint
+
+      - name: Unit tests
+        run: pnpm test:unit
 
       - name: Build
         run: pnpm build

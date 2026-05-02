@@ -1,4 +1,5 @@
 import { EditorialPageLayout } from '../../components/marketing/editorial-page';
+import { MarketingSourcesStrip } from '../../components/marketing/marketing-sources-strip';
 
 export const metadata = {
   title: 'Manifesto · Eushop',
@@ -11,7 +12,7 @@ export default function ManifestoPage() {
     <EditorialPageLayout
       eyebrow="Manifesto"
       title="Suitcase capacity is the new last-mile."
-      subtitle="Two hundred million Europeans live somewhere other than where they grew up. Most of them are flying home in the next ninety days."
+      subtitle="Every weekend someone is already crossing a border with room in the bag. The gap is coordination—not another freight company."
     >
       <article className="text-ink/80 max-w-2xl space-y-8 text-lg leading-relaxed text-pretty">
         <p>
@@ -84,6 +85,7 @@ export default function ManifestoPage() {
           — The Eushop founding team. Munich, Warsaw, Lisbon, Athens, Tallinn.
         </p>
       </article>
+      <MarketingSourcesStrip />
     </EditorialPageLayout>
   );
 }

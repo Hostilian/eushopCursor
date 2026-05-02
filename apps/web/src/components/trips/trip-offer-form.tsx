@@ -223,7 +223,7 @@ export function TripOfferForm() {
       </div>
 
       <Field
-        label="Default finder's fee per slot (EUR)"
+        label="Default agreed fee per slot (EUR)"
         hint="Buyers can offer more; this is your floor."
       >
         <input
@@ -301,7 +301,8 @@ export function TripOfferForm() {
       <div className="flex items-center justify-between">
         <p className="text-ash text-xs">
           By posting you agree to handle your own customs declarations and food-safety obligations.
-          Eushop's take rate appears to buyers as a small platform fee on top of your finder's fee.
+          Eushop&apos;s take rate appears to buyers as a small platform fee on top of your per-slot
+          fee.
         </p>
         <Button type="submit" disabled={submitting} size="lg">
           {submitting ? 'Posting…' : 'Publish trip'}

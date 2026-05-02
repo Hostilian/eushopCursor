@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Freiraum auf deiner Route – und ein Finderlohn für das, was du willst.",
+  "tagline": "Trip-Slots, Vorrat in der Nähe und Gesuche – ein Netz, eine Karte.",
   "hero": {
-    "eyebrow": "Platz im Gepäck · Gesuche mit Finderlohn",
-    "body": "Auf einem Marktplatz tust du beides: freien Platz in deinen Koffern auf Fahrten listen, die du sowieso machst, und einen Finderlohn nennen, damit jemand in der Nähe – oder auf der passenden Route – dir beschafft, was du sucht, und es dir übergibt. Dieselbe stadtnahe Karte, dieselben klaren Profile, derselbe schnelle Weg zum Handel.",
+    "eyebrow": "Routen & Slots · Vorrat · Gesuche",
+    "body": "Stell freie Kofferplätze auf Fahrten ein, die du ohnehin machst, teile Reste aus dem Heimaturlaub in einer 5-km-Zelle oder schreib ein Gesuch – passende Trips und Anzeigen finden dich. Dieselbe stadtnahe Karte, klare Profile, Chat bis zum konkreten Treffpunkt.",
     "discoverCta": "In deiner Nähe entdecken",
     "favsLabel": "Katalog-Highlights"
   },
@@ -14,12 +14,12 @@
     "categoriesEyebrow": "Nach Gelüst stöbern",
     "categoriesHeading": "Kategorien.",
     "editorialEyebrow": "Zwei Seiten, ein Netz",
-    "editorialTitle": "Freie Kapazität und Finderlohn an einem Ort.",
-    "editorialBody": "Eushop verbindet Reisen mit Nachfrage. Jemand in der Nähe braucht vielleicht nur, was du in der Tasche hast; jemand über Zeitzonen hinweg verkauft das freie Kilo im Check-in. Wir setzen auf Kontakte, sichtbare Identität und Chat, der zu klaren nächsten Schritten führt.",
+    "editorialTitle": "Drei Arten zu handeln, ein Netz.",
+    "editorialBody": "Trip-Angebote mit reservierbaren Slots, offene Gesuche und Vorrat in der Nähe teilen sich dieselbe Entdeckungskarte. Nebenan geht es um das, was du in der Tasche hast; auf der Route um das freie Kilo im Aufgabegepäck. Erst die Vermittlung – Zahlung bleibt zwischen euch, bis regulierte In-App-Zahlungen kommen.",
     "pillar1Title": "Ort und Route zuerst.",
     "pillar1Body": "Entdecken folgt Städten, Korridoren und Übergabeorten—nicht nur einer Länderflagge auf der Karte.",
     "pillar2Title": "Zwei Arten zu handeln.",
-    "pillar2Body": "Freie Gepäckkapazität auf Fahrten, die du sowieso machst, oder ein Gesuch mit Finderlohn. Festpreise zuerst; Wettbewerbsgebote folgen auf der Roadmap, wo wir sie sauber liefern können.",
+    "pillar2Body": "Freie Gepäckkapazität auf Fahrten, die du sowieso machst, oder ein Gesuch, damit Trips und Anzeigen matchen. Vorrat nutzt weiter „Finderlohn“; Trip-Slots einen vereinbarten Slot-Preis. Festpreise zuerst; Wettbewerbsgebote folgen auf der Roadmap, wo wir sie sauber liefern können.",
     "pillar3Title": "Abwicklung bleibt bei euch.",
     "pillar3Body": "Ihr vereinbart im Chat und zahlt persönlich oder außerhalb der App, bis regulierte In-App-Zahlungen kommen. Heute berühren wir euer Geld nicht.",
     "ctaBandBody": "Teile deine Mitbringsel, schreib ein Gesuch oder bereite Trip-Kapazität vor, sobald die Flows live gehen—immer innerhalb einer 5-km-Zelle, damit Übergaben praktikabel bleiben."
@@ -39,7 +39,8 @@
     "changelog": "Changelog",
     "manifesto": "Manifest",
     "investors": "Investoren",
-    "traction": "Zahlen"
+    "traction": "Zahlen",
+    "sources": "Quellen"
   },
   "cta": {
     "signIn": "Anmelden",
@@ -93,14 +94,17 @@
     "press": "Presse",
     "roadmap": "Roadmap",
     "changelog": "Changelog",
-    "dataExport": "Datenexport (DSGVO)"
+    "dataExport": "Datenexport (DSGVO)",
+    "sources": "Quellen"
   },
   "kpi": {
     "euCountries": "EU-Länder",
     "categories": "Kategorien",
     "catalogItems": "Katalogartikel",
     "brands": "Marken",
-    "showcaseListings": "Showcase-Anzeigen"
+    "showcaseListings": "Showcase-Anzeigen",
+    "stripFootnote": "Diese Zahlen beschreiben den gebündelten Katalog (und optional Demo-Kacheln), nicht Live-GMV oder Anmeldungen.",
+    "stripFootnoteSources": "Historische Migrationsnachweise:"
   },
   "mobile": {
     "onboardingEyebrow": "Eushop",
@@ -109,7 +113,7 @@
     "onboardingDiscoverTitle": "Entdecken",
     "onboardingDiscoverBody": "Stöbere in Ländern und Anzeigen in deinem Umkreis — Pins bleiben in einer 5-km-Zelle.",
     "onboardingShareTitle": "Teilen",
-    "onboardingShareBody": "Poste, was du von zu Hause mitgebracht hast. Setz einen kleinen Finderlohn und triff dich an einem öffentlichen Ort.",
+    "onboardingShareBody": "Teile, was du von zu Hause mitbringst, mit kleinem Finderlohn zur Abholung – für Trip-Kapazität gilt später ein eigener Slot-Preis.",
     "onboardingMeetTitle": "Treffen",
     "onboardingMeetBody": "Chat in der App, trefft euch im Café oder am Bahnhof, bezahlt vor Ort. Wir berühren kein Bargeld.",
     "onboardingCta": "App öffnen →",
@@ -139,5 +143,67 @@
   },
   "lang": {
     "switch": "Sprache"
+  },
+  "signInForm": {
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "du@beispiel.eu",
+    "sendMagicLink": "Magic-Link senden",
+    "sending": "Wird gesendet…",
+    "checkInbox": "Posteingang prüfen.",
+    "linkOnWay": "Ein Magic-Link ist unterwegs an {email}.",
+    "localDevHint": "Lokal: Ohne Resend steht der Link in der API-Konsole (sichtbar in",
+    "mailhogLink": "Mailhog unter :8025",
+    "useDifferentEmail": "Andere E-Mail verwenden",
+    "invalidEmail": "Bitte eine gültige E-Mail-Adresse eingeben.",
+    "errorTooMany": "Zu viele Anfragen. Bitte in einer Minute erneut versuchen.",
+    "errorServer": "Der Auth-Dienst ist gerade nicht erreichbar. Bitte erneut versuchen.",
+    "errorSend": "Magic-Link konnte nicht gesendet werden. Adresse prüfen und erneut versuchen.",
+    "errorGeneric": "Fehlgeschlagen",
+    "termsLead": "Mit Fortfahren akzeptierst du unsere",
+    "terms": "AGB",
+    "privacy": "Datenschutz",
+    "and": "und"
+  },
+  "profilePanel": {
+    "loading": "Lädt…",
+    "gateTitle": "Melde dich an, um dein Profil zu sehen",
+    "gateCta": "Anmelden",
+    "identityTitle": "Identität",
+    "displayName": "Anzeigename",
+    "displayNamePlaceholder": "Anna K.",
+    "homeCountry": "Heimatland",
+    "currentCountry": "Aktuelles Land",
+    "approxCity": "Ungefähre Stadt",
+    "approxCityHint": "Als 5-km-Zelle gespeichert — nie die Adresse.",
+    "approxCityPlaceholder": "München Glockenbach",
+    "preferredLanguage": "Bevorzugte Sprache",
+    "preferredLanguageHint": "Für E-Mails und die Standard-UI-Sprache.",
+    "saveProfile": "Profil speichern",
+    "saving": "Speichern…",
+    "saved": "Gespeichert.",
+    "inboxEyebrow": "Posteingang",
+    "inboxBody": "Treffer, Reisen und Nachrichten an einem Ort.",
+    "openNotifications": "Benachrichtigungen öffnen",
+    "trustEyebrow": "Vertrauen",
+    "exchanges": "{count} Abschlüsse",
+    "verifiedEmail": "E-Mail verifiziert",
+    "blockedEyebrow": "Blockierte Konten",
+    "blockedBody": "Blockierte Personen können dir nicht schreiben, und du ihnen nicht.",
+    "blockedLoading": "Lädt…",
+    "blockedNone": "Du hast niemanden blockiert.",
+    "unblock": "Entblocken",
+    "gdprEyebrow": "DSGVO",
+    "gdprBody": "Du kannst alle Daten exportieren oder dein Konto jederzeit löschen.",
+    "exportData": "Meine Daten exportieren",
+    "exportPreparing": "Vorbereiten…",
+    "exportDetails": "Export-Details ansehen",
+    "exportFailed": "Export fehlgeschlagen.",
+    "deleteAccount": "Konto löschen",
+    "deleteIntro": "Tippe {phrase}, um die endgültige Löschung zu bestätigen.",
+    "deletePhrase": "delete",
+    "deletePhraseLabel": "Bestätigung",
+    "cancel": "Abbrechen",
+    "deletePermanently": "Endgültig löschen",
+    "deleting": "Wird gelöscht…"
   }
 }

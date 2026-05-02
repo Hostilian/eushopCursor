@@ -105,7 +105,7 @@ export default function TripDetailScreen() {
 
         <View className="border-ink/10 rounded-2xl border bg-white p-4">
           <View className="flex-row justify-between">
-            <Text className="text-ash text-xs">Finder's fee</Text>
+            <Text className="text-ash text-xs">Agreed slot fee</Text>
             <Text className="text-ink text-xs">€{agreedFee.toFixed(2)}</Text>
           </View>
           <View className="mt-1 flex-row justify-between">

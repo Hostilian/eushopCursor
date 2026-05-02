@@ -5,10 +5,12 @@ import { RequestForm } from '../../../components/requests/request-form';
 
 export const metadata = {
   title: 'Post a request',
-  description: 'Post a finder-fee request and we will ping the right traveller or neighbour.',
+  description:
+    "Post an open request with an optional max finder's fee—we ping matching pantry listings and trip offers.",
   openGraph: {
     title: 'Post a request · Eushop',
-    description: 'Post a finder-fee request and we will ping the right traveller or neighbour.',
+    description:
+      "Post an open request with an optional max finder's fee—we ping matching pantry listings and trip offers.",
   },
 };
 

@@ -11,8 +11,8 @@ const STEPS = [
   },
   {
     n: '02',
-    title: 'Set a finder\u2019s fee.',
-    body: 'Sellers list a small fee — €3, €5, €10 — to compensate for the suitcase real-estate. You agree on it in chat.',
+    title: 'Name the fee that matches the trade.',
+    body: 'Pantry listings use a small finder\u2019s fee (€3, €5, €10). Trip slots use an agreed fee per slot. You lock the number in chat before you meet.',
   },
   {
     n: '03',

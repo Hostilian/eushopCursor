@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Wolne miejsce w podróży — i opłata znalazcy za to, czego chcesz.",
+  "tagline": "Sloty na wyjazdach, ogłoszenia w pobliżu i otwarte poszukiwania — jedna sieć.",
   "hero": {
-    "eyebrow": "Miejsce w bagażu · poszukiwania z opłatą znalazcy",
-    "body": "Na jednym rynku możesz wystawić wolne miejsce w bagażu na trasach, które i tak pokonujesz, i wyznaczyć opłatę znalazcy, żeby ktoś w pobliżu — albo na właściwej trasie — zdobył to, czego szukasz, i przekazał przy spotkaniu. Ta sama mapa zaczynająca się od miasta, te same czytelne profile, ten sam prosty tor do umowy.",
+    "eyebrow": "Trasy i sloty · Spiżarnia · Poszukiwania",
+    "body": "Opublikuj wolne miejsce w bagażu na trasach, które i tak pokonujesz, podziel się tym, co przywiozłeś z domu w komórce 5 km, albo dodaj poszukiwanie — dopasowane wyjazdy i ogłoszenia same się zgłoszą. Ta sama mapa od miasta, czytelne profile, czat aż do konkretnego miejsca przekazania.",
     "discoverCta": "Odkrywaj w pobliżu",
     "favsLabel": "Wyróżniki z katalogu"
   },
@@ -14,12 +14,12 @@
     "categoriesEyebrow": "Przeglądaj według ochoty",
     "categoriesHeading": "Kategorie.",
     "editorialEyebrow": "Dwie strony, jedna sieć",
-    "editorialTitle": "Wolna pojemność i opłata znalazcy w jednym miejscu.",
-    "editorialBody": "Eushop łączy podróże z popytem. Ktoś obok może potrzebować tylko tego, co masz w torbie; ktoś przeskakujący strefy sprzeda zapasowy kilogram w bagażu rejestrowanym. Stawiamy na kontakty, widoczną tożsamość i czat prowadzący do jasnego kolejnego kroku.",
+    "editorialTitle": "Trzy sposoby wymiany, jedna sieć.",
+    "editorialBody": "Oferty wyjazdów ze slotami do rezerwacji, otwarte poszukiwania i ogłoszenia „ze spiżarni” dzielą tę samą siatkę odkrywania. Obok chodzi o to, co masz w torbie; na trasie o zapasowy kilogram w bagażu. Najpierw kontakt — rozliczenia zostają między wami, dopóki nie pojawią się regulowane płatności w aplikacji.",
     "pillar1Title": "Najpierw miejsce i trasa.",
     "pillar1Body": "Odkrywanie opiera się na miastach, korytarzach i punktach przekazania—nie tylko na fladze kraju na mapie.",
     "pillar2Title": "Dwa sposoby wymiany.",
-    "pillar2Body": "Opublikuj wolną pojemność bagażową na podróże, które i tak robisz, albo dodaj poszukiwanie z opłatą znalazcy. Najpierw cena stała; konkurencyjne licytacje później w roadmapie, tam gdzie da się je wdrożyć porządnie.",
+    "pillar2Body": "Opublikuj wolną pojemność bagażową na podróże, które i tak robisz, albo dodaj poszukiwanie, żeby wyjazdy i ogłoszenia się dopasowały. Spiżarnia nadal ma „opłatę znalazcy”; sloty na wyjazdach mają osobno uzgodnioną stawkę za slot. Najpierw cena stała; licytacje później w roadmapie, tam gdzie da się je wdrożyć porządnie.",
     "pillar3Title": "Rozliczenia zostają między wami.",
     "pillar3Body": "Ustalacie w czacie i płacicie osobiście lub poza aplikacją, dopóki nie pojawią się regulowane płatności in-app. Dziś nie dotykamy waszych pieniędzy.",
     "ctaBandBody": "Podziel się tym, co masz, dodaj poszukiwanie lub przygotuj się do publikowania pojemności na trasach wraz z rozwojem funkcji—zawsze w komórce 5 km, żeby odbiory były praktyczne."
@@ -39,7 +39,8 @@
     "changelog": "Dziennik zmian",
     "manifesto": "Manifest",
     "investors": "Inwestorzy",
-    "traction": "Wyniki"
+    "traction": "Wyniki",
+    "sources": "Źródła"
   },
   "cta": {
     "signIn": "Zaloguj się",
@@ -93,14 +94,17 @@
     "press": "Media",
     "roadmap": "Roadmapa",
     "changelog": "Dziennik zmian",
-    "dataExport": "Eksport danych (RODO)"
+    "dataExport": "Eksport danych (RODO)",
+    "sources": "Źródła"
   },
   "kpi": {
     "euCountries": "Kraje UE",
     "categories": "Kategorie",
     "catalogItems": "Pozycje w katalogu",
     "brands": "Marki",
-    "showcaseListings": "Ogłoszenia demo"
+    "showcaseListings": "Ogłoszenia demo",
+    "stripFootnote": "Te liczby opisują pakietowy katalog (i ewentualnie kafelki demo), a nie GMV ani rejestracje na produkcji.",
+    "stripFootnoteSources": "Historyczne odniesienia migracyjne:"
   },
   "mobile": {
     "onboardingEyebrow": "Eushop",
@@ -109,7 +113,7 @@
     "onboardingDiscoverTitle": "Odkrywaj",
     "onboardingDiscoverBody": "Przeglądaj kraje i ogłoszenia w promieniu — pinezki zostają w komórce 5 km.",
     "onboardingShareTitle": "Dziel się",
-    "onboardingShareBody": "Opublikuj, co przywiozłeś z domu. Ustal niewielką opłatę znalazcy i spotkajcie się publicznie.",
+    "onboardingShareBody": "Podziel się tym, co przywiozłeś, z małą opłatą znalazcy przy odbiorze — przy publikowaniu miejsca na wyjeździe obowiązuje osobna stawka za slot.",
     "onboardingMeetTitle": "Spotkaj się",
     "onboardingMeetBody": "Czat w aplikacji, ustalenie w kawiarni lub na dworcu, płatność na miejscu. Nie dotykamy gotówki.",
     "onboardingCta": "Wejdź do aplikacji →",
@@ -139,5 +143,67 @@
   },
   "lang": {
     "switch": "Język"
+  },
+  "signInForm": {
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "ty@przyklad.eu",
+    "sendMagicLink": "Wyślij magiczny link",
+    "sending": "Wysyłanie…",
+    "checkInbox": "Sprawdź skrzynkę.",
+    "linkOnWay": "Magiczny link jest w drodze na {email}.",
+    "localDevHint": "Lokalnie: bez Resend link trafia do logów API (widoczny w",
+    "mailhogLink": "Mailhog na :8025",
+    "useDifferentEmail": "Użyj innego adresu",
+    "invalidEmail": "Podaj prawidłowy adres e-mail.",
+    "errorTooMany": "Za dużo prób. Spróbuj ponownie za minutę.",
+    "errorServer": "Usługa logowania jest niedostępna. Spróbuj ponownie.",
+    "errorSend": "Nie udało się wysłać linku. Sprawdź adres i spróbuj ponownie.",
+    "errorGeneric": "Błąd",
+    "termsLead": "Kontynuując akceptujesz nasze",
+    "terms": "Regulamin",
+    "privacy": "Politykę prywatności",
+    "and": "oraz"
+  },
+  "profilePanel": {
+    "loading": "Ładowanie…",
+    "gateTitle": "Zaloguj się, aby zobaczyć profil",
+    "gateCta": "Zaloguj się",
+    "identityTitle": "Tożsamość",
+    "displayName": "Wyświetlana nazwa",
+    "displayNamePlaceholder": "Anna K.",
+    "homeCountry": "Kraj pochodzenia",
+    "currentCountry": "Obecny kraj",
+    "approxCity": "Przybliżone miasto",
+    "approxCityHint": "Zapisujemy jako komórkę 5 km — nigdy dokładny adres.",
+    "approxCityPlaceholder": "Warszawa Śródmieście",
+    "preferredLanguage": "Preferowany język",
+    "preferredLanguageHint": "Do e-maili i domyślnego języka interfejsu.",
+    "saveProfile": "Zapisz profil",
+    "saving": "Zapisywanie…",
+    "saved": "Zapisano.",
+    "inboxEyebrow": "Skrzynka",
+    "inboxBody": "Dopasowania, podróże i wiadomości w jednym miejscu.",
+    "openNotifications": "Otwórz powiadomienia",
+    "trustEyebrow": "Zaufanie",
+    "exchanges": "{count} wymian",
+    "verifiedEmail": "Zweryfikowany e-mail",
+    "blockedEyebrow": "Zablokowane konta",
+    "blockedBody": "Zablokowane osoby nie mogą do Ciebie pisać i Ty do nich.",
+    "blockedLoading": "Ładowanie…",
+    "blockedNone": "Nie zablokowałeś nikogo.",
+    "unblock": "Odblokuj",
+    "gdprEyebrow": "RODO",
+    "gdprBody": "Możesz wyeksportować wszystkie dane lub usunąć konto w dowolnym momencie.",
+    "exportData": "Eksportuj moje dane",
+    "exportPreparing": "Przygotowanie…",
+    "exportDetails": "Szczegóły eksportu",
+    "exportFailed": "Eksport nie powiódł się.",
+    "deleteAccount": "Usuń konto",
+    "deleteIntro": "Wpisz {phrase}, aby potwierdzić trwałe usunięcie.",
+    "deletePhrase": "delete",
+    "deletePhraseLabel": "Fraza potwierdzająca",
+    "cancel": "Anuluj",
+    "deletePermanently": "Usuń na stałe",
+    "deleting": "Usuwanie…"
   }
 }

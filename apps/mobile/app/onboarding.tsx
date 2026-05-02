@@ -9,7 +9,7 @@ const STEPS = [
   },
   {
     title: 'Share',
-    body: 'Post what you brought back from home. Set a small finder\u2019s fee and meet in public.',
+    body: 'Share what you brought from home with a small finder\u2019s fee for pickup—trips use a separate agreed slot fee when you publish capacity.',
   },
   {
     title: 'Meet',

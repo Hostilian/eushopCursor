@@ -1,6 +1,5 @@
 import { blockUserInput, profileUpdateInput } from '@eushop/validators';
 import { and, eq } from 'drizzle-orm';
-import { z } from 'zod';
 import { blocks, profiles, users } from '@eushop/db';
 import { protectedProcedure, publicProcedure, router } from '../trpc';
 
@@ -49,11 +48,9 @@ export const profileRouter = router({
     return created;
   }),
 
-  byUserId: publicProcedure
-    .input(z.object({ userId: z.string().uuid() }))
-    .query(async ({ ctx, input }) => {
-      return ctx.db.query.profiles.findFirst({ where: eq(profiles.userId, input.userId) });
-    }),
+  byUserId: publicProcedure.input(blockUserInput).query(async ({ ctx, input }) => {
+    return ctx.db.query.profiles.findFirst({ where: eq(profiles.userId, input.userId) });
+  }),
 
   exportMyData: protectedProcedure.query(async ({ ctx }) => {
     // GDPR Art. 20 — right to data portability

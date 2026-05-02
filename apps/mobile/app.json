@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Eushop",
-    "description": "City-to-city marketplace for spare luggage capacity on your trips (fixed price or bids) and finder-fee requests — location-first, profile-forward.",
+    "description": "EU-first trips, open requests, and pantry listings—reservable suitcase slots, finder-fee pickups in a 5 km cell, location-first discovery.",
     "slug": "eushop",
     "scheme": "eushop",
     "version": "0.1.0",

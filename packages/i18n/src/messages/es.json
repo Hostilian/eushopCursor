@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Espacio libre en tu viaje — y una tarifa de búsqueda por lo que quieres.",
+  "tagline": "Plazas en viajes, anuncios cerca y pedidos abiertos — una sola red.",
   "hero": {
-    "eyebrow": "Hueco en la maleta · pedidos con tarifa de búsqueda",
-    "body": "En un solo mercado publicas hueco libre en tu equipaje en trayectos que ya haces y fijas una tarifa de búsqueda para que alguien cerca — o en la ruta adecuada — localice lo que necesitas y te lo entregue. El mismo mapa centrado en la ciudad, los mismos perfiles claros, el mismo camino directo al trato.",
+    "eyebrow": "Rutas y plazas · Despensa · Pedidos",
+    "body": "Publica hueco libre en viajes que ya haces, comparte lo que trajiste de casa en una celda de 5 km o abre un pedido para que viajes y anuncios coincidentes te encuentren. El mismo mapa centrado en la ciudad, perfiles claros y chat hasta un punto de entrega concreto.",
     "discoverCta": "Descubrir cerca de ti",
     "favsLabel": "Destacados del catálogo"
   },
@@ -14,12 +14,12 @@
     "categoriesEyebrow": "Por antojo",
     "categoriesHeading": "Categorías.",
     "editorialEyebrow": "Dos lados, una red",
-    "editorialTitle": "Capacidad libre y tarifas de búsqueda en un solo sitio.",
-    "editorialBody": "Eushop conecta viajes con demanda. Alguien cerca solo necesita lo que trajiste en una bolsa; alguien que cruza husos vende el kilo libre en facturado. Nos centramos en presentaciones, identidad visible y chat que lleva a un siguiente paso claro.",
+    "editorialTitle": "Tres formas de intercambiar, una sola red.",
+    "editorialBody": "Ofertas de viaje con plazas reservables, pedidos abiertos y anuncios de despensa comparten la misma rejilla. Al lado quieren lo que trajiste en una bolsa; en ruta se vende el kilo libre en facturado. Primero la presentación — el cobro queda entre vosotros hasta que existan pagos in-app regulados.",
     "pillar1Title": "Lugar y ruta primero.",
     "pillar1Body": "El descubrimiento se apoya en ciudades, corredores y puntos de entrega—no solo en una bandera en el mapa.",
     "pillar2Title": "Dos formas de intercambiar.",
-    "pillar2Body": "Publica capacidad de equipaje en viajes que ya haces, o lanza una búsqueda con tarifa para algo concreto. Precio fijo primero; pujas competitivas después en la hoja de ruta donde podamos implementarlas bien.",
+    "pillar2Body": "Publica capacidad de equipaje en viajes que ya haces, o abre un pedido para que viajes y anuncios hagan match. La despensa sigue con «tarifa de búsqueda»; los viajes usan una tarifa acordada por plaza. Precio fijo primero; pujas después en la hoja de ruta donde podamos implementarlas bien.",
     "pillar3Title": "El pago queda entre vosotros.",
     "pillar3Body": "Acordáis en el chat y cobráis en persona o fuera de la app hasta que lleguen pagos in-app regulados. Hoy no tocamos vuestro dinero.",
     "ctaBandBody": "Comparte lo que trajiste, pide algo o prepárate a publicar capacidad de viaje según vayan saliendo los flujos—siempre en una celda de 5 km para que las entregas sean prácticas."
@@ -39,7 +39,8 @@
     "changelog": "Historial de cambios",
     "manifesto": "Manifiesto",
     "investors": "Inversores",
-    "traction": "Tracción"
+    "traction": "Tracción",
+    "sources": "Fuentes"
   },
   "cta": {
     "signIn": "Iniciar sesión",
@@ -93,14 +94,17 @@
     "press": "Prensa",
     "roadmap": "Hoja de ruta",
     "changelog": "Historial de cambios",
-    "dataExport": "Exportación de datos (RGPD)"
+    "dataExport": "Exportación de datos (RGPD)",
+    "sources": "Fuentes"
   },
   "kpi": {
     "euCountries": "Países UE",
     "categories": "Categorías",
     "catalogItems": "Artículos del catálogo",
     "brands": "Marcas",
-    "showcaseListings": "Anuncios demo"
+    "showcaseListings": "Anuncios demo",
+    "stripFootnote": "Estas cifras describen el catálogo empaquetado (y opcionalmente fichas demo), no el GMV ni los registros en producción.",
+    "stripFootnoteSources": "Referencias históricas de migración:"
   },
   "mobile": {
     "onboardingEyebrow": "Eushop",
@@ -109,7 +113,7 @@
     "onboardingDiscoverTitle": "Descubrir",
     "onboardingDiscoverBody": "Explora países y anuncios en tu radio: los pins siguen en una celda de 5 km.",
     "onboardingShareTitle": "Compartir",
-    "onboardingShareBody": "Publica lo que trajiste de casa. Pon una tarifa de búsqueda y quedad en un sitio público.",
+    "onboardingShareBody": "Comparte lo que trajiste con una tarifa de búsqueda pequeña para la recogida; los viajes usan aparte una tarifa por plaza cuando publiques capacidad.",
     "onboardingMeetTitle": "Quedar",
     "onboardingMeetBody": "Chat en la app, acordáis un café o estación, pagáis en persona. No tocamos el dinero.",
     "onboardingCta": "Entrar en la app →",
@@ -139,5 +143,67 @@
   },
   "lang": {
     "switch": "Idioma"
+  },
+  "signInForm": {
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tu@ejemplo.eu",
+    "sendMagicLink": "Enviar enlace mágico",
+    "sending": "Enviando…",
+    "checkInbox": "Revisa tu bandeja de entrada.",
+    "linkOnWay": "Un enlace mágico va en camino a {email}.",
+    "localDevHint": "En local: sin Resend, el enlace aparece en la consola de la API (visible en",
+    "mailhogLink": "Mailhog en :8025",
+    "useDifferentEmail": "Usar otro correo",
+    "invalidEmail": "Introduce un correo electrónico válido.",
+    "errorTooMany": "Demasiadas solicitudes. Prueba de nuevo en un minuto.",
+    "errorServer": "El servicio de autenticación no está disponible. Reintenta.",
+    "errorSend": "No se pudo enviar el enlace. Comprueba el correo e inténtalo de nuevo.",
+    "errorGeneric": "Error",
+    "termsLead": "Al continuar aceptas nuestros",
+    "terms": "Términos",
+    "privacy": "Privacidad",
+    "and": "y"
+  },
+  "profilePanel": {
+    "loading": "Cargando…",
+    "gateTitle": "Inicia sesión para ver tu perfil",
+    "gateCta": "Iniciar sesión",
+    "identityTitle": "Identidad",
+    "displayName": "Nombre visible",
+    "displayNamePlaceholder": "Ana K.",
+    "homeCountry": "País de origen",
+    "currentCountry": "País actual",
+    "approxCity": "Ciudad aproximada",
+    "approxCityHint": "Se guarda como celda de 5 km — nunca la dirección exacta.",
+    "approxCityPlaceholder": "Madrid Centro",
+    "preferredLanguage": "Idioma preferido",
+    "preferredLanguageHint": "Para correos y el idioma de la interfaz por defecto.",
+    "saveProfile": "Guardar perfil",
+    "saving": "Guardando…",
+    "saved": "Guardado.",
+    "inboxEyebrow": "Bandeja",
+    "inboxBody": "Coincidencias, viajes y mensajes en un solo lugar.",
+    "openNotifications": "Abrir notificaciones",
+    "trustEyebrow": "Confianza",
+    "exchanges": "{count} intercambios",
+    "verifiedEmail": "Correo verificado",
+    "blockedEyebrow": "Cuentas bloqueadas",
+    "blockedBody": "Las personas bloqueadas no pueden escribirte, ni tú a ellas.",
+    "blockedLoading": "Cargando…",
+    "blockedNone": "No has bloqueado a nadie.",
+    "unblock": "Desbloquear",
+    "gdprEyebrow": "RGPD",
+    "gdprBody": "Puedes exportar todo lo que guardamos o borrar tu cuenta en cualquier momento.",
+    "exportData": "Exportar mis datos",
+    "exportPreparing": "Preparando…",
+    "exportDetails": "Ver detalles de exportación",
+    "exportFailed": "Error al exportar.",
+    "deleteAccount": "Eliminar cuenta",
+    "deleteIntro": "Escribe {phrase} para confirmar el borrado permanente.",
+    "deletePhrase": "delete",
+    "deletePhraseLabel": "Frase de confirmación",
+    "cancel": "Cancelar",
+    "deletePermanently": "Eliminar permanentemente",
+    "deleting": "Eliminando…"
   }
 }

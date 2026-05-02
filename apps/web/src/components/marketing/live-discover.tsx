@@ -80,7 +80,7 @@ export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
               <div className="text-paper absolute right-5 bottom-5 left-5">
                 <p className="font-serif text-2xl">{hero.freeformName ?? 'Listing'}</p>
                 <p className="text-paper/80 mt-1 text-sm">
-                  {hero.approximateCity} · €{hero.finderFee} finder&apos;s fee
+                  {hero.approximateCity} · €{hero.finderFee} listing
                 </p>
               </div>
             </div>

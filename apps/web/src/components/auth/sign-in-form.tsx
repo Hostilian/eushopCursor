@@ -1,14 +1,18 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button } from '../ui/button';
 
 type Status = 'idle' | 'sending' | 'sent' | 'error';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
-const isLocalDev =
-  typeof window !== 'undefined' &&
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+function isLocalDevHostname(): boolean {
+  if (typeof globalThis.window === 'undefined') return false;
+  const host = globalThis.window.location.hostname;
+  return host === 'localhost' || host === '127.0.0.1';
+}
 
 function emailLooksValid(value: string): boolean {
   if (value.length < 5 || value.length > 254) return false;
@@ -17,6 +21,7 @@ function emailLooksValid(value: string): boolean {
 }
 
 export function SignInForm() {
+  const t = useTranslations('signInForm');
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +29,7 @@ export function SignInForm() {
   const submit = async (): Promise<void> => {
     const trimmed = email.trim();
     if (!emailLooksValid(trimmed)) {
-      setError('Please enter a valid email address.');
+      setError(t('invalidEmail'));
       setStatus('error');
       return;
     }
@@ -39,17 +44,19 @@ export function SignInForm() {
         body: JSON.stringify({ email: trimmed, callbackURL: '/profile' }),
       });
       if (!res.ok) {
-        const message =
-          res.status === 429
-            ? 'Too many requests. Try again in a minute.'
-            : res.status >= 500
-              ? 'Our auth service is unreachable right now. Please retry.'
-              : 'Could not send the magic link. Check the address and try again.';
+        let message: string;
+        if (res.status === 429) {
+          message = t('errorTooMany');
+        } else if (res.status >= 500) {
+          message = t('errorServer');
+        } else {
+          message = t('errorSend');
+        }
         throw new Error(message);
       }
       setStatus('sent');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed');
+      setError(e instanceof Error ? e.message : t('errorGeneric'));
       setStatus('error');
     }
   };
@@ -57,21 +64,18 @@ export function SignInForm() {
   if (status === 'sent') {
     return (
       <div className="text-center" role="status" aria-live="polite">
-        <p className="text-ink font-serif text-2xl">Check your inbox.</p>
-        <p className="text-ash mt-3 text-sm">
-          A magic link is on its way to <span className="text-ink/80">{email}</span>.
-        </p>
-        {isLocalDev ? (
+        <p className="text-ink font-serif text-2xl">{t('checkInbox')}</p>
+        <p className="text-ash mt-3 text-sm">{t('linkOnWay', { email })}</p>
+        {isLocalDevHostname() ? (
           <p className="text-ash mt-4 text-xs">
-            Local dev: if Resend isn&rsquo;t configured, the link is logged in the API console (and
-            visible in{' '}
+            {t('localDevHint')}{' '}
             <a
               href="http://localhost:8025"
               target="_blank"
               rel="noreferrer"
               className="underline underline-offset-2"
             >
-              Mailhog at :8025
+              {t('mailhogLink')}
             </a>
             ).
           </p>
@@ -83,7 +87,7 @@ export function SignInForm() {
           className="mt-6"
           onClick={() => setStatus('idle')}
         >
-          Use a different email
+          {t('useDifferentEmail')}
         </Button>
       </div>
     );
@@ -101,7 +105,7 @@ export function SignInForm() {
       noValidate
     >
       <label className="block">
-        <span className="text-ink block text-sm font-medium">Email</span>
+        <span className="text-ink block text-sm font-medium">{t('emailLabel')}</span>
         <input
           type="email"
           required
@@ -117,7 +121,7 @@ export function SignInForm() {
               setError(null);
             }
           }}
-          placeholder="you@example.eu"
+          placeholder={t('emailPlaceholder')}
           className="border-ink/10 bg-paper focus:border-saffron-500 mt-2 w-full rounded-2xl border px-4 py-3 text-sm focus:outline-none"
         />
       </label>
@@ -127,16 +131,16 @@ export function SignInForm() {
         </p>
       ) : null}
       <Button type="submit" size="lg" className="w-full" disabled={pending}>
-        {pending ? 'Sending…' : 'Send magic link'}
+        {pending ? t('sending') : t('sendMagicLink')}
       </Button>
       <p className="text-ash text-xs">
-        By continuing you agree to our{' '}
+        {t('termsLead')}{' '}
         <a href="/terms" className="underline">
-          Terms
+          {t('terms')}
         </a>{' '}
-        and{' '}
+        {t('and')}{' '}
         <a href="/privacy" className="underline">
-          Privacy
+          {t('privacy')}
         </a>
         .
       </p>

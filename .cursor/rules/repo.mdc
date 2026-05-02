@@ -1,0 +1,16 @@
+---
+description: Eushop monorepo boundaries and Windows shell notes
+globs: "**/*"
+alwaysApply: false
+---
+
+# Eushop parallel lanes
+
+- **Lane A (web/UI):** `apps/web/**`, `packages/ui-web/**`, `packages/i18n/**`, `packages/design-tokens/**`, `packages/catalog-data/**`.
+- **Lane B (API/data):** `apps/api/**`, `apps/party/**`, `packages/api-router/**`, `packages/db/**`, `packages/auth/**`, `packages/validators/**`, `packages/geo/**`.
+- **Coordinate before editing:** root `package.json`, `turbo.json`, `.env.example`, `README.md`, `docker-compose.yml`, `.github/workflows/**`, `pnpm-lock.yaml`.
+
+# Windows PowerShell 5.1
+
+- Do **not** use `&&` in the shell; use separate lines, `;`, or `cmd /c "a && b"`.
+- Prefer `pnpm verify` from the repo root for typecheck + lint + build.
