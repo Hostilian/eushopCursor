@@ -4,7 +4,6 @@ import { TRPCError } from '@trpc/server';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { foodItems, listings, requests } from '@eushop/db';
-import { fallbackRequests, withFallback, withListFallback } from '../lib/mock-fallback';
 import { protectedProcedure, publicProcedure, router } from '../trpc';
 
 export const requestsRouter = router({
@@ -15,25 +14,22 @@ export const requestsRouter = router({
         limit: z.number().int().min(1).max(40).default(20),
       }),
     )
-    .query(async ({ ctx, input }) =>
-      withListFallback(
-        async () => {
-          const where = and(
-            eq(requests.status, 'open' as const),
-            input.countryIso2
-              ? eq(requests.countryIso2, input.countryIso2.toUpperCase())
-              : undefined,
-          );
-          return ctx.db
-            .select()
-            .from(requests)
-            .where(where)
-            .orderBy(desc(requests.createdAt))
-            .limit(input.limit);
-        },
-        () => fallbackRequests({ countryIso2: input.countryIso2, limit: input.limit }),
-      ),
-    ),
+    .query(async ({ ctx, input }) => {
+      try {
+        const where = and(
+          eq(requests.status, 'open' as const),
+          input.countryIso2 ? eq(requests.countryIso2, input.countryIso2.toUpperCase()) : undefined,
+        );
+        return await ctx.db
+          .select()
+          .from(requests)
+          .where(where)
+          .orderBy(desc(requests.createdAt))
+          .limit(input.limit);
+      } catch {
+        return [];
+      }
+    }),
 
   near: publicProcedure
     .input(
@@ -44,41 +40,31 @@ export const requestsRouter = router({
         limit: z.number().int().min(1).max(40).default(20),
       }),
     )
-    .query(async ({ ctx, input }) =>
-      withListFallback(
-        async () => {
-          const cells = neighborsWithinRadius({ lat: input.lat, lng: input.lng }, input.radiusKm);
-          return ctx.db
-            .select()
-            .from(requests)
-            .where(and(eq(requests.status, 'open'), inArray(requests.cellGeohash, cells)))
-            .orderBy(desc(requests.createdAt))
-            .limit(input.limit);
-        },
-        () => fallbackRequests({ limit: input.limit }),
-      ),
-    ),
+    .query(async ({ ctx, input }) => {
+      try {
+        const cells = neighborsWithinRadius({ lat: input.lat, lng: input.lng }, input.radiusKm);
+        return await ctx.db
+          .select()
+          .from(requests)
+          .where(and(eq(requests.status, 'open'), inArray(requests.cellGeohash, cells)))
+          .orderBy(desc(requests.createdAt))
+          .limit(input.limit);
+      } catch {
+        return [];
+      }
+    }),
 
-  byId: publicProcedure.input(z.object({ id: z.string().min(1) })).query(async ({ ctx, input }) =>
-    withFallback(
-      async () => {
-        const r = await ctx.db.query.requests.findFirst({ where: eq(requests.id, input.id) });
-        if (!r) throw new TRPCError({ code: 'NOT_FOUND' });
-        let item = null;
-        if (r.foodItemId) {
-          item = await ctx.db.query.foodItems.findFirst({
-            where: eq(foodItems.id, r.foodItemId),
-          });
-        }
-        return { ...r, item };
-      },
-      () => {
-        const row = fallbackRequests().find((r) => r.id === input.id);
-        if (!row) throw new TRPCError({ code: 'NOT_FOUND' });
-        return { ...row, item: null };
-      },
-    ),
-  ),
+  byId: publicProcedure.input(z.object({ id: z.string().min(1) })).query(async ({ ctx, input }) => {
+    const r = await ctx.db.query.requests.findFirst({ where: eq(requests.id, input.id) });
+    if (!r) throw new TRPCError({ code: 'NOT_FOUND' });
+    let item = null;
+    if (r.foodItemId) {
+      item = await ctx.db.query.foodItems.findFirst({
+        where: eq(foodItems.id, r.foodItemId),
+      });
+    }
+    return { ...r, item };
+  }),
 
   mine: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db

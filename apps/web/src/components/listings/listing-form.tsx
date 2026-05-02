@@ -15,6 +15,7 @@ const FRESHNESS = [
 ] as const;
 
 type FormState = {
+  foodItemId?: string;
   freeformName: string;
   brandName: string;
   notes: string;
@@ -23,6 +24,7 @@ type FormState = {
   freshness: (typeof FRESHNESS)[number]['v'];
   approximateCity: string;
   photos: { url: string }[];
+  location?: { lat: number; lng: number };
 };
 
 export function ListingForm() {
@@ -36,6 +38,7 @@ export function ListingForm() {
     approximateCity: '',
     photos: [],
   });
+  const [locating, setLocating] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,9 +69,20 @@ export function ListingForm() {
 
   const submit = async () => {
     setError(null);
+    if (state.photos.length === 0) {
+      setError('Add at least one photo so buyers can recognise the product.');
+      return;
+    }
+    if (!state.location) {
+      setError(
+        'We need your approximate location (a 5 km cell) to show this listing to neighbours. Tap "Use my location" or pick a city.',
+      );
+      return;
+    }
     setSubmitting(true);
     try {
       await create.mutateAsync({
+        foodItemId: state.foodItemId,
         freeformName: state.freeformName || undefined,
         brandName: state.brandName || undefined,
         notes: state.notes || undefined,
@@ -77,11 +91,9 @@ export function ListingForm() {
         finderFee: state.finderFee,
         currency: 'EUR',
         freshness: state.freshness,
-        photos: state.photos.length
-          ? state.photos
-          : [{ url: 'https://placehold.co/1200x1200/FAF7F2/3B2F22?text=Photo' }],
+        photos: state.photos,
         approximateCity: state.approximateCity,
-        location: { lat: 52.52, lng: 13.405 }, // mocked Berlin until we wire geolocation
+        location: state.location,
       });
       setDone(true);
     } catch (e) {
@@ -186,6 +198,31 @@ export function ListingForm() {
             placeholder="Berlin Mitte"
             className="form-input border-0 bg-transparent px-0"
           />
+          <button
+            type="button"
+            disabled={locating}
+            onClick={() => {
+              if (!('geolocation' in navigator)) {
+                setError('Your browser does not support geolocation. Type a city instead.');
+                return;
+              }
+              setLocating(true);
+              navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                  set('location', { lat: pos.coords.latitude, lng: pos.coords.longitude });
+                  setLocating(false);
+                },
+                (err) => {
+                  setLocating(false);
+                  setError(err.message || 'Could not read your location.');
+                },
+                { enableHighAccuracy: false, timeout: 8_000 },
+              );
+            }}
+            className="text-ash hover:text-ink shrink-0 text-xs underline underline-offset-2"
+          >
+            {locating ? 'Locating…' : state.location ? '✓ Located' : 'Use my location'}
+          </button>
         </div>
       </Field>
 

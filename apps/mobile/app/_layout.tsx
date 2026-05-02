@@ -1,7 +1,10 @@
+import * as Localization from 'expo-localization';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import '../global.css';
 import { Providers } from '../src/providers';
+
+void Localization.getLocales();
 
 export default function RootLayout() {
   return (
@@ -15,6 +18,7 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: '#FAF7F2' },
         }}
       >
+        <Stack.Screen name="onboarding" options={{ title: 'Welcome', presentation: 'modal' }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="country/[iso2]" options={{ title: '' }} />
         <Stack.Screen name="item/[slug]" options={{ title: '' }} />

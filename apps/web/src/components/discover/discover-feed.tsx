@@ -1,9 +1,10 @@
 'use client';
 
-import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
+import { COUNTRIES } from '@eushop/catalog-data';
 import { countryPalette } from '@eushop/design-tokens';
-import { Filter, MapPin } from 'lucide-react';
+import { ArrowRight, Filter, MapPin } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { trpc } from '../../lib/trpc';
 import { cn, formatDistance, formatFee, timeAgo } from '../../lib/utils';
@@ -18,36 +19,6 @@ const FRESHNESS = [
   { v: 'month', l: 'This month' },
   { v: 'shelf-stable', l: 'Shelf-stable' },
 ] as const;
-
-const SAMPLE_FALLBACK = FOOD_ITEMS.slice(0, 12).map((i, idx) => ({
-  id: `sample-${idx}`,
-  freeformName: i.name,
-  brandName: i.aka?.[0] ?? null,
-  notes: i.description,
-  qty: 1 + (idx % 3),
-  finderFee: ['3', '4', '5', '6', '7', '8', '10'][idx % 7]!,
-  currency: 'EUR',
-  freshness: 'week' as const,
-  approximateCity: [
-    'Berlin Mitte',
-    'Munich Glockenbach',
-    'Madrid Lavapiés',
-    'Amsterdam Oost',
-    'Paris 11e',
-    'Vienna Neubau',
-  ][idx % 6]!,
-  countryIso2: i.originCountryIso2,
-  cellGeohash: 'u33d2',
-  photos: [
-    {
-      url: `https://placehold.co/800x800/${countryPalette[i.originCountryIso2]?.primary.slice(1) ?? '3B2F22'}/${countryPalette[i.originCountryIso2]?.accent.slice(1) ?? 'FAF7F2'}?text=${encodeURIComponent(i.name)}`,
-    },
-  ],
-  createdAt: new Date(Date.now() - idx * 1000 * 60 * 60),
-  point: { lat: 52.52, lng: 13.405 },
-  km: 1 + idx * 0.6,
-  countrySlug: i.originCountryIso2,
-}));
 
 export function DiscoverFeed() {
   const [country, setCountry] = useState<string | null>(null);
@@ -69,9 +40,7 @@ export function DiscoverFeed() {
     { staleTime: 30_000 },
   );
 
-  const liveOrSample = query.data && query.data.length ? query.data : SAMPLE_FALLBACK;
-
-  const items = useMemo(() => liveOrSample, [liveOrSample]);
+  const items = useMemo(() => query.data ?? [], [query.data]);
 
   return (
     <div className="mt-10 grid gap-12 md:grid-cols-12">
@@ -125,11 +94,42 @@ export function DiscoverFeed() {
           </Button>
         </div>
 
-        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-          {items.map((item) => (
-            <ListingCard key={item.id} listing={item} />
-          ))}
-        </ul>
+        {items.length > 0 ? (
+          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            {items.map((item) => (
+              <ListingCard key={item.id} listing={item} />
+            ))}
+          </ul>
+        ) : (
+          <EmptyState />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div className="border-ink/10 bg-porcelain flex flex-col items-center gap-6 rounded-3xl border px-6 py-20 text-center">
+      <div className="bg-saffron-100 text-saffron-700 grid h-14 w-14 place-items-center rounded-full">
+        <MapPin className="h-6 w-6" />
+      </div>
+      <div className="max-w-xl">
+        <h3 className="text-ink font-serif text-2xl">Nothing in your radius — yet.</h3>
+        <p className="text-ash mt-2 text-sm">
+          The map is quiet here. Widen your radius, browse upcoming trips from a country you miss,
+          or post a request so the next diaspora traveller knows to grab it for you.
+        </p>
+      </div>
+      <div className="flex flex-wrap justify-center gap-3">
+        <Button asChild variant="primary">
+          <Link href="/requests/new">
+            Post a request <ArrowRight className="ml-1 h-4 w-4" />
+          </Link>
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/trips">Browse trips</Link>
+        </Button>
       </div>
     </div>
   );

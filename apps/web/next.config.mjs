@@ -38,8 +38,11 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'media.eushop.eu' },
-      { protocol: 'https', hostname: 'placehold.co' },
-      { protocol: 'https', hostname: 'images.unsplash.com' },
+      // Open Food Facts hosts product photos under both static.openfoodfacts.org
+      // and images.openfoodfacts.org. They are CC-BY-SA 4.0; we display them
+      // with attribution on the item page.
+      { protocol: 'https', hostname: 'static.openfoodfacts.org' },
+      { protocol: 'https', hostname: 'images.openfoodfacts.org' },
       ...(extraImageHost
         ? [{ protocol: 'https', hostname: extraImageHost.replace(/^https?:\/\//, '').split('/')[0] }]
         : []),
@@ -52,7 +55,6 @@ const nextConfig = {
     '@eushop/db',
     '@eushop/design-tokens',
     '@eushop/i18n',
-    '@eushop/mock-data',
     '@eushop/ui-web',
     '@eushop/validators',
   ],

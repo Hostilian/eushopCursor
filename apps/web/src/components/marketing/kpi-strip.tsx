@@ -1,13 +1,28 @@
 import { STATS } from '@eushop/catalog-data';
-import { SHOWCASE_STATS } from '@eushop/mock-data';
+import { isDemoModeEnabled } from '../../lib/demo-mode';
+import { showcaseStats } from '../../lib/showcase';
 
-export function KpiStrip() {
-  const tiles = [
+/**
+ * Hero KPI strip. By default it shows only counts that are *true today*:
+ *
+ *  - The size of the curated catalog (countries / categories / items).
+ *  - In demo mode, four extra showcase tiles drawn from the showcase dataset
+ *    so the page never feels empty during a YC partner walkthrough.
+ *
+ * Live counts that depend on real user activity (signups, listings, trips,
+ * GMV) live on `/traction`, never here. The traction page is the place
+ * investors look for "real numbers", and it never honours demo mode.
+ */
+export async function KpiStrip() {
+  const demo = await isDemoModeEnabled();
+  const baseTiles = [
     { label: 'EU countries', value: STATS.countries },
     { label: 'Categories', value: STATS.categories },
     { label: 'Catalog items', value: STATS.items },
-    { label: 'Cities (demo feed)', value: SHOWCASE_STATS.cities },
   ];
+  const tiles = demo
+    ? [...baseTiles, { label: 'Showcase listings', value: showcaseStats().liveListings }]
+    : [...baseTiles, { label: 'Brands', value: STATS.brands }];
 
   return (
     <section className="border-ink/10 bg-parchment/60 border-y">

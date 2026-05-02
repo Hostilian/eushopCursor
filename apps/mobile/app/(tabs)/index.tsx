@@ -1,134 +1,125 @@
-import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
+import { SAMPLE_LISTINGS } from '@eushop/mock-data';
 import { countryPalette } from '@eushop/design-tokens';
 import { Surface } from '@eushop/ui-mobile';
-import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Card } from '../../src/components/Card';
+import { EmptyState } from '../../src/components/EmptyState';
+import { KpiTile } from '../../src/components/KpiTile';
 import { trpc } from '../../src/lib/trpc';
 
-const FEATURED_COUNTRIES = ['PL', 'IT', 'DE', 'GR', 'FR', 'NL'];
+function mockHeroListings() {
+  return SAMPLE_LISTINGS.slice(0, 3).map((l) => ({
+    id: l.id,
+    freeformName: l.freeformName,
+    approximateCity: l.approximateCity,
+    countryIso2: l.countryIso2,
+    finderFee: l.finderFee,
+    photos: l.photos,
+  }));
+}
 
-export default function DiscoverScreen() {
+export default function TodayScreen() {
   const router = useRouter();
-  const recent = trpc.listings.recent.useQuery(undefined, { retry: false });
-  const featured = COUNTRIES.filter((c) => FEATURED_COUNTRIES.includes(c.iso2));
-  const sample = FOOD_ITEMS.slice(0, 8);
+  const recent = trpc.listings.recent.useQuery({ limit: 12 }, { retry: false });
+  const rows =
+    recent.data && recent.data.length > 0
+      ? recent.data.slice(0, 3).map((r) => ({
+          id: r.id,
+          freeformName: r.freeformName,
+          approximateCity: r.approximateCity,
+          countryIso2: r.countryIso2,
+          finderFee: r.finderFee,
+          photos: r.photos,
+        }))
+      : mockHeroListings();
 
   return (
-    <ScrollView className="flex-1 bg-paper" contentContainerStyle={{ paddingBottom: 64 }}>
-      <View className="px-6 pt-10 pb-8">
+    <ScrollView className="bg-paper flex-1" contentContainerStyle={{ paddingBottom: 88 }}>
+      <View className="px-6 pt-8 pb-4">
+        <Text className="text-ash text-xs tracking-widest uppercase">Today near you</Text>
+        <Text className="text-ink mt-2 font-serif text-4xl">Fresh in your cell.</Text>
+        <Text className="text-ink/70 mt-2 text-sm">
+          Munich · Lisbon · Stockholm — demo listings stay live even when the DB is empty.
+        </Text>
+        <View className="mt-5 flex-row gap-2">
+          <KpiTile label="Live" value={recent.data?.length ?? SAMPLE_LISTINGS.length} />
+          <KpiTile label="Cell" value="5 km" />
+          <KpiTile label="Handoff" value="Public" />
+        </View>
+      </View>
+
+      <View className="px-6">
+        {rows.length === 0 ? (
+          <EmptyState
+            title="Nothing posted yet"
+            hint="Pull to refresh or share from your last trip home."
+          />
+        ) : (
+          rows.map((l) => {
+            const palette = countryPalette[l.countryIso2] ?? {
+              primary: '#3B2F22',
+              accent: '#FAF7F2',
+            };
+            const uri = l.photos[0]?.url;
+            return (
+              <TouchableOpacity
+                key={l.id}
+                activeOpacity={0.9}
+                className="mb-4"
+                onPress={() => router.push('/countries')}
+              >
+                <Card className="overflow-hidden p-0">
+                  <View className="relative h-44 w-full">
+                    {uri ? (
+                      <Image source={{ uri }} className="h-full w-full" contentFit="cover" />
+                    ) : (
+                      <View
+                        className="h-full w-full items-center justify-center"
+                        style={{ backgroundColor: palette.primary }}
+                      >
+                        <Text style={{ color: palette.accent }} className="font-serif text-2xl">
+                          {l.freeformName ?? 'Listing'}
+                        </Text>
+                      </View>
+                    )}
+                    <View className="absolute right-0 bottom-0 left-0 bg-black/45 px-4 py-3">
+                      <Text className="text-paper font-serif text-lg">
+                        {l.freeformName ?? 'Listing'}
+                      </Text>
+                      <Text className="text-paper/80 text-xs">
+                        {l.approximateCity} · €{l.finderFee}
+                      </Text>
+                    </View>
+                  </View>
+                </Card>
+              </TouchableOpacity>
+            );
+          })
+        )}
+      </View>
+
+      <View className="mt-4 px-6">
         <Surface>
-          <Text className="text-xs uppercase tracking-widest text-ash">Find a taste of home</Text>
-          <Text className="mt-3 font-serif text-5xl text-ink leading-[1.05]">
-            Just down the street.
-          </Text>
-          <Text className="mt-4 text-base leading-relaxed text-ink/70">
-            Krówki in Munich. Mastiha in Lisbon. Sült in Stockholm. Held by the neighbours who
-            brought it back.
-          </Text>
-          <View className="mt-6 flex-row gap-3">
+          <Text className="text-ink font-serif text-lg">Discover more</Text>
+          <Text className="text-ink/70 mt-1 text-sm">Browse countries or post a request.</Text>
+          <View className="mt-4 flex-row gap-3">
             <TouchableOpacity
-              className="rounded-full bg-ink px-5 py-3"
-              onPress={() => router.push('/listing/new')}
+              className="bg-ink rounded-full px-4 py-2.5"
+              onPress={() => router.push('/countries')}
             >
-              <Text className="text-paper font-medium">Share something</Text>
+              <Text className="text-paper text-sm font-medium">Countries</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              className="rounded-full border border-ink/15 px-5 py-3"
+              className="border-ink/15 rounded-full border px-4 py-2.5"
               onPress={() => router.push('/request/new')}
             >
-              <Text className="text-ink font-medium">Post a request</Text>
+              <Text className="text-ink text-sm font-medium">Request</Text>
             </TouchableOpacity>
           </View>
         </Surface>
       </View>
-
-      <Section
-        title={`A taste of ${featured.length} home countries`}
-        action={{ label: 'All', onPress: () => router.push('/countries') }}
-      >
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingHorizontal: 24 }}>
-          {featured.map((c) => {
-            const palette = countryPalette[c.iso2] ?? { primary: '#3B2F22', accent: '#FAF7F2' };
-            return (
-              <Link key={c.iso2} href={`/country/${c.iso2.toLowerCase()}`} asChild>
-                <TouchableOpacity
-                  style={{ backgroundColor: palette.primary }}
-                  className="w-44 rounded-3xl p-5"
-                >
-                  <Text style={{ color: palette.accent }} className="text-3xl">
-                    {c.flagEmoji}
-                  </Text>
-                  <Text style={{ color: palette.accent }} className="mt-12 font-serif text-xl">
-                    {c.name}
-                  </Text>
-                  <Text style={{ color: palette.accent, opacity: 0.7 }} className="mt-1 text-xs uppercase tracking-widest">
-                    {c.region}
-                  </Text>
-                </TouchableOpacity>
-              </Link>
-            );
-          })}
-        </ScrollView>
-      </Section>
-
-      <Section title="Latest near you">
-        <View className="px-6">
-          {(recent.data ?? sample.map((s, i) => ({
-            id: `s-${i}`,
-            freeformName: s.name,
-            approximateCity: 'Berlin Mitte',
-            finderFee: ['3', '5', '7'][i % 3]!,
-            currency: 'EUR',
-            countryIso2: s.originCountryIso2,
-            photos: [],
-          }))).slice(0, 6).map((l) => {
-            const palette = countryPalette[l.countryIso2] ?? { primary: '#3B2F22', accent: '#FAF7F2' };
-            return (
-              <View key={l.id} className="mb-3 flex-row items-center gap-4 rounded-2xl border border-ink/10 bg-porcelain p-4">
-                <View
-                  style={{ backgroundColor: palette.primary }}
-                  className="h-14 w-14 items-center justify-center rounded-xl"
-                >
-                  <Ionicons name="basket-outline" size={22} color={palette.accent} />
-                </View>
-                <View className="flex-1">
-                  <Text className="font-serif text-base text-ink">{l.freeformName}</Text>
-                  <Text className="text-xs text-ash">{l.approximateCity} · €{l.finderFee} fee</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={18} color="#9A9081" />
-              </View>
-            );
-          })}
-        </View>
-      </Section>
     </ScrollView>
   );
 }
-
-function Section({
-  title,
-  action,
-  children,
-}: {
-  title: string;
-  action?: { label: string; onPress: () => void };
-  children: React.ReactNode;
-}) {
-  return (
-    <View className="mt-10">
-      <View className="flex-row items-end justify-between px-6">
-        <Text className="font-serif text-2xl text-ink">{title}</Text>
-        {action ? (
-          <TouchableOpacity onPress={action.onPress}>
-            <Text className="text-xs uppercase tracking-widest text-saffron-700">{action.label}</Text>
-          </TouchableOpacity>
-        ) : null}
-      </View>
-      <View className="mt-4">{children}</View>
-    </View>
-  );
-}
-
-void Image; // ensure expo-image is part of the bundle

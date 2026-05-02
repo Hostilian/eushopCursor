@@ -1,6 +1,9 @@
+import { ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { countryPalette } from '@eushop/design-tokens';
 import { MapPreview } from '../discover/map-preview';
+import { Button } from '../ui/button';
 
 export type LiveListingCard = {
   id: string;
@@ -16,6 +19,31 @@ export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
   const slice = listings.slice(0, 6);
   const hero = slice[0];
 
+  if (slice.length === 0) {
+    return (
+      <section className="container-editorial mt-24">
+        <p className="text-ash text-xs tracking-widest uppercase">Live snapshot</p>
+        <h2 className="text-ink mt-2 font-serif text-4xl md:text-5xl">
+          The network is just waking up.
+        </h2>
+        <p className="text-ink/70 mt-3 max-w-2xl text-lg text-pretty">
+          Eushop is a brand-new community. The first listings will appear here as soon as someone in
+          your city shares what they brought back from a trip home. You could be that someone.
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Button asChild variant="primary">
+            <Link href="/listings/new">
+              Share your stash <ArrowRight className="ml-1 h-4 w-4" />
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/trips/new">Post an upcoming trip</Link>
+          </Button>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="container-editorial mt-24">
       <p className="text-ash text-xs tracking-widest uppercase">Live snapshot</p>
@@ -23,8 +51,7 @@ export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
         What neighbours are sharing.
       </h2>
       <p className="text-ink/70 mt-3 max-w-2xl text-lg text-pretty">
-        Real listings from the network — or rich demo data when the database is quiet. Same product
-        experience either way.
+        Real listings posted by diaspora users near you. Tap a card to start the chat.
       </p>
 
       <div className="mt-12 grid gap-8 lg:grid-cols-2">
@@ -33,7 +60,12 @@ export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
             href={`/listings/${hero.id}`}
             className="group border-ink/10 bg-porcelain relative overflow-hidden rounded-[2rem] border shadow-sm transition-shadow hover:shadow-md"
           >
-            <div className="relative aspect-[4/3] w-full">
+            <div
+              className="relative aspect-[4/3] w-full"
+              style={{
+                backgroundColor: countryPalette[hero.countryIso2]?.primary ?? 'var(--color-ink)',
+              }}
+            >
               {hero.photos[0]?.url ? (
                 <Image
                   src={hero.photos[0].url}
@@ -66,7 +98,12 @@ export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
                   href={`/listings/${l.id}`}
                   className="border-ink/10 bg-paper hover:border-saffron-400/40 flex gap-3 rounded-2xl border p-3 transition-colors"
                 >
-                  <div className="border-ink/10 relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border">
+                  <div
+                    className="border-ink/10 relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border"
+                    style={{
+                      backgroundColor: countryPalette[l.countryIso2]?.primary ?? 'var(--color-ink)',
+                    }}
+                  >
                     {l.photos[0]?.url ? (
                       <Image
                         src={l.photos[0].url}

@@ -1,4 +1,5 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
+import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -22,8 +23,39 @@ export default function NewListingScreen() {
   const [freshness, setFreshness] = useState<(typeof FRESHNESS)[number]['v']>('week');
   const [permission, requestPermission] = useCameraPermissions();
   const [showCamera, setShowCamera] = useState(false);
+  const [photos, setPhotos] = useState<{ url: string }[]>([]);
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [locating, setLocating] = useState(false);
+
+  const useMyLocation = async () => {
+    setLocating(true);
+    try {
+      const perm = await Location.requestForegroundPermissionsAsync();
+      if (perm.status !== 'granted') {
+        Alert.alert('Permission needed', 'We need location to show your listing to neighbours.');
+        return;
+      }
+      const pos = await Location.getCurrentPositionAsync({});
+      setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+    } catch (e) {
+      Alert.alert('Could not locate', e instanceof Error ? e.message : 'Try again.');
+    } finally {
+      setLocating(false);
+    }
+  };
 
   const submit = async () => {
+    if (photos.length === 0) {
+      Alert.alert('Add a photo', 'Snap at least one photo so buyers can recognise your stash.');
+      return;
+    }
+    if (!coords) {
+      Alert.alert(
+        'Need your location',
+        'Tap "Use my location" so we can show this listing to neighbours in your 5 km cell.',
+      );
+      return;
+    }
     try {
       await create.mutateAsync({
         freeformName: name,
@@ -32,9 +64,9 @@ export default function NewListingScreen() {
         finderFee: Number(fee) || 0,
         currency: 'EUR',
         freshness,
-        photos: [{ url: 'https://placehold.co/1200x1200/FAF7F2/3B2F22?text=Photo' }],
+        photos,
         approximateCity: city,
-        location: { lat: 52.52, lng: 13.405 },
+        location: coords,
       });
       Alert.alert('Listed', 'Your listing is live within your 5km cell.');
       router.back();
@@ -45,11 +77,11 @@ export default function NewListingScreen() {
 
   if (showCamera && permission?.granted) {
     return (
-      <View className="flex-1 bg-ink">
+      <View className="bg-ink flex-1">
         <CameraView className="flex-1" />
         <View className="absolute inset-x-0 bottom-10 items-center" style={{ gap: 12 }}>
           <TouchableOpacity
-            className="h-16 w-16 rounded-full border-4 border-paper bg-paper"
+            className="border-paper bg-paper h-16 w-16 rounded-full border-4"
             onPress={() => setShowCamera(false)}
           />
           <TouchableOpacity onPress={() => setShowCamera(false)}>
@@ -61,9 +93,12 @@ export default function NewListingScreen() {
   }
 
   return (
-    <ScrollView className="flex-1 bg-paper" contentContainerStyle={{ padding: 24, paddingBottom: 64 }}>
-      <Text className="font-serif text-3xl text-ink">Share your stash</Text>
-      <Text className="mt-2 text-sm text-ash">
+    <ScrollView
+      className="bg-paper flex-1"
+      contentContainerStyle={{ padding: 24, paddingBottom: 64 }}
+    >
+      <Text className="text-ink font-serif text-3xl">Share your stash</Text>
+      <Text className="text-ash mt-2 text-sm">
         Approximate city only — never your exact address.
       </Text>
 
@@ -74,7 +109,7 @@ export default function NewListingScreen() {
             onChangeText={setName}
             placeholder="Wedel Mieszanka tin (300g)"
             placeholderTextColor="#9A9081"
-            className="rounded-2xl border border-ink/10 bg-paper px-4 py-3 text-ink"
+            className="border-ink/10 bg-paper text-ink rounded-2xl border px-4 py-3"
           />
         </Field>
 
@@ -84,7 +119,7 @@ export default function NewListingScreen() {
             onChangeText={setCity}
             placeholder="Berlin Mitte"
             placeholderTextColor="#9A9081"
-            className="rounded-2xl border border-ink/10 bg-paper px-4 py-3 text-ink"
+            className="border-ink/10 bg-paper text-ink rounded-2xl border px-4 py-3"
           />
         </Field>
 
@@ -95,7 +130,7 @@ export default function NewListingScreen() {
                 value={qty}
                 onChangeText={setQty}
                 keyboardType="number-pad"
-                className="rounded-2xl border border-ink/10 bg-paper px-4 py-3 text-ink"
+                className="border-ink/10 bg-paper text-ink rounded-2xl border px-4 py-3"
               />
             </Field>
           </View>
@@ -105,23 +140,21 @@ export default function NewListingScreen() {
                 value={fee}
                 onChangeText={setFee}
                 keyboardType="decimal-pad"
-                className="rounded-2xl border border-ink/10 bg-paper px-4 py-3 text-ink"
+                className="border-ink/10 bg-paper text-ink rounded-2xl border px-4 py-3"
               />
             </Field>
           </View>
         </View>
 
         <View>
-          <Text className="text-sm font-medium text-ink">Freshness</Text>
+          <Text className="text-ink text-sm font-medium">Freshness</Text>
           <View className="mt-2 flex-row flex-wrap" style={{ gap: 8 }}>
             {FRESHNESS.map((f) => (
               <TouchableOpacity
                 key={f.v}
                 onPress={() => setFreshness(f.v)}
                 className={`rounded-full border px-3 py-2 ${
-                  freshness === f.v
-                    ? 'border-ink bg-ink'
-                    : 'border-ink/15 bg-transparent'
+                  freshness === f.v ? 'border-ink bg-ink' : 'border-ink/15 bg-transparent'
                 }`}
               >
                 <Text className={freshness === f.v ? 'text-paper text-xs' : 'text-ink/70 text-xs'}>
@@ -133,7 +166,7 @@ export default function NewListingScreen() {
         </View>
 
         <TouchableOpacity
-          className="rounded-2xl border border-dashed border-ink/20 bg-porcelain p-6"
+          className="border-ink/20 bg-porcelain rounded-2xl border border-dashed p-6"
           onPress={async () => {
             if (!permission?.granted) {
               const r = await requestPermission();
@@ -142,11 +175,11 @@ export default function NewListingScreen() {
             setShowCamera(true);
           }}
         >
-          <Text className="text-center text-sm text-ash">📷 Add photos with the camera</Text>
+          <Text className="text-ash text-center text-sm">📷 Add photos with the camera</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="mt-4 rounded-full bg-ink py-4" onPress={submit}>
-          <Text className="text-center text-paper font-medium">Publish listing</Text>
+        <TouchableOpacity className="bg-ink mt-4 rounded-full py-4" onPress={submit}>
+          <Text className="text-paper text-center font-medium">Publish listing</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -156,7 +189,7 @@ export default function NewListingScreen() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <View>
-      <Text className="text-sm font-medium text-ink">{label}</Text>
+      <Text className="text-ink text-sm font-medium">{label}</Text>
       <View className="mt-2">{children}</View>
     </View>
   );

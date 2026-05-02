@@ -47,6 +47,15 @@ importers:
       '@eushop/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@eushop/design-tokens':
+        specifier: workspace:*
+        version: link:../../packages/design-tokens
+      '@eushop/mock-data':
+        specifier: workspace:*
+        version: link:../../packages/mock-data
+      '@eushop/ui-web':
+        specifier: workspace:*
+        version: link:../../packages/ui-web
       '@tanstack/react-query':
         specifier: ^5.62.7
         version: 5.100.7(react@19.2.5)
@@ -178,6 +187,9 @@ importers:
       '@eushop/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
+      '@eushop/mock-data':
+        specifier: workspace:*
+        version: link:../../packages/mock-data
       '@eushop/ui-mobile':
         specifier: workspace:*
         version: link:../../packages/ui-mobile
@@ -318,6 +330,9 @@ importers:
       '@eushop/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
+      '@eushop/mock-data':
+        specifier: workspace:*
+        version: link:../../packages/mock-data
       '@eushop/ui-web':
         specifier: workspace:*
         version: link:../../packages/ui-web

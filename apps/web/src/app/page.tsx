@@ -14,23 +14,29 @@ import { KpiStrip } from '../components/marketing/kpi-strip';
 import { LiveDiscover, type LiveListingCard } from '../components/marketing/live-discover';
 import { MobilePreview } from '../components/marketing/mobile-preview';
 import { api } from '../lib/trpc-server';
+import { isDemoModeEnabled } from '../lib/demo-mode';
+import { showcaseListings } from '../lib/showcase';
 import { COUNTRIES } from '@eushop/catalog-data';
-import { SAMPLE_LISTINGS } from '@eushop/mock-data';
 
-function mockListingCards(): LiveListingCard[] {
-  return SAMPLE_LISTINGS.map((l) => ({
-    id: l.id,
-    freeformName: l.freeformName,
-    approximateCity: l.approximateCity,
-    countryIso2: l.countryIso2,
-    finderFee: l.finderFee,
-    photos: l.photos,
-    point: { lat: l.location.lat, lng: l.location.lng },
+function showcaseCards(): LiveListingCard[] {
+  // Showcase listings are deterministic, drawn from the curated catalog, and
+  // shown only when the demo cookie is set (see lib/demo-mode.ts). They use
+  // a country-tinted swatch instead of a fake photo so nothing on the page
+  // pretends to be a real product photo.
+  return showcaseListings().map((s) => ({
+    id: s.id,
+    freeformName: s.itemName,
+    approximateCity: s.city,
+    countryIso2: s.countryIso2,
+    finderFee: s.finderFee.toFixed(2),
+    photos: [],
+    point: { lat: 50, lng: 10 },
   }));
 }
 
 export default async function HomePage() {
   const t = await getTranslations();
+  const demo = await isDemoModeEnabled();
   let categories: Awaited<ReturnType<Awaited<ReturnType<typeof api>>['catalog']['categories']>> =
     [];
   let liveCards: LiveListingCard[] = [];
@@ -50,7 +56,7 @@ export default async function HomePage() {
   } catch {
     /* offline */
   }
-  if (liveCards.length === 0) liveCards = mockListingCards();
+  if (liveCards.length === 0 && demo) liveCards = showcaseCards();
   const featuredCountries = ['PL', 'IT', 'DE', 'GR', 'FR', 'NL', 'ES', 'PT', 'FI', 'IE'];
   const countries = COUNTRIES.filter((c) => featuredCountries.includes(c.iso2));
 

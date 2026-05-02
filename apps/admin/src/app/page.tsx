@@ -1,93 +1,130 @@
-import { SHOWCASE_AUDIT_LOG, SHOWCASE_STATS, SHOWCASE_WEEKLY_LISTINGS } from '@eushop/mock-data';
+import { CATEGORIES, COUNTRIES, FOOD_ITEMS, BRANDS, STATS } from '@eushop/catalog-data';
+import Link from 'next/link';
 import { api } from '../lib/trpc-server';
 
-export default async function AdminOverviewPage() {
-  let liveCount = SHOWCASE_STATS.liveListings;
-  let reqCount = SHOWCASE_STATS.openRequests;
+export default async function AdminHome() {
+  // Live counts come straight from the DB via tRPC. If the database is offline
+  // (a fresh dev clone before `pnpm db:up && pnpm db:migrate && pnpm db:seed`)
+  // we silently fall back to the build-time STATS from the curated catalog,
+  // which is genuine data — the values just stop being authoritative for the
+  // moderation queue tiles.
+  let live = {
+    countries: STATS.countries,
+    categories: STATS.categories,
+    brands: STATS.brands,
+    items: STATS.items,
+  };
   try {
     const trpc = await api();
-    const [listings, requests] = await Promise.all([
-      trpc.listings.recent({ limit: 40 }),
-      trpc.requests.feed({ limit: 40 }),
+    const [countriesRows, categoriesRows, brandsRows, itemsRows] = await Promise.all([
+      trpc.catalog.countries(),
+      trpc.catalog.categories(),
+      trpc.catalog.brands(),
+      trpc.catalog.browse({ limit: 60 }),
     ]);
-    if (listings.length) liveCount = listings.length;
-    if (requests.length) reqCount = requests.length;
+    live = {
+      countries: countriesRows.length,
+      categories: categoriesRows.length,
+      brands: brandsRows.length,
+      items: itemsRows.items.length,
+    };
   } catch {
-    /* offline — mock stats above */
+    /* offline — fall through to STATS */
   }
 
-  const series = SHOWCASE_WEEKLY_LISTINGS;
-  const max = Math.max(...series, 1);
-  const w = 320;
-  const h = 80;
-  const pts = series
-    .map((v, i) => {
-      const x = (i / (series.length - 1)) * w;
-      const y = h - (v / max) * (h - 8) - 4;
-      return `${x},${y}`;
-    })
-    .join(' ');
-
   return (
-    <div className="space-y-10">
-      <div>
-        <p className="text-ash text-xs tracking-widest uppercase">Overview</p>
-        <h1 className="text-ink font-serif text-4xl">Live network</h1>
-        <p className="text-ink/70 mt-2 max-w-2xl text-sm">
-          KPIs reflect the database when it has rows; otherwise the curated demo snapshot keeps the
-          console alive for walkthroughs.
-        </p>
-      </div>
+    <main className="mx-auto max-w-6xl p-10">
+      <p className="text-ash text-xs tracking-widest uppercase">Eushop · Admin</p>
+      <h1 className="text-ink mt-2 font-serif text-4xl">Catalog overview</h1>
+      <p className="text-ink/70 mt-3">
+        Live counts come from the database via tRPC. The seed catalog in{' '}
+        <code>packages/catalog-data</code> is the floor; everything above it is contributed by users
+        and approved through the moderation queue.
+      </p>
 
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Kpi label="Live listings" value={liveCount} />
-        <Kpi label="Open requests" value={reqCount} />
-        <Kpi label="Demo conversations" value={SHOWCASE_STATS.conversations} />
-        <Kpi label="Avg. trust (demo)" value={SHOWCASE_STATS.trustScoreAvg} />
+      <ul className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-4">
+        <Stat label="Countries" value={live.countries} href="/countries" />
+        <Stat label="Categories" value={live.categories} href="/categories" />
+        <Stat label="Brands" value={live.brands} href="/brands" />
+        <Stat label="Food items" value={live.items} href="/items" />
       </ul>
 
-      <section className="border-ink/10 bg-porcelain/40 rounded-2xl border p-6">
-        <h2 className="text-ink font-serif text-xl">Weekly new listings (demo trend)</h2>
-        <svg
-          viewBox={`0 0 ${w} ${h}`}
-          className="text-saffron-600 mt-4 w-full max-w-md"
-          aria-hidden
-        >
-          <polyline
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-            points={pts}
-          />
-        </svg>
+      <section className="mt-16">
+        <h2 className="text-ink font-serif text-2xl">Quick actions</h2>
+        <ul className="mt-4 space-y-2 text-sm">
+          <li>
+            <code className="bg-ink/5 rounded px-2 py-1">pnpm db:up</code> — start Postgres,
+            Meilisearch and Redis containers
+          </li>
+          <li>
+            <code className="bg-ink/5 rounded px-2 py-1">
+              pnpm db:generate &amp;&amp; pnpm db:migrate
+            </code>
+            — apply schema migrations
+          </li>
+          <li>
+            <code className="bg-ink/5 rounded px-2 py-1">pnpm db:seed</code> — seed the EU food
+            catalog ({STATS.items} curated items)
+          </li>
+          <li>
+            <code className="bg-ink/5 rounded px-2 py-1">pnpm search:index</code> — push the catalog
+            to Meilisearch
+          </li>
+        </ul>
       </section>
 
-      <section className="border-ink/10 bg-porcelain/40 rounded-2xl border p-6">
-        <h2 className="text-ink font-serif text-xl">Today</h2>
-        <ul className="mt-4 space-y-3 text-sm">
-          {SHOWCASE_AUDIT_LOG.slice(0, 5).map((row) => (
-            <li
-              key={row.id}
-              className="border-ink/8 flex flex-wrap items-baseline gap-2 border-b border-dashed pb-2"
-            >
-              <span className="text-ash text-xs">{row.ts.toISOString().slice(11, 16)}</span>
-              <span className="text-ink font-medium">{row.action}</span>
-              <span className="text-ash">· {row.actor}</span>
+      <section className="mt-16">
+        <h2 className="text-ink font-serif text-2xl">Catalog peek</h2>
+        <div className="mt-4 grid gap-8 md:grid-cols-3">
+          <ListBlock
+            title="Latest 8 curated items"
+            items={FOOD_ITEMS.slice(0, 8).map((i) => i.name)}
+          />
+          <ListBlock
+            title="Countries"
+            items={COUNTRIES.slice(0, 12).map((c) => `${c.flagEmoji} ${c.name}`)}
+          />
+          <ListBlock
+            title="Categories"
+            items={CATEGORIES.slice(0, 10).map((c) => `${c.emoji} ${c.name}`)}
+          />
+        </div>
+      </section>
+
+      <section className="mt-16">
+        <h2 className="text-ink font-serif text-2xl">Brands ({BRANDS.length})</h2>
+        <ul className="mt-4 grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
+          {BRANDS.map((b) => (
+            <li key={b.slug}>
+              {b.name} <span className="text-ash">— {b.countryIso2}</span>
             </li>
           ))}
         </ul>
       </section>
-    </div>
+    </main>
   );
 }
 
-function Kpi({ label, value }: { label: string; value: number }) {
+function Stat({ label, value, href }: { label: string; value: number; href: string }) {
   return (
-    <li className="border-ink/10 list-none rounded-2xl border bg-white p-5 shadow-sm">
-      <p className="text-ash text-xs tracking-widest uppercase">{label}</p>
-      <p className="text-ink mt-2 font-serif text-3xl tabular-nums">{value}</p>
+    <li className="border-ink/10 rounded-2xl border bg-white p-5">
+      <Link href={href}>
+        <p className="text-ash text-xs tracking-widest uppercase">{label}</p>
+        <p className="text-ink mt-2 font-serif text-3xl">{value}</p>
+      </Link>
     </li>
+  );
+}
+
+function ListBlock({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div>
+      <p className="text-ash text-xs tracking-widest uppercase">{title}</p>
+      <ul className="mt-3 space-y-1 text-sm">
+        {items.map((i) => (
+          <li key={i}>{i}</li>
+        ))}
+      </ul>
+    </div>
   );
 }

@@ -8,18 +8,9 @@ import {
 import { createListingInput, listingSearchInput, updateListingInput } from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
 import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
-import type { InferSelectModel } from 'drizzle-orm';
 import { z } from 'zod';
 import { brands, categories, foodItems, listings } from '@eushop/db';
-import {
-  fallbackItems,
-  fallbackListings,
-  withFallback,
-  withListFallback,
-} from '../lib/mock-fallback';
 import { protectedProcedure, publicProcedure, router } from '../trpc';
-
-type ListingRow = InferSelectModel<typeof listings>;
 
 function publicListing<T extends { id: string; cellGeohash: string; location?: unknown }>(row: T) {
   const { location: _omit, ...rest } = row as unknown as Record<string, unknown> & {
@@ -76,46 +67,32 @@ export const listingsRouter = router({
       }
     }
 
-    return withListFallback(
-      async () => {
-        const rows = await ctx.db
-          .select()
-          .from(listings)
-          .where(and(...conditions))
-          .orderBy(desc(listings.createdAt))
-          .limit(input.limit);
-        return rows.map(publicListing);
-      },
-      () =>
-        fallbackListings({ countryIso2: input.countryIso2, limit: input.limit }).map((row) =>
-          publicListing(row as ListingRow),
-        ),
-    );
+    try {
+      const rows = await ctx.db
+        .select()
+        .from(listings)
+        .where(and(...conditions))
+        .orderBy(desc(listings.createdAt))
+        .limit(input.limit);
+      return rows.map(publicListing);
+    } catch {
+      // DB unreachable in development. Real users see no synthetic listings —
+      // the surfaces are responsible for showing inviting empty states.
+      return [];
+    }
   }),
 
-  byId: publicProcedure.input(z.object({ id: z.string().min(1) })).query(async ({ ctx, input }) =>
-    withFallback(
-      async () => {
-        const row = await ctx.db.query.listings.findFirst({ where: eq(listings.id, input.id) });
-        if (!row) throw new TRPCError({ code: 'NOT_FOUND' });
-        let item = null;
-        if (row.foodItemId) {
-          item = await ctx.db.query.foodItems.findFirst({
-            where: eq(foodItems.id, row.foodItemId),
-          });
-        }
-        return { ...publicListing(row), item };
-      },
-      () => {
-        const row = fallbackListings().find((l) => l.id === input.id);
-        if (!row) throw new TRPCError({ code: 'NOT_FOUND' });
-        const item = row.foodItemId
-          ? (fallbackItems().find((i) => i.id === row.foodItemId) ?? null)
-          : null;
-        return { ...publicListing(row as ListingRow), item };
-      },
-    ),
-  ),
+  byId: publicProcedure.input(z.object({ id: z.string().min(1) })).query(async ({ ctx, input }) => {
+    const row = await ctx.db.query.listings.findFirst({ where: eq(listings.id, input.id) });
+    if (!row) throw new TRPCError({ code: 'NOT_FOUND' });
+    let item = null;
+    if (row.foodItemId) {
+      item = await ctx.db.query.foodItems.findFirst({
+        where: eq(foodItems.id, row.foodItemId),
+      });
+    }
+    return { ...publicListing(row), item };
+  }),
 
   mine: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db
@@ -200,43 +177,38 @@ export const listingsRouter = router({
     .input(z.object({ limit: z.number().int().min(1).max(40).default(12) }).optional())
     .query(async ({ ctx, input }) => {
       const limit = input?.limit ?? 12;
-      return withListFallback(
-        async () => {
-          const rows = await ctx.db
-            .select()
-            .from(listings)
-            .where(eq(listings.status, 'live'))
-            .orderBy(desc(listings.createdAt))
-            .limit(limit);
-          return rows.map(publicListing);
-        },
-        () => fallbackListings({ limit }).map((row) => publicListing(row as ListingRow)),
-      );
+      try {
+        const rows = await ctx.db
+          .select()
+          .from(listings)
+          .where(eq(listings.status, 'live'))
+          .orderBy(desc(listings.createdAt))
+          .limit(limit);
+        return rows.map(publicListing);
+      } catch {
+        return [];
+      }
     }),
 
   byCountry: publicProcedure
     .input(
       z.object({ iso2: z.string().length(2), limit: z.number().int().min(1).max(40).default(12) }),
     )
-    .query(async ({ ctx, input }) =>
-      withListFallback(
-        async () => {
-          const rows = await ctx.db
-            .select()
-            .from(listings)
-            .where(
-              and(eq(listings.status, 'live'), eq(listings.countryIso2, input.iso2.toUpperCase())),
-            )
-            .orderBy(asc(listings.createdAt))
-            .limit(input.limit);
-          return rows.map(publicListing);
-        },
-        () =>
-          fallbackListings({ countryIso2: input.iso2, limit: input.limit }).map((row) =>
-            publicListing(row as ListingRow),
-          ),
-      ),
-    ),
+    .query(async ({ ctx, input }) => {
+      try {
+        const rows = await ctx.db
+          .select()
+          .from(listings)
+          .where(
+            and(eq(listings.status, 'live'), eq(listings.countryIso2, input.iso2.toUpperCase())),
+          )
+          .orderBy(asc(listings.createdAt))
+          .limit(input.limit);
+        return rows.map(publicListing);
+      } catch {
+        return [];
+      }
+    }),
 });
 
 async function inferCountryFromLatLng(_p: { lat: number; lng: number }): Promise<string | null> {

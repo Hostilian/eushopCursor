@@ -18,36 +18,46 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Discover',
-          tabBarIcon: ({ color, size }) => <Ionicons name="compass-outline" color={color} size={size} />,
+          title: 'Today',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="sunny-outline" color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen
         name="countries"
         options={{
           title: 'Countries',
-          tabBarIcon: ({ color, size }) => <Ionicons name="flag-outline" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="flag-outline" color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen
         name="requests"
         options={{
           title: 'Requests',
-          tabBarIcon: ({ color, size }) => <Ionicons name="megaphone-outline" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="megaphone-outline" color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen
         name="messages"
         options={{
           title: 'Messages',
-          tabBarIcon: ({ color, size }) => <Ionicons name="chatbubble-outline" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="chatbubble-outline" color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color, size }) => <Ionicons name="person-circle-outline" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person-circle-outline" color={color} size={size} />
+          ),
         }}
       />
     </Tabs>
