@@ -2,6 +2,7 @@
 
 import { COUNTRIES } from '@eushop/catalog-data';
 import { Download, Trash2 } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
 import { trpc } from '../../lib/trpc';
 import { Badge } from '../ui/badge';
@@ -113,6 +114,16 @@ export function ProfilePanel() {
       </section>
 
       <aside className="space-y-6">
+        <div className="border-ink/10 bg-porcelain rounded-3xl border p-6">
+          <p className="text-ash text-xs tracking-widest uppercase">Inbox</p>
+          <p className="text-ink/80 mt-2 text-sm">
+            Matches, trips, and messages land in one place.
+          </p>
+          <Button asChild variant="outline" size="sm" className="mt-4 w-full">
+            <Link href="/notifications">Open notifications</Link>
+          </Button>
+        </div>
+
         <div className="border-ink/10 bg-porcelain rounded-3xl border p-6">
           <p className="text-ash text-xs tracking-widest uppercase">Trust</p>
           <p className="text-ink mt-3 font-serif text-2xl">

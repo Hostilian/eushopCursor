@@ -1,4 +1,4 @@
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { deviceTokens, notifications } from '@eushop/db';
 import { protectedProcedure, router } from '../trpc';
@@ -44,4 +44,14 @@ export const notificationsRouter = router({
       .where(eq(notifications.userId, ctx.user.id));
     return { ok: true };
   }),
+
+  markRead: protectedProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db
+        .update(notifications)
+        .set({ readAt: new Date() })
+        .where(and(eq(notifications.id, input.id), eq(notifications.userId, ctx.user.id)));
+      return { ok: true };
+    }),
 });

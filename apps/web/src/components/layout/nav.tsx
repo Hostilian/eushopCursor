@@ -12,6 +12,7 @@ const links = [
   { href: '/trips', key: 'nav.trips' },
   { href: '/countries', key: 'nav.countries' },
   { href: '/requests', key: 'nav.requests' },
+  { href: '/notifications', key: 'nav.notifications' },
 ] as const;
 
 const investorLinks = [

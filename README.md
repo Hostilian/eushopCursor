@@ -105,7 +105,17 @@ Prerequisites: **Node 20.11+**, **pnpm 9+**, **Docker Desktop**.
 - A broken **global** install from `npm install -g pnpm` can leave `@pnpm/exe/pnpm` empty and make Git Bash fail with `This: command not found`. Prefer `npm uninstall -g pnpm` and Corepack instead.
 - **PowerShell 5.1** does not treat `&&` as a command separator. Use **`pnpm verify`** (typecheck, lint, build) instead of pasting `pnpm typecheck && pnpm lint && pnpm build`, or run each script on its own line.
 - **Husky**: committed hooks here only run **Node** and **lint-staged** (see `.husky/pre-commit`). They do not call `pnpm`. If you use `~/.config/husky/init.sh`, keep it free of a broken global `pnpm`, or rely on Corepack as above.
-- **`next build` / ENOENT**: If a production build fails with missing files under `apps/web/.next` (for example `build-manifest.json` or `pages-manifest.json`), delete `apps/web/.next` and `apps/web/tsconfig.tsbuildinfo`, ensure nothing else is touching that folder, and run `pnpm --filter @eushop/web build` again. Aggressive antivirus or parallel tools scanning `.next` can occasionally race the build on Windows.
+- **`next build` / ENOENT**: The `@eushop/web` production script removes `apps/web/.next` and `tsconfig.tsbuildinfo` before each `next build` so Turbo/CI does not reuse a half-written output (avoids sporadic `Cannot find module …` / `PageNotFoundError` on Windows). For `next dev`, if the dev server acts up, stop it and delete `apps/web/.next` manually. Rarely, antivirus scanning `.next` during a build can still cause races—retry once.
+
+### Web-only vs full stack (pick one path)
+
+| What you need | Command | Typical ports |
+| --- | --- | --- |
+| **A — Web UI only** (marketing, static pages, no local API) | `pnpm dev:web` | `:3000` |
+| **B — Web + API** (tRPC, auth, needs DB + search from Docker or your own URLs in `.env`) | `pnpm demo` | `:3000`, `:3001` |
+| **B + local data services** (Postgres, Meilisearch, Redis, Mailhog) | `pnpm demo:stack` | same + Docker services |
+
+Magic links: without `RESEND_API_KEY`, sign-in links are **logged to the API console** (use Mailhog at `:8025` when the stack is up). With `RESEND_API_KEY` and `EMAIL_FROM` set, magic links are sent via **Resend**.
 
 ```bash
 pnpm install

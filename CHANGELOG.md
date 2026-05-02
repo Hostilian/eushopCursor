@@ -77,6 +77,28 @@ items at an agreed finder's fee, and the platform charges
   from the API `createContext` → `inngest.send` bridge.
 - **`/safety/handoff-protocol`** — investor-oriented narrative on public handoffs, food safety,
   KYC roadmap, and moderation; linked from `/safety`.
+- **`listing.created` / `request.created`** — tRPC `listings.create` and `requests.create` now emit
+  Inngest events via the same `enqueueEvent` bridge as trips (so `match-listing-to-open-requests`
+  actually runs). Matcher decodes `listing.indexGeohash` for real 50 km cell overlap instead of a
+  placeholder origin.
+- **Version strings** — root + `@eushop/web` package.json set to `0.2.0`; footer badge reads
+  `v0.2 · Trip marketplace`.
+- **`requests.create` country** — `country_iso2` is now inferred from the request pin via
+  `@eushop/geo` coarse catalog bounding boxes (same approach as listings), falling back to `EU`.
+- **`requests.matchesFor`** — uses `decode(request.cell_geohash)` + the buyer’s `radius_km`
+  instead of a hardcoded central-Europe anchor.
+- **`match-trips-for-open-request` (Inngest)** — on `request.created`, when the request has a
+  `food_item_id`, notifies distinct **trip sellers** whose open offer’s destination cell overlaps
+  the buyer’s radius and whose origin or `intended_item_ids` plausibly cover that catalog item
+  (`system` notifications with `requestId` + `tripOfferId` in `data`).
+- **Sitemap** — static entries for `/trips`, `/trips/new`, `/reservations`, `/manifesto`,
+  `/traction`, `/investors`, `/safety/handoff-protocol`.
+- **`@eushop/api-server`** package version `0.2.0`.
+- **Notifications inbox** — `notifications.markRead` tRPC mutation; web `/notifications` with
+  `NotificationsPanel` (list, deep links by kind, per-row + mark-all read); nav + footer + profile
+  entry points; sitemap entry.
+- **Admin `/trips`** — read-only list of recent open trip offers with “Open in web” links; sidebar
+  nav item **Trips**.
 
 ## 0.1.0 — 2026-05-02 — MVP scaffold
 

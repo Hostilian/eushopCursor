@@ -4,7 +4,41 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { magicLink } from 'better-auth/plugins';
 
 const baseURL = process.env.BETTER_AUTH_URL ?? 'http://localhost:3001';
-const secret = process.env.BETTER_AUTH_SECRET ?? 'dev-secret-not-for-production';
+/** ≥32 chars so Better Auth does not warn in dev when `.env` is missing. */
+const secret =
+  process.env.BETTER_AUTH_SECRET ??
+  'dev-only-not-for-production-openssl-rand-base64-32-chars-min-ok-xxxxxxxx';
+
+function escapeHtmlAttr(value: string): string {
+  return value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;');
+}
+
+async function sendMagicLinkEmail(to: string, url: string): Promise<void> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.info(`[magic-link] ${to} → ${url}`);
+    return;
+  }
+  const from = process.env.EMAIL_FROM ?? 'Eushop <onboarding@resend.dev>';
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from,
+      to: [to],
+      subject: 'Sign in to Eushop',
+      html: `<p><a href="${escapeHtmlAttr(url)}">Sign in to Eushop</a></p><p>If you did not request this, you can ignore this email.</p>`,
+    }),
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    console.error('[magic-link] Resend error', res.status, body);
+    throw new Error(`Magic link email failed (${res.status})`);
+  }
+}
 
 /**
  * Better Auth instance shared across the API server, the web app's server
@@ -44,8 +78,7 @@ export const auth = betterAuth({
   plugins: [
     magicLink({
       sendMagicLink: async ({ email, url }) => {
-        // TODO: wire to Resend in production. For dev we log to mailhog.
-        console.info(`[magic-link] ${email} → ${url}`);
+        await sendMagicLinkEmail(email, url);
       },
     }),
   ],

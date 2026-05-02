@@ -1,4 +1,11 @@
-import { encode, neighborsWithinRadius, publicCell, PRECISION_INDEX } from '@eushop/geo';
+import {
+  decode,
+  encode,
+  neighborsWithinRadius,
+  publicCell,
+  PRECISION_INDEX,
+  roughCatalogCountryIso2FromLatLng,
+} from '@eushop/geo';
 import { createRequestInput } from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
 import { and, desc, eq, inArray } from 'drizzle-orm';
@@ -77,6 +84,7 @@ export const requestsRouter = router({
   create: protectedProcedure.input(createRequestInput).mutation(async ({ ctx, input }) => {
     const indexHash = encode(input.location, PRECISION_INDEX);
     const cell = publicCell(indexHash);
+    const country = roughCatalogCountryIso2FromLatLng(input.location) ?? 'EU';
     const [created] = await ctx.db
       .insert(requests)
       .values({
@@ -89,12 +97,18 @@ export const requestsRouter = router({
         location: input.location,
         cellGeohash: cell,
         approximateCity: input.approximateCity,
-        countryIso2: 'EU',
+        countryIso2: country,
         radiusKm: input.radiusKm,
         notifyOnMatch: input.notifyOnMatch,
         expiresAt: input.expiresAt,
       })
       .returning();
+    if (created) {
+      void ctx.enqueueEvent({
+        name: 'request.created',
+        data: { requestId: created.id, buyerId: created.buyerId },
+      });
+    }
     return created;
   }),
 
@@ -115,17 +129,16 @@ export const requestsRouter = router({
         where: eq(requests.id, input.requestId),
       });
       if (!req) throw new TRPCError({ code: 'NOT_FOUND' });
-      const cells = neighborsWithinRadius({ lat: 50, lng: 10 }, req.radiusKm);
+      const anchor = decode(req.cellGeohash);
+      const cells = neighborsWithinRadius(anchor, req.radiusKm);
+      const conditions = [eq(listings.status, 'live'), inArray(listings.cellGeohash, cells)];
+      if (req.foodItemId) {
+        conditions.push(eq(listings.foodItemId, req.foodItemId));
+      }
       return ctx.db
         .select()
         .from(listings)
-        .where(
-          and(
-            eq(listings.status, 'live'),
-            req.foodItemId ? eq(listings.foodItemId, req.foodItemId) : undefined,
-            inArray(listings.cellGeohash, cells),
-          ),
-        )
+        .where(and(...conditions))
         .limit(20);
     }),
 });

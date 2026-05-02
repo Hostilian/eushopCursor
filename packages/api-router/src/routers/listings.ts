@@ -131,6 +131,10 @@ export const listingsRouter = router({
       })
       .returning();
     if (!created) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Insert failed' });
+    void ctx.enqueueEvent({
+      name: 'listing.created',
+      data: { listingId: created.id, sellerId: created.sellerId },
+    });
     return publicListing(created);
   }),
 

@@ -1,5 +1,5 @@
 import { db, listings, notifications, requests } from '@eushop/db';
-import { neighborsWithinRadius } from '@eushop/geo';
+import { decode, neighborsWithinRadius } from '@eushop/geo';
 import { and, eq, inArray } from 'drizzle-orm';
 import { inngest } from '../client.js';
 
@@ -18,20 +18,16 @@ export const matchListingToOpenRequests = inngest.createFunction(
     if (!listing) return { skipped: true };
 
     const matches = await step.run('find-matching-requests', async () => {
-      const cells = neighborsWithinRadius(
-        { lat: 0, lng: 0 }, // would decode from listing.indexGeohash in production
-        50,
-      );
+      const anchor = decode(listing.indexGeohash);
+      const cells = neighborsWithinRadius(anchor, 50);
+      const conditions = [eq(requests.status, 'open'), inArray(requests.cellGeohash, cells)];
+      if (listing.foodItemId) {
+        conditions.push(eq(requests.foodItemId, listing.foodItemId));
+      }
       return db
         .select()
         .from(requests)
-        .where(
-          and(
-            eq(requests.status, 'open'),
-            listing.foodItemId ? eq(requests.foodItemId, listing.foodItemId) : undefined,
-            inArray(requests.cellGeohash, cells),
-          ),
-        )
+        .where(and(...conditions))
         .limit(50);
     });
 

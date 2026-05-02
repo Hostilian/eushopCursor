@@ -29,6 +29,9 @@ export function Footer() {
               <Link href="/how-it-works">{tc('howItWorks')}</Link>
             </li>
             <li>
+              <Link href="/notifications">{t('nav.notifications')}</Link>
+            </li>
+            <li>
               <Link href="/safety">{tc('safety')}</Link>
             </li>
             <li>
@@ -79,7 +82,7 @@ export function Footer() {
 
       <div className="container-editorial border-ink/10 text-ash mt-12 flex flex-col items-start justify-between gap-2 border-t pt-8 text-xs sm:flex-row">
         <p>© {new Date().getFullYear()} Eushop · Made in the EU · Hosted in Falkenstein</p>
-        <p>v0.1 · MVP</p>
+        <p>v0.2 · Trip marketplace</p>
       </div>
     </footer>
   );
