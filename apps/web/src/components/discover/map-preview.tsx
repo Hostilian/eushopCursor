@@ -8,17 +8,7 @@ import { useMemo } from 'react';
  * approximate area without ever sending precise coordinates to a third party
  * from the server — the parent passes only a coarse centre (e.g. city centre).
  */
-export function MapPreview({
-  label,
-  lat,
-  lng,
-  zoom: _zoom = 11,
-}: {
-  label: string;
-  lat: number;
-  lng: number;
-  zoom?: number;
-}) {
+export function MapPreview({ label, lat, lng }: { label: string; lat: number; lng: number }) {
   const src = useMemo(() => {
     const bbox = 0.08;
     const left = lng - bbox;

@@ -16,6 +16,7 @@
     "@eushop/catalog-data": "workspace:*",
     "@eushop/design-tokens": "workspace:*",
     "@eushop/i18n": "workspace:*",
+    "@eushop/mock-data": "workspace:*",
     "@eushop/ui-web": "workspace:*",
     "@eushop/validators": "workspace:*",
     "@radix-ui/react-dialog": "^1.1.4",

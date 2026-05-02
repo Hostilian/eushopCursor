@@ -1,7 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { Footer } from '../../components/layout/footer';
-import { Nav } from '../../components/layout/nav';
+import { EditorialPageLayout } from '../../components/marketing/editorial-page';
 import { Button } from '../../components/ui/button';
 
 const STEPS = [
@@ -29,38 +28,32 @@ const STEPS = [
 
 export default function HowItWorksPage() {
   return (
-    <>
-      <Nav />
-      <main className="container-editorial pt-16 pb-32">
-        <p className="text-xs uppercase tracking-widest text-ash">How it works</p>
-        <h1 className="mt-3 font-serif text-5xl text-ink md:text-6xl">From craving to handoff.</h1>
-        <p className="mt-4 max-w-xl text-lg text-ink/70">
-          Eushop is built around four steps. We're not a shop — we're the introduction.
-        </p>
+    <EditorialPageLayout
+      eyebrow="How it works"
+      title="From craving to handoff."
+      subtitle="Eushop is built around four steps. We are not a shop — we are the introduction."
+    >
+      <ol className="max-w-3xl space-y-12">
+        {STEPS.map((s) => (
+          <li key={s.n} className="grid items-start gap-8 md:grid-cols-12">
+            <div className="md:col-span-2">
+              <p className="text-saffron-700 font-serif text-6xl">{s.n}</p>
+            </div>
+            <div className="md:col-span-10">
+              <h2 className="text-ink font-serif text-3xl">{s.title}</h2>
+              <p className="text-ink/80 mt-3 max-w-xl text-pretty">{s.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
 
-        <ol className="mt-16 space-y-12">
-          {STEPS.map((s) => (
-            <li key={s.n} className="grid items-start gap-8 md:grid-cols-12">
-              <div className="md:col-span-2">
-                <p className="font-serif text-6xl text-saffron-700">{s.n}</p>
-              </div>
-              <div className="md:col-span-10">
-                <h2 className="font-serif text-3xl text-ink">{s.title}</h2>
-                <p className="mt-3 max-w-xl text-pretty text-ink/80">{s.body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-
-        <div className="mt-24 flex justify-end">
-          <Button asChild size="lg" variant="primary">
-            <Link href="/listings/new">
-              Start a listing <ArrowRight className="ml-1 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      </main>
-      <Footer />
-    </>
+      <div className="mt-16 flex justify-end">
+        <Button asChild size="lg" variant="primary">
+          <Link href="/listings/new">
+            Start a listing <ArrowRight className="ml-1 h-4 w-4" />
+          </Link>
+        </Button>
+      </div>
+    </EditorialPageLayout>
   );
 }

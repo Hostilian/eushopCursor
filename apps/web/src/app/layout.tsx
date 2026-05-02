@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Fraunces, Inter } from 'next/font/google';
+import { DemoModeBanner } from '../components/demo-mode-banner';
 import { Providers } from '../providers';
 import './globals.css';
 
@@ -38,9 +39,20 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={`${inter.variable} ${fraunces.variable}`} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className={`${inter.variable} ${fraunces.variable}`}
+      suppressHydrationWarning
+    >
       <body className="bg-paper text-ink antialiased">
+        <a
+          href="#main-content"
+          className="bg-ink text-paper focus:ring-saffron-400 sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded-lg focus:px-4 focus:py-2 focus:ring-2"
+        >
+          Skip to content
+        </a>
         <NextIntlClientProvider locale={locale} messages={messages}>
+          <DemoModeBanner />
           <Providers>{children}</Providers>
         </NextIntlClientProvider>
       </body>

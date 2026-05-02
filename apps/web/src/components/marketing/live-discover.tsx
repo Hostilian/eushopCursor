@@ -2,7 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { MapPreview } from '../discover/map-preview';
 
-type ListingCard = {
+export type LiveListingCard = {
   id: string;
   freeformName: string | null;
   approximateCity: string;
@@ -12,7 +12,7 @@ type ListingCard = {
   point: { lat: number; lng: number };
 };
 
-export function LiveDiscover({ listings }: { listings: ListingCard[] }) {
+export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
   const slice = listings.slice(0, 6);
   const hero = slice[0];
 

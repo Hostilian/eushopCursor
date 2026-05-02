@@ -17,20 +17,51 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
   const { iso2 } = await params;
   const country = COUNTRIES.find((c) => c.iso2.toLowerCase() === iso2.toLowerCase());
   if (!country) notFound();
-  const palette = countryPalette[country.iso2] ?? { primary: '#3B2F22', accent: '#FAF7F2', ink: '#1A1612' };
+  const palette = countryPalette[country.iso2] ?? {
+    primary: '#3B2F22',
+    accent: '#FAF7F2',
+    ink: '#1A1612',
+  };
   const items = FOOD_ITEMS.filter((i) => i.originCountryIso2 === country.iso2);
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eushop.eu';
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${base}/#organization`,
+        name: 'Eushop',
+        url: base,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${base}/` },
+          { '@type': 'ListItem', position: 2, name: 'Countries', item: `${base}/countries` },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: country.name,
+            item: `${base}/countries/${country.iso2.toLowerCase()}`,
+          },
+        ],
+      },
+    ],
+  };
 
   return (
     <>
       <Nav />
-      <main>
+      <main id="main-content">
         <CountryHero country={country} palette={palette} count={items.length} />
 
         <section className="container-editorial mt-24">
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-xs uppercase tracking-widest text-ash">The catalog</p>
-              <h2 className="mt-3 font-serif text-4xl text-ink">All {items.length} {country.name} items.</h2>
+              <p className="text-ash text-xs tracking-widest uppercase">The catalog</p>
+              <h2 className="text-ink mt-3 font-serif text-4xl">
+                All {items.length} {country.name} items.
+              </h2>
             </div>
             <Button asChild variant="link">
               <Link href={`/discover?country=${country.iso2}`}>
@@ -44,22 +75,26 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
               <li key={item.slug}>
                 <Link href={`/items/${item.slug}`} className="group block">
                   <div
-                    className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-ink/10"
-                    style={{ background: `linear-gradient(180deg, ${palette.primary}22, ${palette.primary}55)` }}
+                    className="border-ink/10 relative aspect-[4/5] overflow-hidden rounded-3xl border"
+                    style={{
+                      background: `linear-gradient(180deg, ${palette.primary}22, ${palette.primary}55)`,
+                    }}
                   >
                     <div className="absolute inset-0 flex items-center justify-center">
                       <span className="text-7xl opacity-30">{country.flagEmoji}</span>
                     </div>
-                    <div className="absolute left-4 top-4">
+                    <div className="absolute top-4 left-4">
                       <Badge variant="solid">{item.categorySlug}</Badge>
                     </div>
                   </div>
-                  <p className="mt-4 font-serif text-lg text-ink transition-colors group-hover:text-saffron-700">
+                  <p className="text-ink group-hover:text-saffron-700 mt-4 font-serif text-lg transition-colors">
                     {item.name}
                   </p>
-                  <p className="mt-1 line-clamp-2 text-sm text-ash">{item.description}</p>
+                  <p className="text-ash mt-1 line-clamp-2 text-sm">{item.description}</p>
                   {item.aka?.length ? (
-                    <p className="mt-1 text-xs uppercase tracking-widest text-ash/60">aka {item.aka[0]}</p>
+                    <p className="text-ash/60 mt-1 text-xs tracking-widest uppercase">
+                      aka {item.aka[0]}
+                    </p>
                   ) : null}
                 </Link>
               </li>
@@ -67,16 +102,19 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
           </ul>
         </section>
 
-        <section className="container-editorial mt-32 rounded-[2.5rem] p-12" style={{ background: palette.primary, color: palette.accent }}>
+        <section
+          className="container-editorial mt-32 rounded-[2.5rem] p-12"
+          style={{ background: palette.primary, color: palette.accent }}
+        >
           <Badge variant="outline" className="border-white/30 text-white">
             <MapPin className="h-3 w-3" /> Bring back next time
           </Badge>
-          <h2 className="mt-4 font-serif text-balance text-4xl md:text-5xl">
+          <h2 className="mt-4 font-serif text-4xl text-balance md:text-5xl">
             Heading home to {country.name} soon? Pre-list what you'll bring.
           </h2>
           <p className="mt-3 max-w-2xl opacity-80">
-            Set a finder's fee, mark when you're back, and your neighbours will reserve before
-            the suitcase even closes.
+            Set a finder's fee, mark when you're back, and your neighbours will reserve before the
+            suitcase even closes.
           </p>
           <Button asChild variant="accent" size="lg" className="mt-8">
             <Link href="/listings/new">
@@ -86,6 +124,10 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
         </section>
       </main>
       <Footer />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </>
   );
 }

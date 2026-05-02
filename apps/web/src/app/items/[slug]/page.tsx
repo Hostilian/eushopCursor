@@ -17,15 +17,49 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
   const item = FOOD_ITEMS.find((i) => i.slug === slug);
   if (!item) notFound();
   const country = COUNTRIES.find((c) => c.iso2 === item.originCountryIso2);
-  const palette = countryPalette[item.originCountryIso2] ?? { primary: '#3B2F22', accent: '#FAF7F2', ink: '#1A1612' };
+  const palette = countryPalette[item.originCountryIso2] ?? {
+    primary: '#3B2F22',
+    accent: '#FAF7F2',
+    ink: '#1A1612',
+  };
   const related = FOOD_ITEMS.filter(
     (i) => i.originCountryIso2 === item.originCountryIso2 && i.slug !== item.slug,
   ).slice(0, 4);
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eushop.eu';
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${base}/#organization`,
+        name: 'Eushop',
+        url: base,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${base}/` },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: country?.name ?? 'Catalog',
+            item: `${base}/countries/${item.originCountryIso2.toLowerCase()}`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: item.name,
+            item: `${base}/items/${item.slug}`,
+          },
+        ],
+      },
+    ],
+  };
 
   return (
     <>
       <Nav />
-      <main>
+      <main id="main-content">
         <section
           className="relative overflow-hidden"
           style={{ background: palette.primary, color: palette.accent }}
@@ -39,12 +73,17 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
               </div>
             </div>
             <div className="md:col-span-7">
-              <Link href={`/countries/${item.originCountryIso2.toLowerCase()}`} className="text-xs uppercase tracking-widest opacity-70 hover:opacity-100">
+              <Link
+                href={`/countries/${item.originCountryIso2.toLowerCase()}`}
+                className="text-xs tracking-widest uppercase opacity-70 hover:opacity-100"
+              >
                 {country?.name} · {item.categorySlug}
               </Link>
-              <h1 className="mt-3 font-serif text-balance text-6xl md:text-7xl">{item.name}</h1>
+              <h1 className="mt-3 font-serif text-6xl text-balance md:text-7xl">{item.name}</h1>
               {item.aka?.length ? (
-                <p className="mt-2 text-sm uppercase tracking-widest opacity-70">aka {item.aka.join(' · ')}</p>
+                <p className="mt-2 text-sm tracking-widest uppercase opacity-70">
+                  aka {item.aka.join(' · ')}
+                </p>
               ) : null}
               <p className="mt-8 max-w-xl text-lg leading-relaxed opacity-80">{item.description}</p>
               <div className="mt-10 flex flex-wrap gap-3">
@@ -53,7 +92,12 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
                     See active listings <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="border-white/30 text-white hover:bg-white/10"
+                >
                   <Link href={`/requests/new?item=${item.slug}`}>Post a request</Link>
                 </Button>
               </div>
@@ -72,19 +116,19 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
 
         <section className="container-editorial mt-20 grid gap-12 md:grid-cols-3">
           <div>
-            <p className="text-xs uppercase tracking-widest text-ash">What it tastes like</p>
-            <p className="mt-3 font-serif text-2xl text-ink">{item.description}</p>
+            <p className="text-ash text-xs tracking-widest uppercase">What it tastes like</p>
+            <p className="text-ink mt-3 font-serif text-2xl">{item.description}</p>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-widest text-ash">Where it's from</p>
-            <p className="mt-3 font-serif text-2xl text-ink">
+            <p className="text-ash text-xs tracking-widest uppercase">Where it's from</p>
+            <p className="text-ink mt-3 font-serif text-2xl">
               {country?.flagEmoji} {country?.name}
             </p>
-            <p className="mt-1 text-sm text-ash">{country?.blurb}</p>
+            <p className="text-ash mt-1 text-sm">{country?.blurb}</p>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-widest text-ash">How to get it</p>
-            <p className="mt-3 text-pretty text-ink/80">
+            <p className="text-ash text-xs tracking-widest uppercase">How to get it</p>
+            <p className="text-ink/80 mt-3 text-pretty">
               Search nearby listings, message the seller, agree on a finder's fee and a meet-up
               spot. Cash or app — your choice; we don't take a cut.
             </p>
@@ -98,16 +142,16 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
 
         {related.length ? (
           <section className="container-editorial mt-32">
-            <h2 className="font-serif text-3xl text-ink">More from {country?.name}</h2>
+            <h2 className="text-ink font-serif text-3xl">More from {country?.name}</h2>
             <ul className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-4">
               {related.map((r) => (
                 <li key={r.slug}>
                   <Link
                     href={`/items/${r.slug}`}
-                    className="group block rounded-3xl border border-ink/10 bg-porcelain p-5 transition-all hover:-translate-y-1 hover:shadow-md"
+                    className="group border-ink/10 bg-porcelain block rounded-3xl border p-5 transition-all hover:-translate-y-1 hover:shadow-md"
                   >
-                    <p className="font-serif text-lg text-ink">{r.name}</p>
-                    <p className="mt-1 line-clamp-2 text-xs text-ash">{r.description}</p>
+                    <p className="text-ink font-serif text-lg">{r.name}</p>
+                    <p className="text-ash mt-1 line-clamp-2 text-xs">{r.description}</p>
                   </Link>
                 </li>
               ))}
@@ -116,6 +160,10 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
         ) : null}
       </main>
       <Footer />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </>
   );
 }

@@ -1,23 +1,28 @@
 /**
- * Adapters + helpers that let a tRPC procedure gracefully fall back to a
- * deterministic mock dataset whenever the real DB query throws or returns
- * an empty result. This keeps the demo investor-credible even if Postgres /
- * Meili are not running locally.
+ * Catalog fallbacks ONLY.
  *
- * The intent is *graceful*: when the DB has rows, those win. When it doesn't,
- * we synthesise a result shaped like the DB row so callers don't notice.
+ * Originally this module also synthesised fictional listings, requests,
+ * conversations and messages whenever a tRPC procedure threw or returned
+ * an empty result. That created a credibility problem: production data
+ * could not be distinguished from invented rows in screenshots, in admin
+ * exports, and in API responses to investors crawling our endpoints.
+ *
+ * Today the contract is much stricter:
+ *   - Catalog data (countries, categories, brands, food items) is *real*
+ *     and ships with the build via `@eushop/catalog-data`. When the DB
+ *     hasn't been seeded yet (e.g. a fresh dev clone before
+ *     `pnpm db:migrate && pnpm db:seed`), these fallbacks let the
+ *     marketing surfaces render the curated list — but every byte of it
+ *     is something the team explicitly authored.
+ *   - User-generated rows (listings, requests, conversations, messages,
+ *     trip offers, reservations) NEVER fall back to anything synthetic.
+ *     If the DB query throws, the procedure throws too. If it returns
+ *     an empty array, callers receive an empty array. The clients are
+ *     responsible for rendering inviting empty states; the server's job
+ *     is to tell the truth.
  */
 
 import { BRANDS, CATEGORIES, COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
-import {
-  SAMPLE_CONVERSATIONS,
-  SAMPLE_LISTINGS,
-  SAMPLE_MESSAGES,
-  SAMPLE_REQUESTS,
-  type SampleListing,
-  type SampleMessage,
-  type SampleRequest,
-} from '@eushop/mock-data';
 
 /** Run a DB query; on throw OR empty array, return the synthesised fallback. */
 export async function withListFallback<T>(
@@ -127,6 +132,11 @@ export function fallbackItems(predicate?: (s: (typeof FOOD_ITEMS)[number]) => bo
     descriptionTranslated: {} as Record<string, string>,
     tags: it.tags ?? [],
     defaultImageUrl: null as string | null,
+    imageVariants: null as null | { thumb?: string; small?: string; large?: string },
+    barcode: null as string | null,
+    openFoodFactsId: null as string | null,
+    verifiedAt: null as Date | null,
+    submittedById: null as string | null,
     embedding: null as number[] | null,
     createdAt: NOW,
     updatedAt: NOW,
@@ -148,34 +158,4 @@ export function fallbackItemsByCategory(slug: string, limit = 24) {
   if (!cat) return undefined;
   const items = fallbackItems((it) => it.categorySlug === slug).slice(0, limit);
   return { category: cat, items };
-}
-
-/* ----- Listings / requests / conversations ------------------------------- */
-
-export function fallbackListings(opts?: { countryIso2?: string; limit?: number }): SampleListing[] {
-  let list: SampleListing[] = SAMPLE_LISTINGS.slice();
-  if (opts?.countryIso2) {
-    const upper = opts.countryIso2.toUpperCase();
-    list = list.filter((l: SampleListing) => l.countryIso2 === upper);
-  }
-  if (opts?.limit) list = list.slice(0, opts.limit);
-  return list;
-}
-
-export function fallbackRequests(opts?: { countryIso2?: string; limit?: number }): SampleRequest[] {
-  let list: SampleRequest[] = SAMPLE_REQUESTS.slice();
-  if (opts?.countryIso2) {
-    const upper = opts.countryIso2.toUpperCase();
-    list = list.filter((r: SampleRequest) => r.countryIso2 === upper);
-  }
-  if (opts?.limit) list = list.slice(0, opts.limit);
-  return list;
-}
-
-export function fallbackConversations() {
-  return SAMPLE_CONVERSATIONS.slice();
-}
-
-export function fallbackMessagesFor(conversationId: string) {
-  return SAMPLE_MESSAGES.filter((m: SampleMessage) => m.conversationId === conversationId);
 }
