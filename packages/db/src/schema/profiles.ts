@@ -1,11 +1,22 @@
 import { sql } from 'drizzle-orm';
-import { index, integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import {
+  index,
+  integer,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core';
 import { users } from './auth';
 
 export const profiles = pgTable(
   'profiles',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     userId: uuid('user_id')
       .notNull()
       .unique()
@@ -17,8 +28,14 @@ export const profiles = pgTable(
     currentCity: text('current_city'),
     currentCellGeohash: text('current_cell_geohash'), // privacy: ~5km
     preferredLocale: text('preferred_locale').notNull().default('en'),
-    languagesSpoken: jsonb('languages_spoken').$type<string[]>().notNull().default(sql`'[]'::jsonb`),
-    badges: jsonb('badges').$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    languagesSpoken: jsonb('languages_spoken')
+      .$type<string[]>()
+      .notNull()
+      .default(sql`'[]'::jsonb`),
+    badges: jsonb('badges')
+      .$type<string[]>()
+      .notNull()
+      .default(sql`'[]'::jsonb`),
     successfulExchanges: integer('successful_exchanges').notNull().default(0),
     avatarUrl: text('avatar_url'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
@@ -34,7 +51,9 @@ export const profiles = pgTable(
 export const blocks = pgTable(
   'blocks',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     blockerId: uuid('blocker_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
@@ -45,5 +64,6 @@ export const blocks = pgTable(
   },
   (t) => ({
     pairIdx: index('blocks_pair_idx').on(t.blockerId, t.blockedId),
+    pairUq: uniqueIndex('blocks_blocker_blocked_uq').on(t.blockerId, t.blockedId),
   }),
 );

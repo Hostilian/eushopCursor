@@ -1,36 +1,58 @@
 {
   "brand": "Eushop",
   "tagline": "Un sabor a casa, a la vuelta de la esquina.",
-  "nav.discover": "Descubrir",
-  "nav.countries": "Países",
-  "nav.requests": "Búsquedas",
-  "nav.listings": "Mis anuncios",
-  "nav.messages": "Mensajes",
-  "nav.profile": "Perfil",
-  "cta.signIn": "Iniciar sesión",
-  "cta.signUp": "Unirse",
-  "cta.postListing": "Comparte lo que trajiste",
-  "cta.postRequest": "Pedir algo",
-  "cta.message": "Mensaje",
-  "cta.viewAll": "Ver todo",
-  "search.placeholder": "Busca Krówki, Stroopwafels, Mastiha…",
-  "country.intro": "Trae el sabor de {country} a tu puerta.",
-  "listing.finderFee": "Tarifa de búsqueda",
-  "listing.freshness.today": "Mejor hoy",
-  "listing.freshness.3-days": "En 3 días",
-  "listing.freshness.week": "Esta semana",
-  "listing.freshness.month": "Este mes",
-  "listing.freshness.shelf-stable": "Larga duración",
-  "listing.qty": "{qty} disponibles",
-  "listing.distance": "A {km} km",
-  "request.title": "Buscando {item}",
-  "empty.listings": "Aún no hay nada cerca — sé el primero.",
-  "empty.requests": "Sin búsquedas en tu radio.",
-  "empty.search": "Nada encontrado para «{q}».",
-  "footer.privacy": "Privacidad",
-  "footer.terms": "Términos",
-  "footer.imprint": "Aviso legal",
-  "auth.signedOut": "Sesión cerrada.",
-  "auth.welcome": "Bienvenido de nuevo, {name}",
-  "lang.switch": "Idioma"
+  "nav": {
+    "discover": "Descubrir",
+    "countries": "Países",
+    "requests": "Búsquedas",
+    "listings": "Mis anuncios",
+    "messages": "Mensajes",
+    "profile": "Perfil"
+  },
+  "cta": {
+    "signIn": "Iniciar sesión",
+    "signUp": "Unirse",
+    "postListing": "Comparte lo que trajiste",
+    "postRequest": "Pedir algo",
+    "message": "Mensaje",
+    "viewAll": "Ver todo"
+  },
+  "search": {
+    "placeholder": "Busca Krówki, Stroopwafels, Mastiha…"
+  },
+  "country": {
+    "intro": "Trae el sabor de {country} a tu puerta."
+  },
+  "listing": {
+    "finderFee": "Tarifa de búsqueda",
+    "freshness": {
+      "today": "Mejor hoy",
+      "3-days": "En 3 días",
+      "week": "Esta semana",
+      "month": "Este mes",
+      "shelf-stable": "Larga duración"
+    },
+    "qty": "{qty} disponibles",
+    "distance": "A {km} km"
+  },
+  "request": {
+    "title": "Buscando {item}"
+  },
+  "empty": {
+    "listings": "Aún no hay nada cerca — sé el primero.",
+    "requests": "Sin búsquedas en tu radio.",
+    "search": "Nada encontrado para «{q}»."
+  },
+  "footer": {
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "imprint": "Aviso legal"
+  },
+  "auth": {
+    "signedOut": "Sesión cerrada.",
+    "welcome": "Bienvenido de nuevo, {name}"
+  },
+  "lang": {
+    "switch": "Idioma"
+  }
 }

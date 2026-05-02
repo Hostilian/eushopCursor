@@ -1,10 +1,16 @@
-import { encode, neighborsWithinRadius, publicCell, publicPoint, PRECISION_INDEX } from '@eushop/geo';
+import {
+  encode,
+  neighborsWithinRadius,
+  publicCell,
+  publicPoint,
+  PRECISION_INDEX,
+} from '@eushop/geo';
 import { createListingInput, listingSearchInput, updateListingInput } from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
 import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { brands, categories, foodItems, listings } from '@eushop/db';
-import { protectedProcedure, publicProcedure, router } from '../trpc.js';
+import { protectedProcedure, publicProcedure, router } from '../trpc';
 
 function publicListing<T extends { id: string; cellGeohash: string; location?: unknown }>(row: T) {
   const { location: _omit, ...rest } = row as unknown as Record<string, unknown> & {
@@ -28,7 +34,9 @@ export const listingsRouter = router({
 
     if (input.q) {
       const pattern = `%${input.q.replace(/[%_]/g, '')}%`;
-      conditions.push(sql`(${listings.freeformName} ILIKE ${pattern} OR ${listings.notes} ILIKE ${pattern})`);
+      conditions.push(
+        sql`(${listings.freeformName} ILIKE ${pattern} OR ${listings.notes} ILIKE ${pattern})`,
+      );
     }
 
     if (input.freshness) {
@@ -69,17 +77,15 @@ export const listingsRouter = router({
     return rows.map(publicListing);
   }),
 
-  byId: publicProcedure
-    .input(z.object({ id: z.string().uuid() }))
-    .query(async ({ ctx, input }) => {
-      const row = await ctx.db.query.listings.findFirst({ where: eq(listings.id, input.id) });
-      if (!row) throw new TRPCError({ code: 'NOT_FOUND' });
-      let item = null;
-      if (row.foodItemId) {
-        item = await ctx.db.query.foodItems.findFirst({ where: eq(foodItems.id, row.foodItemId) });
-      }
-      return { ...publicListing(row), item };
-    }),
+  byId: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
+    const row = await ctx.db.query.listings.findFirst({ where: eq(listings.id, input.id) });
+    if (!row) throw new TRPCError({ code: 'NOT_FOUND' });
+    let item = null;
+    if (row.foodItemId) {
+      item = await ctx.db.query.foodItems.findFirst({ where: eq(foodItems.id, row.foodItemId) });
+    }
+    return { ...publicListing(row), item };
+  }),
 
   mine: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db
@@ -116,14 +122,14 @@ export const listingsRouter = router({
         expiresAt: input.expiresAt,
       })
       .returning();
+    if (!created) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Insert failed' });
     return publicListing(created);
   }),
 
   update: protectedProcedure.input(updateListingInput).mutation(async ({ ctx, input }) => {
     const existing = await ctx.db.query.listings.findFirst({ where: eq(listings.id, input.id) });
     if (!existing) throw new TRPCError({ code: 'NOT_FOUND' });
-    if (existing.sellerId !== ctx.user.id)
-      throw new TRPCError({ code: 'FORBIDDEN' });
+    if (existing.sellerId !== ctx.user.id) throw new TRPCError({ code: 'FORBIDDEN' });
 
     const patch: Record<string, unknown> = { updatedAt: new Date() };
     if (input.qty !== undefined) patch.qty = input.qty;
@@ -146,6 +152,7 @@ export const listingsRouter = router({
       .set(patch)
       .where(eq(listings.id, input.id))
       .returning();
+    if (!updated) throw new TRPCError({ code: 'NOT_FOUND' });
     return publicListing(updated);
   }),
 
@@ -173,7 +180,9 @@ export const listingsRouter = router({
     }),
 
   byCountry: publicProcedure
-    .input(z.object({ iso2: z.string().length(2), limit: z.number().int().min(1).max(40).default(12) }))
+    .input(
+      z.object({ iso2: z.string().length(2), limit: z.number().int().min(1).max(40).default(12) }),
+    )
     .query(async ({ ctx, input }) => {
       const rows = await ctx.db
         .select()

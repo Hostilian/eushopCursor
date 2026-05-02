@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cn } from './cn.js';
+import { cn } from './cn';
 
 const variants: Record<'soft' | 'outline' | 'solid' | 'accent', string> = {
   soft: 'bg-ink/[0.06] text-ink',

@@ -1,8 +1,9 @@
 {
-  "extends": "@eushop/config/tsconfig.base",
+  "extends": "../../packages/config/tsconfig.base.json",
   "compilerOptions": {
     "lib": ["ES2022"],
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "skipLibCheck": true
   },
   "include": ["src/**/*"]
 }

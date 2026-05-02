@@ -4,11 +4,16 @@ import { TRPCError } from '@trpc/server';
 import { and, desc, eq, inArray } from 'drizzle-orm';
 import { z } from 'zod';
 import { foodItems, listings, requests } from '@eushop/db';
-import { protectedProcedure, publicProcedure, router } from '../trpc.js';
+import { protectedProcedure, publicProcedure, router } from '../trpc';
 
 export const requestsRouter = router({
   feed: publicProcedure
-    .input(z.object({ countryIso2: z.string().length(2).optional(), limit: z.number().int().min(1).max(40).default(20) }))
+    .input(
+      z.object({
+        countryIso2: z.string().length(2).optional(),
+        limit: z.number().int().min(1).max(40).default(20),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       const where = and(
         eq(requests.status, 'open' as const),
@@ -41,17 +46,15 @@ export const requestsRouter = router({
         .limit(input.limit);
     }),
 
-  byId: publicProcedure
-    .input(z.object({ id: z.string().uuid() }))
-    .query(async ({ ctx, input }) => {
-      const r = await ctx.db.query.requests.findFirst({ where: eq(requests.id, input.id) });
-      if (!r) throw new TRPCError({ code: 'NOT_FOUND' });
-      let item = null;
-      if (r.foodItemId) {
-        item = await ctx.db.query.foodItems.findFirst({ where: eq(foodItems.id, r.foodItemId) });
-      }
-      return { ...r, item };
-    }),
+  byId: publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ ctx, input }) => {
+    const r = await ctx.db.query.requests.findFirst({ where: eq(requests.id, input.id) });
+    if (!r) throw new TRPCError({ code: 'NOT_FOUND' });
+    let item = null;
+    if (r.foodItemId) {
+      item = await ctx.db.query.foodItems.findFirst({ where: eq(foodItems.id, r.foodItemId) });
+    }
+    return { ...r, item };
+  }),
 
   mine: protectedProcedure.query(async ({ ctx }) => {
     return ctx.db
@@ -98,12 +101,11 @@ export const requestsRouter = router({
   matchesFor: protectedProcedure
     .input(z.object({ requestId: z.string().uuid() }))
     .query(async ({ ctx, input }) => {
-      const req = await ctx.db.query.requests.findFirst({ where: eq(requests.id, input.requestId) });
+      const req = await ctx.db.query.requests.findFirst({
+        where: eq(requests.id, input.requestId),
+      });
       if (!req) throw new TRPCError({ code: 'NOT_FOUND' });
-      const cells = neighborsWithinRadius(
-        { lat: 50, lng: 10 },
-        req.radiusKm,
-      );
+      const cells = neighborsWithinRadius({ lat: 50, lng: 10 }, req.radiusKm);
       return ctx.db
         .select()
         .from(listings)

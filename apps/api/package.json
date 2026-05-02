@@ -8,8 +8,8 @@
     "dev:bun": "bun --watch src/server.ts",
     "build": "tsx src/build.ts",
     "start": "node dist/server.js",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "lint": "node ../../node_modules/eslint/bin/eslint.js -c ../../packages/config/eslint.config.js .",
+    "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit",
     "search:index": "tsx src/jobs/reindex.ts"
   },
   "dependencies": {

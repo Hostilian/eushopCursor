@@ -3,11 +3,13 @@ import { TRPCError } from '@trpc/server';
 import { eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { conversations, moderationActions, profiles, reports, reviews } from '@eushop/db';
-import { adminProcedure, protectedProcedure, publicProcedure, router } from '../trpc.js';
+import { adminProcedure, protectedProcedure, publicProcedure, router } from '../trpc';
 
 export const trustRouter = router({
   reviewsForUser: publicProcedure
-    .input(z.object({ userId: z.string().uuid(), limit: z.number().int().min(1).max(40).default(10) }))
+    .input(
+      z.object({ userId: z.string().uuid(), limit: z.number().int().min(1).max(40).default(10) }),
+    )
     .query(async ({ ctx, input }) => {
       return ctx.db
         .select()
@@ -24,8 +26,7 @@ export const trustRouter = router({
     if (conv.initiatorId !== ctx.user.id && conv.recipientId !== ctx.user.id)
       throw new TRPCError({ code: 'FORBIDDEN' });
 
-    const revieweeId =
-      conv.initiatorId === ctx.user.id ? conv.recipientId : conv.initiatorId;
+    const revieweeId = conv.initiatorId === ctx.user.id ? conv.recipientId : conv.initiatorId;
     const [created] = await ctx.db
       .insert(reviews)
       .values({
@@ -62,11 +63,7 @@ export const trustRouter = router({
 
   // ---- admin / moderation queue --------------------------------------------
   moderationQueue: adminProcedure.query(async ({ ctx }) => {
-    return ctx.db
-      .select()
-      .from(reports)
-      .where(eq(reports.status, 'open'))
-      .limit(50);
+    return ctx.db.select().from(reports).where(eq(reports.status, 'open')).limit(50);
   }),
 
   resolveReport: adminProcedure

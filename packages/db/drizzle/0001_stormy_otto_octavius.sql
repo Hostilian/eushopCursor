@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "blocks_blocker_blocked_uq" ON "blocks" USING btree ("blocker_id","blocked_id");

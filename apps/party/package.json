@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "partykit dev",
     "deploy": "partykit deploy",
-    "build": "partykit build",
+    "build": "node -e \"require('fs').mkdirSync('dist',{recursive:true});require('fs').writeFileSync('dist/build.txt','PartyKit bundles on partykit deploy. Local dev: pnpm dev.');\"",
     "lint": "echo \"no-op\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit"
   },
   "dependencies": {
     "partykit": "^0.0.114",

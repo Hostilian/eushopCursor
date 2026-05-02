@@ -15,14 +15,14 @@ const links = [
 
 export function Nav() {
   const t = useTranslations();
-  const [open, setOpen] = useState(false);
+  const [open, _setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/80 backdrop-blur-xl">
+    <header className="border-ink/10 bg-paper/80 sticky top-0 z-40 border-b backdrop-blur-xl">
       <div className="container-editorial flex h-16 items-center justify-between gap-6">
         <Link href="/" className="flex items-baseline gap-2">
-          <span className="font-serif text-2xl tracking-tight text-ink">{t('brand')}</span>
-          <span className="hidden text-xs uppercase tracking-widest text-ash sm:inline">EU</span>
+          <span className="text-ink font-serif text-2xl tracking-tight">{t('brand')}</span>
+          <span className="text-ash hidden text-xs tracking-widest uppercase sm:inline">EU</span>
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -30,7 +30,7 @@ export function Nav() {
             <Link
               key={l.href}
               href={l.href}
-              className="text-sm text-ink/80 transition-colors hover:text-ink"
+              className="text-ink/80 hover:text-ink text-sm transition-colors"
             >
               {t(l.key)}
             </Link>

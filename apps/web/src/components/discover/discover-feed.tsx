@@ -3,6 +3,7 @@
 import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
 import { countryPalette } from '@eushop/design-tokens';
 import { Filter, MapPin } from 'lucide-react';
+import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { trpc } from '../../lib/trpc';
 import { cn, formatDistance, formatFee, timeAgo } from '../../lib/utils';
@@ -27,10 +28,21 @@ const SAMPLE_FALLBACK = FOOD_ITEMS.slice(0, 12).map((i, idx) => ({
   finderFee: ['3', '4', '5', '6', '7', '8', '10'][idx % 7]!,
   currency: 'EUR',
   freshness: 'week' as const,
-  approximateCity: ['Berlin Mitte', 'Munich Glockenbach', 'Madrid Lavapiés', 'Amsterdam Oost', 'Paris 11e', 'Vienna Neubau'][idx % 6]!,
+  approximateCity: [
+    'Berlin Mitte',
+    'Munich Glockenbach',
+    'Madrid Lavapiés',
+    'Amsterdam Oost',
+    'Paris 11e',
+    'Vienna Neubau',
+  ][idx % 6]!,
   countryIso2: i.originCountryIso2,
   cellGeohash: 'u33d2',
-  photos: [{ url: `https://placehold.co/800x800/${countryPalette[i.originCountryIso2]?.primary.slice(1) ?? '3B2F22'}/${countryPalette[i.originCountryIso2]?.accent.slice(1) ?? 'FAF7F2'}?text=${encodeURIComponent(i.name)}` }],
+  photos: [
+    {
+      url: `https://placehold.co/800x800/${countryPalette[i.originCountryIso2]?.primary.slice(1) ?? '3B2F22'}/${countryPalette[i.originCountryIso2]?.accent.slice(1) ?? 'FAF7F2'}?text=${encodeURIComponent(i.name)}`,
+    },
+  ],
   createdAt: new Date(Date.now() - idx * 1000 * 60 * 60),
   point: { lat: 52.52, lng: 13.405 },
   km: 1 + idx * 0.6,
@@ -43,8 +55,17 @@ export function DiscoverFeed() {
   const [freshness, setFreshness] = useState<string | null>(null);
 
   const query = trpc.listings.near.useQuery(
-    { radiusKm: radius, countryIso2: country ?? undefined, freshness: (freshness ?? undefined) as
-      | 'today' | '3-days' | 'week' | 'month' | 'shelf-stable' | undefined },
+    {
+      radiusKm: radius,
+      countryIso2: country ?? undefined,
+      freshness: (freshness ?? undefined) as
+        | 'today'
+        | '3-days'
+        | 'week'
+        | 'month'
+        | 'shelf-stable'
+        | undefined,
+    },
     { staleTime: 30_000 },
   );
 
@@ -74,7 +95,9 @@ export function DiscoverFeed() {
                   onClick={() => setRadius(r)}
                   className={cn(
                     'rounded-full border px-3 py-1 text-xs',
-                    radius === r ? 'border-ink bg-ink text-paper' : 'border-ink/15 text-ink/70 hover:border-ink/40',
+                    radius === r
+                      ? 'border-ink bg-ink text-paper'
+                      : 'border-ink/15 text-ink/70 hover:border-ink/40',
                   )}
                 >
                   {r} km
@@ -94,7 +117,7 @@ export function DiscoverFeed() {
 
       <div className="md:col-span-9">
         <div className="mb-6 flex items-center justify-between">
-          <p className="text-sm text-ash">
+          <p className="text-ash text-sm">
             {items.length} {items.length === 1 ? 'listing' : 'listings'} in your filter
           </p>
           <Button variant="ghost" size="sm">
@@ -115,7 +138,7 @@ export function DiscoverFeed() {
 function FilterBlock({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-widest text-ash">{label}</p>
+      <p className="text-ash text-xs tracking-widest uppercase">{label}</p>
       <div className="mt-3">{children}</div>
     </div>
   );
@@ -138,7 +161,9 @@ function Pills<T extends string | null>({
           onClick={() => onChange(o.v)}
           className={cn(
             'rounded-full border px-3 py-1 text-xs',
-            value === o.v ? 'border-ink bg-ink text-paper' : 'border-ink/15 text-ink/70 hover:border-ink/40',
+            value === o.v
+              ? 'border-ink bg-ink text-paper'
+              : 'border-ink/15 text-ink/70 hover:border-ink/40',
           )}
         >
           {o.l}
@@ -166,28 +191,31 @@ interface ListingLike {
 function ListingCard({ listing }: { listing: ListingLike }) {
   const palette = countryPalette[listing.countryIso2] ?? { primary: '#3B2F22', accent: '#FAF7F2' };
   return (
-    <li className="group overflow-hidden rounded-3xl border border-ink/10 bg-porcelain transition-all hover:-translate-y-1 hover:shadow-lg">
+    <li className="group border-ink/10 bg-porcelain overflow-hidden rounded-3xl border transition-all hover:-translate-y-1 hover:shadow-lg">
       <div
         className="relative aspect-[4/3] overflow-hidden"
         style={{ background: palette.primary }}
       >
         {listing.photos[0] ? (
-          <img
+          <Image
             src={listing.photos[0].url}
             alt=""
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            fill
+            unoptimized
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : null}
-        <div className="absolute right-3 top-3">
+        <div className="absolute top-3 right-3">
           <Badge variant="solid">{formatFee(listing.finderFee, listing.currency)}</Badge>
         </div>
       </div>
       <div className="p-5">
-        <p className="font-serif text-lg text-ink">{listing.freeformName}</p>
+        <p className="text-ink font-serif text-lg">{listing.freeformName}</p>
         {listing.notes ? (
-          <p className="mt-1 line-clamp-2 text-sm text-ash">{listing.notes}</p>
+          <p className="text-ash mt-1 line-clamp-2 text-sm">{listing.notes}</p>
         ) : null}
-        <div className="mt-4 flex items-center justify-between text-xs text-ash">
+        <div className="text-ash mt-4 flex items-center justify-between text-xs">
           <span className="inline-flex items-center gap-1">
             <MapPin className="h-3 w-3" /> {listing.approximateCity}
             {listing.km !== undefined ? ` · ${formatDistance(listing.km)}` : null}

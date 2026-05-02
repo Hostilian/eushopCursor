@@ -1,12 +1,12 @@
-export * from './countries.js';
-export * from './categories.js';
-export * from './brands.js';
-export * from './items.js';
+export * from './countries';
+export * from './categories';
+export * from './brands';
+export * from './items';
 
-import { COUNTRIES } from './countries.js';
-import { CATEGORIES } from './categories.js';
-import { BRANDS } from './brands.js';
-import { FOOD_ITEMS } from './items.js';
+import { COUNTRIES } from './countries';
+import { CATEGORIES } from './categories';
+import { BRANDS } from './brands';
+import { FOOD_ITEMS } from './items';
 
 export const STATS = {
   countries: COUNTRIES.length,

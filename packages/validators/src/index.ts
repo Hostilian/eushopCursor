@@ -59,6 +59,9 @@ export const profileUpdateInput = z.object({
 });
 export type ProfileUpdateInput = z.infer<typeof profileUpdateInput>;
 
+export const blockUserInput = z.object({ userId: z.string().uuid() });
+export type BlockUserInput = z.infer<typeof blockUserInput>;
+
 // ---------- Catalog ----------------------------------------------------------
 
 export const catalogQuery = z.object({
@@ -159,6 +162,14 @@ export const startConversationInput = z.object({
 });
 export type StartConversationInput = z.infer<typeof startConversationInput>;
 
+/** Safe starter lines for chat UIs (shared with web, mobile, and API docs). */
+export const MESSAGING_SAFE_TEMPLATES = [
+  'Hi! Is your stash still available?',
+  'Could we meet near a metro stop you like? Privacy first.',
+  'What freshness window works for the handoff?',
+  'Happy with the finder\u2019s fee — do you accept Revolut/cash on pickup?',
+] as const;
+
 // ---------- Reviews ---------------------------------------------------------
 
 export const reviewTags = z.enum([
@@ -206,7 +217,11 @@ export type SubmitReportInput = z.infer<typeof submitReportInput>;
 export const presignUploadInput = z.object({
   filename: z.string().min(1).max(120),
   contentType: z.enum(['image/jpeg', 'image/png', 'image/webp', 'image/avif']),
-  byteLength: z.number().int().min(1).max(15 * 1024 * 1024),
+  byteLength: z
+    .number()
+    .int()
+    .min(1)
+    .max(15 * 1024 * 1024),
   purpose: z.enum(['listing', 'avatar', 'food-item']),
 });
 export type PresignUploadInput = z.infer<typeof presignUploadInput>;

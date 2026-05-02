@@ -9,7 +9,13 @@ import { Button } from '../ui/button';
 
 export function ProfilePanel() {
   const me = trpc.profile.me.useQuery(undefined, { retry: false });
+  const myBlocks = trpc.profile.myBlocks.useQuery(undefined, { enabled: !!me.data, retry: false });
   const upsert = trpc.profile.upsert.useMutation({ onSuccess: () => me.refetch() });
+  const unblockUser = trpc.profile.unblockUser.useMutation({
+    onSuccess: () => {
+      void myBlocks.refetch();
+    },
+  });
   const exportData = trpc.profile.exportMyData.useQuery(undefined, { enabled: false });
   const deleteAcct = trpc.profile.deleteMyAccount.useMutation();
   const [name, setName] = useState('');
@@ -17,11 +23,11 @@ export function ProfilePanel() {
   const [current, setCurrent] = useState('');
   const [city, setCity] = useState('');
 
-  if (me.isLoading) return <p className="mt-12 text-ash">Loading…</p>;
+  if (me.isLoading) return <p className="text-ash mt-12">Loading…</p>;
   if (me.error || !me.data) {
     return (
-      <div className="mt-12 rounded-3xl border border-ink/10 bg-porcelain p-12 text-center">
-        <p className="font-serif text-2xl text-ink">Sign in to view your profile</p>
+      <div className="border-ink/10 bg-porcelain mt-12 rounded-3xl border p-12 text-center">
+        <p className="text-ink font-serif text-2xl">Sign in to view your profile</p>
       </div>
     );
   }
@@ -29,8 +35,8 @@ export function ProfilePanel() {
 
   return (
     <div className="mt-12 grid gap-12 md:grid-cols-3">
-      <section className="md:col-span-2 space-y-8 rounded-3xl border border-ink/10 bg-porcelain p-8">
-        <h2 className="font-serif text-2xl text-ink">Identity</h2>
+      <section className="border-ink/10 bg-porcelain space-y-8 rounded-3xl border p-8 md:col-span-2">
+        <h2 className="text-ink font-serif text-2xl">Identity</h2>
         <Field label="Display name">
           <input
             defaultValue={profile?.displayName ?? ''}
@@ -107,22 +113,58 @@ export function ProfilePanel() {
       </section>
 
       <aside className="space-y-6">
-        <div className="rounded-3xl border border-ink/10 bg-porcelain p-6">
-          <p className="text-xs uppercase tracking-widest text-ash">Trust</p>
-          <p className="mt-3 font-serif text-2xl text-ink">
+        <div className="border-ink/10 bg-porcelain rounded-3xl border p-6">
+          <p className="text-ash text-xs tracking-widest uppercase">Trust</p>
+          <p className="text-ink mt-3 font-serif text-2xl">
             {profile?.successfulExchanges ?? 0} exchanges
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {(profile?.badges ?? []).map((b) => (
-              <Badge key={b} variant="accent">{b}</Badge>
+              <Badge key={b} variant="accent">
+                {b}
+              </Badge>
             ))}
             <Badge variant="soft">Verified email</Badge>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-ink/10 bg-porcelain p-6">
-          <p className="text-xs uppercase tracking-widest text-ash">GDPR</p>
-          <p className="mt-3 text-sm text-ink/80">
+        <div className="border-ink/10 bg-porcelain rounded-3xl border p-6">
+          <p className="text-ash text-xs tracking-widest uppercase">Blocked accounts</p>
+          <p className="text-ink/80 mt-3 text-sm">
+            People you have blocked cannot message you, and you cannot message them.
+          </p>
+          {myBlocks.isLoading ? (
+            <p className="text-ash mt-3 text-sm">Loading…</p>
+          ) : (myBlocks.data?.length ?? 0) === 0 ? (
+            <p className="text-ash mt-3 text-sm">You have not blocked anyone.</p>
+          ) : (
+            <ul className="mt-4 space-y-2">
+              {myBlocks.data!.map((row) => (
+                <li
+                  key={row.id}
+                  className="border-ink/10 bg-paper flex items-center justify-between gap-2 rounded-2xl border px-3 py-2 text-sm"
+                >
+                  <span className="text-ash font-mono text-xs">
+                    User {row.blockedId.slice(0, 8)}…
+                  </span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={unblockUser.isPending}
+                    onClick={() => unblockUser.mutate({ userId: row.blockedId })}
+                  >
+                    Unblock
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="border-ink/10 bg-porcelain rounded-3xl border p-6">
+          <p className="text-ash text-xs tracking-widest uppercase">GDPR</p>
+          <p className="text-ink/80 mt-3 text-sm">
             You can export everything we hold or delete your account at any moment.
           </p>
           <div className="mt-4 flex flex-col gap-2">
@@ -131,7 +173,9 @@ export function ProfilePanel() {
               size="sm"
               onClick={async () => {
                 const data = await exportData.refetch();
-                const blob = new Blob([JSON.stringify(data.data, null, 2)], { type: 'application/json' });
+                const blob = new Blob([JSON.stringify(data.data, null, 2)], {
+                  type: 'application/json',
+                });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
@@ -172,8 +216,8 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="block text-sm font-medium text-ink">{label}</span>
-      {hint ? <span className="mt-0.5 block text-xs text-ash">{hint}</span> : null}
+      <span className="text-ink block text-sm font-medium">{label}</span>
+      {hint ? <span className="text-ash mt-0.5 block text-xs">{hint}</span> : null}
       <div className="mt-2">{children}</div>
     </label>
   );

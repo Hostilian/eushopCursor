@@ -1,8 +1,6 @@
-import { colors, motion, radius, shadow, spacing, typography } from './index.js';
+import { colors, motion, radius, shadow, spacing, typography } from './index';
 
-const fontSize = Object.fromEntries(
-  Object.entries(typography.size).map(([k, v]) => [k, `${v}px`]),
-);
+const fontSize = Object.fromEntries(Object.entries(typography.size).map(([k, v]) => [k, `${v}px`]));
 
 const spacingPx = Object.fromEntries(
   Object.entries(spacing).map(([k, v]) => [k, typeof v === 'number' ? `${v}px` : v]),

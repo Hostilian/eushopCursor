@@ -11,8 +11,8 @@
     "./context": "./src/context.ts"
   },
   "scripts": {
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "lint": "node ../../node_modules/eslint/bin/eslint.js -c ../config/eslint.config.js .",
+    "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit"
   },
   "dependencies": {
     "@eushop/auth": "workspace:*",

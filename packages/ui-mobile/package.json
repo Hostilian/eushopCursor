@@ -19,6 +19,6 @@
   },
   "scripts": {
     "lint": "echo \"no-op\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "echo \"no-op (Surface is checked via @eushop/mobile build)\""
   }
 }

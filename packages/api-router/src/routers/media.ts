@@ -1,6 +1,6 @@
 import { presignUploadInput } from '@eushop/validators';
 import crypto from 'node:crypto';
-import { protectedProcedure, router } from '../trpc.js';
+import { protectedProcedure, router } from '../trpc';
 
 /**
  * Media uploads are presigned client-side directly to Cloudflare R2 via the

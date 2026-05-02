@@ -9,13 +9,4 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-export default [
-  ...eushop,
-  ...compat.extends('next/core-web-vitals'),
-  {
-    rules: {
-      // Marketing and legal copy use natural punctuation; escaping hurts readability.
-      'react/no-unescaped-entities': 'off',
-    },
-  },
-];
+export default [...eushop, ...compat.extends('next/core-web-vitals')];

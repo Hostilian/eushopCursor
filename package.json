@@ -9,14 +9,17 @@
     "pnpm": ">=9"
   },
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck",
-    "test": "turbo run test",
+    "build": "node ./node_modules/turbo/bin/turbo run build",
+    "dev": "node ./node_modules/turbo/bin/turbo run dev",
+    "lint": "node ./node_modules/turbo/bin/turbo run lint",
+    "typecheck": "node ./node_modules/turbo/bin/turbo run typecheck",
+    "verify": "pnpm typecheck && pnpm lint && pnpm build",
+    "demo": "node ./node_modules/turbo/bin/turbo run dev --filter=@eushop/web --filter=@eushop/api-server",
+    "demo:stack": "pnpm db:up && pnpm demo",
+    "test": "node ./node_modules/turbo/bin/turbo run test",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
-    "clean": "turbo run clean && rimraf node_modules .turbo",
+    "clean": "node ./node_modules/turbo/bin/turbo run clean && rimraf node_modules .turbo",
     "db:up": "docker compose up -d postgres meilisearch redis mailhog",
     "db:down": "docker compose down",
     "db:logs": "docker compose logs -f postgres",
@@ -39,7 +42,11 @@
     "typescript": "^5.7.2"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": ["prettier --write"],
-    "*.{json,md,yml,yaml}": ["prettier --write"]
+    "*.{ts,tsx,js,jsx}": [
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
   }
 }

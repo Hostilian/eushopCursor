@@ -15,7 +15,7 @@ export function isLocale(input: unknown): input is Locale {
   return typeof input === 'string' && (SUPPORTED_LOCALES as readonly string[]).includes(input);
 }
 
-export async function loadMessages(locale: Locale): Promise<Record<string, string>> {
+export async function loadMessages(locale: Locale) {
   const mod = await import(`./messages/${locale}.json`, { with: { type: 'json' } });
-  return mod.default as Record<string, string>;
+  return mod.default;
 }

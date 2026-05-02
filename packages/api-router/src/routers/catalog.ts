@@ -3,7 +3,7 @@ import { TRPCError } from '@trpc/server';
 import { and, asc, desc, eq, ilike, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { brands, categories, countries, foodItems } from '@eushop/db';
-import { publicProcedure, router } from '../trpc.js';
+import { publicProcedure, router } from '../trpc';
 
 export const catalogRouter = router({
   countries: publicProcedure.query(async ({ ctx }) => {
@@ -38,7 +38,9 @@ export const catalogRouter = router({
   brands: publicProcedure
     .input(z.object({ countryIso2: z.string().length(2).optional() }).optional())
     .query(async ({ ctx, input }) => {
-      const where = input?.countryIso2 ? eq(brands.countryIso2, input.countryIso2.toUpperCase()) : undefined;
+      const where = input?.countryIso2
+        ? eq(brands.countryIso2, input.countryIso2.toUpperCase())
+        : undefined;
       return ctx.db.select().from(brands).where(where).orderBy(asc(brands.name));
     }),
 
@@ -88,7 +90,9 @@ export const catalogRouter = router({
   }),
 
   itemsByCountry: publicProcedure
-    .input(z.object({ iso2: z.string().length(2), limit: z.number().int().min(1).max(60).default(24) }))
+    .input(
+      z.object({ iso2: z.string().length(2), limit: z.number().int().min(1).max(60).default(24) }),
+    )
     .query(async ({ ctx, input }) => {
       return ctx.db
         .select()
@@ -101,7 +105,9 @@ export const catalogRouter = router({
   itemsByCategory: publicProcedure
     .input(z.object({ slug: z.string(), limit: z.number().int().min(1).max(60).default(24) }))
     .query(async ({ ctx, input }) => {
-      const cat = await ctx.db.query.categories.findFirst({ where: eq(categories.slug, input.slug) });
+      const cat = await ctx.db.query.categories.findFirst({
+        where: eq(categories.slug, input.slug),
+      });
       if (!cat) throw new TRPCError({ code: 'NOT_FOUND' });
       const items = await ctx.db
         .select()
@@ -113,7 +119,12 @@ export const catalogRouter = router({
     }),
 
   search: publicProcedure
-    .input(z.object({ q: z.string().min(1).max(120), limit: z.number().int().min(1).max(40).default(20) }))
+    .input(
+      z.object({
+        q: z.string().min(1).max(120),
+        limit: z.number().int().min(1).max(40).default(20),
+      }),
+    )
     .query(async ({ ctx, input }) => {
       try {
         const result = await ctx.meili.index('food_items').search<{

@@ -1,36 +1,58 @@
 {
   "brand": "Eushop",
   "tagline": "Un goût de chez vous, juste au coin de la rue.",
-  "nav.discover": "Découvrir",
-  "nav.countries": "Pays",
-  "nav.requests": "Recherches",
-  "nav.listings": "Mes annonces",
-  "nav.messages": "Messages",
-  "nav.profile": "Profil",
-  "cta.signIn": "Se connecter",
-  "cta.signUp": "Rejoindre",
-  "cta.postListing": "Partager vos provisions",
-  "cta.postRequest": "Lancer une recherche",
-  "cta.message": "Message",
-  "cta.viewAll": "Tout voir",
-  "search.placeholder": "Cherche Krówki, Stroopwafels, Mastiha…",
-  "country.intro": "Faites venir le goût de {country} chez vous.",
-  "listing.finderFee": "Frais de recherche",
-  "listing.freshness.today": "À consommer aujourd'hui",
-  "listing.freshness.3-days": "Sous 3 jours",
-  "listing.freshness.week": "Cette semaine",
-  "listing.freshness.month": "Ce mois-ci",
-  "listing.freshness.shelf-stable": "Longue conservation",
-  "listing.qty": "{qty} disponibles",
-  "listing.distance": "À {km} km",
-  "request.title": "Recherche {item}",
-  "empty.listings": "Personne dans le coin pour l'instant — soyez le premier.",
-  "empty.requests": "Aucune recherche dans le périmètre.",
-  "empty.search": "Rien trouvé pour « {q} ».",
-  "footer.privacy": "Confidentialité",
-  "footer.terms": "Conditions",
-  "footer.imprint": "Mentions légales",
-  "auth.signedOut": "Déconnecté.",
-  "auth.welcome": "Content de vous revoir, {name}",
-  "lang.switch": "Langue"
+  "nav": {
+    "discover": "Découvrir",
+    "countries": "Pays",
+    "requests": "Recherches",
+    "listings": "Mes annonces",
+    "messages": "Messages",
+    "profile": "Profil"
+  },
+  "cta": {
+    "signIn": "Se connecter",
+    "signUp": "Rejoindre",
+    "postListing": "Partager vos provisions",
+    "postRequest": "Lancer une recherche",
+    "message": "Message",
+    "viewAll": "Tout voir"
+  },
+  "search": {
+    "placeholder": "Cherche Krówki, Stroopwafels, Mastiha…"
+  },
+  "country": {
+    "intro": "Faites venir le goût de {country} chez vous."
+  },
+  "listing": {
+    "finderFee": "Frais de recherche",
+    "freshness": {
+      "today": "À consommer aujourd'hui",
+      "3-days": "Sous 3 jours",
+      "week": "Cette semaine",
+      "month": "Ce mois-ci",
+      "shelf-stable": "Longue conservation"
+    },
+    "qty": "{qty} disponibles",
+    "distance": "À {km} km"
+  },
+  "request": {
+    "title": "Recherche {item}"
+  },
+  "empty": {
+    "listings": "Personne dans le coin pour l'instant — soyez le premier.",
+    "requests": "Aucune recherche dans le périmètre.",
+    "search": "Rien trouvé pour « {q} »."
+  },
+  "footer": {
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "imprint": "Mentions légales"
+  },
+  "auth": {
+    "signedOut": "Déconnecté.",
+    "welcome": "Content de vous revoir, {name}"
+  },
+  "lang": {
+    "switch": "Langue"
+  }
 }

@@ -12,7 +12,7 @@ export function MapPreview({
   label,
   lat,
   lng,
-  zoom = 11,
+  zoom: _zoom = 11,
 }: {
   label: string;
   lat: number;
@@ -29,13 +29,18 @@ export function MapPreview({
   }, [lat, lng]);
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-ink/10 bg-porcelain shadow-sm">
-      <div className="flex items-center gap-2 border-b border-ink/10 px-4 py-3 text-xs text-ash">
+    <div className="border-ink/10 bg-porcelain overflow-hidden rounded-3xl border shadow-sm">
+      <div className="border-ink/10 text-ash flex items-center gap-2 border-b px-4 py-3 text-xs">
         <MapPin className="h-3.5 w-3.5" />
         <span>Approximate area · {label}</span>
       </div>
-      <iframe title="Map preview" className="h-72 w-full grayscale contrast-125" loading="lazy" src={src} />
-      <p className="border-t border-ink/10 px-4 py-2 text-[10px] leading-relaxed text-ash">
+      <iframe
+        title="Map preview"
+        className="h-72 w-full contrast-125 grayscale"
+        loading="lazy"
+        src={src}
+      />
+      <p className="border-ink/10 text-ash border-t px-4 py-2 text-[10px] leading-relaxed">
         Pins on Eushop are never exact addresses — they jitter inside a ~5 km cell for safety.
       </p>
     </div>

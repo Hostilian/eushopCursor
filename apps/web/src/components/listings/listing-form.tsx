@@ -1,6 +1,7 @@
 'use client';
 
 import { Camera, MapPin, X } from 'lucide-react';
+import Image from 'next/image';
 import { useState } from 'react';
 import { trpc } from '../../lib/trpc';
 import { Button } from '../ui/button';
@@ -76,7 +77,9 @@ export function ListingForm() {
         finderFee: state.finderFee,
         currency: 'EUR',
         freshness: state.freshness,
-        photos: state.photos.length ? state.photos : [{ url: 'https://placehold.co/1200x1200/FAF7F2/3B2F22?text=Photo' }],
+        photos: state.photos.length
+          ? state.photos
+          : [{ url: 'https://placehold.co/1200x1200/FAF7F2/3B2F22?text=Photo' }],
         approximateCity: state.approximateCity,
         location: { lat: 52.52, lng: 13.405 }, // mocked Berlin until we wire geolocation
       });
@@ -90,9 +93,9 @@ export function ListingForm() {
 
   if (done) {
     return (
-      <div className="rounded-3xl border border-ink/10 bg-porcelain p-12 text-center">
-        <p className="font-serif text-3xl text-ink">Listed.</p>
-        <p className="mt-3 text-ink/70">Anyone within your 5 km cell can now find it.</p>
+      <div className="border-ink/10 bg-porcelain rounded-3xl border p-12 text-center">
+        <p className="text-ink font-serif text-3xl">Listed.</p>
+        <p className="text-ink/70 mt-3">Anyone within your 5 km cell can now find it.</p>
       </div>
     );
   }
@@ -170,9 +173,12 @@ export function ListingForm() {
         </Field>
       </div>
 
-      <Field label="Approximate city / neighbourhood" hint="Buyers see only your 5 km cell, never the exact address.">
-        <div className="flex items-center gap-2 rounded-2xl border border-ink/10 bg-paper px-4">
-          <MapPin className="h-4 w-4 text-ash" />
+      <Field
+        label="Approximate city / neighbourhood"
+        hint="Buyers see only your 5 km cell, never the exact address."
+      >
+        <div className="border-ink/10 bg-paper flex items-center gap-2 rounded-2xl border px-4">
+          <MapPin className="text-ash h-4 w-4" />
           <input
             required
             value={state.approximateCity}
@@ -186,19 +192,27 @@ export function ListingForm() {
       <Field label="Photos" hint="Up to 8. We resize and strip EXIF on upload.">
         <div className="grid grid-cols-3 gap-3 md:grid-cols-4">
           {state.photos.map((p, idx) => (
-            <div key={idx} className="group relative aspect-square overflow-hidden rounded-2xl bg-bone">
-              <img src={p.url} alt="" className="h-full w-full object-cover" />
+            <div
+              key={idx}
+              className="group bg-bone relative aspect-square overflow-hidden rounded-2xl"
+            >
+              <Image src={p.url} alt="" fill unoptimized sizes="120px" className="object-cover" />
               <button
                 type="button"
-                onClick={() => set('photos', state.photos.filter((_, i) => i !== idx))}
-                className="absolute right-2 top-2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-ink/80 text-paper opacity-0 transition-opacity group-hover:opacity-100"
+                onClick={() =>
+                  set(
+                    'photos',
+                    state.photos.filter((_, i) => i !== idx),
+                  )
+                }
+                className="bg-ink/80 text-paper absolute top-2 right-2 inline-flex h-7 w-7 items-center justify-center rounded-full opacity-0 transition-opacity group-hover:opacity-100"
               >
                 <X className="h-3 w-3" />
               </button>
             </div>
           ))}
           {state.photos.length < 8 ? (
-            <label className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-ink/20 bg-paper text-ash hover:border-ink/40 hover:text-ink">
+            <label className="border-ink/20 bg-paper text-ash hover:border-ink/40 hover:text-ink flex aspect-square cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-dashed">
               <Camera className="h-5 w-5" />
               <span className="text-xs">Add photo</span>
               <input
@@ -215,10 +229,10 @@ export function ListingForm() {
         </div>
       </Field>
 
-      {error ? <p className="text-sm text-danger">{error}</p> : null}
+      {error ? <p className="text-danger text-sm">{error}</p> : null}
 
       <div className="flex items-center justify-between">
-        <p className="text-xs text-ash">
+        <p className="text-ash text-xs">
           By posting you confirm you're a private individual sharing personal pantry stock.
         </p>
         <Button type="submit" disabled={submitting} size="lg">
@@ -257,8 +271,8 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="block text-sm font-medium text-ink">{label}</span>
-      {hint ? <span className="mt-0.5 block text-xs text-ash">{hint}</span> : null}
+      <span className="text-ink block text-sm font-medium">{label}</span>
+      {hint ? <span className="text-ash mt-0.5 block text-xs">{hint}</span> : null}
       <div className="mt-2">{children}</div>
     </label>
   );

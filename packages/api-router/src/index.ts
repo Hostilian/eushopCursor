@@ -1,4 +1,4 @@
-export * from './context.js';
-export * from './router.js';
-export * from './trpc.js';
-export { SAFE_TEMPLATES } from './routers/messaging.js';
+export * from './context';
+export * from './router';
+export * from './trpc';
+export { MESSAGING_SAFE_TEMPLATES as SAFE_TEMPLATES } from '@eushop/validators';

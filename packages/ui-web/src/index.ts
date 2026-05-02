@@ -1,3 +1,3 @@
-export { Button, buttonVariants, type ButtonProps } from './button.js';
-export { Badge } from './badge.js';
-export { cn } from './cn.js';
+export { Button, buttonVariants, type ButtonProps } from './button';
+export { Badge } from './badge';
+export { cn } from './cn';

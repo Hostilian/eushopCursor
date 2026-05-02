@@ -4,6 +4,9 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const isProd = process.env.NODE_ENV === 'production';
 
+/** Optional extra hostname for user media (e.g. custom R2 public domain). */
+const extraImageHost = process.env.NEXT_PUBLIC_MEDIA_HOSTNAME?.trim();
+
 /** Content-Security-Policy: tight enough for OSM embeds; dev keeps eval for Next/Turbopack. */
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -22,22 +25,24 @@ const contentSecurityPolicy = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    typedRoutes: true,
-  },
+  typedRoutes: true,
   async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [{ key: 'Content-Security-Policy', value: contentSecurityPolicy }],
-      },
+    const securityHeaders = [
+      { key: 'Content-Security-Policy', value: contentSecurityPolicy },
+      { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+      { key: 'X-Content-Type-Options', value: 'nosniff' },
+      { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
     ];
+    return [{ source: '/:path*', headers: securityHeaders }];
   },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'media.eushop.eu' },
       { protocol: 'https', hostname: 'placehold.co' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
+      ...(extraImageHost
+        ? [{ protocol: 'https', hostname: extraImageHost.replace(/^https?:\/\//, '').split('/')[0] }]
+        : []),
     ],
   },
   transpilePackages: [

@@ -1,4 +1,4 @@
 {
-  "extends": "@eushop/config/tsconfig.base",
+  "extends": "../config/tsconfig.base.json",
   "include": ["src/**/*"]
 }

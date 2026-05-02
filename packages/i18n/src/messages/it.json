@@ -1,36 +1,58 @@
 {
   "brand": "Eushop",
   "tagline": "Un sapore di casa, dietro l'angolo.",
-  "nav.discover": "Scopri",
-  "nav.countries": "Paesi",
-  "nav.requests": "Richieste",
-  "nav.listings": "I miei annunci",
-  "nav.messages": "Messaggi",
-  "nav.profile": "Profilo",
-  "cta.signIn": "Accedi",
-  "cta.signUp": "Iscriviti",
-  "cta.postListing": "Condividi le tue scorte",
-  "cta.postRequest": "Pubblica una richiesta",
-  "cta.message": "Messaggio",
-  "cta.viewAll": "Vedi tutto",
-  "search.placeholder": "Cerca Krówki, Stroopwafels, Mastiha…",
-  "country.intro": "Porta a casa il sapore di {country}.",
-  "listing.finderFee": "Compenso ricerca",
-  "listing.freshness.today": "Meglio oggi",
-  "listing.freshness.3-days": "Entro 3 giorni",
-  "listing.freshness.week": "Questa settimana",
-  "listing.freshness.month": "Questo mese",
-  "listing.freshness.shelf-stable": "Lunga conservazione",
-  "listing.qty": "{qty} disponibili",
-  "listing.distance": "A {km} km",
-  "request.title": "Cerco {item}",
-  "empty.listings": "Ancora nulla qui vicino — sii il primo.",
-  "empty.requests": "Nessuna richiesta nel tuo raggio.",
-  "empty.search": "Niente trovato per «{q}».",
-  "footer.privacy": "Privacy",
-  "footer.terms": "Termini",
-  "footer.imprint": "Note legali",
-  "auth.signedOut": "Disconnesso.",
-  "auth.welcome": "Bentornato, {name}",
-  "lang.switch": "Lingua"
+  "nav": {
+    "discover": "Scopri",
+    "countries": "Paesi",
+    "requests": "Richieste",
+    "listings": "I miei annunci",
+    "messages": "Messaggi",
+    "profile": "Profilo"
+  },
+  "cta": {
+    "signIn": "Accedi",
+    "signUp": "Iscriviti",
+    "postListing": "Condividi le tue scorte",
+    "postRequest": "Pubblica una richiesta",
+    "message": "Messaggio",
+    "viewAll": "Vedi tutto"
+  },
+  "search": {
+    "placeholder": "Cerca Krówki, Stroopwafels, Mastiha…"
+  },
+  "country": {
+    "intro": "Porta a casa il sapore di {country}."
+  },
+  "listing": {
+    "finderFee": "Compenso ricerca",
+    "freshness": {
+      "today": "Meglio oggi",
+      "3-days": "Entro 3 giorni",
+      "week": "Questa settimana",
+      "month": "Questo mese",
+      "shelf-stable": "Lunga conservazione"
+    },
+    "qty": "{qty} disponibili",
+    "distance": "A {km} km"
+  },
+  "request": {
+    "title": "Cerco {item}"
+  },
+  "empty": {
+    "listings": "Ancora nulla qui vicino — sii il primo.",
+    "requests": "Nessuna richiesta nel tuo raggio.",
+    "search": "Niente trovato per «{q}»."
+  },
+  "footer": {
+    "privacy": "Privacy",
+    "terms": "Termini",
+    "imprint": "Note legali"
+  },
+  "auth": {
+    "signedOut": "Disconnesso.",
+    "welcome": "Bentornato, {name}"
+  },
+  "lang": {
+    "switch": "Lingua"
+  }
 }

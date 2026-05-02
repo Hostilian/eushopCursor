@@ -1,17 +1,36 @@
 import { sendMessageInput, startConversationInput } from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
 import { and, asc, desc, eq, ne, or } from 'drizzle-orm';
+import type { InferSelectModel } from 'drizzle-orm';
 import { z } from 'zod';
-import { conversations, messages } from '@eushop/db';
-import { protectedProcedure, router } from '../trpc.js';
+import { blocks, conversations, messages } from '@eushop/db';
+import { usersAreBlockedPair } from '../lib/blocks';
+import { protectedProcedure, router } from '../trpc';
 
 export const messagingRouter = router({
   list: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db
+    const rows = await ctx.db
       .select()
       .from(conversations)
-      .where(or(eq(conversations.initiatorId, ctx.user.id), eq(conversations.recipientId, ctx.user.id))!)
+      .where(
+        or(eq(conversations.initiatorId, ctx.user.id), eq(conversations.recipientId, ctx.user.id))!,
+      )
       .orderBy(desc(conversations.lastMessageAt));
+
+    const blockRows = await ctx.db
+      .select()
+      .from(blocks)
+      .where(or(eq(blocks.blockerId, ctx.user.id), eq(blocks.blockedId, ctx.user.id)));
+    const blockedPeerIds = new Set<string>();
+    for (const b of blockRows) {
+      blockedPeerIds.add(b.blockerId === ctx.user.id ? b.blockedId : b.blockerId);
+    }
+
+    type ConvRow = InferSelectModel<typeof conversations>;
+    return rows.filter((c: ConvRow) => {
+      const other = c.initiatorId === ctx.user.id ? c.recipientId : c.initiatorId;
+      return !blockedPeerIds.has(other);
+    });
   }),
 
   conversation: protectedProcedure
@@ -23,6 +42,10 @@ export const messagingRouter = router({
       if (!conv) throw new TRPCError({ code: 'NOT_FOUND' });
       if (conv.initiatorId !== ctx.user.id && conv.recipientId !== ctx.user.id)
         throw new TRPCError({ code: 'FORBIDDEN' });
+      const peerId = conv.initiatorId === ctx.user.id ? conv.recipientId : conv.initiatorId;
+      if (await usersAreBlockedPair(ctx.db, ctx.user.id, peerId)) {
+        throw new TRPCError({ code: 'FORBIDDEN', message: 'Messaging is not available' });
+      }
       const msgs = await ctx.db
         .select()
         .from(messages)
@@ -35,6 +58,10 @@ export const messagingRouter = router({
   start: protectedProcedure.input(startConversationInput).mutation(async ({ ctx, input }) => {
     if (input.recipientId === ctx.user.id)
       throw new TRPCError({ code: 'BAD_REQUEST', message: 'Cannot message yourself' });
+
+    if (await usersAreBlockedPair(ctx.db, ctx.user.id, input.recipientId)) {
+      throw new TRPCError({ code: 'FORBIDDEN', message: 'Messaging is not available' });
+    }
 
     const existing = await ctx.db.query.conversations.findFirst({
       where: and(
@@ -88,6 +115,11 @@ export const messagingRouter = router({
     if (conv.initiatorId !== ctx.user.id && conv.recipientId !== ctx.user.id)
       throw new TRPCError({ code: 'FORBIDDEN' });
 
+    const peerId = conv.initiatorId === ctx.user.id ? conv.recipientId : conv.initiatorId;
+    if (await usersAreBlockedPair(ctx.db, ctx.user.id, peerId)) {
+      throw new TRPCError({ code: 'FORBIDDEN', message: 'Messaging is not available' });
+    }
+
     const [msg] = await ctx.db
       .insert(messages)
       .values({
@@ -107,6 +139,16 @@ export const messagingRouter = router({
   markRead: protectedProcedure
     .input(z.object({ conversationId: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
+      const conv = await ctx.db.query.conversations.findFirst({
+        where: eq(conversations.id, input.conversationId),
+      });
+      if (!conv) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (conv.initiatorId !== ctx.user.id && conv.recipientId !== ctx.user.id)
+        throw new TRPCError({ code: 'FORBIDDEN' });
+      const peerId = conv.initiatorId === ctx.user.id ? conv.recipientId : conv.initiatorId;
+      if (await usersAreBlockedPair(ctx.db, ctx.user.id, peerId)) {
+        throw new TRPCError({ code: 'FORBIDDEN', message: 'Messaging is not available' });
+      }
       await ctx.db
         .update(messages)
         .set({ readAt: new Date() })
@@ -119,10 +161,3 @@ export const messagingRouter = router({
       return { ok: true };
     }),
 });
-
-export const SAFE_TEMPLATES = [
-  'Hi! Is your stash still available?',
-  'Could we meet near a metro stop you like? Privacy first.',
-  'What freshness window works for the handoff?',
-  'Happy with the finder\u2019s fee — do you accept Revolut/cash on pickup?',
-];

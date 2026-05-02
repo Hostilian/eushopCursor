@@ -1,7 +1,7 @@
 import { desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
 import { deviceTokens, notifications } from '@eushop/db';
-import { protectedProcedure, router } from '../trpc.js';
+import { protectedProcedure, router } from '../trpc';
 
 export const notificationsRouter = router({
   list: protectedProcedure.query(async ({ ctx }) => {

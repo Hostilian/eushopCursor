@@ -32,6 +32,7 @@
     "NEXT_PUBLIC_API_URL",
     "NEXT_PUBLIC_PARTYKIT_HOST",
     "NEXT_PUBLIC_POSTHOG_KEY",
+    "NEXT_PUBLIC_MEDIA_HOSTNAME",
     "EXPO_PUBLIC_API_URL",
     "EXPO_PUBLIC_PARTYKIT_HOST"
   ],
@@ -45,10 +46,9 @@
       "persistent": true
     },
     "lint": {
-      "dependsOn": ["^build"]
+      "outputs": []
     },
     "typecheck": {
-      "dependsOn": ["^build"],
       "outputs": []
     },
     "test": {

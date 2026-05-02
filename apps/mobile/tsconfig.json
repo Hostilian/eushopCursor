@@ -1,4 +1,4 @@
 {
-  "extends": "@eushop/config/tsconfig.expo",
+  "extends": "../../packages/config/tsconfig.expo.json",
   "include": ["app/**/*", "src/**/*", "global.d.ts", "nativewind-env.d.ts"]
 }

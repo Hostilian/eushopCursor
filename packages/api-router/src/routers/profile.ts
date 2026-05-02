@@ -1,8 +1,8 @@
-import { profileUpdateInput } from '@eushop/validators';
-import { eq } from 'drizzle-orm';
+import { blockUserInput, profileUpdateInput } from '@eushop/validators';
+import { and, eq } from 'drizzle-orm';
 import { z } from 'zod';
-import { profiles, users } from '@eushop/db';
-import { protectedProcedure, publicProcedure, router } from '../trpc.js';
+import { blocks, profiles, users } from '@eushop/db';
+import { protectedProcedure, publicProcedure, router } from '../trpc';
 
 export const profileRouter = router({
   me: protectedProcedure.query(async ({ ctx }) => {
@@ -71,5 +71,46 @@ export const profileRouter = router({
     // GDPR Art. 17 — delete the auth user; FK cascades clear profiles, listings, requests, etc.
     await ctx.db.delete(users).where(eq(users.id, ctx.user.id));
     return { ok: true };
+  }),
+
+  /** Users you have blocked (outgoing blocks only). */
+  myBlocks: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.select().from(blocks).where(eq(blocks.blockerId, ctx.user.id));
+  }),
+
+  blockUser: protectedProcedure.input(blockUserInput).mutation(async ({ ctx, input }) => {
+    if (input.userId === ctx.user.id) {
+      return { ok: false as const, reason: 'self' as const };
+    }
+    const exists = await ctx.db.query.blocks.findFirst({
+      where: and(eq(blocks.blockerId, ctx.user.id), eq(blocks.blockedId, input.userId)),
+    });
+    if (exists) return { ok: true as const, already: true as const };
+    await ctx.db.insert(blocks).values({ blockerId: ctx.user.id, blockedId: input.userId });
+    return { ok: true as const };
+  }),
+
+  unblockUser: protectedProcedure.input(blockUserInput).mutation(async ({ ctx, input }) => {
+    await ctx.db
+      .delete(blocks)
+      .where(and(eq(blocks.blockerId, ctx.user.id), eq(blocks.blockedId, input.userId)));
+    return { ok: true as const };
+  }),
+
+  /** Whether a block exists in either direction (for UI gating before opening chat). */
+  blockStatus: protectedProcedure.input(blockUserInput).query(async ({ ctx, input }) => {
+    if (input.userId === ctx.user.id)
+      return { blocked: false, iBlockedThem: false, theyBlockedMe: false };
+    const iBlocked = await ctx.db.query.blocks.findFirst({
+      where: and(eq(blocks.blockerId, ctx.user.id), eq(blocks.blockedId, input.userId)),
+    });
+    const theyBlocked = await ctx.db.query.blocks.findFirst({
+      where: and(eq(blocks.blockerId, input.userId), eq(blocks.blockedId, ctx.user.id)),
+    });
+    return {
+      blocked: !!(iBlocked || theyBlocked),
+      iBlockedThem: !!iBlocked,
+      theyBlockedMe: !!theyBlocked,
+    };
   }),
 });

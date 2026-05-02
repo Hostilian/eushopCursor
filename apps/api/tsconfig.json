@@ -1,5 +1,5 @@
 {
-  "extends": "@eushop/config/tsconfig.base",
+  "extends": "../../packages/config/tsconfig.base.json",
   "compilerOptions": {
     "noEmit": true,
     "module": "ESNext",
