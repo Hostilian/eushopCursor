@@ -61,7 +61,7 @@ jobs:
             turbo-${{ runner.os }}-build-
 
       - name: Install
-        run: pnpm install --frozen-lockfile=false
+        run: pnpm install --frozen-lockfile
 
       - name: Init Postgres extensions
         run: |
@@ -148,7 +148,7 @@ jobs:
             playwright-${{ runner.os }}-
 
       - name: Install
-        run: pnpm install --frozen-lockfile=false
+        run: pnpm install --frozen-lockfile
 
       - name: Init Postgres extensions
         run: |

@@ -17,8 +17,9 @@
       "distribution": "internal",
       "channel": "preview",
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.example.com",
-        "EXPO_PUBLIC_PARTYKIT_HOST": "https://party.example.com"
+        "EXPO_PUBLIC_API_URL": "https://api.staging.eushop.eu",
+        "EXPO_PUBLIC_SITE_URL": "https://staging.eushop.eu",
+        "EXPO_PUBLIC_PARTYKIT_HOST": "https://party.staging.eushop.eu"
       }
     },
     "production": {
@@ -32,6 +33,17 @@
     }
   },
   "submit": {
-    "production": {}
+    "internal": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "completed"
+      }
+    },
+    "production": {
+      "android": {
+        "track": "production",
+        "releaseStatus": "completed"
+      }
+    }
   }
 }

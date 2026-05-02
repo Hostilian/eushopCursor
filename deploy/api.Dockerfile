@@ -8,12 +8,13 @@ WORKDIR /app
 FROM base AS runner
 ENV NODE_ENV=production
 
-RUN addgroup --system --gid 1001 nodejs \
-  && adduser --system --uid 1001 --ingroup nodejs apiuser
-
-COPY --chown=apiuser:nodejs . .
-USER apiuser
+COPY . .
 RUN pnpm install --frozen-lockfile
+
+RUN addgroup --system --gid 1001 nodejs \
+  && adduser --system --uid 1001 --ingroup nodejs apiuser \
+  && chown -R apiuser:nodejs /app
+USER apiuser
 
 EXPOSE 3001
 ENV PORT=3001

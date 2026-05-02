@@ -48,7 +48,12 @@ const nextConfig = {
       { protocol: 'https', hostname: 'static.openfoodfacts.org' },
       { protocol: 'https', hostname: 'images.openfoodfacts.org' },
       ...(extraImageHost
-        ? [{ protocol: 'https', hostname: extraImageHost.replace(/^https?:\/\//, '').split('/')[0] }]
+        ? [
+            {
+              protocol: 'https',
+              hostname: extraImageHost.replace(/^https?:\/\//, '').split('/')[0],
+            },
+          ]
         : []),
     ],
   },

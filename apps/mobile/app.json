@@ -8,7 +8,9 @@
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "icon": "./assets/icon.png",
     "splash": {
+      "image": "./assets/splash.png",
       "backgroundColor": "#FAF7F2",
       "resizeMode": "contain"
     },
@@ -23,6 +25,7 @@
     "android": {
       "package": "eu.eushop.app",
       "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FAF7F2"
       }
     },

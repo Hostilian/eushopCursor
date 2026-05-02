@@ -19,6 +19,8 @@ Run builds from the **repository root** after `pnpm install --frozen-lockfile` s
 
 ## Docker
 
+See **[deploy/README.md](../../deploy/README.md)** for full `docker build` examples (including `NEXT_PUBLIC_*` and admin `BETTER_AUTH_SECRET` build-args).
+
 - **API:** `docker build -f deploy/api.Dockerfile -t eushop-api .` then run with `PORT` and the full API env matrix.
 - **Web:** `docker build -f deploy/web.Dockerfile -t eushop-web .` — serves Next standalone on port 3000.
 - **Admin:** `docker build -f deploy/admin.Dockerfile -t eushop-admin .` — port 3002.

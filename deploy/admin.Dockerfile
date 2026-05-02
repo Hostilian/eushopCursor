@@ -12,8 +12,9 @@ ARG NEXT_PUBLIC_API_URL=https://api.eushop.eu
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# run-next-build.mjs injects a placeholder when unset; production images should pass the real secret.
-ARG BETTER_AUTH_SECRET=image-build-placeholder-not-for-production-use-32minxxxxxxxx
+# Omit at build → admin's run-next-build.mjs injects a CI-only placeholder. For production, pass the real secret:
+#   --build-arg BETTER_AUTH_SECRET=...
+ARG BETTER_AUTH_SECRET
 ENV BETTER_AUTH_SECRET=$BETTER_AUTH_SECRET
 
 RUN pnpm install --frozen-lockfile

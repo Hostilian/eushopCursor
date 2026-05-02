@@ -51,3 +51,4 @@ Optional deep health check: set `HEALTHCHECK_DEEP=1` on the API and call `GET /h
 
 - **CI** ([`.github/workflows/ci.yml`](../../.github/workflows/ci.yml)): lint, typecheck, unit tests, build on PR/push.
 - **Deploy** ([`.github/workflows/deploy.yml`](../../.github/workflows/deploy.yml)): manual `workflow_dispatch` checklist job—extend with your Coolify webhook, SSH, or container registry push.
+- **Docker publish** ([`.github/workflows/docker-publish.yml`](../../.github/workflows/docker-publish.yml)): optional manual build/push of API, web, and admin images to `ghcr.io` (see [`deploy/README.md`](../../deploy/README.md)).

@@ -8,6 +8,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "generate-assets": "node ./scripts/generate-assets.mjs",
     "build": "node -e \"require('fs').mkdirSync('dist',{recursive:true});require('fs').writeFileSync('dist/build.txt','Native binaries via EAS.');\" && echo \"Use eas build for native binaries\"",
     "lint": "echo \"no-op\"",
     "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit"
@@ -53,6 +54,7 @@
     "@babel/core": "^7.26.0",
     "@eushop/config": "workspace:*",
     "@types/react": "~19.0.2",
+    "pngjs": "^7.0.0",
     "typescript": "^5.7.2"
   }
 }
