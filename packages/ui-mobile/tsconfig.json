@@ -1,0 +1,8 @@
+{
+  "extends": "@eushop/config/tsconfig.base",
+  "compilerOptions": {
+    "lib": ["ES2022"],
+    "jsx": "react-jsx"
+  },
+  "include": ["src/**/*"]
+}

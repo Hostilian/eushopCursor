@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "dev:bun": "bun --watch src/server.ts",
     "build": "tsx src/build.ts",
     "start": "node dist/server.js",
     "lint": "eslint .",

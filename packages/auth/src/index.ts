@@ -17,7 +17,11 @@ const secret = process.env.BETTER_AUTH_SECRET ?? 'dev-secret-not-for-production'
 export const auth = betterAuth({
   baseURL,
   secret,
-  database: drizzleAdapter(db, { provider: 'pg' }),
+  database: drizzleAdapter(db, {
+    provider: 'pg',
+    /** Our Drizzle tables are plural (`users`, `sessions`, …) — match Better Auth defaults. */
+    usePlural: true,
+  }),
   emailAndPassword: { enabled: true, requireEmailVerification: false },
   socialProviders: {
     ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET

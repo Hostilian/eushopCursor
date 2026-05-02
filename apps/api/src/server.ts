@@ -8,6 +8,8 @@ import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { inngest, inngestFunctions } from './inngest/client.js';
 import { serve as inngestServe } from 'inngest/hono';
+import { openApiDocument } from './openapi.js';
+import { authRateLimit, trpcRateLimit } from './rate-limit.js';
 
 const app = new Hono();
 
@@ -24,11 +26,14 @@ app.use(
 
 app.get('/', (c) => c.json({ name: 'eushop-api', ok: true }));
 app.get('/health', (c) => c.json({ ok: true, ts: Date.now() }));
+app.get('/openapi.json', (c) => c.json(openApiDocument));
 
 // Better Auth handler — exposes /api/auth/*
+app.use('/api/auth/*', authRateLimit());
 app.on(['POST', 'GET'], '/api/auth/*', (c) => auth.handler(c.req.raw));
 
 // tRPC at /trpc
+app.use('/trpc/*', trpcRateLimit());
 app.use(
   '/trpc/*',
   trpcServer({

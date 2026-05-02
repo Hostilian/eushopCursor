@@ -110,7 +110,13 @@ export const listingSearchInput = z.object({
   q: z.string().max(120).optional(),
   near: latLng.optional(),
   radiusKm: z.number().min(1).max(500).default(25),
-  countryIso2: isoCountry.optional(),
+  /** Accept lowercase from clients; normalize to ISO2 uppercase. */
+  countryIso2: z
+    .string()
+    .length(2)
+    .transform((s) => s.toUpperCase())
+    .pipe(isoCountry)
+    .optional(),
   categorySlug: slug.optional(),
   brandSlug: slug.optional(),
   freshness: freshnessWindow.optional(),

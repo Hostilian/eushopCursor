@@ -1,0 +1,22 @@
+{
+  "name": "@eushop/party",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "partykit dev",
+    "deploy": "partykit deploy",
+    "build": "partykit build",
+    "lint": "echo \"no-op\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "partykit": "^0.0.114",
+    "partyserver": "^0.0.71",
+    "partysocket": "^1.0.3"
+  },
+  "devDependencies": {
+    "@eushop/config": "workspace:*",
+    "typescript": "^5.7.2"
+  }
+}

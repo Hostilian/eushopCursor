@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { index, integer, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { users } from './auth.js';
+import { users } from './auth';
 
 export const profiles = pgTable(
   'profiles',

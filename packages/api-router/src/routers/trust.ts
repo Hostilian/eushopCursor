@@ -2,7 +2,7 @@ import { submitReportInput, submitReviewInput } from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
 import { eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { conversations, profiles, reports, reviews } from '@eushop/db';
+import { conversations, moderationActions, profiles, reports, reviews } from '@eushop/db';
 import { adminProcedure, protectedProcedure, publicProcedure, router } from '../trpc.js';
 
 export const trustRouter = router({
@@ -72,6 +72,13 @@ export const trustRouter = router({
   resolveReport: adminProcedure
     .input(z.object({ id: z.string().uuid(), action: z.enum(['resolved', 'dismissed']) }))
     .mutation(async ({ ctx, input }) => {
+      const modAction = input.action === 'dismissed' ? 'dismiss_report' : 'resolve_report';
+      await ctx.db.insert(moderationActions).values({
+        reportId: input.id,
+        actorId: ctx.user.id,
+        action: modAction,
+        note: `Report ${input.action} by moderator`,
+      });
       await ctx.db
         .update(reports)
         .set({ status: input.action, resolvedAt: new Date(), resolverId: ctx.user.id })

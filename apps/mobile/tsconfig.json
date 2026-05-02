@@ -1,0 +1,4 @@
+{
+  "extends": "@eushop/config/tsconfig.expo",
+  "include": ["app/**/*", "src/**/*", "global.d.ts", "nativewind-env.d.ts"]
+}

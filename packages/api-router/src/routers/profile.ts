@@ -1,7 +1,7 @@
 import { profileUpdateInput } from '@eushop/validators';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
-import { profiles } from '@eushop/db';
+import { profiles, users } from '@eushop/db';
 import { protectedProcedure, publicProcedure, router } from '../trpc.js';
 
 export const profileRouter = router({
@@ -68,8 +68,8 @@ export const profileRouter = router({
   }),
 
   deleteMyAccount: protectedProcedure.mutation(async ({ ctx }) => {
-    // GDPR Art. 17 — cascading FK deletes will sweep listings, requests, etc.
-    await ctx.db.delete(profiles).where(eq(profiles.userId, ctx.user.id));
+    // GDPR Art. 17 — delete the auth user; FK cascades clear profiles, listings, requests, etc.
+    await ctx.db.delete(users).where(eq(users.id, ctx.user.id));
     return { ok: true };
   }),
 });

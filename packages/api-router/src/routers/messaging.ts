@@ -1,6 +1,6 @@
 import { sendMessageInput, startConversationInput } from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
-import { and, asc, desc, eq, or } from 'drizzle-orm';
+import { and, asc, desc, eq, ne, or } from 'drizzle-orm';
 import { z } from 'zod';
 import { conversations, messages } from '@eushop/db';
 import { protectedProcedure, router } from '../trpc.js';
@@ -113,7 +113,7 @@ export const messagingRouter = router({
         .where(
           and(
             eq(messages.conversationId, input.conversationId),
-            eq(messages.senderId, ctx.user.id),
+            ne(messages.senderId, ctx.user.id),
           ),
         );
       return { ok: true };

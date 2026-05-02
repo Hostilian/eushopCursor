@@ -24,7 +24,8 @@
     "db:migrate": "pnpm --filter @eushop/db migrate",
     "db:seed": "pnpm --filter @eushop/db seed",
     "db:studio": "pnpm --filter @eushop/db studio",
-    "search:index": "pnpm --filter @eushop/api search:index",
+    "search:index": "pnpm --filter @eushop/api-server search:index",
+    "api:dev:bun": "pnpm --filter @eushop/api-server dev:bun",
     "prepare": "husky || true"
   },
   "devDependencies": {

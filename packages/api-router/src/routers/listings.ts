@@ -3,7 +3,7 @@ import { createListingInput, listingSearchInput, updateListingInput } from '@eus
 import { TRPCError } from '@trpc/server';
 import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { foodItems, listings } from '@eushop/db';
+import { brands, categories, foodItems, listings } from '@eushop/db';
 import { protectedProcedure, publicProcedure, router } from '../trpc.js';
 
 function publicListing<T extends { id: string; cellGeohash: string; location?: unknown }>(row: T) {
@@ -29,6 +29,34 @@ export const listingsRouter = router({
     if (input.q) {
       const pattern = `%${input.q.replace(/[%_]/g, '')}%`;
       conditions.push(sql`(${listings.freeformName} ILIKE ${pattern} OR ${listings.notes} ILIKE ${pattern})`);
+    }
+
+    if (input.freshness) {
+      conditions.push(eq(listings.freshness, input.freshness));
+    }
+
+    if (input.hasPhoto === true) {
+      conditions.push(sql`coalesce(jsonb_array_length(${listings.photos}), 0) > 0`);
+    }
+
+    if (input.categorySlug) {
+      const cat = await ctx.db.query.categories.findFirst({
+        where: eq(categories.slug, input.categorySlug),
+      });
+      if (cat) {
+        conditions.push(
+          sql`${listings.foodItemId} IN (SELECT id FROM food_items WHERE category_id = ${cat.id})`,
+        );
+      }
+    }
+
+    if (input.brandSlug) {
+      const b = await ctx.db.query.brands.findFirst({ where: eq(brands.slug, input.brandSlug) });
+      if (b) {
+        conditions.push(
+          sql`${listings.foodItemId} IN (SELECT id FROM food_items WHERE brand_id = ${b.id})`,
+        );
+      }
     }
 
     const rows = await ctx.db

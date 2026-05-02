@@ -11,8 +11,8 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { users } from './auth.js';
-import { foodItems } from './catalog.js';
+import { users } from './auth';
+import { foodItems } from './catalog';
 
 const geographyPoint = customType<{ data: { lat: number; lng: number }; driverData: string }>({
   dataType() {

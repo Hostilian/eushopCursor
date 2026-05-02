@@ -1,8 +1,8 @@
 import { sql } from 'drizzle-orm';
 import { index, jsonb, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
-import { users } from './auth.js';
-import { listings } from './listings.js';
-import { requests } from './requests.js';
+import { users } from './auth';
+import { listings } from './listings';
+import { requests } from './requests';
 
 export const conversations = pgTable(
   'conversations',

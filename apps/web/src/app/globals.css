@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Scan shared UI so @eushop/ui-web utility classes are generated */
+@source "../../../../packages/ui-web/src";
+
 @theme {
   /* Eushop palette — see packages/design-tokens for the canonical set */
   --color-paper: #faf7f2;

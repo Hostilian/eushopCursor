@@ -1,6 +1,10 @@
 import 'dotenv/config';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
-import { db, sql } from './client.js';
+import { db, sql } from './client';
+
+const migrationsFolder = join(dirname(fileURLToPath(import.meta.url)), '..', 'drizzle');
 
 async function run() {
   console.info('▸ Ensuring required Postgres extensions are present');
@@ -13,8 +17,8 @@ async function run() {
      CREATE EXTENSION IF NOT EXISTS "unaccent";`,
   );
 
-  console.info('▸ Running drizzle migrations');
-  await migrate(db, { migrationsFolder: './drizzle' });
+  console.info('▸ Running drizzle migrations from', migrationsFolder);
+  await migrate(db, { migrationsFolder });
 
   console.info('✓ Database is up to date');
   await sql.end();

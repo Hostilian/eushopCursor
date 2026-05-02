@@ -1,0 +1,5 @@
+{
+  "extends": "@eushop/config/tsconfig.next",
+  "include": ["next-env.d.ts", "src/**/*", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

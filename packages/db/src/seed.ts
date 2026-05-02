@@ -7,8 +7,8 @@ import {
   FOOD_ITEMS,
   STATS,
 } from '@eushop/catalog-data';
-import { db, sql } from './client.js';
-import { brands, categories, countries, foodItems } from './schema/catalog.js';
+import { db, sql } from './client';
+import { brands, categories, countries, foodItems } from './schema/catalog';
 
 async function seed() {
   console.info('▸ Seeding catalog');

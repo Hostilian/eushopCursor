@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "Eushop",
+    "slug": "eushop",
+    "scheme": "eushop",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#FAF7F2",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "eu.eushop.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We use your approximate location (5 km cell only) to show nearby listings — your precise address is never sent to anyone.",
+        "NSCameraUsageDescription": "Take photos of the items you brought back to share in your listings."
+      }
+    },
+    "android": {
+      "package": "eu.eushop.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#FAF7F2"
+      }
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-localization",
+      "expo-notifications",
+      "expo-camera",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FAF7F2",
+          "resizeMode": "contain"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

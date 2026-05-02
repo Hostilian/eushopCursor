@@ -9,10 +9,8 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core';
-import { users } from './auth.js';
-import { conversations, messages } from './messaging.js';
-import { listings } from './listings.js';
-import { requests } from './requests.js';
+import { users } from './auth';
+import { conversations } from './messaging';
 
 export const reviews = pgTable(
   'reviews',
@@ -79,5 +77,31 @@ export const reports = pgTable(
   }),
 );
 
-// Helper type-narrow exports — keep imports tidy
-export const _references = { listings, requests, messages };
+export const moderationActionEnum = pgEnum('moderation_action_type', [
+  'warn',
+  'suspend_user',
+  'remove_listing',
+  'remove_request',
+  'resolve_report',
+  'dismiss_report',
+  'note',
+]);
+
+export const moderationActions = pgTable(
+  'moderation_actions',
+  {
+    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    reportId: uuid('report_id').references(() => reports.id, { onDelete: 'set null' }),
+    actorId: uuid('actor_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    action: moderationActionEnum('action').notNull(),
+    note: text('note'),
+    metadata: jsonb('metadata').$type<Record<string, unknown>>().notNull().default(sql`'{}'::jsonb`),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    reportIdx: index('moderation_actions_report_idx').on(t.reportId),
+    actorIdx: index('moderation_actions_actor_idx').on(t.actorId),
+  }),
+);
