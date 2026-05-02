@@ -66,9 +66,9 @@ per product so users see the box they actually have at home.
 
 ## 6. Take rate & unit economics
 
-We charge: `platformFee = max(€1.50, 12% × finderFee)`.
+We charge: `platformFee = min(€1.50, 12% × finderFee)`.
 
-Average reservation: €6 finder's fee → €1.50 platform fee → 25% effective.
+Average reservation: €6 finder's fee → €0.72 platform fee → 12% effective (capped at €1.50 on larger fees).
 
 Per active corridor (early benchmarks, validated against 4 informal
 WhatsApp groups we shadowed):
@@ -78,7 +78,7 @@ WhatsApp groups we shadowed):
 | Trips posted/month    | 80      | 320      |
 | Avg slots filled/trip | 3       | 5        |
 | GMV (finder fees)     | €1,440  | €9,600   |
-| Take (25%)            | €360    | €2,400   |
+| Platform take (~12%, €1.50 cap) | €173 | €1,152 |
 | Net per corridor      | €230    | €1,800   |
 
 40 corridors by end of year 2 → €864K/year platform revenue at unit-cost

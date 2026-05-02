@@ -39,7 +39,13 @@ app.use(
   '/trpc/*',
   trpcServer({
     router: appRouter,
-    createContext: ({ req }) => createContext({ headers: req.headers }),
+    createContext: ({ req }) =>
+      createContext({
+        headers: req.headers,
+        enqueueEvent: async (event) => {
+          await inngest.send({ name: event.name as never, data: event.data as never });
+        },
+      }),
   }),
 );
 

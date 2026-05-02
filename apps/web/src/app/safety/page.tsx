@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { EditorialPageLayout } from '../../components/marketing/editorial-page';
 
 export default function SafetyPage() {
@@ -41,6 +43,21 @@ export default function SafetyPage() {
           <p className="mt-3">
             Every listing, request and message has a Report button. Reports go straight to our
             moderation queue and are reviewed within 48 hours. Repeat offenders are removed.
+          </p>
+        </section>
+
+        <section className="border-ink/10 bg-porcelain/60 rounded-2xl border p-6">
+          <h2 className="text-ink font-serif text-xl">For partners &amp; diligence</h2>
+          <p className="mt-3 text-base">
+            If you are an insurer, marketplace regulator, or LP reviewing how we think about
+            in-person handoffs, identity, and food safety at scale, read our{' '}
+            <Link
+              href="/safety/handoff-protocol"
+              className="text-ink font-medium underline underline-offset-4"
+            >
+              institutional handoff protocol
+            </Link>
+            .
           </p>
         </section>
       </article>

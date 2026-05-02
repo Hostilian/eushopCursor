@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { PLATFORM_FEE_FLOOR_CENTS, PLATFORM_FEE_RATE } from '@eushop/validators';
+import { calculatePlatformFeeCents } from '@eushop/validators';
 import { trpc } from '../../lib/trpc';
 import { ProductPicker, type ProductPickerSelection } from '../catalog/product-picker';
 import { Button } from '../ui/button';
@@ -44,10 +44,7 @@ export function ReservationForm({
     );
   }
 
-  const platformFeeCents = Math.max(
-    PLATFORM_FEE_FLOOR_CENTS,
-    Math.round(agreedFee * 100 * PLATFORM_FEE_RATE),
-  );
+  const platformFeeCents = calculatePlatformFeeCents(Math.round(agreedFee * 100));
   const platformFee = (platformFeeCents / 100).toFixed(2);
 
   return (

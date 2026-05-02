@@ -15,11 +15,20 @@ export interface CtxUser {
   role: string;
 }
 
+/** Fire-and-forget outbound jobs (Inngest, etc.). Defaults to a no-op. */
+export type EnqueueEvent = (event: {
+  name: string;
+  data: Record<string, unknown>;
+}) => Promise<void>;
+
 export interface CreateContextOptions {
   headers: Headers;
+  enqueueEvent?: EnqueueEvent;
 }
 
-export async function createContext({ headers }: CreateContextOptions) {
+const noopEnqueue: EnqueueEvent = async () => {};
+
+export async function createContext({ headers, enqueueEvent }: CreateContextOptions) {
   const session = await auth.api.getSession({ headers }).catch(() => null);
   const user: CtxUser | null = session?.user
     ? {
@@ -37,6 +46,7 @@ export async function createContext({ headers }: CreateContextOptions) {
     auth,
     user,
     headers,
+    enqueueEvent: enqueueEvent ?? noopEnqueue,
   };
 }
 

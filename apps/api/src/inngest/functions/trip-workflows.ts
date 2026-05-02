@@ -1,11 +1,5 @@
-import {
-  db,
-  notifications,
-  requests as openRequests,
-  tripOffers,
-  tripReservations,
-} from '@eushop/db';
-import { and, eq, gte, lte, sql } from 'drizzle-orm';
+import { db, notifications, requests, tripOffers, tripReservations } from '@eushop/db';
+import { and, eq, gte, inArray, isNotNull, lte, ne, or, sql } from 'drizzle-orm';
 import { inngest } from '../client.js';
 
 /**
@@ -123,4 +117,63 @@ export const autoCloseStaleTrips = inngest.createFunction(
   },
 );
 
-void openRequests; // reserved for the upcoming match-request-to-trip job
+/**
+ * When a seller posts a trip, notify buyers whose open requests match the
+ * trip's **origin** country (sourcing market) and either the declared
+ * `intendedItemIds` or the catalog origin of their requested food item.
+ */
+export const matchRequestToTrip = inngest.createFunction(
+  { id: 'match-request-to-trip' },
+  { event: 'trip.offer.created' },
+  async ({ event, step }) => {
+    const trip = await step.run('load-trip', async () =>
+      db.query.tripOffers.findFirst({ where: eq(tripOffers.id, event.data.tripOfferId) }),
+    );
+    if (!trip) return { skipped: true };
+
+    const intended = (trip.intendedItemIds ?? []) as string[];
+
+    const originItemMatch = sql`exists (
+      select 1 from food_items fi
+      where fi.id = ${requests.foodItemId}
+      and fi.origin_country_iso2 = ${trip.originCountryIso2}
+    )`;
+
+    const rows = await step.run('find-requests', async () => {
+      const itemClause =
+        intended.length > 0
+          ? or(inArray(requests.foodItemId, intended), originItemMatch)
+          : originItemMatch;
+
+      return db
+        .select()
+        .from(requests)
+        .where(
+          and(
+            eq(requests.status, 'open'),
+            eq(requests.notifyOnMatch, true),
+            ne(requests.buyerId, trip.sellerId),
+            isNotNull(requests.foodItemId),
+            itemClause,
+          ),
+        )
+        .limit(80);
+    });
+
+    if (!rows.length) return { matches: 0 };
+
+    await step.run('notify-buyers', async () => {
+      for (const r of rows) {
+        await db.insert(notifications).values({
+          userId: r.buyerId,
+          kind: 'new-request-match',
+          title: 'A trip matches your request',
+          body: `Someone is flying ${trip.originCity} → ${trip.destinationCity} and may be able to bring what you asked for.`,
+          data: { requestId: r.id, tripOfferId: trip.id },
+        });
+      }
+    });
+
+    return { matches: rows.length };
+  },
+);

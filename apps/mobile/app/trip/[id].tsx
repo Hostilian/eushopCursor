@@ -10,11 +10,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { calculatePlatformFeeCents } from '@eushop/validators';
 import { ProductPicker, type ProductPickerSelection } from '../../src/components/ProductPicker';
 import { trpc } from '../../src/lib/trpc';
-
-const PLATFORM_FEE_RATE = 0.12;
-const PLATFORM_FEE_FLOOR_CENTS = 150;
 
 export default function TripDetailScreen() {
   const params = useLocalSearchParams<{ id: string }>();
@@ -45,7 +43,7 @@ export default function TripDetailScreen() {
 
   const { trip } = data;
   const agreedFee = Number(fee) || 0;
-  const platformFee = Math.max(PLATFORM_FEE_FLOOR_CENTS / 100, agreedFee * PLATFORM_FEE_RATE);
+  const platformFee = calculatePlatformFeeCents(Math.round(agreedFee * 100)) / 100;
 
   const submit = async () => {
     if (!picker.freeformName?.trim()) {

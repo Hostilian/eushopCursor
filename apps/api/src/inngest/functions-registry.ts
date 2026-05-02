@@ -7,6 +7,7 @@ import { notifyMessage } from './functions/notify-message.js';
 import { reindexCatalog } from './functions/reindex-catalog.js';
 import {
   autoCloseStaleTrips,
+  matchRequestToTrip,
   notifyReservationCreated,
   notifyTripDepartureFanout,
   notifyTripDepartureSoon,
@@ -19,6 +20,7 @@ export const inngestFunctions = [
   importOpenFoodFactsBatch,
   importOpenFoodFactsDaily,
   notifyReservationCreated,
+  matchRequestToTrip,
   notifyTripDepartureFanout,
   notifyTripDepartureSoon,
   autoCloseStaleTrips,

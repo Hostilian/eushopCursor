@@ -32,6 +32,9 @@ export function Footer() {
               <Link href="/safety">{tc('safety')}</Link>
             </li>
             <li>
+              <Link href="/safety/handoff-protocol">{tc('handoffProtocol')}</Link>
+            </li>
+            <li>
               <Link href="/manifesto">{tc('manifesto')}</Link>
             </li>
             <li>

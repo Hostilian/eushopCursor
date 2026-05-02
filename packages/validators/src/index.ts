@@ -358,15 +358,18 @@ export type CancelReservationInput = z.infer<typeof cancelReservationInput>;
  * Eushop's take rate. Single source of truth — clients display this and the
  * server enforces it.
  *
- *   platformFee = max(€1.50, 12% × finderFee)
+ *   platformFee = min(€1.50, 12% × finderFee)
  *
  * Implemented in cents to avoid float drift; callers convert back to euros
- * for display.
+ * for display. The cap keeps small finder-fee trips investor-friendly; the
+ * proportional slice applies on larger fees.
  */
-export const PLATFORM_FEE_FLOOR_CENTS = 150;
+export const PLATFORM_FEE_CAP_CENTS = 150;
+/** @deprecated Use PLATFORM_FEE_CAP_CENTS — fee is a ceiling, not a floor. */
+export const PLATFORM_FEE_FLOOR_CENTS = PLATFORM_FEE_CAP_CENTS;
 export const PLATFORM_FEE_RATE = 0.12;
 
 export function calculatePlatformFeeCents(finderFeeCents: number): number {
   const proportional = Math.round(finderFeeCents * PLATFORM_FEE_RATE);
-  return Math.max(PLATFORM_FEE_FLOOR_CENTS, proportional);
+  return Math.min(PLATFORM_FEE_CAP_CENTS, proportional);
 }

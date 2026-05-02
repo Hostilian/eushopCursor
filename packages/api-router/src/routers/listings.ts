@@ -4,6 +4,7 @@ import {
   publicCell,
   publicPoint,
   PRECISION_INDEX,
+  roughCatalogCountryIso2FromLatLng,
 } from '@eushop/geo';
 import { createListingInput, listingSearchInput, updateListingInput } from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
@@ -151,6 +152,7 @@ export const listingsRouter = router({
       patch.location = input.location;
       patch.indexGeohash = indexHash;
       patch.cellGeohash = publicCell(indexHash);
+      patch.countryIso2 = (await inferCountryFromLatLng(input.location)) ?? 'EU';
     }
     if (input.approximateCity !== undefined) patch.approximateCity = input.approximateCity;
 
@@ -211,8 +213,6 @@ export const listingsRouter = router({
     }),
 });
 
-async function inferCountryFromLatLng(_p: { lat: number; lng: number }): Promise<string | null> {
-  // Stubbed for the modular monolith — a future geo service will reverse-geocode
-  // via an offline polygon shapefile (Natural Earth) and return a confident ISO2.
-  return null;
+async function inferCountryFromLatLng(p: { lat: number; lng: number }): Promise<string | null> {
+  return roughCatalogCountryIso2FromLatLng(p);
 }

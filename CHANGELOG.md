@@ -8,7 +8,7 @@ The narrative reframe. Pantry listings and requests stay as primitives, but the
 primary monetisable surface is now **trip offers + reservations**: a verified
 diaspora user announces a trip with N suitcase slots, buyers reserve specific
 items at an agreed finder's fee, and the platform charges
-`max(€1.50, 12% × finderFee)` on each confirmation.
+`min(€1.50, 12% × finderFee)` on each confirmation.
 
 ### All mock data killed
 - Deleted `packages/mock-data` entirely (every fictional listing, request, user,
@@ -69,6 +69,14 @@ items at an agreed finder's fee, and the platform charges
   page renders a public stub plus links to /manifesto and /traction.
 - New `apps/web/src/components/demo-mode-banner.tsx`.
 - README rewritten to lead with the new manifesto.
+- **Platform fee formula** aligned with the product spec:
+  `platformFee = min(€1.50, 12% × finderFee)` (was incorrectly implemented as `max` briefly).
+- **`match-request-to-trip` Inngest job** — on `trip.offer.created`, notifies buyers whose open
+  requests match the trip origin country (via catalog `food_items.origin_country_iso2`) or
+  overlap `intendedItemIds`. `trip.reservation.created` and `trip.offer.created` are now emitted
+  from the API `createContext` → `inngest.send` bridge.
+- **`/safety/handoff-protocol`** — investor-oriented narrative on public handoffs, food safety,
+  KYC roadmap, and moderation; linked from `/safety`.
 
 ## 0.1.0 — 2026-05-02 — MVP scaffold
 

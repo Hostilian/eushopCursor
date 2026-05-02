@@ -111,3 +111,5 @@ export function bboxOf(hash: string): { sw: LatLng; ne: LatLng } {
   const [minLat, minLng, maxLat, maxLng] = geohash.decode_bbox(hash);
   return { sw: { lat: minLat, lng: minLng }, ne: { lat: maxLat, lng: maxLng } };
 }
+
+export { roughCatalogCountryIso2FromLatLng } from './rough-catalog-country';

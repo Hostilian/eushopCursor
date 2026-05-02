@@ -35,7 +35,16 @@ const nextConfig = {
       { key: 'X-Content-Type-Options', value: 'nosniff' },
       { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
     ];
-    return [{ source: '/:path*', headers: securityHeaders }];
+    // Do not attach CSP (and other security headers) to `/_next/*` or `/api/*`.
+    // Applying them to `/_next/static/css/app/layout.css` breaks dev: that URL is
+    // a virtual entry served by webpack; with headers on every path it can 404 and
+    // the Simple Browser / Chrome shows unstyled HTML (Tailwind never loads).
+    return [
+      {
+        source: '/((?!_next/|api/).*)',
+        headers: securityHeaders,
+      },
+    ];
   },
   images: {
     remotePatterns: [

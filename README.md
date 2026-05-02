@@ -18,7 +18,7 @@ Three primitives, one network:
    Krówki, €3, pickup at Goetheplatz") with privacy-preserving geohash discovery.
 
 We charge a small platform fee on each confirmed reservation:
-`platformFee = max(€1.50, 12% × finderFee)`. Settlement of the goods themselves stays
+`platformFee = min(€1.50, 12% × finderFee)`. Settlement of the goods themselves stays
 between the parties — we are introductions, identity, and chat, not customs, freight,
 or regulated payments.
 

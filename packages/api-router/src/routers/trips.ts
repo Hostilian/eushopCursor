@@ -179,6 +179,10 @@ export const tripsRouter = router({
       })
       .returning();
     if (!created) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+    void ctx.enqueueEvent({
+      name: 'trip.offer.created',
+      data: { tripOfferId: created.id, sellerId: created.sellerId },
+    });
     return publicTrip(created);
   }),
 
@@ -237,6 +241,16 @@ export const tripsRouter = router({
           currency: trip.currency,
         })
         .returning();
+      if (created) {
+        void ctx.enqueueEvent({
+          name: 'trip.reservation.created',
+          data: {
+            reservationId: created.id,
+            tripOfferId: trip.id,
+            buyerId: ctx.user.id,
+          },
+        });
+      }
       return created;
     } catch (e) {
       // Restore the slot on insert failure (e.g. duplicate active reservation).

@@ -22,6 +22,8 @@ type Events = {
   'trip.reservation.created': {
     data: { reservationId: string; tripOfferId: string; buyerId: string };
   };
+  /** Emitted after `trips.create` — matches open requests by origin country + item. */
+  'trip.offer.created': { data: { tripOfferId: string; sellerId: string } };
   /** Cron-driven: 48h before a trip departs, ping all reservation holders. */
   'trip.departure.imminent': { data: { tripOfferId: string } };
 };
