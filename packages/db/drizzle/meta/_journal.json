@@ -15,6 +15,13 @@
       "when": 1777684387215,
       "tag": "0001_stormy_otto_octavius",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1809456000000,
+      "tag": "0002_trip_marketplace",
+      "breakpoints": true
     }
   ]
 }
