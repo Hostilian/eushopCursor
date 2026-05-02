@@ -52,6 +52,7 @@ const nextConfig = {
     '@eushop/db',
     '@eushop/design-tokens',
     '@eushop/i18n',
+    '@eushop/mock-data',
     '@eushop/ui-web',
     '@eushop/validators',
   ],

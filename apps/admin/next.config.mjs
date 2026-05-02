@@ -30,6 +30,9 @@ const nextConfig = {
     '@eushop/auth',
     '@eushop/catalog-data',
     '@eushop/db',
+    '@eushop/design-tokens',
+    '@eushop/mock-data',
+    '@eushop/ui-web',
   ],
 };
 
