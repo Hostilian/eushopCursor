@@ -1,6 +1,6 @@
-import { Footer } from '../../components/layout/footer';
-import { Nav } from '../../components/layout/nav';
-import { ProfilePanel } from '../../components/profile/profile-panel';
+import { Footer } from '../../../components/layout/footer';
+import { Nav } from '../../../components/layout/nav';
+import { ProfilePanel } from '../../../components/profile/profile-panel';
 
 export default function ProfilePage() {
   return (

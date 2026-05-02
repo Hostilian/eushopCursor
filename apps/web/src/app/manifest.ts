@@ -2,10 +2,10 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Eushop — Trips & neighbourhood shares',
+    name: 'Eushop — trips, neighbours & open asks',
     short_name: 'Eushop',
     description:
-      'Spare luggage space on trips you take, local shares, and open asks—profiles, chat, public handoffs.',
+      'Get something from somewhere. Bring something for someone. Trips, neighbours, and open asks on one map — profiles, chat, public handoffs.',
     start_url: '/',
     display: 'standalone',
     background_color: '#FAF7F2',

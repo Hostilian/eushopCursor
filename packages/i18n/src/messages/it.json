@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Spazio in più in valigia, condivisioni vicino a te e ciò che cerchi—tutto sulla stessa mappa.",
+  "tagline": "Prendi qualcosa da qualche parte. Porta qualcosa a qualcuno.",
   "hero": {
-    "eyebrow": "Viaggi · Vicino a te · Richieste",
-    "body": "Offri spazio libero nel bagaglio sui voli che fai già. Condividi qualcosa di casa nella tua cella di 5 km. O di’ cosa cerchi—viaggi e offerte vicine possono trovarti. Stessa mappa centrata sulla città, profili chiari, chat fino a un passaggio di mano semplice.",
+    "eyebrow": "Viaggi. Vicini. Richieste.",
+    "body": "Qualcuno è sempre in partenza. Offri lo spazio libero nel bagaglio, condividi ciò che hai portato o di’ cosa stai cercando — le persone giuste si incontrano su una sola mappa. Vi mettete d’accordo, ve lo passate, l’accordo resta tra voi.",
     "discoverCta": "Scopri vicino a te",
     "favsLabel": "In evidenza dal catalogo"
   },
@@ -99,7 +99,7 @@
     "sources": "Fonti"
   },
   "kpi": {
-    "euCountries": "Paesi UE",
+    "euCountries": "Paesi nel catalogo",
     "categories": "Categorie",
     "catalogItems": "Articoli in catalogo",
     "brands": "Marchi",

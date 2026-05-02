@@ -1,6 +1,6 @@
-import { Footer } from '../../components/layout/footer';
-import { Nav } from '../../components/layout/nav';
-import { SearchClient } from '../../components/search/search-client';
+import { Footer } from '../../../components/layout/footer';
+import { Nav } from '../../../components/layout/nav';
+import { SearchClient } from '../../../components/search/search-client';
 
 export const metadata = {
   title: 'Search the catalog',

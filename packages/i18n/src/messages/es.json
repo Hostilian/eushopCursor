@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Espacio extra en la maleta, comparte cerca y lo que buscas—todo en un mismo mapa.",
+  "tagline": "Consigue algo de algún sitio. Lleva algo para alguien.",
   "hero": {
-    "eyebrow": "Viajes · Cerca de ti · Pedidos",
-    "body": "Ofrece hueco en el equipaje en vuelos que ya haces. Comparte algo de casa en tu celda de 5 km. O di qué buscas—viajes y ofertas cercanas pueden encontrarte. El mismo mapa centrado en la ciudad, perfiles claros y chat hasta una entrega sencilla.",
+    "eyebrow": "Viajes. Vecinos. Pedidos.",
+    "body": "Alguien siempre va a alguna parte. Ofrece el hueco libre en tu equipaje, comparte lo que trajiste o di qué buscas — la gente adecuada se encuentra en un mismo mapa. Os ponéis de acuerdo, lo entregáis, el trato queda entre vosotros.",
     "discoverCta": "Descubrir cerca de ti",
     "favsLabel": "Destacados del catálogo"
   },
@@ -99,7 +99,7 @@
     "sources": "Fuentes"
   },
   "kpi": {
-    "euCountries": "Países UE",
+    "euCountries": "Países en el catálogo",
     "categories": "Categorías",
     "catalogItems": "Artículos del catálogo",
     "brands": "Marcas",

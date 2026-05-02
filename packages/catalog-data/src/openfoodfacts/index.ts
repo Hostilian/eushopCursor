@@ -10,7 +10,7 @@
  *
  * Attribution is mandatory. Every page that renders an OFF-sourced image
  * must surface "Product info via Open Food Facts contributors" — handled by
- * the `apps/web/src/app/items/[slug]/page.tsx` template.
+ * the `apps/web/src/app/(product)/items/[slug]/page.tsx` template.
  */
 
 const SEARCH_ENDPOINT = 'https://world.openfoodfacts.org/cgi/search.pl';

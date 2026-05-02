@@ -1,14 +1,14 @@
 import { ArrowRight, Plane } from 'lucide-react';
 import Link from 'next/link';
-import { Footer } from '../../components/layout/footer';
-import { Nav } from '../../components/layout/nav';
+import { Footer } from '../../../components/layout/footer';
+import { Nav } from '../../../components/layout/nav';
 import {
   ReservationActions,
   type ReservationActionStatus,
-} from '../../components/trips/reservation-actions';
-import { Badge } from '../../components/ui/badge';
-import { Button } from '../../components/ui/button';
-import { api } from '../../lib/trpc-server';
+} from '../../../components/trips/reservation-actions';
+import { Badge } from '../../../components/ui/badge';
+import { Button } from '../../../components/ui/button';
+import { api } from '../../../lib/trpc-server';
 
 export const dynamic = 'force-dynamic';
 

@@ -8,7 +8,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./router": "./src/router.ts",
-    "./context": "./src/context.ts"
+    "./context": "./src/context.ts",
+    "./lib/stripe": "./src/lib/stripe.ts"
   },
   "scripts": {
     "lint": "node ../../node_modules/eslint/bin/eslint.js -c ../config/eslint.config.js .",

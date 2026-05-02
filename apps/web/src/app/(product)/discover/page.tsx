@@ -1,7 +1,7 @@
-import { Footer } from '../../components/layout/footer';
-import { Nav } from '../../components/layout/nav';
-import { DiscoverFeed } from '../../components/discover/discover-feed';
-import { MapPreview } from '../../components/discover/map-preview';
+import { Footer } from '../../../components/layout/footer';
+import { Nav } from '../../../components/layout/nav';
+import { DiscoverFeed } from '../../../components/discover/discover-feed';
+import { MapPreview } from '../../../components/discover/map-preview';
 
 export const metadata = {
   title: 'Discover near you',

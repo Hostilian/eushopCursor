@@ -1,5 +1,5 @@
-import { EditorialPageLayout } from '../../components/marketing/editorial-page';
-import { MarketingSourcesStrip } from '../../components/marketing/marketing-sources-strip';
+import { EditorialPageLayout } from '../../../components/marketing/editorial-page';
+import { MarketingSourcesStrip } from '../../../components/marketing/marketing-sources-strip';
 
 export const metadata = {
   title: 'Manifesto · Eushop',

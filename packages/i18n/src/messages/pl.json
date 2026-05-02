@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Wolne miejsce w bagażu, sąsiedzkie udostępnienia i to, czego szukasz—na jednej mapie.",
+  "tagline": "Zdobądź coś skądś. Przywieź coś dla kogoś.",
   "hero": {
-    "eyebrow": "Wyjazdy · W pobliżu · Poszukiwania",
-    "body": "Zaoferuj wolne miejsce w bagażu na lotach, na które i tak lecisz. Podziel się czymś z domu w swojej komórce 5 km. Albo napisz, czego szukasz—pasujące wyjazdy i oferty w okolicy mogą cię znaleźć. Ta sama mapa od miasta, czytelne profile, czat aż do prostego przekazania.",
+    "eyebrow": "Wyjazdy. Sąsiedzi. Poszukiwania.",
+    "body": "Ktoś zawsze gdzieś jedzie. Zaoferuj wolne miejsce w bagażu, podziel się tym, co przywiozłeś, albo po prostu napisz, czego szukasz — właściwi ludzie spotykają się na jednej mapie. Dogadujecie się, przekazujecie, układ zostaje między wami.",
     "discoverCta": "Odkrywaj w pobliżu",
     "favsLabel": "Wyróżniki z katalogu"
   },
@@ -99,7 +99,7 @@
     "sources": "Źródła"
   },
   "kpi": {
-    "euCountries": "Kraje UE",
+    "euCountries": "Kraje w katalogu",
     "categories": "Kategorie",
     "catalogItems": "Pozycje w katalogu",
     "brands": "Marki",

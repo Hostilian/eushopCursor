@@ -1,4 +1,4 @@
-import { EditorialPageLayout } from '../../components/marketing/editorial-page';
+import { EditorialPageLayout } from '../../../components/marketing/editorial-page';
 
 const ENTRIES = [
   {

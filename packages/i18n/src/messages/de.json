@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Mehr Platz im Koffer, Nachbarschafts-Teilen und was du suchst—alles auf einer Karte.",
+  "tagline": "Hol etwas von irgendwo. Bring etwas für jemanden.",
   "hero": {
-    "eyebrow": "Reisen · In deiner Nähe · Gesuche",
-    "body": "Biete freien Platz im Gepäck auf Flügen, die du ohnehin nimmst. Teile etwas von zu Hause in deiner 5-km-Zelle. Oder sag, wonach du suchst—passende Reisen und Angebote in der Nähe können dich finden. Dieselbe stadtnahe Karte, klare Profile, Chat bis zur einfachen Übergabe.",
+    "eyebrow": "Reisen. Nachbarn. Gesuche.",
+    "body": "Irgendwer ist immer unterwegs. Biete freien Platz im Gepäck, teile, was du mitgebracht hast, oder sag einfach, wonach du suchst — die richtigen Leute treffen sich auf einer Karte. Ihr einigt euch, ihr übergebt, der Deal bleibt bei euch.",
     "discoverCta": "In deiner Nähe entdecken",
     "favsLabel": "Katalog-Highlights"
   },
@@ -99,7 +99,7 @@
     "sources": "Quellen"
   },
   "kpi": {
-    "euCountries": "EU-Länder",
+    "euCountries": "Länder im Katalog",
     "categories": "Kategorien",
     "catalogItems": "Katalogartikel",
     "brands": "Marken",

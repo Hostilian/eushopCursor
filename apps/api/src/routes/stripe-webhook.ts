@@ -1,0 +1,230 @@
+import {
+  connectAccounts,
+  db,
+  financialEvents,
+  payouts,
+  reservationPayments,
+  tripReservations,
+} from '@eushop/db';
+import { verifyWebhookSignature } from '@eushop/api-router/lib/stripe';
+import { eq } from 'drizzle-orm';
+import type { Context } from 'hono';
+
+/**
+ * Stripe webhook handler.
+ *
+ * The endpoint mirrors every interesting object Stripe surfaces about our
+ * marketplace into our local tables so admin tools, payouts and reconciliation
+ * never need to call Stripe to know "what really happened".
+ *
+ * Idempotency: every event lands in `financial_events` keyed on the Stripe
+ * `evt_…` id. Duplicate webhook deliveries are absorbed by the unique index.
+ */
+export async function handleStripeWebhook(c: Context): Promise<Response> {
+  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!secret) {
+    return c.json({ error: 'STRIPE_WEBHOOK_SECRET not configured' }, 501);
+  }
+  const raw = await c.req.text();
+  let event: Awaited<ReturnType<typeof verifyWebhookSignature>>;
+  try {
+    event = verifyWebhookSignature({
+      rawBody: raw,
+      signatureHeader: c.req.header('stripe-signature') ?? null,
+      secret,
+    });
+  } catch (e) {
+    console.warn('[stripe webhook] signature reject', e instanceof Error ? e.message : e);
+    return c.json({ error: 'Bad signature' }, 400);
+  }
+
+  const obj = event.data.object as Record<string, unknown>;
+  const stripeObjectId = (obj.id as string | undefined) ?? null;
+
+  // Idempotency: skip if this event id has already been recorded.
+  const existing = await db
+    .select({ id: financialEvents.id })
+    .from(financialEvents)
+    .where(eq(financialEvents.stripeEventId, event.id))
+    .limit(1);
+  if (existing.length > 0) {
+    return c.json({ received: true, idempotent: true });
+  }
+
+  let kind: typeof financialEvents.kind.dataType | null = null;
+  let amountCents: string | null = null;
+  let currency: string | null = null;
+  let reservationId: string | null = null;
+
+  switch (event.type) {
+    case 'payment_intent.created':
+      kind = 'payment_intent.created';
+      break;
+    case 'payment_intent.requires_action':
+      kind = 'payment_intent.requires_action';
+      break;
+    case 'payment_intent.succeeded':
+    case 'payment_intent.amount_capturable_updated':
+      kind = 'payment_intent.succeeded';
+      break;
+    case 'payment_intent.canceled':
+      kind = 'payment_intent.canceled';
+      break;
+    case 'charge.captured':
+    case 'charge.succeeded':
+      kind = 'charge.captured';
+      break;
+    case 'charge.refunded':
+      kind = 'charge.refunded';
+      break;
+    case 'charge.dispute.created':
+      kind = 'charge.dispute.created';
+      break;
+    case 'charge.dispute.closed':
+      kind = 'charge.dispute.closed';
+      break;
+    case 'transfer.created':
+      kind = 'transfer.created';
+      break;
+    case 'transfer.failed':
+      kind = 'transfer.failed';
+      break;
+    case 'payout.paid':
+      kind = 'payout.paid';
+      break;
+    case 'payout.failed':
+      kind = 'payout.failed';
+      break;
+    case 'account.updated':
+      kind = 'connect.account.updated';
+      break;
+    default:
+      // Unknown event type — we still record it as raw so we can audit later.
+      console.info('[stripe webhook] unhandled', event.type);
+  }
+
+  // Pull amount/currency from the Stripe object when present.
+  if (typeof obj.amount === 'number') amountCents = String(obj.amount);
+  if (typeof obj.currency === 'string') currency = String(obj.currency).toUpperCase();
+
+  // Map back to a reservation via metadata.reservationId or the stored PI id.
+  const meta = (obj.metadata as Record<string, string> | undefined) ?? undefined;
+  if (meta?.reservationId) reservationId = meta.reservationId;
+  if (!reservationId && typeof obj.payment_intent === 'string') {
+    const [pay] = await db
+      .select({ reservationId: reservationPayments.reservationId })
+      .from(reservationPayments)
+      .where(eq(reservationPayments.stripePaymentIntentId, obj.payment_intent as string))
+      .limit(1);
+    if (pay) reservationId = pay.reservationId;
+  }
+  if (!reservationId && typeof obj.id === 'string' && event.type.startsWith('payment_intent.')) {
+    const [pay] = await db
+      .select({ reservationId: reservationPayments.reservationId })
+      .from(reservationPayments)
+      .where(eq(reservationPayments.stripePaymentIntentId, obj.id as string))
+      .limit(1);
+    if (pay) reservationId = pay.reservationId;
+  }
+
+  // Side effects per type.
+  try {
+    if (event.type === 'account.updated' && typeof obj.id === 'string') {
+      const [row] = await db
+        .select()
+        .from(connectAccounts)
+        .where(eq(connectAccounts.stripeAccountId, obj.id as string))
+        .limit(1);
+      if (row) {
+        const chargesEnabled = Boolean(obj.charges_enabled);
+        const payoutsEnabled = Boolean(obj.payouts_enabled);
+        const detailsSubmitted = Boolean(obj.details_submitted);
+        const reqs =
+          (obj.requirements as
+            | { currently_due?: string[]; disabled_reason?: string | null }
+            | undefined) ?? {};
+        await db
+          .update(connectAccounts)
+          .set({
+            chargesEnabled,
+            payoutsEnabled,
+            detailsSubmitted,
+            requirementsCurrentlyDue: reqs.currently_due ?? [],
+            requirementsDisabledReason: reqs.disabled_reason ?? null,
+            status:
+              chargesEnabled && payoutsEnabled
+                ? 'active'
+                : detailsSubmitted
+                  ? 'restricted'
+                  : 'pending',
+            updatedAt: new Date(),
+          })
+          .where(eq(connectAccounts.id, row.id));
+      }
+    }
+
+    if (
+      reservationId &&
+      (event.type === 'payment_intent.succeeded' ||
+        event.type === 'payment_intent.canceled' ||
+        event.type === 'charge.refunded' ||
+        event.type === 'charge.dispute.created')
+    ) {
+      const patch: Record<string, unknown> = { updatedAt: new Date() };
+      if (event.type === 'payment_intent.succeeded') {
+        patch.status = 'succeeded';
+        patch.capturedAt = new Date();
+      } else if (event.type === 'payment_intent.canceled') {
+        patch.status = 'canceled';
+        patch.cancelledAt = new Date();
+      } else if (event.type === 'charge.refunded') {
+        patch.status = 'refunded';
+        patch.refundedAt = new Date();
+      } else if (event.type === 'charge.dispute.created') {
+        patch.disputedAt = new Date();
+      }
+      await db
+        .update(reservationPayments)
+        .set(patch)
+        .where(eq(reservationPayments.reservationId, reservationId));
+    }
+
+    if (event.type === 'payout.paid' && typeof obj.id === 'string') {
+      await db
+        .update(payouts)
+        .set({ status: 'paid', updatedAt: new Date() })
+        .where(eq(payouts.stripeTransferId, obj.id as string));
+    }
+    if (event.type === 'payout.failed' && typeof obj.id === 'string') {
+      await db
+        .update(payouts)
+        .set({ status: 'failed', updatedAt: new Date() })
+        .where(eq(payouts.stripeTransferId, obj.id as string));
+    }
+  } catch (e) {
+    console.error('[stripe webhook] side-effect failure', event.type, e);
+  }
+
+  if (kind) {
+    let resForLookup: typeof tripReservations.$inferSelect | undefined;
+    if (reservationId) {
+      resForLookup = await db.query.tripReservations.findFirst({
+        where: eq(tripReservations.id, reservationId),
+      });
+    }
+    await db.insert(financialEvents).values({
+      kind,
+      stripeEventId: event.id,
+      stripeObjectId,
+      reservationId,
+      tripOfferId: resForLookup?.tripOfferId ?? null,
+      sellerUserId: null,
+      buyerUserId: resForLookup?.buyerId ?? null,
+      amountCents,
+      currency,
+      payload: obj,
+    });
+  }
+
+  return c.json({ received: true });
+}

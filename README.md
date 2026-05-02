@@ -1,11 +1,15 @@
 # Eushop
 
-> **Suitcase capacity is the new last-mile.**
+> **Get something from somewhere. Bring something for someone.**
 
-Eushop is the EU-first diaspora **trip**, **request**, and **pantry** marketplace: reservable
-suitcase slots on routes you already fly, open asks that notify matching supply, and
-nearby listings with a finder’s fee—discovery, identity, and chat first; settlement stays
-between the parties until regulated in-app payments ship.
+Eushop is the open peer layer for **trips**, **neighbours**, and **open asks**: spare
+luggage capacity on routes people are already taking, finder-fee shares between
+neighbours, and open asks that notify matching supply. Discovery, identity, and chat
+first; settlement stays between the parties until regulated in-app payments ship.
+
+The category is global. We are launching in dense **EU diaspora corridors** because that
+is where the flows are best documented and the community is ready — and we are designing
+every primitive (geo cells, identity, chat, fees) to travel anywhere people travel.
 
 Large-scale cross-border mobility in Europe is a long-standing statistical fact, not a
 vendor TAM we invent here. When we mention that context in marketing copy, we point to
@@ -60,7 +64,7 @@ regulated payments.
 - **Stripe Connect** wire-up so platform fees actually collect on confirmation.
 - **Verified-bringer badge** (Veriff/Onfido passport-country attestation).
 - **Group-buys**, restock alerts, pickup hubs, multilingual catalog search,
-  city leaderboards. Tracked in `[/roadmap](apps/web/src/app/roadmap/page.tsx)`.
+  city leaderboards. Tracked in `[/roadmap](apps/web/src/app/(marketing)/roadmap/page.tsx)`.
 
 EU-first by construction. Hosting in Hetzner Falkenstein, CDN via Cloudflare EU.
 
@@ -87,7 +91,7 @@ Human-oriented docs live in **[docs/README.md](docs/README.md)** (operations und
 
 ```
 apps/
-  web/        Next.js 15 marketing + product
+  web/        Next.js 15 — `src/app/(marketing)` vs `src/app/(product)` route groups (URLs unchanged)
   mobile/     Expo (iOS + Android + web fallback)
   api/        Hono + tRPC + Better Auth + Inngest
   admin/      Catalog & moderation cockpit

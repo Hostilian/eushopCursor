@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { EditorialPageLayout } from '../../components/marketing/editorial-page';
+import { EditorialPageLayout } from '../../../components/marketing/editorial-page';
 
 export const metadata = {
   title: 'Sources · Eushop',

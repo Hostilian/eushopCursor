@@ -1,5 +1,5 @@
-import { Footer } from '../../components/layout/footer';
-import { Nav } from '../../components/layout/nav';
+import { Footer } from '../../../components/layout/footer';
+import { Nav } from '../../../components/layout/nav';
 
 const legalName =
   process.env.NEXT_PUBLIC_LEGAL_REGISTERED_NAME?.trim() ||

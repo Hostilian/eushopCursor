@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Eushop",
-    "description": "EU-first trips, open asks, and local shares—spare luggage space, finder-fee pickups in a 5 km cell, location-first discovery.",
+    "description": "Get something from somewhere, person to person. Trips, neighbours, and open asks on one map — profiles, chat, public handoffs.",
     "slug": "eushop",
     "scheme": "eushop",
     "version": "0.1.0",

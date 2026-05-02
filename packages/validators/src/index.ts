@@ -415,6 +415,24 @@ export type AdminReviewFoodItemImageProposalInput = z.infer<
   typeof adminReviewFoodItemImageProposalInput
 >;
 
+// ---------- Payments / Connect -----------------------------------------------
+
+export const connectOnboardingInput = z.object({
+  /** ISO-3166-1 alpha-2 country code Stripe should anchor the account to. */
+  countryIso2: isoCountry,
+  returnUrl: z.string().url(),
+  refreshUrl: z.string().url(),
+});
+export type ConnectOnboardingInput = z.infer<typeof connectOnboardingInput>;
+
+export const refundReservationInput = z.object({
+  reservationId: z.string().uuid(),
+  reason: z.enum(['duplicate', 'fraudulent', 'requested_by_customer']).optional(),
+  /** Optional partial-refund amount in major units (EUR). Defaults to full. */
+  amount: z.number().nonnegative().optional(),
+});
+export type RefundReservationInput = z.infer<typeof refundReservationInput>;
+
 // ---------- Trip marketplace -------------------------------------------------
 
 export const createTripOfferInput = z.object({

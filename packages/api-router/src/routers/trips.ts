@@ -11,6 +11,7 @@ import {
   completeReservationInput,
   confirmReservationInput,
   createTripOfferInput,
+  refundReservationInput,
   reserveSlotInput,
   tripFeedNearInput,
   tripSearchInput,
@@ -19,7 +20,21 @@ import {
 } from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
 import { and, asc, desc, eq, gte, inArray, lte, sql } from 'drizzle-orm';
-import { tripOffers, tripReservations } from '@eushop/db';
+import {
+  connectAccounts,
+  financialEvents,
+  payouts,
+  reservationPayments,
+  tripOffers,
+  tripReservations,
+} from '@eushop/db';
+import {
+  StripeNotConfiguredError,
+  cancelPaymentIntent,
+  capturePaymentIntent,
+  createPaymentIntent,
+  createRefund,
+} from '../lib/stripe';
 import { protectedProcedure, publicProcedure, router } from '../trpc';
 
 /**
@@ -295,8 +310,9 @@ export const tripsRouter = router({
     const finderFeeCents = Math.round(input.agreedFinderFee * 100);
     const platformFeeCents = calculatePlatformFeeCents(finderFeeCents);
 
+    let created;
     try {
-      const [created] = await ctx.db
+      const [row] = await ctx.db
         .insert(tripReservations)
         .values({
           tripOfferId: trip.id,
@@ -309,19 +325,8 @@ export const tripsRouter = router({
           currency: trip.currency,
         })
         .returning();
-      if (created) {
-        void ctx.enqueueEvent({
-          name: 'trip.reservation.created',
-          data: {
-            reservationId: created.id,
-            tripOfferId: trip.id,
-            buyerId: ctx.user.id,
-          },
-        });
-      }
-      return created;
+      created = row;
     } catch (e) {
-      // Restore the slot on insert failure (e.g. duplicate active reservation).
       await ctx.db
         .update(tripOffers)
         .set({ slotsAvailable: sql`${tripOffers.slotsAvailable} + 1`, updatedAt: new Date() })
@@ -331,6 +336,76 @@ export const tripsRouter = router({
         message: e instanceof Error ? e.message : 'Could not create reservation',
       });
     }
+    if (!created) throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' });
+
+    // If Stripe is wired and the seller has a connected account with charges
+    // enabled, mint a manual-capture PaymentIntent now. The slot is reserved
+    // either way; payments are best-effort here so a Stripe outage cannot
+    // block buyers from booking on a marketplace built around timely flights.
+    let clientSecret: string | null = null;
+    if (process.env.STRIPE_SECRET_KEY) {
+      try {
+        const [sellerConnect] = await ctx.db
+          .select()
+          .from(connectAccounts)
+          .where(eq(connectAccounts.userId, trip.sellerId))
+          .limit(1);
+        if (sellerConnect?.chargesEnabled) {
+          const totalCents = finderFeeCents + platformFeeCents;
+          const pi = await createPaymentIntent({
+            amountCents: totalCents,
+            applicationFeeCents: platformFeeCents,
+            currency: trip.currency,
+            destinationAccountId: sellerConnect.stripeAccountId,
+            description: `Eushop reservation ${created.id}`,
+            metadata: {
+              reservationId: created.id,
+              tripOfferId: trip.id,
+              buyerId: ctx.user.id,
+              sellerId: trip.sellerId,
+            },
+          });
+          clientSecret = pi.client_secret ?? null;
+          await ctx.db.insert(reservationPayments).values({
+            reservationId: created.id,
+            sellerUserId: trip.sellerId,
+            buyerUserId: ctx.user.id,
+            sellerStripeAccountId: sellerConnect.stripeAccountId,
+            stripePaymentIntentId: pi.id,
+            amountTotalCents: String(totalCents),
+            amountPlatformFeeCents: String(platformFeeCents),
+            amountSellerCents: String(finderFeeCents),
+            currency: trip.currency,
+            status: pi.status,
+          });
+          await ctx.db.insert(financialEvents).values({
+            kind: 'payment_intent.created',
+            stripeObjectId: pi.id,
+            reservationId: created.id,
+            tripOfferId: trip.id,
+            sellerUserId: trip.sellerId,
+            buyerUserId: ctx.user.id,
+            amountCents: String(totalCents),
+            currency: trip.currency,
+            payload: { applicationFeeCents: platformFeeCents },
+          });
+        }
+      } catch (e) {
+        if (!(e instanceof StripeNotConfiguredError)) {
+          console.error('[trips.reserve] PI creation failed; reservation kept', e);
+        }
+      }
+    }
+
+    void ctx.enqueueEvent({
+      name: 'trip.reservation.created',
+      data: {
+        reservationId: created.id,
+        tripOfferId: trip.id,
+        buyerId: ctx.user.id,
+      },
+    });
+    return { ...created, paymentClientSecret: clientSecret };
   }),
 
   confirmReservation: protectedProcedure
@@ -355,6 +430,43 @@ export const tripsRouter = router({
         .set({ status: 'confirmed', confirmedAt: new Date(), updatedAt: new Date() })
         .where(eq(tripReservations.id, input.reservationId))
         .returning();
+
+      // Capture the PaymentIntent (if any) so the buyer's card actually gets
+      // charged once the seller commits. Capture failures are surfaced but
+      // do not flip the reservation back to pending — the seller already said
+      // yes; financial reconciliation is the job of the webhook.
+      const [payment] = await ctx.db
+        .select()
+        .from(reservationPayments)
+        .where(eq(reservationPayments.reservationId, input.reservationId))
+        .limit(1);
+      if (payment?.stripePaymentIntentId && process.env.STRIPE_SECRET_KEY) {
+        try {
+          const captured = await capturePaymentIntent(payment.stripePaymentIntentId);
+          await ctx.db
+            .update(reservationPayments)
+            .set({
+              status: captured.status,
+              stripeChargeId: captured.latest_charge ?? null,
+              capturedAt: new Date(),
+              updatedAt: new Date(),
+            })
+            .where(eq(reservationPayments.id, payment.id));
+          await ctx.db.insert(financialEvents).values({
+            kind: 'charge.captured',
+            stripeObjectId: payment.stripePaymentIntentId,
+            reservationId: input.reservationId,
+            tripOfferId: trip.id,
+            sellerUserId: trip.sellerId,
+            buyerUserId: reservation.buyerId,
+            amountCents: payment.amountTotalCents,
+            currency: payment.currency,
+            payload: { paymentIntentStatus: captured.status },
+          });
+        } catch (e) {
+          console.error('[trips.confirmReservation] capture failed', e);
+        }
+      }
       return updated;
     }),
 
@@ -386,6 +498,35 @@ export const tripsRouter = router({
         .update(tripOffers)
         .set({ slotsAvailable: sql`${tripOffers.slotsAvailable} + 1`, updatedAt: new Date() })
         .where(eq(tripOffers.id, trip.id));
+
+      // Cancel the held PaymentIntent so the buyer's card is released.
+      const [payment] = await ctx.db
+        .select()
+        .from(reservationPayments)
+        .where(eq(reservationPayments.reservationId, input.reservationId))
+        .limit(1);
+      if (payment?.stripePaymentIntentId && process.env.STRIPE_SECRET_KEY) {
+        try {
+          const cancelled = await cancelPaymentIntent(payment.stripePaymentIntentId);
+          await ctx.db
+            .update(reservationPayments)
+            .set({ status: cancelled.status, cancelledAt: new Date(), updatedAt: new Date() })
+            .where(eq(reservationPayments.id, payment.id));
+          await ctx.db.insert(financialEvents).values({
+            kind: 'payment_intent.canceled',
+            stripeObjectId: payment.stripePaymentIntentId,
+            reservationId: input.reservationId,
+            tripOfferId: trip.id,
+            sellerUserId: trip.sellerId,
+            buyerUserId: reservation.buyerId,
+            amountCents: payment.amountTotalCents,
+            currency: payment.currency,
+            payload: { reason: input.reason ?? null },
+          });
+        } catch (e) {
+          console.error('[trips.rejectReservation] cancel PI failed', e);
+        }
+      }
       return { ok: true };
     }),
 
@@ -414,7 +555,103 @@ export const tripsRouter = router({
         .set({ status: 'completed', completedAt: new Date(), updatedAt: new Date() })
         .where(eq(tripReservations.id, input.reservationId))
         .returning();
+
+      // Roll up the payout row. We write one payout per reservation; the
+      // settlement job (next milestone) will batch them per Stripe transfer.
+      try {
+        const grossCents = Math.round(Number(reservation.agreedFinderFee) * 100);
+        const feeCents = Math.round(Number(reservation.platformFee) * 100);
+        const netCents = grossCents - feeCents;
+        await ctx.db.insert(payouts).values({
+          sellerId: trip.sellerId,
+          tripOfferId: trip.id,
+          amountGross: (grossCents / 100).toFixed(2),
+          amountFee: (feeCents / 100).toFixed(2),
+          amountNet: (netCents / 100).toFixed(2),
+          currency: reservation.currency,
+          status: 'pending',
+        });
+      } catch (e) {
+        console.error('[trips.completeReservation] payout write failed', e);
+      }
+
       return updated;
+    }),
+
+  /**
+   * Buyer- or admin-initiated refund. Calls Stripe Refund (with
+   * `reverse_transfer = true` so the seller's connected balance is debited)
+   * and writes a `financial_events` row. Reservation status moves to
+   * `refunded`. Slot is *not* restored — the trip already happened.
+   */
+  refundReservation: protectedProcedure
+    .input(refundReservationInput)
+    .mutation(async ({ ctx, input }) => {
+      const reservation = await ctx.db.query.tripReservations.findFirst({
+        where: eq(tripReservations.id, input.reservationId),
+      });
+      if (!reservation) throw new TRPCError({ code: 'NOT_FOUND' });
+      const trip = await ctx.db.query.tripOffers.findFirst({
+        where: eq(tripOffers.id, reservation.tripOfferId),
+      });
+      if (!trip) throw new TRPCError({ code: 'NOT_FOUND' });
+      const isAdmin = ctx.user.role === 'admin';
+      const isParty = reservation.buyerId === ctx.user.id || trip.sellerId === ctx.user.id;
+      if (!isAdmin && !isParty) throw new TRPCError({ code: 'FORBIDDEN' });
+      if (reservation.status === 'refunded') {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Already refunded' });
+      }
+
+      const [payment] = await ctx.db
+        .select()
+        .from(reservationPayments)
+        .where(eq(reservationPayments.reservationId, input.reservationId))
+        .limit(1);
+      if (!payment?.stripePaymentIntentId || !process.env.STRIPE_SECRET_KEY) {
+        // No Stripe wiring; flip status only so the books reflect intent.
+        await ctx.db
+          .update(tripReservations)
+          .set({ status: 'refunded', updatedAt: new Date() })
+          .where(eq(tripReservations.id, input.reservationId));
+        return { ok: true as const, refundedExternally: false };
+      }
+      try {
+        const refund = await createRefund({
+          paymentIntentId: payment.stripePaymentIntentId,
+          amountCents: input.amount ? Math.round(input.amount * 100) : undefined,
+          reason: input.reason,
+          reverseTransfer: true,
+          refundApplicationFee: true,
+        });
+        await ctx.db
+          .update(reservationPayments)
+          .set({ status: 'refunded', refundedAt: new Date(), updatedAt: new Date() })
+          .where(eq(reservationPayments.id, payment.id));
+        await ctx.db
+          .update(tripReservations)
+          .set({ status: 'refunded', updatedAt: new Date() })
+          .where(eq(tripReservations.id, input.reservationId));
+        await ctx.db.insert(financialEvents).values({
+          kind: 'charge.refunded',
+          stripeObjectId: refund.id,
+          reservationId: input.reservationId,
+          tripOfferId: trip.id,
+          sellerUserId: trip.sellerId,
+          buyerUserId: reservation.buyerId,
+          amountCents: String(refund.amount),
+          currency: payment.currency,
+          payload: { initiatedBy: isAdmin ? 'admin' : 'party' },
+        });
+        return { ok: true as const, refundedExternally: true, refundId: refund.id };
+      } catch (e) {
+        if (e instanceof StripeNotConfiguredError) {
+          throw new TRPCError({
+            code: 'PRECONDITION_FAILED',
+            message: 'Stripe is not configured (STRIPE_SECRET_KEY).',
+          });
+        }
+        throw e;
+      }
     }),
 
   cancelReservation: protectedProcedure
@@ -450,6 +687,60 @@ export const tripsRouter = router({
         .update(tripOffers)
         .set({ slotsAvailable: sql`${tripOffers.slotsAvailable} + 1`, updatedAt: new Date() })
         .where(eq(tripOffers.id, reservation.tripOfferId));
+
+      // Cancel the held PaymentIntent (or refund if already captured) so the
+      // buyer's card is released the moment they back out.
+      const [payment] = await ctx.db
+        .select()
+        .from(reservationPayments)
+        .where(eq(reservationPayments.reservationId, input.reservationId))
+        .limit(1);
+      if (payment?.stripePaymentIntentId && process.env.STRIPE_SECRET_KEY) {
+        try {
+          if (payment.status === 'succeeded' || payment.capturedAt) {
+            const refund = await createRefund({
+              paymentIntentId: payment.stripePaymentIntentId,
+              reason: 'requested_by_customer',
+              reverseTransfer: true,
+              refundApplicationFee: true,
+            });
+            await ctx.db
+              .update(reservationPayments)
+              .set({ status: 'refunded', refundedAt: new Date(), updatedAt: new Date() })
+              .where(eq(reservationPayments.id, payment.id));
+            await ctx.db.insert(financialEvents).values({
+              kind: 'charge.refunded',
+              stripeObjectId: refund.id,
+              reservationId: input.reservationId,
+              tripOfferId: reservation.tripOfferId,
+              sellerUserId: trip?.sellerId ?? null,
+              buyerUserId: reservation.buyerId,
+              amountCents: String(refund.amount),
+              currency: payment.currency,
+              payload: { initiatedBy: 'buyer-cancel' },
+            });
+          } else {
+            const cancelled = await cancelPaymentIntent(payment.stripePaymentIntentId);
+            await ctx.db
+              .update(reservationPayments)
+              .set({ status: cancelled.status, cancelledAt: new Date(), updatedAt: new Date() })
+              .where(eq(reservationPayments.id, payment.id));
+            await ctx.db.insert(financialEvents).values({
+              kind: 'payment_intent.canceled',
+              stripeObjectId: payment.stripePaymentIntentId,
+              reservationId: input.reservationId,
+              tripOfferId: reservation.tripOfferId,
+              sellerUserId: trip?.sellerId ?? null,
+              buyerUserId: reservation.buyerId,
+              amountCents: payment.amountTotalCents,
+              currency: payment.currency,
+              payload: { reason: input.reason ?? null, initiatedBy: 'buyer-cancel' },
+            });
+          }
+        } catch (e) {
+          console.error('[trips.cancelReservation] PI release failed', e);
+        }
+      }
       return { ok: true };
     }),
 });

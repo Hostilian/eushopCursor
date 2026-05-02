@@ -7,7 +7,9 @@
     "build": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true});try{require('fs').unlinkSync('tsconfig.tsbuildinfo')}catch(_){}\" && next build",
     "start": "next start --port 3000",
     "lint": "next lint",
-    "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit"
+    "typecheck": "node ../../node_modules/typescript/bin/tsc --noEmit",
+    "e2e": "playwright test",
+    "e2e:install": "playwright install --with-deps chromium"
   },
   "dependencies": {
     "@eushop/api-router": "workspace:*",
@@ -40,6 +42,7 @@
   "devDependencies": {
     "@eushop/config": "workspace:*",
     "@eslint/eslintrc": "^3.2.0",
+    "@playwright/test": "^1.49.0",
     "@tailwindcss/postcss": "^4.0.0-beta.8",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",

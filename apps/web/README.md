@@ -22,7 +22,7 @@ Port **3000** by default.
 
 | Path | Purpose |
 |------|---------|
-| `src/app/` | App Router pages |
+| `src/app/` | App Router pages (e.g. `(marketing)/` for editorial routes like `/changelog`) |
 | `src/components/` | UI (layout, marketing, trips, listings, …) |
 | `src/lib/trpc-server.ts` | Server-side tRPC caller |
 | `src/i18n/request.ts` | next-intl locale loading |

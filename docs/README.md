@@ -19,6 +19,8 @@
 | Mobile | [apps/mobile/README.md](../apps/mobile/README.md) |
 | PartyKit | [apps/party/README.md](../apps/party/README.md) |
 
+Dependency updates: [`.github/dependabot.yml`](../.github/dependabot.yml) (weekly npm/pnpm, grouped PRs).
+
 ### Operations quick links
 
 - [Environment variables](ops/environment.md) — full matrix from `.env.example`

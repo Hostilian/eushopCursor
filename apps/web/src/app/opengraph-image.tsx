@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-export const alt = 'Eushop — Trips, local shares & open asks';
+export const alt = 'Eushop — get something from somewhere, person to person';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -22,12 +22,12 @@ export default function OgImage() {
       <div
         style={{ fontSize: 28, letterSpacing: '0.35em', textTransform: 'uppercase', opacity: 0.75 }}
       >
-        EU-first · trips · near you · asks
+        Trips · Neighbours · Asks
       </div>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div style={{ fontSize: 84, lineHeight: 1.05, fontWeight: 500, maxWidth: 900 }}>Eushop</div>
         <div style={{ marginTop: 24, fontSize: 36, opacity: 0.88, maxWidth: 820 }}>
-          Trip space, something from home, or what you’re after—one map, one thread to meet.
+          Get something from somewhere. Bring something for someone. One map, one thread to meet.
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>

@@ -1,5 +1,5 @@
-import { Footer } from '../../components/layout/footer';
-import { Nav } from '../../components/layout/nav';
+import { Footer } from '../../../components/layout/footer';
+import { Nav } from '../../../components/layout/nav';
 
 export default function DataExportPage() {
   return (

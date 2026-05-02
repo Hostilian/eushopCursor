@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { EditorialPageLayout } from '../../components/marketing/editorial-page';
-import { MarketingSourcesStrip } from '../../components/marketing/marketing-sources-strip';
+import { EditorialPageLayout } from '../../../components/marketing/editorial-page';
+import { MarketingSourcesStrip } from '../../../components/marketing/marketing-sources-strip';
 
 export default function PitchPage() {
   return (
@@ -14,9 +14,10 @@ export default function PitchPage() {
         <section>
           <h2 className="text-ink font-serif text-2xl">Problem</h2>
           <p className="mt-3">
-            Diaspora groceries are fragmented across groups, messaging chains, and luck. There is no
-            trusted, EU-wide layer for &quot;who near me—or on my route—has this niche thing right
-            now?&quot;
+            People are always on the move, and they bring things back for each other — but that
+            trade is fragmented across group chats, DMs, and luck. There is no trusted layer for
+            &quot;who near me, or on my route, has this niche thing right now?&quot; The category is
+            global; we are starting where it is densest.
           </p>
         </section>
         <section>
@@ -44,7 +45,8 @@ export default function PitchPage() {
         <section>
           <h2 className="text-ink font-serif text-2xl">GTM</h2>
           <p className="mt-3">
-            Seed dense corridors with community partners, then expand along rail hubs. Catalog is
+            Wedge: dense EU corridors with community partners, then expand along rail and air hubs.
+            Destination: a global peer layer for trips, neighbours, and open asks. Catalog is
             seeded; growth is user-generated listings, requests, and trip offers.
           </p>
         </section>
@@ -52,8 +54,8 @@ export default function PitchPage() {
           <h2 className="text-ink font-serif text-2xl">Ask</h2>
           <p className="mt-3">
             Capital to harden trust & safety, ship native payments rails where legal, and hire a
-            small moderation pod per time zone. We&apos;re building the polite corner of European
-            food peer trade.
+            small moderation pod per time zone. We&apos;re building the polite corner of peer trade
+            for things people already carry — starting in Europe, designed to travel.
           </p>
         </section>
       </div>

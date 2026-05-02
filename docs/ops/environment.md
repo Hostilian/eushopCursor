@@ -31,7 +31,7 @@ Copy from [`.env.example`](../../.env.example) and set **real** values per deplo
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | See [stripe-connect.md](./stripe-connect.md). |
 | `VERIFF_API_KEY` (or your KYC vendor) | See [verified-bringer-kyc.md](./verified-bringer-kyc.md). |
 | `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` | See [observability.md](./observability.md). |
-| `POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_KEY`, `POSTHOG_HOST` | EU PostHog; respect consent banner. |
+| `POSTHOG_KEY`, `POSTHOG_HOST` (server), `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST` (web) | EU PostHog; respect consent banner. |
 | `INVESTOR_ACCESS_TOKENS` | Comma-separated tokens for `/investors`; rotate per policy. |
 | `ENABLE_DEMO_MODE` | Set to `1` only on staging or controlled demos so `?demo=1` can show a labelled catalog showcase. Omit in production. |
 | `NEXT_PUBLIC_LEGAL_REGISTERED_NAME`, `NEXT_PUBLIC_LEGAL_REGISTERED_OFFICE`, `NEXT_PUBLIC_LEGAL_REGISTER_ID`, `NEXT_PUBLIC_LEGAL_VAT_ID`, `NEXT_PUBLIC_LEGAL_SUPERVISORY_NOTE` | Imprint (`/imprint`); required for launch copy (defaults are bracketed dev hints). |

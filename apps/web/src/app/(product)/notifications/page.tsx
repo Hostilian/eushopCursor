@@ -1,6 +1,6 @@
-import { Footer } from '../../components/layout/footer';
-import { Nav } from '../../components/layout/nav';
-import { NotificationsPanel } from '../../components/notifications/notifications-panel';
+import { Footer } from '../../../components/layout/footer';
+import { Nav } from '../../../components/layout/nav';
+import { NotificationsPanel } from '../../../components/notifications/notifications-panel';
 
 export const metadata = {
   title: 'Notifications',

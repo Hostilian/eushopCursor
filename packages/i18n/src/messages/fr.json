@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Place bagage, partages du quartier et ce que vous cherchez—tout sur une carte.",
+  "tagline": "Trouvez quelque chose, quelque part. Apportez quelque chose à quelqu’un.",
   "hero": {
-    "eyebrow": "Trajets · Près de chez vous · Demandes",
-    "body": "Proposez de la place libre dans vos bagages sur les vols que vous prenez déjà. Partagez quelque chose de chez vous dans votre cellule de 5 km. Ou dites ce que vous cherchez—des trajets et des offres à proximité peuvent vous trouver. Même carte centrée ville, profils clairs, chat jusqu’à une remise simple.",
+    "eyebrow": "Trajets. Voisins. Demandes.",
+    "body": "Quelqu’un part toujours quelque part. Proposez la place libre dans vos bagages, partagez ce que vous avez ramené, ou dites simplement ce que vous cherchez — les bonnes personnes se retrouvent sur une seule carte. Vous vous mettez d’accord, vous remettez, l’accord reste entre vous.",
     "discoverCta": "Découvrir près de chez vous",
     "favsLabel": "Sélection du catalogue"
   },
@@ -99,7 +99,7 @@
     "sources": "Sources"
   },
   "kpi": {
-    "euCountries": "Pays UE",
+    "euCountries": "Pays au catalogue",
     "categories": "Catégories",
     "catalogItems": "Articles du catalogue",
     "brands": "Marques",

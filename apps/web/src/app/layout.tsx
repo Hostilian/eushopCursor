@@ -21,18 +21,18 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Eushop — Trips, local shares & open asks',
+    default: 'Eushop — get something from somewhere, person to person',
     template: '%s · Eushop',
   },
   description:
-    'EU-first introductions: spare luggage space on flights you already take, neighbourhood shares with a finder’s fee, and open asks—city-first discovery, clear profiles, chat down to a simple handoff.',
+    'Someone is always going somewhere. Offer the spare room in your bag, share what you brought, or just say what you’re after — the right people meet on a single map. You agree, you hand it over, the deal stays yours.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eushop.eu'),
   openGraph: {
     type: 'website',
     siteName: 'Eushop',
-    title: 'Eushop — Trips, local shares & open asks',
+    title: 'Eushop — get something from somewhere, person to person',
     description:
-      'Offer trip space, share from home, or name what you need—one map, real profiles, practical meetups.',
+      'Trips, neighbours, and open asks on one map. Offer space in your bag, share what you brought, or name what you need.',
   },
   alternates: { canonical: '/' },
 };

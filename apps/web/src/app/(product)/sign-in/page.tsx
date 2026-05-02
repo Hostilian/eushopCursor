@@ -1,6 +1,6 @@
-import { Footer } from '../../components/layout/footer';
-import { Nav } from '../../components/layout/nav';
-import { SignInForm } from '../../components/auth/sign-in-form';
+import { Footer } from '../../../components/layout/footer';
+import { Nav } from '../../../components/layout/nav';
+import { SignInForm } from '../../../components/auth/sign-in-form';
 
 export default function SignInPage() {
   return (

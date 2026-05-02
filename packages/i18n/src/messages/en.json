@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Extra bag space, neighbourhood shares, and what you're looking for—all on one map.",
+  "tagline": "Get something from somewhere. Bring something for someone.",
   "hero": {
-    "eyebrow": "Trips · Near you · Asks",
-    "body": "Offer spare room in luggage on flights you're already taking. Share something from home within your 5 km cell. Or say what you're after—matching trips and nearby offers can find you. Same city-first map, clear profiles, chat down to a simple handoff.",
+    "eyebrow": "Trips. Locals. Asks.",
+    "body": "Someone is always going somewhere. Offer the spare room in your bag, share what you brought, or just say what you're after — the right people meet on a single map. You agree, you hand it over, the deal stays yours.",
     "discoverCta": "Discover near you",
     "favsLabel": "Catalog spotlight"
   },
@@ -99,7 +99,7 @@
     "sources": "Sources"
   },
   "kpi": {
-    "euCountries": "EU countries",
+    "euCountries": "Countries in catalog",
     "categories": "Categories",
     "catalogItems": "Catalog items",
     "brands": "Brands",

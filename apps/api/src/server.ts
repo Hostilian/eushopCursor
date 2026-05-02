@@ -11,6 +11,7 @@ import { inngestFunctions } from './inngest/functions-registry.js';
 import { serve as inngestServe } from 'inngest/hono';
 import { openApiDocument } from './openapi.js';
 import { authRateLimit, trpcRateLimit } from './rate-limit.js';
+import { handleStripeWebhook } from './routes/stripe-webhook.js';
 
 const app = new Hono();
 
@@ -56,16 +57,8 @@ app.on(
   inngestServe({ client: inngest, functions: inngestFunctions }),
 );
 
-/** Stripe Connect webhooks — verify signature with the Stripe SDK in production (see docs/ops/stripe-connect.md). */
-app.post('/webhooks/stripe', async (c) => {
-  if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    return c.json({ error: 'STRIPE_WEBHOOK_SECRET not configured' }, 501);
-  }
-  const raw = await c.req.text();
-  const hasSig = Boolean(c.req.header('stripe-signature'));
-  console.info('[stripe webhook] stub accept', { bytes: raw.length, hasSig });
-  return c.json({ received: true });
-});
+/** Stripe webhooks — signature verified inside handleStripeWebhook. */
+app.post('/webhooks/stripe', handleStripeWebhook);
 
 const port = Number(process.env.PORT ?? 3001);
 

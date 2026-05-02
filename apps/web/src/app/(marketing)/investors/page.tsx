@@ -3,8 +3,8 @@ import path from 'node:path';
 
 import Link from 'next/link';
 
-import { EditorialPageLayout } from '../../components/marketing/editorial-page';
-import { MarkdownArticle } from '../../lib/markdown';
+import { EditorialPageLayout } from '../../../components/marketing/editorial-page';
+import { MarkdownArticle } from '../../../lib/markdown';
 
 export const metadata = {
   title: 'Investors · Eushop',

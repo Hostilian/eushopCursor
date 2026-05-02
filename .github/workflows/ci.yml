@@ -52,6 +52,14 @@ jobs:
           node-version: 20
           cache: pnpm
 
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-build-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-build-
+
       - name: Install
         run: pnpm install --frozen-lockfile=false
 
@@ -74,3 +82,92 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Migrate dry-run (validate Drizzle SQL against fresh Postgres)
+        run: pnpm db:migrate
+
+  e2e:
+    name: Playwright smoke (web)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    needs: build
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: eushop
+          POSTGRES_PASSWORD: eushop
+          POSTGRES_DB: eushop
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U eushop"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://eushop:eushop@localhost:5432/eushop
+      MEILI_HOST: http://localhost:7700
+      MEILI_MASTER_KEY: ci
+      BETTER_AUTH_SECRET: ci-only-not-secret-not-secret-not-secret
+      BETTER_AUTH_URL: http://localhost:3000
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-e2e-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-e2e-
+            turbo-${{ runner.os }}-build-
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('apps/web/package.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: Install
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Init Postgres extensions
+        run: |
+          PGPASSWORD=eushop psql -h localhost -U eushop -d eushop \
+            -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; CREATE EXTENSION IF NOT EXISTS "pgcrypto"; CREATE EXTENSION IF NOT EXISTS "postgis"; CREATE EXTENSION IF NOT EXISTS "vector"; CREATE EXTENSION IF NOT EXISTS "pg_trgm"; CREATE EXTENSION IF NOT EXISTS "unaccent";'
+
+      - name: Migrate
+        run: pnpm db:migrate
+
+      - name: Build web
+        run: pnpm --filter @eushop/web build
+
+      - name: Install Playwright browsers
+        run: pnpm --filter @eushop/web e2e:install
+
+      - name: Playwright smoke
+        run: pnpm --filter @eushop/web e2e
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report
+          retention-days: 7

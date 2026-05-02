@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { EditorialPageLayout } from '../../components/marketing/editorial-page';
-import { Button } from '../../components/ui/button';
+import { EditorialPageLayout } from '../../../components/marketing/editorial-page';
+import { Button } from '../../../components/ui/button';
 
 const STEPS = [
   {

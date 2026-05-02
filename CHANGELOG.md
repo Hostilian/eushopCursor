@@ -58,7 +58,7 @@ items at an agreed finder's fee, and the platform charges
   three image candidates per result, upload / paste-URL / propose-product
   fallbacks. Wired into listing form, request form, trip-offer form,
   reservation form.
-- `apps/web/src/app/items/[slug]/page.tsx` renders the real catalog image and
+- `apps/web/src/app/(product)/items/[slug]/page.tsx` renders the real catalog image and
   attributes Open Food Facts when the source warrants.
 
 ### Investor / YC readiness

@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import { EditorialPageLayout } from '../../components/marketing/editorial-page';
-import { MarketingSourcesStrip } from '../../components/marketing/marketing-sources-strip';
-import { api } from '../../lib/trpc-server';
+import { EditorialPageLayout } from '../../../components/marketing/editorial-page';
+import { MarketingSourcesStrip } from '../../../components/marketing/marketing-sources-strip';
+import { api } from '../../../lib/trpc-server';
 
 export const metadata = {
   title: 'Traction · Eushop',

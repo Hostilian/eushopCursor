@@ -11,4 +11,4 @@ These publications ground **historical** claims about large-scale cross-border m
 3. **Eurostat** (2008 release; reference period 2007). *Population in Europe 2007: first results* (Statistics in Focus 81/2008, KS-SF-08-081).  
    https://ec.europa.eu/eurostat/en/web/products-statistics-in-focus/-/ks-sf-08-081  
 
-The web app mirrors this list at **`/sources`** (`apps/web/src/app/sources/page.tsx`) for footnotes on About, Manifesto, and related marketing pages.
+The web app mirrors this list at **`/sources`** (`apps/web/src/app/(marketing)/sources/page.tsx`) for footnotes on About, Manifesto, and related marketing pages.
