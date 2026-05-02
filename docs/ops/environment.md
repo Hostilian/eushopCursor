@@ -30,6 +30,17 @@ Copy from [`.env.example`](../../.env.example) and set **real** values per deplo
 | Variable | Notes |
 |----------|--------|
 | `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | See [stripe-connect.md](./stripe-connect.md). |
+
+### Stripe staging E2E (sell-ready checklist)
+
+Run this once per staging environment so Connect, card holds, and webhooks are proven end-to-end:
+
+1. **Secrets:** Set `STRIPE_SECRET_KEY` (test mode), `STRIPE_WEBHOOK_SECRET` from Stripe CLI or Dashboard webhook endpoint, and `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` on the web app. See [stripe-connect.md](./stripe-connect.md) for variable roles.
+2. **Webhook URL:** Stripe Dashboard (or `stripe listen --forward-to https://<api>/webhooks/stripe`) must hit the API route handled in [`apps/api/src/routes/stripe-webhook.ts`](../../apps/api/src/routes/stripe-webhook.ts). Mismatched signing secret is the most common 400.
+3. **Happy path:** Seller completes Connect Express onboarding (`charges_enabled` true) → buyer reserves a trip slot (PaymentIntent created) → buyer confirms payment in web Elements → seller **confirms** reservation (capture attempted) → Stripe sends events → `financial_events` / `reservation_payments` rows update (verify in admin **Payments** or DB).
+4. **Idempotency:** Replay the same `evt_…` in Stripe CLI; the API should respond with `{ idempotent: true }` after the first persist (unique `stripe_event_id` on `financial_events`).
+
+Document any staging-only URLs or CLI commands in your team wiki; keep this matrix limited to **which variables and routes must exist**.
 | `VERIFF_API_KEY` (or your KYC vendor) | See [verified-bringer-kyc.md](./verified-bringer-kyc.md). |
 | `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` | See [observability.md](./observability.md). |
 | `POSTHOG_KEY`, `POSTHOG_HOST` (server), `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST` (web) | EU PostHog; respect consent banner. |

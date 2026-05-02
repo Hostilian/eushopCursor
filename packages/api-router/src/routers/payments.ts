@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server';
 import { and, desc, eq } from 'drizzle-orm';
-import { connectAccounts, kycSessions, reservationPayments, users } from '@eushop/db';
+import { connectAccounts, kycSessions, payouts, reservationPayments, users } from '@eushop/db';
 import { connectOnboardingInput } from '@eushop/validators';
 import {
   StripeNotConfiguredError,
@@ -174,6 +174,12 @@ export const paymentsRouter = router({
       .from(reservationPayments)
       .orderBy(desc(reservationPayments.createdAt))
       .limit(200);
+    return rows;
+  }),
+
+  /** Admin: trip payout rows (Stripe transfer id vs Dashboard). */
+  adminListPayouts: adminProcedure.query(async ({ ctx }) => {
+    const rows = await ctx.db.select().from(payouts).orderBy(desc(payouts.updatedAt)).limit(200);
     return rows;
   }),
 

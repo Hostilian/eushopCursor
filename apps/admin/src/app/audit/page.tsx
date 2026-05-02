@@ -2,6 +2,7 @@
  * Audit log from `moderation_actions`, joined to actor email for review context.
  */
 
+import Link from 'next/link';
 import { api } from '../../lib/trpc-server';
 
 type AuditRow = {
@@ -29,8 +30,10 @@ export default async function AdminAuditPage() {
     <div className="space-y-6">
       <h1 className="text-ink font-serif text-3xl">Audit log</h1>
       <p className="text-ink/70 max-w-xl text-sm">
-        Moderation actions (report resolutions, dismissals, and future listing or user actions) as
-        stored in <code>moderation_actions</code>. Newest first, capped at 100 rows.
+        Moderation actions (report resolutions, dismissals, operator listing removals such as{' '}
+        <code>remove_listing</code>, role changes, and notes) as stored in{' '}
+        <code>moderation_actions</code>. Newest first, capped at 100 rows. For payment ledger rows,
+        see <Link href="/payments">Payments</Link>.
       </p>
 
       {loadError ? (

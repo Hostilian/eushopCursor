@@ -26,10 +26,10 @@ export async function generateMetadata({
   const items = FOOD_ITEMS.filter((i) => i.originCountryIso2 === country.iso2);
   return {
     title: `${country.name} \u2014 ${items.length} catalog items`,
-    description: `Eushop's editorial guide to niche ${country.name} foods. ${items.length} canonical items.`,
+    description: `Eushop's editorial guide to ${country.name} foods. ${items.length} canonical items.`,
     openGraph: {
       title: `${country.name} \u00b7 Eushop`,
-      description: `Niche regional foods from ${country.name}. ${items.length} items in the catalog.`,
+      description: `Regional foods from ${country.name}. ${items.length} items in the catalog.`,
     },
   };
 }
@@ -173,7 +173,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
             <MapPin className="h-3 w-3" /> Bring back next time
           </Badge>
           <h2 className="mt-4 font-serif text-4xl text-balance md:text-5xl">
-            Heading home to {country.name} soon? Pre-list what you'll bring.
+            Heading home to {country.name} soon? Pre-list what you&apos;ll bring.
           </h2>
           <p className="mt-3 max-w-2xl opacity-80">
             Name a small finder&apos;s fee on the listing, mark when you&apos;re back, and

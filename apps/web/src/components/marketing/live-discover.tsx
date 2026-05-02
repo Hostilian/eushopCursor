@@ -51,7 +51,7 @@ export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
         What neighbours are sharing.
       </h2>
       <p className="text-ink/70 mt-3 max-w-2xl text-lg text-pretty">
-        Real listings posted by diaspora users near you. Tap a card to start the chat.
+        Real listings posted by people near you. Tap a card to start the chat.
       </p>
 
       <div className="mt-12 grid gap-8 lg:grid-cols-2">

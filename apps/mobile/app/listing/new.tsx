@@ -52,7 +52,7 @@ export default function NewListingScreen() {
     if (!coords) {
       Alert.alert(
         'Need your location',
-        'Tap "Use my location" so we can show this listing to neighbours in your 5 km cell.',
+        'Tap "Use my location" so we can show this listing to neighbours near you.',
       );
       return;
     }
@@ -68,7 +68,7 @@ export default function NewListingScreen() {
         approximateCity: city,
         location: coords,
       });
-      Alert.alert('Listed', 'Your listing is live within your 5km cell.');
+      Alert.alert('Listed', 'Your listing is live to people near you.');
       router.back();
     } catch (e) {
       Alert.alert('Error', e instanceof Error ? e.message : 'Failed');

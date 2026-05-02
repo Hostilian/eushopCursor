@@ -22,8 +22,13 @@ export default async function AdminListingsPage({
     <div className="space-y-6">
       <h1 className="text-ink font-serif text-3xl">Listings</h1>
       <p className="text-ink/70 max-w-xl text-sm">
-        Live listings only. Operators can remove a post from the public feed (status → removed) and
-        we log a moderation action for audit.
+        Live listings only (removed posts are hidden from public queries). Operators can remove a
+        post from the public feed (status → <code>removed</code>) — each action is recorded in{' '}
+        <code>moderation_actions</code>. View the trail in{' '}
+        <Link href="/audit" className="text-saffron-700 underline">
+          Audit log
+        </Link>
+        .
       </p>
       {sp.err ? (
         <p className="text-danger rounded-2xl border border-red-200 bg-red-50 px-4 py-2 text-sm">

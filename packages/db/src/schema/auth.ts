@@ -9,7 +9,9 @@ import { boolean, index, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-c
 export const users = pgTable(
   'users',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     email: text('email').notNull().unique(),
     emailVerified: boolean('email_verified').notNull().default(false),
     name: text('name'),
@@ -26,7 +28,9 @@ export const users = pgTable(
 export const accounts = pgTable(
   'accounts',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     userId: uuid('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
@@ -51,7 +55,9 @@ export const accounts = pgTable(
 export const sessions = pgTable(
   'sessions',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     userId: uuid('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
@@ -71,7 +77,9 @@ export const sessions = pgTable(
 export const verifications = pgTable(
   'verifications',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     identifier: text('identifier').notNull(),
     value: text('value').notNull(),
     expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),

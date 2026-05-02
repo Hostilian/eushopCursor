@@ -1,4 +1,4 @@
-import { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
+import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
 import { router } from './trpc';
 import { catalogRouter } from './routers/catalog';
 import { listingsRouter } from './routers/listings';

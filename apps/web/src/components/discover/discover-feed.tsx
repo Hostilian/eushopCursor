@@ -70,7 +70,7 @@ export function DiscoverFeed() {
         description={
           <>
             The map is quiet here. Widen your radius, browse upcoming trips from a country you miss,
-            or post a request so the next diaspora traveller knows to grab it for you.
+            or post an ask so the next traveller knows to grab it for you.
           </>
         }
         actions={

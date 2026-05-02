@@ -4,6 +4,7 @@
 
 - Set `SENTRY_DSN` on API and `NEXT_PUBLIC_SENTRY_DSN` on web/admin if using Sentry’s Next SDK in the browser.
 - Web [`instrumentation.ts`](../../apps/web/src/instrumentation.ts) calls `Sentry.init` on the **Node** runtime when `SENTRY_DSN` is set and `@sentry/nextjs` is installed (otherwise logs a one-line hint). Add the dependency to `apps/web` when you enable it; tune `beforeSend` for PII and use the EU DSN/host if required by your DPA.
+- [`apps/web/src/app/error.tsx`](../../apps/web/src/app/error.tsx) is the app error boundary (client `reset()` + home link). Call `Sentry.captureException(error)` from `useEffect` there when the browser SDK is active.
 
 ## PostHog (optional)
 

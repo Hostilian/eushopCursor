@@ -7,7 +7,12 @@ export interface BrandSeed {
 
 export const BRANDS: BrandSeed[] = [
   // PL
-  { slug: 'wedel', name: 'E. Wedel', countryIso2: 'PL', blurb: 'Warsaw chocolate house since 1851.' },
+  {
+    slug: 'wedel',
+    name: 'E. Wedel',
+    countryIso2: 'PL',
+    blurb: 'Warsaw chocolate house since 1851.',
+  },
   { slug: 'wawel', name: 'Wawel', countryIso2: 'PL' },
   { slug: 'tymbark', name: 'Tymbark', countryIso2: 'PL' },
   { slug: 'krakus', name: 'Krakus', countryIso2: 'PL' },

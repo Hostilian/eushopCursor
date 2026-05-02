@@ -15,13 +15,8 @@ import {
 type FetchHandler = (url: URL, init: RequestInit) => Promise<Response> | Response;
 
 function installFetch(handler: FetchHandler) {
-  const fn = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-    const url =
-      typeof input === 'string'
-        ? new URL(input)
-        : input instanceof URL
-          ? input
-          : new URL(String(input));
+  const fn = vi.fn(async (input: string | URL, init?: RequestInit) => {
+    const url = typeof input === 'string' ? new URL(input) : input;
     return handler(url, init ?? {});
   });
   vi.stubGlobal('fetch', fn);

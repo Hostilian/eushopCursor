@@ -9,7 +9,7 @@ const PHASES = [
   {
     q: 'Q2 2026',
     title: 'Trust & density',
-    body: 'Moderation tooling, repeat-handoff prompts, corridor playbooks.',
+    body: 'Moderation tooling, repeat-handoff prompts, corridor playbooks, Meilisearch tuning, and optional restock alerts for saved corridors.',
   },
   {
     q: 'Q3 2026',

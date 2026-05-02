@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
 import { Fraunces, Inter } from 'next/font/google';
 import { AdminShell } from '../components/admin-shell';
+import { initAdminSentry } from '../lib/observability';
 import './globals.css';
+
+void initAdminSentry('server');
 
 const inter = Inter({
   subsets: ['latin', 'latin-ext'],

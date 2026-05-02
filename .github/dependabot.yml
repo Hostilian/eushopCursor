@@ -23,3 +23,8 @@ updates:
           - '@types/react-dom'
           - 'next'
           - 'eslint-config-next'
+      trpc-drizzle:
+        patterns:
+          - '@trpc/*'
+          - 'drizzle-orm'
+          - 'drizzle-kit'

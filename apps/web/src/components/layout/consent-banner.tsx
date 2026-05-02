@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { initPostHog } from '../../lib/posthog';
 import { Button } from '../ui/button';
 
 const STORAGE_KEY = 'eushop.consent.v1';
@@ -24,29 +25,34 @@ export function ConsentBanner() {
   const save = (consent: Consent) => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(consent));
     setShow(false);
+    if (consent.analytics) initPostHog();
   };
 
   if (!show) return null;
 
   return (
-    <div className="fixed inset-x-4 bottom-4 z-50 mx-auto max-w-3xl rounded-3xl border border-ink/10 bg-porcelain p-6 shadow-xl">
+    <div className="border-ink/10 bg-porcelain fixed inset-x-4 bottom-4 z-50 mx-auto max-w-3xl rounded-3xl border p-6 shadow-xl">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        <p className="flex-1 text-sm text-ink/80">
-          Eushop uses only the cookies required to keep you signed in and to remember your
-          language. Analytics and marketing are off by default. EU rules; honour them.
+        <p className="text-ink/80 flex-1 text-sm">
+          Eushop uses only the cookies required to keep you signed in and to remember your language.
+          Analytics and marketing are off by default. EU rules; honour them.
         </p>
         <div className="flex flex-wrap items-center gap-2">
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => save({ necessary: true, analytics: false, marketing: false, ts: Date.now() })}
+            onClick={() =>
+              save({ necessary: true, analytics: false, marketing: false, ts: Date.now() })
+            }
           >
             Reject all
           </Button>
           <Button
             variant="primary"
             size="sm"
-            onClick={() => save({ necessary: true, analytics: true, marketing: false, ts: Date.now() })}
+            onClick={() =>
+              save({ necessary: true, analytics: true, marketing: false, ts: Date.now() })
+            }
           >
             Accept analytics
           </Button>

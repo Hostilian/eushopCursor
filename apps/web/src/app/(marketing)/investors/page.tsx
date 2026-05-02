@@ -8,7 +8,7 @@ import { MarkdownArticle } from '../../../lib/markdown';
 
 export const metadata = {
   title: 'Investors · Eushop',
-  description: 'Token-gated long-form investor pitch. Suitcase capacity is the new last-mile.',
+  description: 'Token-gated long-form investor pitch. The last-mile is already going somewhere.',
 };
 
 const PUBLIC_PREVIEW = `
@@ -90,7 +90,7 @@ export default async function InvestorsPage({ searchParams }: InvestorsPageProps
   return (
     <EditorialPageLayout
       eyebrow="Investors · gated"
-      title="Suitcase capacity is the new last-mile."
+      title="The last-mile is already going somewhere."
       subtitle="Welcome. The numbers below are the same ones the operating team looks at on Monday mornings."
     >
       {pitch ? (

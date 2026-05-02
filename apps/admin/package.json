@@ -25,6 +25,9 @@
     "react-dom": "19.2.5",
     "superjson": "^2.2.1"
   },
+  "optionalDependencies": {
+    "@sentry/nextjs": "^8.45.0"
+  },
   "devDependencies": {
     "@eushop/config": "workspace:*",
     "@eslint/eslintrc": "^3.2.0",

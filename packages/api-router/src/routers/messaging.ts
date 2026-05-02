@@ -9,7 +9,18 @@ import { and, asc, desc, eq, ne, or } from 'drizzle-orm';
 import type { InferSelectModel } from 'drizzle-orm';
 import { blocks, conversations, messages } from '@eushop/db';
 import { usersAreBlockedPair } from '../lib/blocks';
-import { protectedProcedure, router } from '../trpc';
+import { protectedProcedure, rateLimited, router } from '../trpc';
+
+const startConversationLimit = rateLimited({
+  scope: 'messaging.start',
+  perMinute: 30,
+  perDay: 200,
+});
+const sendMessageLimit = rateLimited({
+  scope: 'messaging.send',
+  perMinute: 60,
+  perDay: 4000,
+});
 
 export const messagingRouter = router({
   list: protectedProcedure.query(async ({ ctx }) => {
@@ -57,86 +68,92 @@ export const messagingRouter = router({
     return { conversation: conv, messages: msgs };
   }),
 
-  start: protectedProcedure.input(startConversationInput).mutation(async ({ ctx, input }) => {
-    if (input.recipientId === ctx.user.id)
-      throw new TRPCError({ code: 'BAD_REQUEST', message: 'Cannot message yourself' });
+  start: protectedProcedure
+    .use(startConversationLimit)
+    .input(startConversationInput)
+    .mutation(async ({ ctx, input }) => {
+      if (input.recipientId === ctx.user.id)
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Cannot message yourself' });
 
-    if (await usersAreBlockedPair(ctx.db, ctx.user.id, input.recipientId)) {
-      throw new TRPCError({ code: 'FORBIDDEN', message: 'Messaging is not available' });
-    }
+      if (await usersAreBlockedPair(ctx.db, ctx.user.id, input.recipientId)) {
+        throw new TRPCError({ code: 'FORBIDDEN', message: 'Messaging is not available' });
+      }
 
-    const existing = await ctx.db.query.conversations.findFirst({
-      where: and(
-        or(
-          and(
-            eq(conversations.initiatorId, ctx.user.id),
-            eq(conversations.recipientId, input.recipientId),
+      const existing = await ctx.db.query.conversations.findFirst({
+        where: and(
+          or(
+            and(
+              eq(conversations.initiatorId, ctx.user.id),
+              eq(conversations.recipientId, input.recipientId),
+            )!,
+            and(
+              eq(conversations.initiatorId, input.recipientId),
+              eq(conversations.recipientId, ctx.user.id),
+            )!,
           )!,
-          and(
-            eq(conversations.initiatorId, input.recipientId),
-            eq(conversations.recipientId, ctx.user.id),
-          )!,
-        )!,
-        input.listingId ? eq(conversations.listingId, input.listingId) : undefined,
-      ),
-    });
-    let conv = existing;
-    if (!conv) {
-      const [created] = await ctx.db
-        .insert(conversations)
+          input.listingId ? eq(conversations.listingId, input.listingId) : undefined,
+        ),
+      });
+      let conv = existing;
+      if (!conv) {
+        const [created] = await ctx.db
+          .insert(conversations)
+          .values({
+            initiatorId: ctx.user.id,
+            recipientId: input.recipientId,
+            listingId: input.listingId,
+            requestId: input.requestId,
+          })
+          .returning();
+        conv = created;
+      }
+
+      const [msg] = await ctx.db
+        .insert(messages)
         .values({
-          initiatorId: ctx.user.id,
-          recipientId: input.recipientId,
-          listingId: input.listingId,
-          requestId: input.requestId,
+          conversationId: conv!.id,
+          senderId: ctx.user.id,
+          body: input.body,
         })
         .returning();
-      conv = created;
-    }
+      await ctx.db
+        .update(conversations)
+        .set({ lastMessageAt: new Date() })
+        .where(eq(conversations.id, conv!.id));
+      return { conversation: conv!, message: msg };
+    }),
 
-    const [msg] = await ctx.db
-      .insert(messages)
-      .values({
-        conversationId: conv!.id,
-        senderId: ctx.user.id,
-        body: input.body,
-      })
-      .returning();
-    await ctx.db
-      .update(conversations)
-      .set({ lastMessageAt: new Date() })
-      .where(eq(conversations.id, conv!.id));
-    return { conversation: conv!, message: msg };
-  }),
+  send: protectedProcedure
+    .use(sendMessageLimit)
+    .input(sendMessageInput)
+    .mutation(async ({ ctx, input }) => {
+      const conv = await ctx.db.query.conversations.findFirst({
+        where: eq(conversations.id, input.conversationId),
+      });
+      if (!conv) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (conv.initiatorId !== ctx.user.id && conv.recipientId !== ctx.user.id)
+        throw new TRPCError({ code: 'FORBIDDEN' });
 
-  send: protectedProcedure.input(sendMessageInput).mutation(async ({ ctx, input }) => {
-    const conv = await ctx.db.query.conversations.findFirst({
-      where: eq(conversations.id, input.conversationId),
-    });
-    if (!conv) throw new TRPCError({ code: 'NOT_FOUND' });
-    if (conv.initiatorId !== ctx.user.id && conv.recipientId !== ctx.user.id)
-      throw new TRPCError({ code: 'FORBIDDEN' });
+      const peerId = conv.initiatorId === ctx.user.id ? conv.recipientId : conv.initiatorId;
+      if (await usersAreBlockedPair(ctx.db, ctx.user.id, peerId)) {
+        throw new TRPCError({ code: 'FORBIDDEN', message: 'Messaging is not available' });
+      }
 
-    const peerId = conv.initiatorId === ctx.user.id ? conv.recipientId : conv.initiatorId;
-    if (await usersAreBlockedPair(ctx.db, ctx.user.id, peerId)) {
-      throw new TRPCError({ code: 'FORBIDDEN', message: 'Messaging is not available' });
-    }
-
-    const [msg] = await ctx.db
-      .insert(messages)
-      .values({
-        conversationId: input.conversationId,
-        senderId: ctx.user.id,
-        body: input.body,
-        attachments: input.attachments ?? [],
-      })
-      .returning();
-    await ctx.db
-      .update(conversations)
-      .set({ lastMessageAt: new Date() })
-      .where(eq(conversations.id, input.conversationId));
-    return msg;
-  }),
+      const [msg] = await ctx.db
+        .insert(messages)
+        .values({
+          conversationId: input.conversationId,
+          senderId: ctx.user.id,
+          body: input.body,
+          attachments: input.attachments ?? [],
+        })
+        .returning();
+      await ctx.db
+        .update(conversations)
+        .set({ lastMessageAt: new Date() })
+        .where(eq(conversations.id, input.conversationId));
+      return msg;
+    }),
 
   markRead: protectedProcedure.input(conversationMessagesInput).mutation(async ({ ctx, input }) => {
     const conv = await ctx.db.query.conversations.findFirst({

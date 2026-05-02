@@ -3,8 +3,11 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Fraunces, Inter } from 'next/font/google';
 import { DemoModeBanner } from '../components/demo-mode-banner';
+import { initWebSentry } from '../lib/observability';
 import { Providers } from '../providers';
 import './globals.css';
+
+void initWebSentry('server');
 
 const inter = Inter({
   subsets: ['latin', 'latin-ext'],
@@ -32,7 +35,7 @@ export const metadata: Metadata = {
     siteName: 'Eushop',
     title: 'Eushop — get something from somewhere, person to person',
     description:
-      'Trips, neighbours, and open asks on one map. Offer space in your bag, share what you brought, or name what you need.',
+      'Trips, locals, and open asks on one map. Offer space in your bag, share what you brought, or name what you need.',
   },
   alternates: { canonical: '/' },
 };

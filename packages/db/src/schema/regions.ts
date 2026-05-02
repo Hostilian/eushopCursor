@@ -9,7 +9,9 @@ import { countries } from './catalog';
 export const regions = pgTable(
   'regions',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     countryIso2: text('country_iso2')
       .notNull()
       .references(() => countries.iso2, { onDelete: 'cascade' }),

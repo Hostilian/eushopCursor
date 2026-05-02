@@ -22,7 +22,7 @@ export default function OgImage() {
       <div
         style={{ fontSize: 28, letterSpacing: '0.35em', textTransform: 'uppercase', opacity: 0.75 }}
       >
-        Trips · Neighbours · Asks
+        Trips · Locals · Asks
       </div>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div style={{ fontSize: 84, lineHeight: 1.05, fontWeight: 500, maxWidth: 900 }}>Eushop</div>

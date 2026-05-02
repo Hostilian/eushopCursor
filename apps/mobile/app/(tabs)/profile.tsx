@@ -19,10 +19,11 @@ export default function ProfileScreen() {
       try {
         const tokenResult = await Notifications.getExpoPushTokenAsync();
         await registerDevice.mutateAsync({
-          platform: (Platform.OS === 'ios' ? 'ios' : Platform.OS === 'android' ? 'android' : 'web') as
-            | 'ios'
-            | 'android'
-            | 'web',
+          platform: (Platform.OS === 'ios'
+            ? 'ios'
+            : Platform.OS === 'android'
+              ? 'android'
+              : 'web') as 'ios' | 'android' | 'web',
           expoPushToken: tokenResult.data,
         });
         setStatus('registered');
@@ -34,21 +35,21 @@ export default function ProfileScreen() {
 
   if (me.isLoading) {
     return (
-      <View className="flex-1 items-center justify-center bg-paper">
+      <View className="bg-paper flex-1 items-center justify-center">
         <Text className="text-ash">Loading…</Text>
       </View>
     );
   }
   if (!me.data) {
     return (
-      <View className="flex-1 items-center justify-center bg-paper p-10">
+      <View className="bg-paper flex-1 items-center justify-center p-10">
         <Ionicons name="person-circle-outline" size={56} color="#9A9081" />
-        <Text className="mt-3 font-serif text-2xl text-ink">Sign in</Text>
-        <Text className="mt-1 text-center text-sm text-ash">
+        <Text className="text-ink mt-3 font-serif text-2xl">Sign in</Text>
+        <Text className="text-ash mt-1 text-center text-sm">
           We email you a magic link — no passwords ever.
         </Text>
         <TouchableOpacity
-          className="mt-6 rounded-full bg-ink px-6 py-3"
+          className="bg-ink mt-6 rounded-full px-6 py-3"
           onPress={() => router.push('/sign-in')}
         >
           <Text className="text-paper font-medium">Sign in</Text>
@@ -58,25 +59,30 @@ export default function ProfileScreen() {
   }
 
   return (
-    <ScrollView className="flex-1 bg-paper" contentContainerStyle={{ padding: 24, paddingBottom: 64 }}>
-      <Text className="text-xs uppercase tracking-widest text-ash">You</Text>
-      <Text className="mt-3 font-serif text-4xl text-ink">{me.data.profile?.displayName ?? me.data.user.email}</Text>
-      <Text className="mt-2 text-sm text-ash">{me.data.user.email}</Text>
+    <ScrollView
+      className="bg-paper flex-1"
+      contentContainerStyle={{ padding: 24, paddingBottom: 64 }}
+    >
+      <Text className="text-ash text-xs tracking-widest uppercase">You</Text>
+      <Text className="text-ink mt-3 font-serif text-4xl">
+        {me.data.profile?.displayName ?? me.data.user.email}
+      </Text>
+      <Text className="text-ash mt-2 text-sm">{me.data.user.email}</Text>
 
-      <View className="mt-8 rounded-3xl border border-ink/10 bg-porcelain p-6">
-        <Text className="text-xs uppercase tracking-widest text-ash">Trust</Text>
-        <Text className="mt-2 font-serif text-2xl text-ink">
+      <View className="border-ink/10 bg-porcelain mt-8 rounded-3xl border p-6">
+        <Text className="text-ash text-xs tracking-widest uppercase">Trust</Text>
+        <Text className="text-ink mt-2 font-serif text-2xl">
           {me.data.profile?.successfulExchanges ?? 0} exchanges
         </Text>
       </View>
 
-      <View className="mt-4 rounded-3xl border border-ink/10 bg-porcelain p-6">
-        <Text className="text-xs uppercase tracking-widest text-ash">Notifications</Text>
-        <Text className="mt-2 text-sm text-ink/80">Push status: {status}</Text>
+      <View className="border-ink/10 bg-porcelain mt-4 rounded-3xl border p-6">
+        <Text className="text-ash text-xs tracking-widest uppercase">Notifications</Text>
+        <Text className="text-ink/80 mt-2 text-sm">Push status: {status}</Text>
       </View>
 
       <TouchableOpacity
-        className="mt-8 self-start rounded-full border border-danger/40 px-5 py-2.5"
+        className="border-danger/40 mt-8 self-start rounded-full border px-5 py-2.5"
         onPress={() =>
           Alert.alert('Delete account', 'This permanently removes your data.', [
             { text: 'Cancel' },
@@ -90,7 +96,7 @@ export default function ProfileScreen() {
           ])
         }
       >
-        <Text className="text-sm text-danger">Delete account</Text>
+        <Text className="text-danger text-sm">Delete account</Text>
       </TouchableOpacity>
     </ScrollView>
   );

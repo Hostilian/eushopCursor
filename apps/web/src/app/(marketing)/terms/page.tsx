@@ -12,8 +12,10 @@ export default function TermsPage() {
           <h2 className="text-ink mt-10 font-serif text-2xl">What Eushop is</h2>
           <p>
             A discovery and messaging service that helps private individuals find each other to
-            share niche European foods. We are <strong>not</strong> a marketplace operator, food
-            retailer, or payment processor. We do not handle the goods or the money.
+            share taste-of-home foods. We are <strong>not</strong> the seller of the goods, a food
+            retailer, or a carrier. Where trip checkout is enabled, we may provide payment
+            infrastructure (authorization and settlement rails) between buyers and travellers
+            through a licensed partner — you still contract for the handoff with the other person.
           </p>
 
           <h2 className="text-ink mt-10 font-serif text-2xl">Private use only</h2>
@@ -30,11 +32,30 @@ export default function TermsPage() {
             country — it is on you to know.
           </p>
 
-          <h2 className="text-ink mt-10 font-serif text-2xl">Money &amp; finder's fees</h2>
+          <h2 className="text-ink mt-10 font-serif text-2xl">
+            Money, finder&apos;s fees &amp; trip slots
+          </h2>
           <p>
-            Buyers and sellers settle the finder's fee directly, typically in cash or a peer-to-peer
-            payment app. Eushop never takes a cut and never holds funds. Disputes about money are
-            between the two of you.
+            For <strong>local listings</strong>, buyers and sellers usually settle the finder&apos;s
+            fee directly (cash or a peer-to-peer app). Eushop does not process those payments.
+          </p>
+          <p id="trip-payments" className="mt-4">
+            For <strong>trip reservations</strong>, when checkout is available, you may authorize a
+            card <strong>hold</strong> for the agreed slot fee plus a small{' '}
+            <strong>platform fee</strong> (capped at €1.50 or 12% of the slot fee, whichever is
+            lower). The hold is only <strong>captured</strong> after the traveller confirms your
+            booking. If the booking is cancelled in line with our flows, we release or refund the
+            hold where the payment network allows.
+          </p>
+          <h2 id="refunds-disputes" className="text-ink mt-10 font-serif text-2xl">
+            Refunds, disputes &amp; chargebacks
+          </h2>
+          <p>
+            If something goes wrong, contact the other party in chat first. For card payments,
+            refunds follow the rules of the card network and our payment partner. A{' '}
+            <strong>chargeback</strong> is a separate process you may start with your bank or card
+            issuer; outcomes are decided by them, not by Eushop. We do not guarantee any particular
+            refund for peer-to-peer handoffs — see our role above.
           </p>
 
           <h2 className="text-ink mt-10 font-serif text-2xl">Behaviour</h2>

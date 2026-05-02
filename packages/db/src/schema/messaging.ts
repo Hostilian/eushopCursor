@@ -7,7 +7,9 @@ import { requests } from './requests';
 export const conversations = pgTable(
   'conversations',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     initiatorId: uuid('initiator_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
@@ -29,7 +31,9 @@ export const conversations = pgTable(
 export const messages = pgTable(
   'messages',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     conversationId: uuid('conversation_id')
       .notNull()
       .references(() => conversations.id, { onDelete: 'cascade' }),

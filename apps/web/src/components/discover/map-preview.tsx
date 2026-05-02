@@ -31,7 +31,8 @@ export function MapPreview({ label, lat, lng }: { label: string; lat: number; ln
         src={src}
       />
       <p className="border-ink/10 text-ash border-t px-4 py-2 text-[10px] leading-relaxed">
-        Pins on Eushop are never exact addresses — they jitter inside a ~5 km cell for safety.
+        Pins on Eushop are never exact addresses — they jitter inside an approximate area for
+        safety.
       </p>
     </div>
   );

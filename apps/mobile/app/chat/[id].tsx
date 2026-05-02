@@ -1,4 +1,5 @@
 import { MESSAGING_SAFE_TEMPLATES as SAFE_TEMPLATES } from '@eushop/validators';
+import messagesEn from '../../../../packages/i18n/src/messages/en.json';
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
@@ -148,7 +149,9 @@ export default function ChatScreen() {
             value={body}
             onChangeText={setBody}
             editable={canSend}
-            placeholder={canSend ? 'Type a message' : 'Unavailable'}
+            placeholder={
+              canSend ? messagesEn.chat.placeholder : messagesEn.chat.placeholderUnavailable
+            }
             placeholderTextColor="#9A9081"
             className="border-ink/10 bg-porcelain text-ink flex-1 rounded-full border px-4 py-3"
           />

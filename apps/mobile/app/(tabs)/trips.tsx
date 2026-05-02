@@ -60,10 +60,12 @@ export default function TripsScreen() {
     >
       <View className="flex-row items-end justify-between">
         <View className="flex-1">
-          <Text className="text-ash text-xs tracking-widest uppercase">Suitcase capacity</Text>
+          <Text className="text-ash text-xs tracking-widest uppercase">
+            Trips already happening
+          </Text>
           <Text className="text-ink mt-3 font-serif text-4xl">Upcoming trips.</Text>
           <Text className="text-ash mt-2 text-sm">
-            Diaspora travellers selling spare slots in their next trip home.
+            People sharing spare slots in their next trip home.
           </Text>
         </View>
         <TouchableOpacity

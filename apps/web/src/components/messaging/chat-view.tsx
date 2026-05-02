@@ -9,6 +9,7 @@ import { trpc } from '../../lib/trpc';
 import { Button } from '../ui/button';
 
 export function ChatView({ conversationId }: { conversationId: string }) {
+  const t = useTranslations('chat');
   const me = trpc.profile.me.useQuery(undefined, { retry: false });
   const { data, isLoading, error } = trpc.messaging.conversation.useQuery(
     { id: conversationId },

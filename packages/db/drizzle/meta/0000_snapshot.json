@@ -133,12 +133,8 @@
           "name": "accounts_user_id_users_id_fk",
           "tableFrom": "accounts",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -242,12 +238,8 @@
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -257,9 +249,7 @@
         "sessions_token_unique": {
           "name": "sessions_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -347,9 +337,7 @@
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -483,12 +471,8 @@
           "name": "blocks_blocker_id_users_id_fk",
           "tableFrom": "blocks",
           "tableTo": "users",
-          "columnsFrom": [
-            "blocker_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["blocker_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -496,12 +480,8 @@
           "name": "blocks_blocked_id_users_id_fk",
           "tableFrom": "blocks",
           "tableTo": "users",
-          "columnsFrom": [
-            "blocked_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["blocked_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -666,12 +646,8 @@
           "name": "profiles_user_id_users_id_fk",
           "tableFrom": "profiles",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -681,9 +657,7 @@
         "profiles_user_id_unique": {
           "name": "profiles_user_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "user_id"
-          ]
+          "columns": ["user_id"]
         }
       },
       "policies": {},
@@ -748,12 +722,8 @@
           "name": "brands_country_iso2_countries_iso2_fk",
           "tableFrom": "brands",
           "tableTo": "countries",
-          "columnsFrom": [
-            "country_iso2"
-          ],
-          "columnsTo": [
-            "iso2"
-          ],
+          "columnsFrom": ["country_iso2"],
+          "columnsTo": ["iso2"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -763,9 +733,7 @@
         "brands_slug_unique": {
           "name": "brands_slug_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "slug"
-          ]
+          "columns": ["slug"]
         }
       },
       "policies": {},
@@ -838,9 +806,7 @@
         "categories_slug_unique": {
           "name": "categories_slug_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "slug"
-          ]
+          "columns": ["slug"]
         }
       },
       "policies": {},
@@ -1089,12 +1055,8 @@
           "name": "food_items_origin_country_iso2_countries_iso2_fk",
           "tableFrom": "food_items",
           "tableTo": "countries",
-          "columnsFrom": [
-            "origin_country_iso2"
-          ],
-          "columnsTo": [
-            "iso2"
-          ],
+          "columnsFrom": ["origin_country_iso2"],
+          "columnsTo": ["iso2"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1102,12 +1064,8 @@
           "name": "food_items_category_id_categories_id_fk",
           "tableFrom": "food_items",
           "tableTo": "categories",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["category_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1115,12 +1073,8 @@
           "name": "food_items_brand_id_brands_id_fk",
           "tableFrom": "food_items",
           "tableTo": "brands",
-          "columnsFrom": [
-            "brand_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["brand_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1130,9 +1084,7 @@
         "food_items_slug_unique": {
           "name": "food_items_slug_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "slug"
-          ]
+          "columns": ["slug"]
         }
       },
       "policies": {},
@@ -1204,12 +1156,8 @@
           "name": "regions_country_iso2_countries_iso2_fk",
           "tableFrom": "regions",
           "tableTo": "countries",
-          "columnsFrom": [
-            "country_iso2"
-          ],
-          "columnsTo": [
-            "iso2"
-          ],
+          "columnsFrom": ["country_iso2"],
+          "columnsTo": ["iso2"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1475,12 +1423,8 @@
           "name": "listings_seller_id_users_id_fk",
           "tableFrom": "listings",
           "tableTo": "users",
-          "columnsFrom": [
-            "seller_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["seller_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1488,12 +1432,8 @@
           "name": "listings_food_item_id_food_items_id_fk",
           "tableFrom": "listings",
           "tableTo": "food_items",
-          "columnsFrom": [
-            "food_item_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["food_item_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1701,12 +1641,8 @@
           "name": "requests_buyer_id_users_id_fk",
           "tableFrom": "requests",
           "tableTo": "users",
-          "columnsFrom": [
-            "buyer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["buyer_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1714,12 +1650,8 @@
           "name": "requests_food_item_id_food_items_id_fk",
           "tableFrom": "requests",
           "tableTo": "food_items",
-          "columnsFrom": [
-            "food_item_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["food_item_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1832,12 +1764,8 @@
           "name": "conversations_initiator_id_users_id_fk",
           "tableFrom": "conversations",
           "tableTo": "users",
-          "columnsFrom": [
-            "initiator_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["initiator_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1845,12 +1773,8 @@
           "name": "conversations_recipient_id_users_id_fk",
           "tableFrom": "conversations",
           "tableTo": "users",
-          "columnsFrom": [
-            "recipient_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["recipient_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1858,12 +1782,8 @@
           "name": "conversations_listing_id_listings_id_fk",
           "tableFrom": "conversations",
           "tableTo": "listings",
-          "columnsFrom": [
-            "listing_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["listing_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1871,12 +1791,8 @@
           "name": "conversations_request_id_requests_id_fk",
           "tableFrom": "conversations",
           "tableTo": "requests",
-          "columnsFrom": [
-            "request_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["request_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1980,12 +1896,8 @@
           "name": "messages_conversation_id_conversations_id_fk",
           "tableFrom": "messages",
           "tableTo": "conversations",
-          "columnsFrom": [
-            "conversation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["conversation_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -1993,12 +1905,8 @@
           "name": "messages_sender_id_users_id_fk",
           "tableFrom": "messages",
           "tableTo": "users",
-          "columnsFrom": [
-            "sender_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["sender_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2097,12 +2005,8 @@
           "name": "moderation_actions_report_id_reports_id_fk",
           "tableFrom": "moderation_actions",
           "tableTo": "reports",
-          "columnsFrom": [
-            "report_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["report_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2110,12 +2014,8 @@
           "name": "moderation_actions_actor_id_users_id_fk",
           "tableFrom": "moderation_actions",
           "tableTo": "users",
-          "columnsFrom": [
-            "actor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["actor_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2240,12 +2140,8 @@
           "name": "reports_reporter_id_users_id_fk",
           "tableFrom": "reports",
           "tableTo": "users",
-          "columnsFrom": [
-            "reporter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["reporter_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2253,12 +2149,8 @@
           "name": "reports_resolver_id_users_id_fk",
           "tableFrom": "reports",
           "tableTo": "users",
-          "columnsFrom": [
-            "resolver_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["resolver_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -2362,12 +2254,8 @@
           "name": "reviews_conversation_id_conversations_id_fk",
           "tableFrom": "reviews",
           "tableTo": "conversations",
-          "columnsFrom": [
-            "conversation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["conversation_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2375,12 +2263,8 @@
           "name": "reviews_reviewer_id_users_id_fk",
           "tableFrom": "reviews",
           "tableTo": "users",
-          "columnsFrom": [
-            "reviewer_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["reviewer_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2388,12 +2272,8 @@
           "name": "reviews_reviewee_id_users_id_fk",
           "tableFrom": "reviews",
           "tableTo": "users",
-          "columnsFrom": [
-            "reviewee_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["reviewee_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2490,12 +2370,8 @@
           "name": "consents_user_id_users_id_fk",
           "tableFrom": "consents",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2579,12 +2455,8 @@
           "name": "device_tokens_user_id_users_id_fk",
           "tableFrom": "device_tokens",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2594,9 +2466,7 @@
         "device_tokens_expo_push_token_unique": {
           "name": "device_tokens_expo_push_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "expo_push_token"
-          ]
+          "columns": ["expo_push_token"]
         }
       },
       "policies": {},
@@ -2688,12 +2558,8 @@
           "name": "notifications_user_id_users_id_fk",
           "tableFrom": "notifications",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2709,36 +2575,17 @@
     "public.freshness_window": {
       "name": "freshness_window",
       "schema": "public",
-      "values": [
-        "today",
-        "3-days",
-        "week",
-        "month",
-        "shelf-stable"
-      ]
+      "values": ["today", "3-days", "week", "month", "shelf-stable"]
     },
     "public.listing_status": {
       "name": "listing_status",
       "schema": "public",
-      "values": [
-        "draft",
-        "live",
-        "reserved",
-        "completed",
-        "expired",
-        "removed"
-      ]
+      "values": ["draft", "live", "reserved", "completed", "expired", "removed"]
     },
     "public.request_status": {
       "name": "request_status",
       "schema": "public",
-      "values": [
-        "open",
-        "matched",
-        "fulfilled",
-        "expired",
-        "closed"
-      ]
+      "values": ["open", "matched", "fulfilled", "expired", "closed"]
     },
     "public.moderation_action_type": {
       "name": "moderation_action_type",
@@ -2756,35 +2603,17 @@
     "public.report_reason": {
       "name": "report_reason",
       "schema": "public",
-      "values": [
-        "spam",
-        "commercial",
-        "unsafe-food",
-        "scam",
-        "inappropriate",
-        "duplicate",
-        "other"
-      ]
+      "values": ["spam", "commercial", "unsafe-food", "scam", "inappropriate", "duplicate", "other"]
     },
     "public.report_status": {
       "name": "report_status",
       "schema": "public",
-      "values": [
-        "open",
-        "reviewing",
-        "resolved",
-        "dismissed"
-      ]
+      "values": ["open", "reviewing", "resolved", "dismissed"]
     },
     "public.report_target_type": {
       "name": "report_target_type",
       "schema": "public",
-      "values": [
-        "listing",
-        "request",
-        "user",
-        "message"
-      ]
+      "values": ["listing", "request", "user", "message"]
     },
     "public.notification_kind": {
       "name": "notification_kind",

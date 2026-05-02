@@ -5,7 +5,7 @@
 Eushop is the open peer layer for **trips**, **neighbours**, and **open asks**: spare
 luggage capacity on routes people are already taking, finder-fee shares between
 neighbours, and open asks that notify matching supply. Discovery, identity, and chat
-first; settlement stays between the parties until regulated in-app payments ship.
+first; trip reservations can use **Stripe Connect** holds when enabled — see ops docs — while many listings still settle off-platform.
 
 The category is global. We are launching in dense **EU diaspora corridors** because that
 is where the flows are best documented and the community is ready — and we are designing
@@ -19,12 +19,12 @@ public web bibliography at **`/sources`**.
 
 Three primitives, one network:
 
-1. **Trip offers** — a verified diaspora user announces a trip ("Munich → Warsaw,
-   May 14, 6 suitcase slots, here's what I'll grab"), each slot reservable at an
+1. **Trip offers** — a verified user announces a trip ("Munich → Warsaw,
+   May 14, 6 bag slots, here's what I'll grab"), each slot reservable at an
    **agreed fee per slot**. *Reservations are the monetisable event.*
-2. **Open requests** — a buyer posts what they want; matching trips and listings
-   in the same corridor or 5 km cell light it up automatically.
-3. **Pantry listings** — neighbourhood-scale finder-fee posts ("half a tin of
+2. **Open asks** — a buyer posts what they want; matching trips and listings
+   in the same corridor or radius light it up automatically.
+3. **Local listings** — neighbourhood-scale finder-fee posts ("half a tin of
    Krówki, €3, pickup at Goetheplatz") with privacy-preserving geohash discovery.
 
 We charge a small platform fee on each confirmed reservation:
@@ -44,12 +44,12 @@ regulated payments.
 - **Trip marketplace** (`/trips`, `/trips/new`, `/reservations`) on web and mobile,
   backed by `trip_offers`, `trip_reservations`, `payouts` schemas and a full
   `trips` tRPC router (create / search / reserve / confirm / complete / cancel).
-- **Hybrid product catalog** — curated EU foods + Open Food Facts importer
-  (CC-BY-SA, attributed in-app) + UGC moderation queue (`food_item_candidates`,
-  `food_item_image_proposals`).
+- **Hybrid product catalog** — curated taste-of-home foods + Open Food Facts
+  importer (CC-BY-SA, attributed in-app) + UGC moderation queue
+  (`food_item_candidates`, `food_item_image_proposals`).
 - **Product picker** with three image candidates, photo upload, paste-image-URL
   (server-side download + R2 re-host), and "propose this product" UGC flow.
-- **Pantry listings & requests** with PostGIS, Meilisearch, and 5 km geohash cells.
+- **Local listings & open asks** with PostGIS, Meilisearch, and privacy geohash cells.
 - **Realtime chat** (PartyKit Durable Objects), Better Auth, Inngest workflows
   (Open Food Facts importer, trip-reservation notifications, departure reminders),
   and an admin moderation cockpit.
@@ -66,7 +66,7 @@ regulated payments.
 - **Group-buys**, restock alerts, pickup hubs, multilingual catalog search,
   city leaderboards. Tracked in `[/roadmap](apps/web/src/app/(marketing)/roadmap/page.tsx)`.
 
-EU-first by construction. Hosting in Hetzner Falkenstein, CDN via Cloudflare EU.
+Hosted in the EU by default — Hetzner Falkenstein, CDN via Cloudflare EU.
 
 ## Stack (validated 2026)
 
@@ -108,6 +108,10 @@ packages/
   geo/             geohash + privacy helpers
   config/          shared eslint / tsconfig / prettier
 ```
+
+## Parallel work (Cursor)
+
+For merge-safe multi-agent queues, hotspot files, and claim templates, use **[docs/cursor-parallel-backlog.md](docs/cursor-parallel-backlog.md)**. Editing lanes and verify cadence: **[AGENTS.md](AGENTS.md)**.
 
 ## Production & operations
 
@@ -180,10 +184,10 @@ Then open:
 
 ## Catalog seed
 
-The seed catalog (`packages/catalog-data`) still powers **niche EU foods** and country
-editorial pages—Krówki, Stroopwafels, Mastiha, Liverwurst, Sült, Halloumi, and many more.
-That remains useful for finder-fee “taste of home” listings; **trip / luggage** surfaces
-are orthogonal and keyed off routes and **slot** metadata.
+The seed catalog (`packages/catalog-data`) still powers **niche taste-of-home foods**
+and country editorial pages—Krówki, Stroopwafels, Mastiha, Liverwurst, Sült, Halloumi,
+and many more. That remains useful for finder-fee local listings; **trip / luggage**
+surfaces are orthogonal and keyed off routes and **slot** metadata.
 
 |              |                                      |
 | ------------ | ------------------------------------ |
@@ -194,7 +198,7 @@ are orthogonal and keyed off routes and **slot** metadata.
 
 ## GDPR
 
-Eushop is built EU-first:
+Eushop hosts in the EU by default and is built for GDPR:
 
 - All data hosted in EU regions (Hetzner Falkenstein, Cloudflare EU).
 - Approximate addresses only — geohash precision 5 (~5 km cell) is the maximum a

@@ -27,7 +27,7 @@ export default function DataExportPage() {
             <a className="underline" href="mailto:dpo@eushop.eu">
               dpo@eushop.eu
             </a>{' '}
-            and we'll respond within 30 days.
+            and we&apos;ll respond within 30 days.
           </p>
         </article>
       </main>

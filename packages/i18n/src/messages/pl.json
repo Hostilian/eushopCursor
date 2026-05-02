@@ -8,7 +8,7 @@
     "favsLabel": "Wyróżniki z katalogu"
   },
   "home": {
-    "countriesEyebrow": "Z całej Unii",
+    "countriesEyebrow": "Z całego świata",
     "countriesHeading": "Smak {count} krajów ojczystych.",
     "countriesSeeAll": "Zobacz wszystkie ({count})",
     "categoriesEyebrow": "Przeglądaj według ochoty",
@@ -22,7 +22,7 @@
     "pillar2Body": "Opublikuj wolne miejsce w bagażu na podróże, które i tak robisz, albo dodaj poszukiwanie i pozwól, by oferty same przyszły. Codzienne udostępnienia mają małą opłatę znalazcy; sloty na wyjazdach—uzgodnioną stawkę za slot. Dziś ceny stałe; później precyzyjniejsze rozliczenia, gdy uda się je wdrożyć porządnie.",
     "pillar3Title": "Układ zostaje między wami.",
     "pillar3Body": "Ustalacie w czacie i płacicie osobiście lub poza aplikacją, dopóki nie pojawią się regulowane płatności in-app. Dziś nie dotykamy waszych pieniędzy.",
-    "ctaBandBody": "Podziel się tym, co przywiozłeś, napisz, czego potrzebujesz, albo ogłoś miejsce na wyjeździe, gdy narzędzia wystartują—zawsze w komórce 5 km, by spotkania były realne."
+    "ctaBandBody": "Podziel się tym, co przywiozłeś, napisz, czego potrzebujesz, albo ogłoś miejsce na wyjeździe, gdy narzędzia wystartują—zawsze blisko, by spotkania były realne."
   },
   "nav": {
     "discover": "Odkryj",
@@ -80,41 +80,6 @@
     "stripFootnote": "Te liczby opisują kuratorski katalog, a nie GMV ani rejestracje na produkcji.",
     "stripFootnoteSources": "Historyczne odniesienia migracyjne:"
   },
-  "mobile": {
-    "onboardingEyebrow": "Eushop",
-    "onboardingTitle": "Trzy kroki.",
-    "onboardingSubtitle": "Ta sama historia w webie, panelu admin i tutaj — pod kciuk.",
-    "onboardingDiscoverTitle": "Odkrywaj",
-    "onboardingDiscoverBody": "Przeglądaj kraje i ogłoszenia w promieniu — pinezki zostają w komórce 5 km.",
-    "onboardingShareTitle": "Dziel się",
-    "onboardingShareBody": "Podziel się tym, co przywiozłeś, z małą opłatą znalazcy przy odbiorze — przy publikowaniu miejsca na wyjeździe obowiązuje osobna stawka za slot.",
-    "onboardingMeetTitle": "Spotkaj się",
-    "onboardingMeetBody": "Czat w aplikacji, ustalenie w kawiarni lub na dworcu, płatność na miejscu. Nie dotykamy gotówki.",
-    "onboardingCta": "Wejdź do aplikacji →",
-    "todayEyebrow": "Dziś w pobliżu",
-    "todayTitle": "Świeże w Twojej komórce.",
-    "todaySubtitle": "Prawdziwe ogłoszenia w komórce 5 km wokół Ciebie. Pociągnij, by odświeżyć.",
-    "kpiLive": "Na żywo",
-    "kpiCell": "Komórka",
-    "kpiHandoff": "Przekazanie",
-    "emptyTitle": "Cisza w Twojej komórce",
-    "emptyHint": "Bądź pierwszy — albo dodaj poszukiwanie, damy znać, gdy pojawi się pasujące ogłoszenie lub trasa."
-  },
-  "admin": {
-    "sidebarOverview": "Przegląd",
-    "sidebarListings": "Ogłoszenia",
-    "sidebarRequests": "Poszukiwania",
-    "sidebarUsers": "Użytkownicy",
-    "sidebarCatalog": "Katalog",
-    "sidebarAudit": "Dziennik audytu",
-    "productName": "Eushop",
-    "productTag": "Admin",
-    "mobileHeader": "Eushop Admin"
-  },
-  "auth": {
-    "signedOut": "Wylogowano.",
-    "welcome": "Witaj z powrotem, {name}"
-  },
   "signInForm": {
     "emailLabel": "E-mail",
     "emailPlaceholder": "ty@przyklad.eu",
@@ -145,7 +110,7 @@
     "homeCountry": "Kraj pochodzenia",
     "currentCountry": "Obecny kraj",
     "approxCity": "Przybliżone miasto",
-    "approxCityHint": "Zapisujemy jako komórkę 5 km — nigdy dokładny adres.",
+    "approxCityHint": "Zapisujemy jako przybliżony obszar — nigdy dokładny adres.",
     "approxCityPlaceholder": "Warszawa Śródmieście",
     "preferredLanguage": "Preferowany język",
     "preferredLanguageHint": "Do e-maili i domyślnego języka interfejsu.",
@@ -179,25 +144,35 @@
   },
   "discover": {
     "metaTitle": "Odkrywaj w pobliżu · Eushop",
-    "metaDescription": "Ogłoszenia w komórce 25 km. Pinezki są lekko przesunięte w komórce 5 km — dokładne adresy pozostają prywatne.",
+    "metaDescription": "Ogłoszenia w promieniu 25 km od Ciebie. Dokładne adresy pozostają prywatne — pinezki są lekko przesunięte dla bezpieczeństwa.",
     "eyebrow": "Wokół Ciebie",
-    "heading": "W obrębie komórki 25 km.",
-    "intro": "Pinezki są lekko przesunięte w komórce 5 km — nigdy nie pokazujemy dokładnych adresów. Dotknij karty, aby napisać.",
+    "heading": "W promieniu 25 km od Ciebie.",
+    "intro": "Pinezki są lekko przesunięte, aby chronić dokładne adresy — nigdy ich nie pokazujemy. Dotknij karty, aby napisać.",
     "mapExampleLabel": "Przykład: centrum Berlina"
   },
+  "about": {
+    "metaTitle": "O nas · Eushop",
+    "metaDescription": "Smak domu bez tajemniczych DM. Otwarta warstwa dla podróży diaspory, lokalnych podziałów i otwartych próśb.",
+    "eyebrow": "O nas",
+    "title": "Smak domu bez tajemniczych DM.",
+    "subtitle": "Ludzie ciągle podróżują i przywożą sobie nawzajem rzeczy. Eushop to otwarta warstwa na to — zaczynamy od gęstych europejskich korytarzy.",
+    "p1": "Eushop jest dla małych zachcianek między wizytami w domu: czekolady, która nigdzie nie smakuje tak samo, sera z lodówki babci, kiełbasy, która dla was znaczy „niedziela”.",
+    "p2": "Nie jesteśmy importerem, magazynem ani kurierem. Jesteśmy od przedstawień: miejsce w walizce na prawdziwych trasach, otwarte prośby, lokalne dzielenie się między sąsiadami — widzialna tożsamość i czat aż do jasnego przekazania. Regulowane płatności w aplikacji tam, gdzie prawo pozwala; do tego czasu rozliczenie zostaje między wami.",
+    "p3": "Jesteśmy mali z premedytacją. Dziś bez komercyjnych sprzedawców. Spotykajcie się publicznie, zachowujcie rozsądek i sąsiedzkie porcje."
+  },
   "trips": {
-    "metaTitle": "Trips · Diaspora marketplace",
-    "metaDescription": "Reserve a slot in a diaspora traveller’s suitcase. Trips between EU cities, every week.",
-    "eyebrow": "Suitcase capacity is the new last-mile",
-    "heading": "Upcoming diaspora trips.",
-    "intro": "A diaspora traveller flying home next week posts the spare slots in their carry-on. Reserve one for the jar of Krówki, the Manchego wheel, the Mastiha bottle. We charge a small platform fee on each confirmed reservation; everything else stays between you and the traveller.",
+    "metaTitle": "Wyjazdy · Eushop",
+    "metaDescription": "Zarezerwuj miejsce w wolnym bagażu osoby, która jedzie. Wyjazdy między miastami, co tydzień.",
+    "eyebrow": "Wyjazdy, które już się dzieją.",
+    "heading": "Nadchodzące wyjazdy.",
+    "intro": "Ktoś, kto jedzie w przyszłym tygodniu, publikuje wolne miejsca w bagażu. Zarezerwuj jedno na słoik Krówek, krąg Manchego, butelkę Mastiha. Pobieramy niewielką opłatę platformy od każdej potwierdzonej rezerwacji; cała reszta zostaje między wami a osobą podróżującą.",
     "postTrip": "Dodaj podróż",
-    "postFirstTrip": "Post the first trip",
-    "browseRequests": "Browse open requests",
-    "browseRequestsAlt": "Browse requests",
-    "retry": "Retry",
-    "emptyTitle": "No trips posted yet.",
-    "emptyDescription": "Eushop is brand new and the trip board is quiet. Be the first traveller to advertise spare slots — or post a request and we’ll notify you when a matching route appears.",
+    "postFirstTrip": "Dodaj pierwszą podróż",
+    "browseRequests": "Zobacz otwarte poszukiwania",
+    "browseRequestsAlt": "Zobacz poszukiwania",
+    "retry": "Spróbuj ponownie",
+    "emptyTitle": "Brak wyjazdów.",
+    "emptyDescription": "Eushop jest świeży i tablica wyjazdów jest cicha. Bądź pierwszą osobą, która udostępni wolne miejsca — albo dodaj poszukiwanie, a damy znać, gdy pojawi się pasująca trasa.",
     "errorTitle": "Trips service is offline.",
     "errorDescription": "We couldn’t reach the trips service. Try again in a moment, or browse open requests in the meantime.",
     "departs": "Departs {when}",
@@ -278,7 +253,9 @@
     "statusSellerRejected": "Declined by traveller",
     "feeLabel": "Agreed fee €{fee}",
     "platformFeeLabel": "Platform fee €{fee}",
-    "qty": "{qty} item(s)"
+    "qty": "{qty} item(s)",
+    "paymentsNotice": "Przy płatności online za miejsce w podróży może obowiązywać blokada na karcie do czasu potwierdzenia przez podróżnika. Zwroty, spory i chargebacki wynikają z Regulaminu i banku wydającego kartę.",
+    "paymentsTermsLink": "Regulamin: płatności i spory"
   },
   "reservationForm": {
     "metaTitle": "Reserve a slot",
@@ -298,7 +275,19 @@
     "successTitle": "Reservation requested",
     "successBody": "We pinged the traveller. You’ll see updates on this page and in your inbox.",
     "errorMinFee": "Minimum finder fee is €{floor}.",
-    "errorGeneric": "Could not reserve right now. Please try again."
+    "errorGeneric": "Could not reserve right now. Please try again.",
+    "tripPaymentsFinePrint": "Przy włączonym checkout możesz upoważnić do blokady opłaty za slot plus opłata platformy.",
+    "tripPaymentsTermsCta": "Zobacz regulamin"
+  },
+  "reservationPayment": {
+    "cardTitle": "Autoryzacja karty",
+    "holdExplainer": "Blokujemy kwotę opłaty za slot i niewielką opłatę platformy Eushop. Pobranie następuje dopiero po potwierdzeniu przez podróżnika.",
+    "disputesNote": "Chargebacki i zwroty według reguł sieci kart; zobacz regulamin.",
+    "termsLink": "Regulamin: zwroty i spory",
+    "authorizeHold": "Upoważnij blokadę",
+    "processing": "Przetwarzanie…",
+    "skipForNow": "Pomiń na razie",
+    "stripeKeyMissing": "Brak klucza publikowalnego Stripe — rezerwacja zapisana; sprzedawca potwierdzi bez blokady online, dopóki nie ustawisz NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY."
   },
   "reservationActions": {
     "cancel": "Anuluj rezerwację",
@@ -316,5 +305,8 @@
   },
   "trip": {
     "verifiedBringer": "Zweryfikowany podróżnik"
+  },
+  "productPicker": {
+    "searchPlaceholder": "Krówki Mleczne, Mastiha of Chios, Manner Original…"
   }
 }

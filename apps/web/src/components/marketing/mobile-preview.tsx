@@ -32,7 +32,7 @@ export function MobilePreview() {
               <div className="from-saffron-100/80 absolute inset-x-0 top-0 h-28 bg-gradient-to-b to-transparent" />
               <div className="relative flex h-full flex-col px-4 pt-10 pb-6">
                 <p className="text-ink text-center font-serif text-lg">Today near you</p>
-                <p className="text-ash mt-1 text-center text-xs">Munich · 5 km cell</p>
+                <p className="text-ash mt-1 text-center text-xs">Munich · near you</p>
                 <div className="mt-6 space-y-3">
                   {[1, 2, 3].map((i) => (
                     <motion.div

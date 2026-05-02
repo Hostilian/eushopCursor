@@ -1,6 +1,11 @@
 # Eushop — Investor pitch
 
-> Suitcase capacity is the new last-mile.
+> The last-mile is already going somewhere.
+
+## 0. How to read this deck
+
+- **Historic / cited claims** (e.g. official mobility context) stay tied to primary sources and the public **[/sources](/sources)** page — not mixed with revenue math.
+- **Forward-looking or vendor TAM figures** belong in slides labelled *third-party estimate* with publisher and year; refresh team, ask, and projections with **counsel** before wide distribution.
 
 ## 1. Problem
 
@@ -22,11 +27,11 @@ That gap is our take rate.
 
 Three primitives, one network:
 
-1. **Trip offers** — a verified diaspora user announces a trip from country A to country B with N spare suitcase slots. Buyers reserve slots at an **agreed fee per slot**; we collect a small platform fee on each confirmed reservation. *Reservations are the monetisable event.*
-2. **Open requests** — a buyer posts what they want; matching trips and listings in the same corridor or 5 km cell light it up automatically.
-3. **Pantry listings** — neighbourhood-scale posts with a **finder’s fee** (“half a tin of Krówki, €3, pickup at Goetheplatz”) with privacy-preserving geohash discovery.
+1. **Trip offers** — a verified diaspora user announces a trip from country A to country B with N spare bag slots. Buyers reserve slots at an **agreed fee per slot**; we collect a small platform fee on each confirmed reservation. *Reservations are the monetisable event.*
+2. **Open asks** — a buyer posts what they want; matching trips and listings in the same corridor or radius light it up automatically.
+3. **Local listings** — neighbourhood-scale posts with a **finder’s fee** (“half a tin of Krówki, €3, pickup at Goetheplatz”) with privacy-preserving geohash discovery.
 
-Catalog is hybrid: curated EU foods + Open Food Facts (CC-BY-SA) + UGC proposals voted up by the community. Pickers show three image candidates per product so users see the box they actually have at home.
+Catalog is hybrid: curated taste-of-home foods + Open Food Facts (CC-BY-SA) + UGC proposals voted up by the community. Pickers show three image candidates per product so users see the box they actually have at home.
 
 ## 4. Market
 
@@ -64,7 +69,7 @@ Average reservation: €6 agreed slot fee → €0.72 platform fee → 12% effec
 
 - **Trust graph** between diaspora communities is sticky — a verified badge from a Munich user transfers across categories.
 - **Catalog UGC compounds.** Every approved product, every voted image, every confirmed handoff makes the next search better.
-- **Geo + privacy primitives** (5 km cell hashing, deterministic jitter) are non-trivial to copy correctly; doing it wrong burns the trust you need to charge.
+- **Geo + privacy primitives** (5 km privacy cell hashing, deterministic jitter) are non-trivial to copy correctly; doing it wrong burns the trust you need to charge.
 - **Multi-modal: web + Expo + Hono + PartyKit + Inngest.** All under one pnpm workspace, all shipping in this repo.
 
 ## 8. Team

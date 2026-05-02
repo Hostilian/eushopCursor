@@ -83,9 +83,11 @@ export const listingsRouter = router({
         .orderBy(desc(listings.createdAt))
         .limit(input.limit);
       return rows.map(publicListing);
-    } catch {
+    } catch (e) {
       // DB unreachable in development. Real users see no synthetic listings —
-      // the surfaces are responsible for showing inviting empty states.
+      // the surfaces are responsible for showing inviting empty states. We
+      // still log so the operator can see why the fallback kicked in.
+      console.error('[listings.feed] DB read failed; returning empty list', e);
       return [];
     }
   }),
@@ -194,7 +196,8 @@ export const listingsRouter = router({
         .orderBy(desc(listings.createdAt))
         .limit(limit);
       return rows.map(publicListing);
-    } catch {
+    } catch (e) {
+      console.error('[listings.recent] DB read failed', e);
       return [];
     }
   }),
@@ -208,7 +211,8 @@ export const listingsRouter = router({
         .orderBy(asc(listings.createdAt))
         .limit(input.limit);
       return rows.map(publicListing);
-    } catch {
+    } catch (e) {
+      console.error('[listings.byCountry] DB read failed', e);
       return [];
     }
   }),

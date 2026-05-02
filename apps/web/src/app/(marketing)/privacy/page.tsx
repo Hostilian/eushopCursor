@@ -28,8 +28,15 @@ export default function PrivacyPage() {
               to clients.
             </li>
             <li>
-              Payment data. Eushop does not process payments — buyers and sellers settle
-              off-platform.
+              <strong>Payments:</strong> For trip checkout, card data is processed by our payment
+              partner (e.g. Stripe). We do not store full card numbers or CVC. We may store
+              transaction metadata (amounts, currency, reservation ids, payment intent references)
+              for support and reconciliation.
+            </li>
+            <li>
+              <strong>Identity verification (optional):</strong> If you use a verified-bringing or
+              similar programme, a verification vendor may process identity documents; we store the
+              outcome (e.g. badge flags) and references as described in our processor agreements.
             </li>
             <li>Your phone number unless you choose to verify it for the trust badge.</li>
           </ul>

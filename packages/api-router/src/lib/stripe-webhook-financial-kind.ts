@@ -1,4 +1,4 @@
-import { financialEventKindEnum } from '@eushop/db';
+import { type financialEventKindEnum } from '@eushop/db';
 
 export type FinancialEventKind = (typeof financialEventKindEnum.enumValues)[number];
 

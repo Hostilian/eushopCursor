@@ -27,8 +27,8 @@ export function RequestForm() {
       <div className="border-ink/10 bg-porcelain rounded-3xl border p-12 text-center">
         <p className="text-ink font-serif text-3xl">Request posted.</p>
         <p className="text-ink/70 mt-3">
-          We'll notify you as soon as someone within {radius} km lists it — or posts a trip from the
-          right country.
+          We&apos;ll notify you as soon as someone within {radius} km lists it — or posts a trip
+          from the right country.
         </p>
       </div>
     );
@@ -131,7 +131,7 @@ export function RequestForm() {
       </Field>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Field label="Search radius" hint={`${radius} km from your cell`}>
+        <Field label="Search radius" hint={`${radius} km from you`}>
           <input
             type="range"
             min={5}

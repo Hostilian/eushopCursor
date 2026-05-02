@@ -63,7 +63,8 @@ export const tractionRouter = router({
         platformFeeCents: gmv?.fee ?? 0,
         countriesActive: countries?.c ?? 0,
       };
-    } catch {
+    } catch (e) {
+      console.error('[traction.liveCounts] DB read failed; returning zeros', e);
       return empty;
     }
   }),

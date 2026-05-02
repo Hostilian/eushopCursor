@@ -25,13 +25,13 @@ export default function TodayScreen() {
     <ScrollView className="bg-paper flex-1" contentContainerStyle={{ paddingBottom: 88 }}>
       <View className="px-6 pt-8 pb-4">
         <Text className="text-ash text-xs tracking-widest uppercase">Today near you</Text>
-        <Text className="text-ink mt-2 font-serif text-4xl">Fresh in your cell.</Text>
+        <Text className="text-ink mt-2 font-serif text-4xl">Fresh near you.</Text>
         <Text className="text-ink/70 mt-2 text-sm">
-          Real listings within a 5 km cell of where you are. Pull to refresh.
+          Real listings near where you are. Pull to refresh.
         </Text>
         <View className="mt-5 flex-row gap-2">
           <KpiTile label="Live" value={rows.length} />
-          <KpiTile label="Cell" value="5 km" />
+          <KpiTile label="Radius" value="5 km" />
           <KpiTile label="Handoff" value="Public" />
         </View>
       </View>
@@ -39,8 +39,8 @@ export default function TodayScreen() {
       <View className="px-6">
         {rows.length === 0 ? (
           <EmptyState
-            title="Quiet in your cell"
-            hint="Be the first to share — or post a request and we'll ping you when a matching listing or trip lands."
+            title="Quiet near you"
+            hint="Be the first to share — or post an ask and we'll ping you when a matching listing or trip lands."
           />
         ) : (
           rows.map((l) => {

@@ -9,6 +9,7 @@ Use with counsel before enabling **in-app trip payments** and **KYC-gated badges
 
 ## Terms and Privacy
 
+- Track counsel review in **[terms-privacy-payments-review.md](./terms-privacy-payments-review.md)**.
 - **Peer-to-peer role**: Terms should describe Eushop as introductions, identity, chat, and (where enabled) payment **infrastructure**, not as seller of the goods or carrier.
 - **Payments**: When Stripe Connect and manual-capture holds are live, add or update sections on: authorization vs capture, refunds, disputes/chargebacks, and platform fee disclosure (aligned with [`calculatePlatformFeeCents`](../../packages/validators/src/index.ts)).
 - **KYC / verified bringer**: If you show a verified badge, Privacy should cover identity verification data, vendor subprocessors, retention, and user rights; Terms should not over-claim liability for third-party verification outcomes.

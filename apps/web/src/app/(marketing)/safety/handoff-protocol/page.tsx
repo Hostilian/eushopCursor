@@ -19,11 +19,10 @@ export default function HandoffProtocolPage() {
         <section>
           <h2 className="text-ink font-serif text-2xl">What Eushop is</h2>
           <p className="mt-3">
-            A discovery and messaging layer between private individuals. We match diaspora
-            travellers who have spare suitcase capacity with neighbours who want a taste of home. We
-            do not import, warehouse, refrigerate, or ship. We do not touch the cash that changes
-            hands at the café table unless and until regulated in-app payments are live in your
-            jurisdiction.
+            A discovery and messaging layer between private individuals. We match travellers who
+            have spare bag space with neighbours who want a taste of home. We do not import,
+            warehouse, refrigerate, or ship. We do not touch the cash that changes hands at the café
+            table unless and until regulated in-app payments are live in your jurisdiction.
           </p>
         </section>
 

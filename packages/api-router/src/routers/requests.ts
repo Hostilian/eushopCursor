@@ -32,7 +32,8 @@ export const requestsRouter = router({
         .where(where)
         .orderBy(desc(requests.createdAt))
         .limit(input.limit);
-    } catch {
+    } catch (e) {
+      console.error('[requests.feed] DB read failed', e);
       return [];
     }
   }),
@@ -46,7 +47,8 @@ export const requestsRouter = router({
         .where(and(eq(requests.status, 'open'), inArray(requests.cellGeohash, cells)))
         .orderBy(desc(requests.createdAt))
         .limit(input.limit);
-    } catch {
+    } catch (e) {
+      console.error('[requests.near] DB read failed', e);
       return [];
     }
   }),

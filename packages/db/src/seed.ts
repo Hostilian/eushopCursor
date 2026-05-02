@@ -1,12 +1,6 @@
 import 'dotenv/config';
 import { eq } from 'drizzle-orm';
-import {
-  BRANDS,
-  CATEGORIES,
-  COUNTRIES,
-  FOOD_ITEMS,
-  STATS,
-} from '@eushop/catalog-data';
+import { BRANDS, CATEGORIES, COUNTRIES, FOOD_ITEMS, STATS } from '@eushop/catalog-data';
 import { db, sql } from './client';
 import { brands, categories, countries, foodItems } from './schema/catalog';
 

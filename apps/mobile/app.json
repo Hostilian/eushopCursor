@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Eushop",
-    "description": "Get something from somewhere, person to person. Trips, neighbours, and open asks on one map — profiles, chat, public handoffs.",
+    "description": "Get something from somewhere, person to person. Trips, locals, and open asks on one map — profiles, chat, public handoffs.",
     "slug": "eushop",
     "scheme": "eushop",
     "version": "0.1.0",

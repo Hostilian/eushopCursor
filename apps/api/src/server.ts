@@ -9,11 +9,20 @@ import { logger } from 'hono/logger';
 import { inngest } from './inngest/client.js';
 import { inngestFunctions } from './inngest/functions-registry.js';
 import { serve as inngestServe } from 'inngest/hono';
+import { captureError, initSentry } from './observability.js';
 import { openApiDocument } from './openapi.js';
-import { authRateLimit, trpcRateLimit } from './rate-limit.js';
+import { authRateLimit, healthRateLimit, inngestRateLimit, trpcRateLimit } from './rate-limit.js';
 import { handleStripeWebhook } from './routes/stripe-webhook.js';
 
+await initSentry();
+
 const app = new Hono();
+
+app.onError((err, c) => {
+  captureError(err, { route: c.req.path });
+  console.error('[hono] unhandled error', err);
+  return c.json({ ok: false, error: 'Internal server error' }, 500);
+});
 
 app.use('*', logger());
 app.use(
@@ -25,6 +34,13 @@ app.use(
     allowHeaders: ['Content-Type', 'Authorization', 'X-Trpc-Source'],
   }),
 );
+
+// Tiny limiter on public/unauthenticated surfaces so a single noisy
+// client (or scraper) cannot saturate health probes or the OpenAPI doc.
+const healthLimiter = healthRateLimit();
+app.use('/', healthLimiter);
+app.use('/health', healthLimiter);
+app.use('/openapi.json', healthLimiter);
 
 app.get('/', (c) => c.json({ name: 'eushop-api', ok: true }));
 app.get('/health', (c) => c.json({ ok: true, ts: Date.now() }));
@@ -50,7 +66,7 @@ app.use(
   }),
 );
 
-// Inngest jobs
+app.use('/api/inngest', inngestRateLimit());
 app.on(
   ['GET', 'POST', 'PUT'],
   '/api/inngest',

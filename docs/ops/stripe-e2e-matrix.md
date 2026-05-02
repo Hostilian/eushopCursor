@@ -52,4 +52,8 @@ Other types log `[stripe webhook] unhandled` and **do not** receive a mapped `ki
 | `reservation_payments` out of sync | Compare Stripe PI status vs row; replay event or patch with audit note |
 | Payout stuck | `payouts` row vs Stripe payout; verify `stripeTransferId` linkage |
 
-Optional: periodic job comparing open reservations with PI status (document in Inngest when built).
+Optional: periodic job comparing open reservations with PI status — see [stripe-reconciliation-repair.md](./stripe-reconciliation-repair.md).
+
+## Reconciliation runbook
+
+Step-by-step admin repair: [stripe-reconciliation-repair.md](./stripe-reconciliation-repair.md).

@@ -41,6 +41,10 @@
     "tailwind-merge": "^2.6.0",
     "zod": "^3.23.8"
   },
+  "optionalDependencies": {
+    "@sentry/nextjs": "^8.45.0",
+    "posthog-js": "^1.200.0"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eushop/config": "workspace:*",

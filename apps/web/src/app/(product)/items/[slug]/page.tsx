@@ -170,7 +170,7 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
             <p className="text-ink mt-3 font-serif text-2xl">{item.description}</p>
           </div>
           <div>
-            <p className="text-ash text-xs tracking-widest uppercase">Where it's from</p>
+            <p className="text-ash text-xs tracking-widest uppercase">Where it&apos;s from</p>
             <p className="text-ink mt-3 font-serif text-2xl">
               {country?.flagEmoji} {country?.name}
             </p>

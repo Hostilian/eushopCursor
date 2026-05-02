@@ -6,9 +6,10 @@
 
 Product UX that often stays English until translated:
 
-- ~~Chat input placeholder (`chat-view.tsx`)~~ — uses `chat.placeholder` / `chat.placeholderUnavailable` (mobile `chat/[id].tsx` still EN-only).
+- ~~Chat input placeholder (`chat-view.tsx`)~~ — uses `chat.placeholder` / `chat.placeholderUnavailable`.
+- ~~Mobile chat placeholders (`app/chat/[id].tsx`)~~ — reads `chat.*` from `@eushop/i18n` `en.json` (device locale wiring can map to `loadMessages` later).
 - ~~Search bar placeholder (`search-client.tsx`)~~ — uses `search.placeholder` and `search.inputAriaLabel` from i18n.
-- `ProductPicker` placeholders (web + mobile).
+- `ProductPicker`: **search field** uses `productPicker.searchPlaceholder` (all six locales); other picker/modal strings still English — migrate incrementally.
 - Trip / listing / request form hints and placeholders (domain-specific examples).
 - Admin app (operator console) — typically English-only.
 

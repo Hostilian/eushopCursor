@@ -9,12 +9,12 @@ services:
       POSTGRES_PASSWORD: eushop
       POSTGRES_DB: eushop
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U eushop -d eushop"]
+      test: ['CMD-SHELL', 'pg_isready -U eushop -d eushop']
       interval: 5s
       timeout: 5s
       retries: 10
@@ -25,18 +25,18 @@ services:
     environment:
       MEILI_MASTER_KEY: eushopDevMeiliMasterKey
       MEILI_ENV: development
-      MEILI_NO_ANALYTICS: "true"
+      MEILI_NO_ANALYTICS: 'true'
     ports:
-      - "7700:7700"
+      - '7700:7700'
     volumes:
       - meilisearch-data:/meili_data
 
   redis:
     image: redis:7-alpine
     restart: unless-stopped
-    command: ["redis-server", "--appendonly", "yes"]
+    command: ['redis-server', '--appendonly', 'yes']
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis-data:/data
 
@@ -44,18 +44,18 @@ services:
     image: mailhog/mailhog:v1.0.1
     restart: unless-stopped
     ports:
-      - "1025:1025"
-      - "8025:8025"
+      - '1025:1025'
+      - '8025:8025'
 
   imgproxy:
     image: darthsim/imgproxy:v3
     restart: unless-stopped
     environment:
-      IMGPROXY_USE_ETAG: "true"
-      IMGPROXY_ENABLE_WEBP_DETECTION: "true"
-      IMGPROXY_ENABLE_AVIF_DETECTION: "true"
+      IMGPROXY_USE_ETAG: 'true'
+      IMGPROXY_ENABLE_WEBP_DETECTION: 'true'
+      IMGPROXY_ENABLE_AVIF_DETECTION: 'true'
     ports:
-      - "8080:8080"
+      - '8080:8080'
 
 volumes:
   postgres-data:

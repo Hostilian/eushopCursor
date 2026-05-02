@@ -107,7 +107,7 @@ export function TripOfferForm() {
         <p className="text-ink font-serif text-3xl">Trip posted.</p>
         <p className="text-ink/70 mt-3">
           Buyers in {destinationCity || COUNTRIES.find((c) => c.iso2 === destinationIso)?.name} can
-          now reserve a slot. We'll ping you the moment someone books.
+          now reserve a slot. We&apos;ll ping you the moment someone books.
         </p>
       </div>
     );
@@ -237,7 +237,7 @@ export function TripOfferForm() {
             className="form-input"
           />
         </Field>
-        <Field label="Suitcase slots" hint="Each slot is one buyer's small request.">
+        <Field label="Bag slots" hint="Each slot is one buyer's small ask.">
           <input
             type="number"
             min={1}
@@ -268,10 +268,7 @@ export function TripOfferForm() {
             placeholder="e.g. 12"
           />
         </Field>
-        <Field
-          label="Spare volume hint (liters, optional)"
-          hint="Suitcase volume ballpark for buyers."
-        >
+        <Field label="Spare volume hint (liters, optional)" hint="Bag volume ballpark for buyers.">
           <input
             type="number"
             min={1}

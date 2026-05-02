@@ -27,16 +27,19 @@ export default function SignInScreen() {
   };
 
   return (
-    <View className="flex-1 justify-center bg-paper p-8">
-      <Text className="font-serif text-4xl text-ink">Sign in</Text>
-      <Text className="mt-2 text-sm text-ash">A magic link, no passwords.</Text>
+    <View className="bg-paper flex-1 justify-center p-8">
+      <Text className="text-ink font-serif text-4xl">Sign in</Text>
+      <Text className="text-ash mt-2 text-sm">A magic link, no passwords.</Text>
 
       {sent ? (
-        <View className="mt-12 rounded-3xl border border-ink/10 bg-porcelain p-8">
-          <Text className="font-serif text-2xl text-ink">Check your inbox</Text>
-          <Text className="mt-2 text-sm text-ash">A link is on its way to {email}.</Text>
-          <TouchableOpacity className="mt-6 rounded-full border border-ink/10 px-5 py-3" onPress={() => router.back()}>
-            <Text className="text-center text-ink">Done</Text>
+        <View className="border-ink/10 bg-porcelain mt-12 rounded-3xl border p-8">
+          <Text className="text-ink font-serif text-2xl">Check your inbox</Text>
+          <Text className="text-ash mt-2 text-sm">A link is on its way to {email}.</Text>
+          <TouchableOpacity
+            className="border-ink/10 mt-6 rounded-full border px-5 py-3"
+            onPress={() => router.back()}
+          >
+            <Text className="text-ink text-center">Done</Text>
           </TouchableOpacity>
         </View>
       ) : (
@@ -48,10 +51,14 @@ export default function SignInScreen() {
             placeholderTextColor="#9A9081"
             keyboardType="email-address"
             autoCapitalize="none"
-            className="rounded-2xl border border-ink/10 bg-paper px-4 py-3 text-ink"
+            className="border-ink/10 bg-paper text-ink rounded-2xl border px-4 py-3"
           />
-          <TouchableOpacity className="rounded-full bg-ink py-4" onPress={submit} disabled={pending}>
-            <Text className="text-center text-paper font-medium">
+          <TouchableOpacity
+            className="bg-ink rounded-full py-4"
+            onPress={submit}
+            disabled={pending}
+          >
+            <Text className="text-paper text-center font-medium">
               {pending ? 'Sending…' : 'Send magic link'}
             </Text>
           </TouchableOpacity>

@@ -14,7 +14,7 @@ export function Footer() {
           <p className="text-ash mt-4 max-w-md text-sm">{t('tagline')}</p>
           <p className="text-ash mt-6 max-w-md text-xs">
             Eushop is a discovery & messaging service for private individuals trading in small
-            quantities of niche regional foods. We do not handle payments, package, ship, or verify
+            quantities of taste-of-home foods. We do not handle payments, package, ship, or verify
             food safety. Always meet in safe public places and use your judgement.
           </p>
         </div>

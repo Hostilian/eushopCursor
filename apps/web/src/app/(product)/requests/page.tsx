@@ -61,7 +61,7 @@ export default async function RequestsPage() {
             </h1>
             <p className="text-ink/70 mt-4 max-w-xl text-lg">
               When someone posts a matching listing — or an upcoming trip from the right country —
-              we'll notify the requester.
+              we&apos;ll notify the requester.
             </p>
           </div>
           <Button asChild variant="primary" size="lg">
@@ -177,9 +177,8 @@ function EmptyRequests() {
       title="Be the first to ask."
       description={
         <>
-          No open requests near you yet. Post yours &mdash; we&rsquo;ll ping every diaspora
-          traveller in your radius and surface it on the next matching trip from your country of
-          origin.
+          No open asks near you yet. Post yours &mdash; we&rsquo;ll ping travellers in your radius
+          and surface it on the next matching trip from your country of origin.
         </>
       }
       actions={

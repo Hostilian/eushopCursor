@@ -81,6 +81,12 @@ export default async function ReservationsPage() {
               {t('heading')}
             </h1>
             <p className="text-ink/70 mt-3 max-w-xl text-lg">{t('intro')}</p>
+            <p className="text-ash mt-4 max-w-xl text-sm leading-relaxed">
+              {t('paymentsNotice')}{' '}
+              <Link href="/terms#refunds-disputes" className="text-saffron-700 underline">
+                {t('paymentsTermsLink')}
+              </Link>
+            </p>
           </div>
           <Button asChild variant="primary">
             <Link href="/trips">

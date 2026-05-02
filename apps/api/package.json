@@ -27,6 +27,9 @@
     "inngest": "^3.27.4",
     "meilisearch": "^0.45.0"
   },
+  "optionalDependencies": {
+    "@sentry/node": "^8.45.0"
+  },
   "devDependencies": {
     "@eushop/config": "workspace:*",
     "@types/node": "^22.10.0",

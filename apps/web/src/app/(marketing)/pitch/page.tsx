@@ -46,8 +46,8 @@ export default function PitchPage() {
           <h2 className="text-ink font-serif text-2xl">GTM</h2>
           <p className="mt-3">
             Wedge: dense EU corridors with community partners, then expand along rail and air hubs.
-            Destination: a global peer layer for trips, neighbours, and open asks. Catalog is
-            seeded; growth is user-generated listings, requests, and trip offers.
+            Destination: a global peer layer for trips, locals, and open asks. Catalog is seeded;
+            growth is user-generated listings, requests, and trip offers.
           </p>
         </section>
         <section>

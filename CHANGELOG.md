@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.3 — 2026-05-02 — Post-0.2.2 backlog remainder
+
+- **Legal / product**: [`docs/ops/terms-privacy-payments-review.md`](docs/ops/terms-privacy-payments-review.md); Terms/Privacy updated for trip checkout, Stripe, refunds/chargebacks; reservations + pay step copy with `/terms` anchors.
+- **Ops**: [`docs/ops/stripe-reconciliation-repair.md`](docs/ops/stripe-reconciliation-repair.md); admin **Payments** lists `payouts` via `payments.adminListPayouts`; [`docs/ops/corridor-playbooks.md`](docs/ops/corridor-playbooks.md), [`docs/ops/build-runtime.md`](docs/ops/build-runtime.md).
+- **Tests**: [`trips-confirm-reservation.test.ts`](packages/api-router/src/routers/trips-confirm-reservation.test.ts), [`stripe-webhook.test.ts`](apps/api/src/routes/stripe-webhook.test.ts) (Vitest includes `apps/api`).
+- **Analytics**: PostHog initializes only after **analytics consent** (`Providers` + [`consent-banner`](apps/web/src/components/layout/consent-banner.tsx)).
+- **i18n**: `reservationPayment` + payments notices; `productPicker.searchPlaceholder`; mobile chat uses shared `en.json` chat keys; [`pitch.md`](apps/web/content/pitch.md) “how to read this deck”.
+
 ## 0.2.2 — 2026-05-02 — Launch docs and product hardening
 
 - Rewrote **[`docs/ops/stripe-connect.md`](docs/ops/stripe-connect.md)** and added **[`docs/ops/stripe-e2e-matrix.md`](docs/ops/stripe-e2e-matrix.md)**, **[`docs/ops/legal-launch-checklist.md`](docs/ops/legal-launch-checklist.md)**, **[`docs/ops/investor-access.md`](docs/ops/investor-access.md)**, **[`docs/ops/mobile-payments-parity.md`](docs/ops/mobile-payments-parity.md)**, **[`docs/roadmap-epics.md`](docs/roadmap-epics.md)**; expanded deploy runbook and workflow notes.

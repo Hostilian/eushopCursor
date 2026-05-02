@@ -30,8 +30,11 @@ export default function NewRequestScreen() {
   };
 
   return (
-    <ScrollView className="flex-1 bg-paper" contentContainerStyle={{ padding: 24, paddingBottom: 64 }}>
-      <Text className="font-serif text-3xl text-ink">Tell us what to find</Text>
+    <ScrollView
+      className="bg-paper flex-1"
+      contentContainerStyle={{ padding: 24, paddingBottom: 64 }}
+    >
+      <Text className="text-ink font-serif text-3xl">Tell us what to find</Text>
 
       <View className="mt-8" style={{ gap: 16 }}>
         <Field label="What are you looking for?">
@@ -40,7 +43,7 @@ export default function NewRequestScreen() {
             onChangeText={setItem}
             placeholder="Krówki Mleczne — Wedel"
             placeholderTextColor="#9A9081"
-            className="rounded-2xl border border-ink/10 bg-paper px-4 py-3 text-ink"
+            className="border-ink/10 bg-paper text-ink rounded-2xl border px-4 py-3"
           />
         </Field>
         <Field label="Your approximate city">
@@ -49,7 +52,7 @@ export default function NewRequestScreen() {
             onChangeText={setCity}
             placeholder="Munich Glockenbach"
             placeholderTextColor="#9A9081"
-            className="rounded-2xl border border-ink/10 bg-paper px-4 py-3 text-ink"
+            className="border-ink/10 bg-paper text-ink rounded-2xl border px-4 py-3"
           />
         </Field>
         <View className="flex-row" style={{ gap: 12 }}>
@@ -59,7 +62,7 @@ export default function NewRequestScreen() {
                 value={radius}
                 onChangeText={setRadius}
                 keyboardType="number-pad"
-                className="rounded-2xl border border-ink/10 bg-paper px-4 py-3 text-ink"
+                className="border-ink/10 bg-paper text-ink rounded-2xl border px-4 py-3"
               />
             </Field>
           </View>
@@ -69,13 +72,13 @@ export default function NewRequestScreen() {
                 value={maxFee}
                 onChangeText={setMaxFee}
                 keyboardType="decimal-pad"
-                className="rounded-2xl border border-ink/10 bg-paper px-4 py-3 text-ink"
+                className="border-ink/10 bg-paper text-ink rounded-2xl border px-4 py-3"
               />
             </Field>
           </View>
         </View>
-        <TouchableOpacity className="mt-4 rounded-full bg-ink py-4" onPress={submit}>
-          <Text className="text-center text-paper font-medium">Post request</Text>
+        <TouchableOpacity className="bg-ink mt-4 rounded-full py-4" onPress={submit}>
+          <Text className="text-paper text-center font-medium">Post request</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -85,7 +88,7 @@ export default function NewRequestScreen() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <View>
-      <Text className="text-sm font-medium text-ink">{label}</Text>
+      <Text className="text-ink text-sm font-medium">{label}</Text>
       <View className="mt-2">{children}</View>
     </View>
   );

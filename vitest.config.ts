@@ -9,6 +9,7 @@ export default defineConfig({
       'packages/api-router/src/**/*.test.ts',
       'packages/validators/src/**/*.test.ts',
       'packages/catalog-data/src/**/*.test.ts',
+      'apps/api/src/**/*.test.ts',
     ],
   },
 });

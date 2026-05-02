@@ -312,7 +312,10 @@ export const catalogRouter = router({
         });
         if (result.hits.length > 0) return result.hits;
         throw new Error('empty');
-      } catch {
+      } catch (e) {
+        if (!(e instanceof Error && e.message === 'empty')) {
+          console.error('[catalog.search] Meili offline, falling back to DB', e);
+        }
         const pattern = `%${input.q.replace(/[%_]/g, '')}%`;
         try {
           const rows = await ctx.db
@@ -327,8 +330,8 @@ export const catalogRouter = router({
             .where(or(ilike(foodItems.name, pattern), ilike(foodItems.description, pattern)))
             .limit(input.limit);
           if (rows.length > 0) return rows;
-        } catch {
-          /* fall through to static catalog */
+        } catch (e) {
+          console.error('[catalog.search] DB trigram fallback failed; using curated catalog', e);
         }
         const q = input.q.toLowerCase();
         return fallbackItems(
@@ -402,8 +405,8 @@ export const catalogRouter = router({
           if (h.slug) seenSlugs.add(h.slug);
           if (h.barcode) seenBarcodes.add(h.barcode);
         }
-      } catch {
-        // Meili offline; fall through to DB / catalog.
+      } catch (e) {
+        console.error('[catalog.searchWithSuggestions] Meili offline, falling through to DB', e);
       }
 
       if (hits.length < input.limit) {
@@ -434,8 +437,8 @@ export const catalogRouter = router({
             seenSlugs.add(r.slug);
             if (r.barcode) seenBarcodes.add(r.barcode);
           }
-        } catch {
-          /* DB offline */
+        } catch (e) {
+          console.error('[catalog.searchWithSuggestions] DB trigram fallback failed', e);
         }
       }
 
@@ -639,7 +642,8 @@ export const catalogRouter = router({
           )
           .orderBy(desc(foodItemImageProposals.votes))
           .limit(input.limit);
-      } catch {
+      } catch (e) {
+        console.error('[catalog.imagesForItem] DB query failed; returning empty', e);
         return [];
       }
     }),

@@ -33,7 +33,9 @@ export async function ensureSchema() {
   `);
 }
 
-export async function cacheCountries(rows: { iso2: string; name: string; flagEmoji: string; blurb?: string | null }[]) {
+export async function cacheCountries(
+  rows: { iso2: string; name: string; flagEmoji: string; blurb?: string | null }[],
+) {
   const db = await dbPromise;
   await db.withTransactionAsync(async () => {
     for (const r of rows) {

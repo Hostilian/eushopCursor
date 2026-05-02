@@ -3,12 +3,12 @@
 | Surface | Location | Claim type | Notes |
 |--------|----------|--------------|-------|
 | i18n | `packages/i18n/src/messages/*.json` | Product, CTA | Single source for nav, hero, home pillars, mobile onboarding |
-| Web marketing | `apps/web/src/app/(marketing)/{about,manifesto,roadmap,...}/page.tsx` | Editorial, occasional stats | Hardcoded EN; align with i18n tone |
+| Web marketing | `apps/web/src/app/(marketing)/{manifesto,roadmap,...}/page.tsx` | Editorial, occasional stats | Mostly hardcoded EN; **`/about` uses `about.*` in** `packages/i18n/src/messages/*.json` |
 | Web product | `apps/web/src/app/(product)/{discover,listings,trips,...}/**` | Product flows | Route group; URLs unchanged |
 | Web content | `apps/web/content/pitch.md` | Investor, stats, projections | Gated deck; separate cited history vs forward-looking |
 | Web trips UI | `apps/web/src/components/trips/*.tsx` | Product labels | Trip slot fees vs listing finder fee |
 | Mobile | `apps/mobile/app/**/*.tsx` | Product | Trip detail labels |
-| Admin | `apps/admin/src/app/**` | Cockpit | Moderation copy |
+| Admin | `apps/admin/src/app/**` | Cockpit | Moderation copy; **`/payments`** reservation ledger for Stripe reconciliation |
 | Validators | `packages/validators/src/index.ts` | Chat template | User-visible string |
 | Root | `README.md`, `package.json` | Product + stack | Opening paragraph; no uncited millions |
 | Ops docs | `docs/README.md`, `docs/ops/*` | Runbooks, env, compliance prep | Index at `docs/README.md`; production matrix in `docs/ops/environment.md` |

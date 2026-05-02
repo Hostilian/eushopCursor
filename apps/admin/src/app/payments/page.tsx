@@ -1,0 +1,142 @@
+import Link from 'next/link';
+import { api } from '../../lib/trpc-server';
+
+export default async function AdminPaymentsPage() {
+  let reservationRows: Awaited<
+    ReturnType<Awaited<ReturnType<typeof api>>['payments']['adminListReservationPayments']>
+  > = [];
+  let payoutRows: Awaited<
+    ReturnType<Awaited<ReturnType<typeof api>>['payments']['adminListPayouts']>
+  > = [];
+  let loadError: string | null = null;
+  try {
+    const trpc = await api();
+    [reservationRows, payoutRows] = await Promise.all([
+      trpc.payments.adminListReservationPayments(),
+      trpc.payments.adminListPayouts(),
+    ]);
+  } catch (e) {
+    loadError = e instanceof Error ? e.message : 'Could not load payments data.';
+  }
+
+  return (
+    <div className="space-y-10">
+      <div className="space-y-6">
+        <h1 className="text-ink font-serif text-3xl">Reservation payments</h1>
+        <p className="text-ink/70 max-w-2xl text-sm">
+          Latest rows from <code>reservation_payments</code> (newest first, cap 200). Use this for
+          reconciliation when capture fails or webhooks disagree with Stripe Dashboard. Cross-check
+          with <Link href="/audit">Audit log</Link>, <code>financial_events</code>, and the ops
+          runbook <code className="text-ink">docs/ops/stripe-reconciliation-repair.md</code>.
+        </p>
+
+        {loadError ? (
+          <div className="border-danger/30 bg-danger/5 text-danger rounded-2xl border p-4 text-sm">
+            {loadError}
+          </div>
+        ) : null}
+
+        {reservationRows.length === 0 && !loadError ? (
+          <div className="border-ink/10 bg-porcelain rounded-2xl border p-8 text-center">
+            <p className="text-ink/70 text-sm">No reservation payment rows yet.</p>
+          </div>
+        ) : (
+          <div className="border-ink/10 overflow-x-auto rounded-2xl border bg-white">
+            <table className="w-full min-w-[720px] text-left text-sm">
+              <thead className="bg-porcelain/80 text-ash text-xs tracking-widest uppercase">
+                <tr>
+                  <th className="px-3 py-2 font-medium">Reservation</th>
+                  <th className="px-3 py-2 font-medium">Status</th>
+                  <th className="px-3 py-2 font-medium">PI</th>
+                  <th className="px-3 py-2 font-medium">Total €</th>
+                  <th className="px-3 py-2 font-medium">Platform €</th>
+                  <th className="px-3 py-2 font-medium">Captured</th>
+                  <th className="px-3 py-2 font-medium">Updated</th>
+                </tr>
+              </thead>
+              <tbody className="divide-ink/10 divide-y">
+                {reservationRows.map((r) => (
+                  <tr key={r.id}>
+                    <td className="px-3 py-2 font-mono text-xs">{r.reservationId}</td>
+                    <td className="px-3 py-2">{r.status}</td>
+                    <td className="px-3 py-2 font-mono text-xs">
+                      {r.stripePaymentIntentId ?? '—'}
+                    </td>
+                    <td className="px-3 py-2">
+                      {(Number(r.amountTotalCents) / 100).toFixed(2)} {r.currency}
+                    </td>
+                    <td className="px-3 py-2">
+                      {(Number(r.amountPlatformFeeCents) / 100).toFixed(2)}
+                    </td>
+                    <td className="px-3 py-2 text-xs">
+                      {r.capturedAt
+                        ? r.capturedAt instanceof Date
+                          ? r.capturedAt.toISOString()
+                          : String(r.capturedAt)
+                        : '—'}
+                    </td>
+                    <td className="text-ash px-3 py-2 text-xs">
+                      {r.updatedAt instanceof Date
+                        ? r.updatedAt.toISOString()
+                        : String(r.updatedAt)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-6">
+        <h2 className="text-ink font-serif text-2xl">Trip payouts</h2>
+        <p className="text-ink/70 max-w-2xl text-sm">
+          Rows from <code>payouts</code> (newest first, cap 200). Compare{' '}
+          <code>stripe_transfer_id</code> to Stripe Connect transfers / payouts.
+        </p>
+        {loadError ? null : payoutRows.length === 0 ? (
+          <div className="border-ink/10 bg-porcelain rounded-2xl border p-8 text-center">
+            <p className="text-ink/70 text-sm">No payout rows yet.</p>
+          </div>
+        ) : (
+          <div className="border-ink/10 overflow-x-auto rounded-2xl border bg-white">
+            <table className="w-full min-w-[640px] text-left text-sm">
+              <thead className="bg-porcelain/80 text-ash text-xs tracking-widest uppercase">
+                <tr>
+                  <th className="px-3 py-2 font-medium">Trip</th>
+                  <th className="px-3 py-2 font-medium">Seller</th>
+                  <th className="px-3 py-2 font-medium">Status</th>
+                  <th className="px-3 py-2 font-medium">Gross</th>
+                  <th className="px-3 py-2 font-medium">Fee</th>
+                  <th className="px-3 py-2 font-medium">Net</th>
+                  <th className="px-3 py-2 font-medium">Transfer id</th>
+                  <th className="px-3 py-2 font-medium">Updated</th>
+                </tr>
+              </thead>
+              <tbody className="divide-ink/10 divide-y">
+                {payoutRows.map((p) => (
+                  <tr key={p.id}>
+                    <td className="px-3 py-2 font-mono text-xs">{p.tripOfferId}</td>
+                    <td className="px-3 py-2 font-mono text-xs">{p.sellerId}</td>
+                    <td className="px-3 py-2">{p.status}</td>
+                    <td className="px-3 py-2">
+                      {p.amountGross} {p.currency}
+                    </td>
+                    <td className="px-3 py-2">{p.amountFee}</td>
+                    <td className="px-3 py-2">{p.amountNet}</td>
+                    <td className="px-3 py-2 font-mono text-xs">{p.stripeTransferId ?? '—'}</td>
+                    <td className="text-ash px-3 py-2 text-xs">
+                      {p.updatedAt instanceof Date
+                        ? p.updatedAt.toISOString()
+                        : String(p.updatedAt)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

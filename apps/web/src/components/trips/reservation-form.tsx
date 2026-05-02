@@ -3,6 +3,7 @@
 import { useId, useState } from 'react';
 import { calculatePlatformFeeCents } from '@eushop/validators';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 import { trpc } from '../../lib/trpc';
 import { ProductPicker, type ProductPickerSelection } from '../catalog/product-picker';
 import { Button } from '../ui/button';
@@ -208,6 +209,13 @@ export function ReservationForm({
           {error}
         </p>
       ) : null}
+
+      <p className="text-ash text-xs leading-relaxed">
+        {t('tripPaymentsFinePrint')}{' '}
+        <Link href="/terms#trip-payments" className="text-saffron-700 underline">
+          {t('tripPaymentsTermsCta')}
+        </Link>
+      </p>
 
       <Button type="submit" disabled={submitting} variant="primary" className="w-full">
         {submitting ? t('submitting') : t('submit')}

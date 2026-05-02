@@ -2,25 +2,15 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
-const isProd = process.env.NODE_ENV === 'production';
-
 /** Optional extra hostname for user media (e.g. custom R2 public domain). */
 const extraImageHost = process.env.NEXT_PUBLIC_MEDIA_HOSTNAME?.trim();
 
-/** Content-Security-Policy: tight enough for OSM embeds; dev keeps eval for Next/Turbopack. */
-const contentSecurityPolicy = [
-  "default-src 'self'",
-  isProd
-    ? "script-src 'self' 'unsafe-inline'"
-    : "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https:",
-  "font-src 'self' data:",
-  "connect-src 'self' https: http://localhost:* http://127.0.0.1:* ws: wss:",
-  "frame-src 'self' https://www.openstreetmap.org https://*.openstreetmap.org",
-  "base-uri 'self'",
-  "form-action 'self'",
-].join('; ');
+/**
+ * Content-Security-Policy is now applied per-request from `src/middleware.ts`
+ * so we can mint a fresh nonce per response. We keep static `Permissions-Policy`,
+ * `Referrer-Policy`, and `X-Content-Type-Options` here as a backstop in case
+ * the middleware ever short-circuits a request before reaching us.
+ */
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -29,20 +19,15 @@ const nextConfig = {
   // builds; Link hrefs are still checked at compile time via string literals in practice.
   typedRoutes: false,
   async headers() {
-    const securityHeaders = [
-      { key: 'Content-Security-Policy', value: contentSecurityPolicy },
+    const fallbackHeaders = [
       { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
       { key: 'X-Content-Type-Options', value: 'nosniff' },
       { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
     ];
-    // Do not attach CSP (and other security headers) to `/_next/*` or `/api/*`.
-    // Applying them to `/_next/static/css/app/layout.css` breaks dev: that URL is
-    // a virtual entry served by webpack; with headers on every path it can 404 and
-    // the Simple Browser / Chrome shows unstyled HTML (Tailwind never loads).
     return [
       {
         source: '/((?!_next/|api/).*)',
-        headers: securityHeaders,
+        headers: fallbackHeaders,
       },
     ];
   },

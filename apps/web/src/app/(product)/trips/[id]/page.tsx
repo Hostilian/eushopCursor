@@ -27,14 +27,14 @@ export async function generateMetadata({
     const route = `${bundle.trip.originCity}, ${from ?? bundle.trip.originCountryIso2} \u2192 ${bundle.trip.destinationCity}, ${to ?? bundle.trip.destinationCountryIso2}`;
     return {
       title: `Trip ${route}`,
-      description: `${bundle.trip.slotsAvailable} of ${bundle.trip.slotsTotal} suitcase slots available on this Eushop trip.`,
+      description: `${bundle.trip.slotsAvailable} of ${bundle.trip.slotsTotal} bag slots available on this Eushop trip.`,
       openGraph: {
         title: `Trip ${route} \u00b7 Eushop`,
         description: `${bundle.trip.slotsAvailable}/${bundle.trip.slotsTotal} slots, \u20ac${Number(bundle.trip.defaultPerSlotFee).toFixed(2)} per slot.`,
       },
     };
   } catch {
-    return { title: 'Trip details', description: 'Diaspora trip on Eushop.' };
+    return { title: 'Trip details', description: 'A trip on Eushop.' };
   }
 }
 
@@ -188,8 +188,8 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
                 <div>
                   <p className="text-ink font-serif text-2xl">All slots taken.</p>
                   <p className="text-ash mt-2 text-sm">
-                    Post a request and we'll notify you when this traveller — or the next one on the
-                    route — opens a new trip.
+                    Post a request and we&apos;ll notify you when this traveller — or the next one
+                    on the route — opens a new trip.
                   </p>
                   <Button asChild variant="primary" className="mt-4">
                     <Link href="/requests/new">

@@ -4,14 +4,14 @@ import { MarketingSourcesStrip } from '../../../components/marketing/marketing-s
 export const metadata = {
   title: 'Manifesto · Eushop',
   description:
-    'Suitcase capacity is the new last-mile. The Eushop manifesto for a polite, peer-powered diaspora marketplace.',
+    'The last-mile is already going somewhere. The Eushop manifesto for a polite, peer-powered diaspora marketplace.',
 };
 
 export default function ManifestoPage() {
   return (
     <EditorialPageLayout
       eyebrow="Manifesto"
-      title="Suitcase capacity is the new last-mile."
+      title="The last-mile is already going somewhere."
       subtitle="Every weekend someone is already crossing a border with room in the bag. The gap is coordination—not another freight company."
     >
       <article className="text-ink/80 max-w-2xl space-y-8 text-lg leading-relaxed text-pretty">
@@ -33,12 +33,12 @@ export default function ManifestoPage() {
         <h2 className="text-ink font-serif text-3xl">Three convictions</h2>
 
         <h3 className="text-ink font-serif text-xl">
-          1. The marginal cost of a suitcase slot is zero.
+          1. The marginal cost of a spare bag slot is zero.
         </h3>
         <p>
           Diaspora travel is already booked, already paid for, already at the airport. Three empty
-          kilos in a checked bag are a wasted resource the way an empty Uber seat was a wasted
-          resource in 2008. We are the matchmaker, not the carrier.
+          kilos in a bag are a wasted resource the way an empty Uber seat was a wasted resource in
+          2008. We are the matchmaker, not the carrier.
         </p>
 
         <h3 className="text-ink font-serif text-xl">2. The product is the introduction.</h3>

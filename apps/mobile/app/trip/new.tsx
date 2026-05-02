@@ -54,7 +54,7 @@ export default function NewTripScreen() {
     try {
       const perm = await Location.requestForegroundPermissionsAsync();
       if (perm.status !== 'granted') {
-        Alert.alert('Location needed', 'Grant location to pin a precise cell.');
+        Alert.alert('Location needed', 'Grant location so we can pin your origin or destination.');
         return;
       }
       const pos = await Location.getCurrentPositionAsync({});

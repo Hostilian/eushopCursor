@@ -19,7 +19,7 @@ High-level steps for shipping Eushop (Coolify, Docker, or similar). Adjust names
    (requires API env pointing at prod Meilisearch + Postgres).
 3. **API**: Deploy `apps/api` (Node/Bun), expose `/trpc`, `/api/auth/*`, `/api/inngest`, `/health`.
 4. **Web**: Deploy `apps/web` (`next build` / `next start` or serverless equivalent); set all `NEXT_PUBLIC_*` vars.
-5. **Admin**: Deploy `apps/admin` with production auth + API URLs.
+5. **Admin**: Deploy `apps/admin` with production auth + API URLs. Operators use **Payments** (`/payments`) for `reservation_payments` reconciliation alongside Stripe.
 6. **PartyKit**: Deploy `apps/party` per PartyKit docs; set `PARTYKIT_HOST` and public host vars.
 7. **Inngest**: Register/sync functions; confirm signing key and production app URL.
 8. **Mobile**: Build with EAS using production `EXPO_PUBLIC_*` (see `apps/mobile/eas.json`).

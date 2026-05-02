@@ -7,7 +7,7 @@ const STEPS = [
   {
     n: '01',
     title: 'Search by craving or by flag.',
-    body: 'Browse 30 EU + EEA countries or hunt a specific item. Type "Krówki" — see who in your radius has a tin.',
+    body: 'Browse 30 countries (today, mostly Europe) or hunt a specific item. Type "Krówki" — see who in your radius has a tin.',
   },
   {
     n: '02',

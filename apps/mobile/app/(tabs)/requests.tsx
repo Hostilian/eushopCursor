@@ -30,8 +30,8 @@ export default function RequestsScreen() {
         <View className="mt-12 items-center">
           <Ionicons name="megaphone-outline" size={40} color="#9A9081" />
           <Text className="text-ash mt-3 text-center text-sm">
-            No open requests yet. Post yours — we'll ping every diaspora traveller in your radius
-            and surface it on the next matching trip from your country of origin.
+            No open asks yet. Post yours — we'll ping travellers in your radius and surface it on
+            the next matching trip from your country of origin.
           </Text>
         </View>
       ) : (

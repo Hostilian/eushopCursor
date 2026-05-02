@@ -48,7 +48,9 @@ export const listingStatusEnum = pgEnum('listing_status', [
 export const listings = pgTable(
   'listings',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     sellerId: uuid('seller_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),

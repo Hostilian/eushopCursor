@@ -71,7 +71,7 @@ export function ListingForm() {
     }
     if (!state.location) {
       setError(
-        'We need your approximate location (a 5 km cell) to show this listing to neighbours. Tap "Use my location" or pick a city.',
+        'We need your approximate location to show this listing to neighbours. Tap "Use my location" or pick a city.',
       );
       return;
     }
@@ -103,7 +103,7 @@ export function ListingForm() {
     return (
       <div className="border-ink/10 bg-porcelain rounded-3xl border p-12 text-center">
         <p className="text-ink font-serif text-3xl">Listed.</p>
-        <p className="text-ink/70 mt-3">Anyone within your 5 km cell can now find it.</p>
+        <p className="text-ink/70 mt-3">Anyone near you can now find it.</p>
       </div>
     );
   }
@@ -228,7 +228,7 @@ export function ListingForm() {
 
       <div className="flex items-center justify-between">
         <p className="text-ash text-xs">
-          By posting you confirm you're a private individual sharing personal items from home.
+          By posting you confirm you&apos;re a private individual sharing personal items from home.
         </p>
         <Button type="submit" disabled={submitting} size="lg">
           {submitting ? 'Posting…' : 'Publish listing'}

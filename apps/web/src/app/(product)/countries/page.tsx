@@ -6,10 +6,10 @@ import { Nav } from '../../../components/layout/nav';
 
 export const metadata = {
   title: `All ${COUNTRIES.length} home countries`,
-  description: `Niche regional foods from every EU member, plus EEA neighbours. ${COUNTRIES.length} country editorials.`,
+  description: `Regional foods from every EU member and EEA neighbour. ${COUNTRIES.length} country editorials.`,
   openGraph: {
     title: `All ${COUNTRIES.length} home countries · Eushop`,
-    description: 'Niche regional foods from every EU member, plus EEA neighbours.',
+    description: 'Regional foods from every EU member and EEA neighbour.',
   },
 };
 
@@ -37,8 +37,8 @@ export default function CountriesPage() {
           All {COUNTRIES.length} home countries.
         </h1>
         <p className="text-ink/70 mt-4 max-w-2xl text-lg">
-          We index niche regional foods from every EU member, plus EEA neighbours Norway and
-          Iceland. Tap a flag for the editorial.
+          We index regional foods from every EU member and EEA neighbours Norway and Iceland. Tap a
+          flag for the editorial.
         </p>
 
         {Object.entries(grouped).map(([region, items]) => (

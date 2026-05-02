@@ -36,6 +36,7 @@ import {
   createPaymentIntent,
   createRefund,
 } from '../lib/stripe';
+import { confirmReservationBlockedReason } from '../lib/trip-reservation-guards';
 import { protectedProcedure, publicProcedure, router } from '../trpc';
 
 /**
@@ -89,7 +90,8 @@ export const tripsRouter = router({
         .orderBy(asc(tripOffers.departAt))
         .limit(input.limit);
       return rows.map(({ offer, sellerBadges }) => publicTrip(offer, sellerBadges));
-    } catch {
+    } catch (e) {
+      console.error('[trips.byRoute] DB read failed; returning empty list', e);
       return [];
     }
   }),
@@ -114,7 +116,8 @@ export const tripsRouter = router({
         .orderBy(asc(tripOffers.departAt))
         .limit(input.limit);
       return rows.map(({ offer, sellerBadges }) => publicTrip(offer, sellerBadges));
-    } catch {
+    } catch (e) {
+      console.error('[trips.feedNear] DB read failed; returning empty list', e);
       return [];
     }
   }),
@@ -209,7 +212,8 @@ export const tripsRouter = router({
         .orderBy(asc(tripOffers.departAt))
         .limit(input?.limit ?? 12);
       return rows.map(({ offer, sellerBadges }) => publicTrip(offer, sellerBadges));
-    } catch {
+    } catch (e) {
+      console.error('[trips.recent] DB read failed; returning empty list', e);
       return [];
     }
   }),
@@ -428,11 +432,9 @@ export const tripsRouter = router({
         where: eq(tripOffers.id, reservation.tripOfferId),
       });
       if (!trip || trip.sellerId !== ctx.user.id) throw new TRPCError({ code: 'FORBIDDEN' });
-      if (reservation.status !== 'pending') {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: `Reservation is already ${reservation.status}`,
-        });
+      const confirmBlock = confirmReservationBlockedReason(reservation.status);
+      if (confirmBlock) {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: confirmBlock });
       }
       const [updated] = await ctx.db
         .update(tripReservations)

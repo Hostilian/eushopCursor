@@ -2,6 +2,7 @@
 
 import { Check, Image as ImageIcon, Link2, Plus, Search, Sparkles, Upload, X } from 'lucide-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { trpc } from '../../lib/trpc';
 import { Button } from '../ui/button';
@@ -63,6 +64,7 @@ export function ProductPicker({
   purpose = 'listing',
   proposeCategoryOptions = [],
 }: Props) {
+  const t = useTranslations('productPicker');
   const [query, setQuery] = useState(value.freeformName ?? '');
   const [debouncedQ, setDebouncedQ] = useState(query);
   const [pasteUrl, setPasteUrl] = useState('');
@@ -163,7 +165,7 @@ export function ProductPicker({
               onChange({ ...value, foodItemId: undefined, freeformName: e.target.value });
             else onChange({ ...value, freeformName: e.target.value });
           }}
-          placeholder="Krówki Mleczne, Mastiha of Chios, Manner Original…"
+          placeholder={t('searchPlaceholder')}
           className="form-input border-0 bg-transparent px-0"
         />
         {value.foodItemId ? (
@@ -369,7 +371,8 @@ function ProposeItemModal({
         <div>
           <h3 className="text-ink font-serif text-2xl">Propose a product</h3>
           <p className="text-ash mt-1 text-xs">
-            We'll review and merge it into the catalog so the next neighbour can find it instantly.
+            We&apos;ll review and merge it into the catalog so the next neighbour can find it
+            instantly.
           </p>
         </div>
         <label className="block">

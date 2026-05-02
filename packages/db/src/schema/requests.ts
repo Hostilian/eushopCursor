@@ -34,7 +34,9 @@ export const requestStatusEnum = pgEnum('request_status', [
 export const requests = pgTable(
   'requests',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     buyerId: uuid('buyer_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),

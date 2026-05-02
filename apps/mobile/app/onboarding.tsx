@@ -5,7 +5,7 @@ import { Card } from '../src/components/Card';
 const STEPS = [
   {
     title: 'Discover',
-    body: 'Browse countries and listings in your radius — pins stay inside a 5 km cell.',
+    body: 'Browse countries and listings near you — pins stay approximate so addresses stay private.',
   },
   {
     title: 'Share',

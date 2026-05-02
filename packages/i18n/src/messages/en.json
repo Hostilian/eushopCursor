@@ -8,7 +8,7 @@
     "favsLabel": "Catalog spotlight"
   },
   "home": {
-    "countriesEyebrow": "From around the union",
+    "countriesEyebrow": "From around the world",
     "countriesHeading": "A taste of {count} home countries.",
     "countriesSeeAll": "See all {count}",
     "categoriesEyebrow": "Browse by craving",
@@ -22,7 +22,7 @@
     "pillar2Body": "Publish spare luggage space on trips you already take, or open a request and let offers come to you. Everyday shares use a small finder's fee; trip slots use a fee you agree per slot. Fixed prices today; smarter pricing when we can ship it cleanly.",
     "pillar3Title": "The deal stays between you.",
     "pillar3Body": "You agree terms in chat and settle in person or off-platform unless and until regulated in-app payments arrive. We never hold your money today.",
-    "ctaBandBody": "Share what you brought, name what you need, or list trip space as those tools roll out—always within a 5 km cell so meetups stay practical."
+    "ctaBandBody": "Share what you brought, name what you need, or list trip space as those tools roll out—always near you so meetups stay practical."
   },
   "nav": {
     "discover": "Discover",
@@ -80,41 +80,6 @@
     "stripFootnote": "These numbers describe the curated catalog seed, not live GMV or signups.",
     "stripFootnoteSources": "Historic migration citations:"
   },
-  "mobile": {
-    "onboardingEyebrow": "Eushop",
-    "onboardingTitle": "Three beats.",
-    "onboardingSubtitle": "The same story on web, admin, and here — tuned for thumbs.",
-    "onboardingDiscoverTitle": "Discover",
-    "onboardingDiscoverBody": "Browse countries and listings in your radius — pins stay inside a 5 km cell.",
-    "onboardingShareTitle": "Share",
-    "onboardingShareBody": "Post what you brought back from home with a small finder’s fee for pickup—trips use a separate agreed slot fee when you publish capacity.",
-    "onboardingMeetTitle": "Meet",
-    "onboardingMeetBody": "Message in-app, agree on a café or station, settle in person. We never touch the cash.",
-    "onboardingCta": "Enter the app →",
-    "todayEyebrow": "Today near you",
-    "todayTitle": "Fresh in your cell.",
-    "todaySubtitle": "Real listings within a 5 km cell of where you are. Pull to refresh.",
-    "kpiLive": "Live",
-    "kpiCell": "Cell",
-    "kpiHandoff": "Handoff",
-    "emptyTitle": "Quiet in your cell",
-    "emptyHint": "Be the first to share — or post a request and we'll ping you when a matching listing or trip offer lands."
-  },
-  "admin": {
-    "sidebarOverview": "Overview",
-    "sidebarListings": "Listings",
-    "sidebarRequests": "Requests",
-    "sidebarUsers": "Users",
-    "sidebarCatalog": "Catalog",
-    "sidebarAudit": "Audit log",
-    "productName": "Eushop",
-    "productTag": "Admin",
-    "mobileHeader": "Eushop Admin"
-  },
-  "auth": {
-    "signedOut": "You're signed out.",
-    "welcome": "Welcome back, {name}"
-  },
   "signInForm": {
     "emailLabel": "Email",
     "emailPlaceholder": "you@example.eu",
@@ -137,25 +102,35 @@
   },
   "discover": {
     "metaTitle": "Discover near you · Eushop",
-    "metaDescription": "Listings within a 25 km cell. Pins are jittered inside their 5 km cell — exact addresses stay private.",
+    "metaDescription": "Listings within 25 km of you. Exact addresses stay private — pins are jittered for safety.",
     "eyebrow": "Around you",
-    "heading": "Within a 25 km cell.",
-    "intro": "Pins are jittered inside their 5 km cell — we never reveal exact addresses. Tap a card to message.",
+    "heading": "Within 25 km of you.",
+    "intro": "Pins are jittered to protect exact addresses — we never reveal them. Tap a card to message.",
     "mapExampleLabel": "Example: Berlin centre"
   },
+  "about": {
+    "metaTitle": "About · Eushop",
+    "metaDescription": "The taste of home, without the mystery DMs. Open introductions for diaspora trips, local shares, and open asks.",
+    "eyebrow": "About",
+    "title": "The taste of home, without the mystery DMs.",
+    "subtitle": "People are always on the move, and they bring things back for each other. Eushop is the open layer for that, anywhere in the world. We are starting in dense European corridors, where the diaspora flows are best documented, and growing out from there.",
+    "p1": "Eushop exists for the small cravings between visits home: the chocolate that doesn't taste quite right anywhere else, the cheese bar from grandma's fridge, the brand of sausage that means \"Sunday\" to you.",
+    "p2": "We are not an importer, a warehouse, or a courier. We are introductions: spare luggage space on real routes, open asks, and local shares between neighbours—discovery, identity you can see, and chat that leads to a clear handoff. Regulated in-app payments roll out where law allows; until then settlement stays between you.",
+    "p3": "We are tiny on purpose. No commercial sellers in the loop today. Meet in public, use your judgement, and keep portions neighbour-sized."
+  },
   "trips": {
-    "metaTitle": "Trips · Diaspora marketplace",
-    "metaDescription": "Reserve a slot in a diaspora traveller’s suitcase. Trips between EU cities, every week.",
-    "eyebrow": "Suitcase capacity is the new last-mile",
-    "heading": "Upcoming diaspora trips.",
-    "intro": "A diaspora traveller flying home next week posts the spare slots in their carry-on. Reserve one for the jar of Krówki, the Manchego wheel, the Mastiha bottle. We charge a small platform fee on each confirmed reservation; everything else stays between you and the traveller.",
+    "metaTitle": "Trips · Eushop",
+    "metaDescription": "Reserve a slot in someone’s spare bag space. Trips already happening between cities, every week.",
+    "eyebrow": "Trips already happening.",
+    "heading": "Upcoming trips.",
+    "intro": "A traveller heading out next week posts the spare slots in their bag. Reserve one for the jar of Krówki, the Manchego wheel, the Mastiha bottle. We charge a small platform fee on each confirmed reservation; everything else stays between you and the traveller.",
     "postTrip": "Post a trip",
     "postFirstTrip": "Post the first trip",
-    "browseRequests": "Browse open requests",
-    "browseRequestsAlt": "Browse requests",
+    "browseRequests": "Browse open asks",
+    "browseRequestsAlt": "Browse asks",
     "retry": "Retry",
     "emptyTitle": "No trips posted yet.",
-    "emptyDescription": "Eushop is brand new and the trip board is quiet. Be the first traveller to advertise spare slots — or post a request and we’ll notify you when a matching route appears.",
+    "emptyDescription": "Eushop is brand new and the trip board is quiet. Be the first traveller to share spare slots — or post an ask and we’ll notify you when a matching route appears.",
     "errorTitle": "Trips service is offline.",
     "errorDescription": "We couldn’t reach the trips service. Try again in a moment, or browse open requests in the meantime.",
     "departs": "Departs {when}",
@@ -237,7 +212,9 @@
     "statusSellerRejected": "Declined by traveller",
     "feeLabel": "Agreed fee €{fee}",
     "platformFeeLabel": "Platform fee €{fee}",
-    "qty": "{qty} item(s)"
+    "qty": "{qty} item(s)",
+    "paymentsNotice": "Online trip payments use a card hold until the traveller confirms. Refunds, disputes and chargebacks follow our Terms and your card issuer.",
+    "paymentsTermsLink": "Terms: payments and disputes"
   },
   "reservationForm": {
     "metaTitle": "Reserve a slot",
@@ -257,7 +234,19 @@
     "successTitle": "Reservation requested",
     "successBody": "We pinged the traveller. You’ll see updates on this page and in your inbox.",
     "errorMinFee": "Minimum finder fee is €{floor}.",
-    "errorGeneric": "Could not reserve right now. Please try again."
+    "errorGeneric": "Could not reserve right now. Please try again.",
+    "tripPaymentsFinePrint": "If checkout is enabled, you may authorize a card hold for the slot fee plus the platform fee.",
+    "tripPaymentsTermsCta": "See Terms"
+  },
+  "reservationPayment": {
+    "cardTitle": "Card authorization",
+    "holdExplainer": "We place a hold for the slot fee plus Eushop’s small platform fee. Nothing is captured until the traveller confirms your booking.",
+    "disputesNote": "Chargebacks and refunds are handled under card-network rules; see Terms.",
+    "termsLink": "Terms: refunds and disputes",
+    "authorizeHold": "Authorize hold",
+    "processing": "Processing…",
+    "skipForNow": "Skip for now",
+    "stripeKeyMissing": "Stripe publishable key is not configured — your reservation is saved; the seller will confirm without an online card hold until NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is set."
   },
   "reservationActions": {
     "cancel": "Cancel reservation",
@@ -278,7 +267,7 @@
     "homeCountry": "Home country",
     "currentCountry": "Current country",
     "approxCity": "Approximate city",
-    "approxCityHint": "Stored as a 5km cell — never the address.",
+    "approxCityHint": "Stored as an approximate area — never the exact address.",
     "approxCityPlaceholder": "Munich Glockenbach",
     "preferredLanguage": "Preferred language",
     "preferredLanguageHint": "Used in emails and the default UI locale.",
@@ -317,5 +306,8 @@
   },
   "trip": {
     "verifiedBringer": "Verified bringer"
+  },
+  "productPicker": {
+    "searchPlaceholder": "Krówki Mleczne, Mastiha of Chios, Manner Original…"
   }
 }

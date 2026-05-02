@@ -13,7 +13,7 @@ export async function register() {
     Sentry.init({
       dsn: process.env.SENTRY_DSN,
       tracesSampleRate: Number(process.env.SENTRY_TRACES_SAMPLE_RATE ?? '0.1'),
-      beforeSend(event) {
+      beforeSend(event: { request?: { cookies?: unknown } }) {
         if (event.request?.cookies) delete event.request.cookies;
         return event;
       },

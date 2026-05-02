@@ -154,6 +154,10 @@ export default function TripDetailScreen() {
             <Text className="text-ash text-xs">Eushop platform fee</Text>
             <Text className="text-ink text-xs">€{platformFee.toFixed(2)}</Text>
           </View>
+          <Text className="text-ash mt-2 text-xs leading-snug">
+            Charged when the seller confirms your reservation. Card holds and Stripe checkout are on
+            the web today when Connect is enabled for the route.
+          </Text>
         </View>
 
         <TouchableOpacity

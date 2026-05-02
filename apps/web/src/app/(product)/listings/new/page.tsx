@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Footer } from '../../../../components/layout/footer';
 import { Nav } from '../../../../components/layout/nav';
 import { ListingForm } from '../../../../components/listings/listing-form';
+import { PayoutReadinessCallout } from '../../../../components/payments/payout-readiness-callout';
 
 export const metadata = {
   title: 'Share what you brought',
@@ -12,7 +13,7 @@ export const metadata = {
   },
 };
 
-export default function NewListingPage() {
+export default async function NewListingPage() {
   return (
     <>
       <Nav />
@@ -36,9 +37,10 @@ export default function NewListingPage() {
         </h1>
         <p className="text-ink/70 mt-4 max-w-xl text-lg">
           A few photos, a finder&apos;s fee, an approximate neighbourhood. We never publish your
-          exact address &mdash; just a 5km cell.
+          exact address. If you also post trips, complete Connect payouts so travellers can take
+          card-backed reservations on those routes.
         </p>
-
+        <PayoutReadinessCallout />
         <div className="mt-12 max-w-3xl">
           <ListingForm />
         </div>

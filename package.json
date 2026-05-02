@@ -2,7 +2,7 @@
   "name": "eushop",
   "version": "0.2.1",
   "private": true,
-  "description": "Peer marketplace for trips, neighbours, and open asks — spare luggage space and finder-fee listings on one map. Launching in EU corridors first.",
+  "description": "Peer marketplace for trips, locals, and open asks — spare luggage space and finder-fee listings on one map. Launching in EU corridors first.",
   "packageManager": "pnpm@9.12.0",
   "engines": {
     "node": ">=20.11.0",
