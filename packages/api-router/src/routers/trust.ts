@@ -101,4 +101,44 @@ export const trustRouter = router({
         .where(eq(reports.id, input.id));
       return { ok: true };
     }),
+
+  /** After KYC review, grant or revoke the `verified_bringer` profile badge. */
+  setVerifiedBringer: adminProcedure
+    .input(
+      z.object({
+        userId: z.string().uuid(),
+        verified: z.boolean(),
+        note: z.string().max(500).optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const profile = await ctx.db.query.profiles.findFirst({
+        where: eq(profiles.userId, input.userId),
+      });
+      if (!profile) throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found' });
+
+      const badge = 'verified_bringer';
+      const nextBadges = input.verified
+        ? Array.from(new Set([...profile.badges, badge]))
+        : profile.badges.filter((b) => b !== badge);
+
+      await ctx.db
+        .update(profiles)
+        .set({ badges: nextBadges, updatedAt: new Date() })
+        .where(eq(profiles.userId, input.userId));
+
+      await ctx.db.insert(moderationActions).values({
+        actorId: ctx.user.id,
+        action: 'note',
+        note: input.verified
+          ? `Granted verified_bringer badge${input.note ? `: ${input.note}` : ''}`
+          : `Revoked verified_bringer badge${input.note ? `: ${input.note}` : ''}`,
+        metadata: {
+          userId: input.userId,
+          kind: input.verified ? 'grant_verified_bringer' : 'revoke_verified_bringer',
+        },
+      });
+
+      return { ok: true, badges: nextBadges };
+    }),
 });

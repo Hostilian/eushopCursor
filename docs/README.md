@@ -1,0 +1,28 @@
+# Documentation
+
+| Path | What it is |
+|------|------------|
+| **[ops/](ops/)** | Production: env matrix, deploy runbook, Stripe Connect, KYC badge, observability |
+| [pre-2008-sources.md](pre-2008-sources.md) | Historic EU mobility citations (editorial / deck bibliography) |
+| [copy-inventory.md](copy-inventory.md) | Copy source map (marketing vs product strings) |
+| [voice-glossary.md](voice-glossary.md) | Tone and terminology |
+| [i18n-english-surfaces.md](i18n-english-surfaces.md) | Deliberately English-only UI surfaces |
+| [eslint-next-migration.md](eslint-next-migration.md) | Plan to move off `next lint` |
+
+### Apps (short pointers)
+
+| App | README |
+|-----|--------|
+| Web | [apps/web/README.md](../apps/web/README.md) |
+| API | [apps/api/README.md](../apps/api/README.md) |
+| Admin | [apps/admin/README.md](../apps/admin/README.md) |
+| Mobile | [apps/mobile/README.md](../apps/mobile/README.md) |
+| PartyKit | [apps/party/README.md](../apps/party/README.md) |
+
+### Operations quick links
+
+- [Environment variables](ops/environment.md) — full matrix from `.env.example`
+- [Deploy runbook](ops/deploy-runbook.md) — migrate, search index, smoke checks
+- [Stripe Connect](ops/stripe-connect.md) — platform fees, webhooks
+- [Verified bringer / KYC](ops/verified-bringer-kyc.md)
+- [Observability](ops/observability.md) — Sentry, PostHog, runbooks

@@ -40,16 +40,40 @@ export async function generateMetadata({
 export default async function TripDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   let bundle: Awaited<ReturnType<Awaited<ReturnType<typeof api>>['trips']['byId']>> | null = null;
+  let outageMessage: string | null = null;
   try {
     const trpc = await api();
     bundle = await trpc.trips.byId({ id });
   } catch (e) {
     if (e instanceof Error && /NOT_FOUND/.test(e.message)) notFound();
-    /* DB unreachable; render an honest empty page */
+    outageMessage =
+      e instanceof Error && e.message
+        ? e.message
+        : 'We could not load this trip. The catalogue service may be reloading — try again in a moment.';
+  }
+
+  if (outageMessage) {
+    return (
+      <>
+        <Nav />
+        <main id="main-content" className="container-editorial pt-12 pb-32">
+          <h1 className="text-ink font-serif text-3xl">Trip temporarily unavailable</h1>
+          <p className="text-ash mt-3 max-w-xl text-sm">{outageMessage}</p>
+          <div className="mt-6 flex gap-3">
+            <Button asChild variant="primary">
+              <Link href="/trips">Back to all trips</Link>
+            </Button>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
   }
 
   if (!bundle) notFound();
-  const { trip, reservations } = bundle;
+  const trip = bundle.trip;
+  const reservations = bundle.viewerIsSeller ? bundle.reservations : bundle.ownReservations;
+  const summary = bundle.viewerIsSeller ? null : bundle.reservationSummary;
   const from = COUNTRIES.find((c) => c.iso2 === trip.originCountryIso2);
   const to = COUNTRIES.find((c) => c.iso2 === trip.destinationCountryIso2);
 
@@ -101,10 +125,22 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
             ) : null}
 
             <div className="mt-10">
-              <h2 className="text-ink font-serif text-2xl">Reservations on this trip</h2>
+              <h2 className="text-ink font-serif text-2xl">
+                {bundle.viewerIsSeller ? 'Reservations on this trip' : 'Your reservations'}
+              </h2>
+              {summary ? (
+                <p className="text-ash mt-2 text-sm">
+                  {summary.confirmed + summary.pending} active reservation
+                  {summary.confirmed + summary.pending === 1 ? '' : 's'} · {summary.confirmed}{' '}
+                  confirmed · {summary.pending} pending
+                  {summary.completed > 0 ? ` · ${summary.completed} completed` : ''}
+                </p>
+              ) : null}
               {reservations.length === 0 ? (
                 <p className="text-ash mt-2 text-sm">
-                  No reservations yet. Yours could be the first.
+                  {bundle.viewerIsSeller
+                    ? 'No reservations yet. Buyers will appear here as they book.'
+                    : 'You have no reservations on this trip yet.'}
                 </p>
               ) : (
                 <ul className="border-ink/10 mt-4 divide-y rounded-2xl border bg-white">

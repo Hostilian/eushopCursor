@@ -1,5 +1,7 @@
 import { searchOpenFoodFacts } from '@eushop/catalog-data';
 import {
+  adminBulkReviewFoodItemCandidateInput,
+  adminBulkReviewFoodItemImageProposalInput,
   adminCatalogUgcQueueInput,
   adminReviewFoodItemCandidateInput,
   adminReviewFoodItemImageProposalInput,
@@ -20,6 +22,7 @@ import {
   foodItemImageProposals,
   foodItemImageVotes,
   foodItems,
+  moderationActions,
 } from '@eushop/db';
 import {
   fallbackBrands,
@@ -32,10 +35,11 @@ import {
   fallbackItemsByCategory,
   withFallback,
   withListFallback,
-} from '../lib/mock-fallback';
+} from '../lib/catalog-fallback';
 import type { DB } from '@eushop/db/client';
-import { adminProcedure, protectedProcedure, publicProcedure, router } from '../trpc';
-import type { Context } from '../context';
+import { adminProcedure, protectedProcedure, publicProcedure, rateLimited, router } from '../trpc';
+
+const ugcMutationLimit = rateLimited({ scope: 'catalog.ugc', perMinute: 30, perDay: 200 });
 
 type CatalogImageVariantSource = 'off' | 'r2' | 'user';
 
@@ -191,19 +195,35 @@ export const catalogRouter = router({
             or(ilike(foodItems.name, pattern), ilike(foodItems.description, pattern))!,
           );
         }
+        // Cursor format: `${createdAt.toISOString()}|${id}` — keyset over a
+        // strict ordering on (created_at desc, id desc) so duplicates of the
+        // same timestamp don't break pagination.
+        if (input.cursor) {
+          const sep = input.cursor.indexOf('|');
+          const tsPart = sep >= 0 ? input.cursor.slice(0, sep) : input.cursor;
+          const idPart = sep >= 0 ? input.cursor.slice(sep + 1) : '';
+          const cursorDate = new Date(tsPart);
+          if (!Number.isNaN(cursorDate.valueOf())) {
+            conditions.push(
+              sql`(${foodItems.createdAt}, ${foodItems.id}::text) < (${cursorDate.toISOString()}, ${idPart})`,
+            );
+          }
+        }
 
         const rows = await ctx.db
           .select()
           .from(foodItems)
           .where(conditions.length ? and(...conditions) : undefined)
-          .orderBy(desc(foodItems.createdAt))
+          .orderBy(desc(foodItems.createdAt), desc(foodItems.id))
           .limit(input.limit);
 
         if (rows.length === 0) throw new Error('empty');
-        return {
-          items: rows,
-          nextCursor: rows.length === input.limit ? rows.at(-1)?.id : undefined,
-        };
+        const last = rows.at(-1);
+        const nextCursor =
+          rows.length === input.limit && last
+            ? `${last.createdAt.toISOString()}|${last.id}`
+            : undefined;
+        return { items: rows, nextCursor };
       },
       () => {
         const items = fallbackItems((it) => {
@@ -308,7 +328,7 @@ export const catalogRouter = router({
             .limit(input.limit);
           if (rows.length > 0) return rows;
         } catch {
-          /* fall through to mock */
+          /* fall through to static catalog */
         }
         const q = input.q.toLowerCase();
         return fallbackItems(
@@ -466,23 +486,75 @@ export const catalogRouter = router({
    * UGC: propose new product / propose alternate image / upvote.    *
    * -------------------------------------------------------------- */
 
-  proposeItem: protectedProcedure.input(proposeFoodItemInput).mutation(async ({ ctx, input }) => {
-    const [created] = await ctx.db
-      .insert(foodItemCandidates)
-      .values({
-        name: input.name,
-        aka: input.aka ?? [],
-        categorySlug: input.categorySlug,
-        originCountryIso2: input.originCountryIso2,
-        description: input.description,
-        proposedImages: input.proposedImages ?? [],
-        submittedById: ctx.user.id,
-      })
-      .returning();
-    return created;
-  }),
+  proposeItem: protectedProcedure
+    .use(ugcMutationLimit)
+    .input(proposeFoodItemInput)
+    .mutation(async ({ ctx, input }) => {
+      // Surface obvious duplicates so the submitter (and the moderator) can
+      // confirm before we add yet-another row to moderate. We check by barcode
+      // first (deterministic) then by trigram similarity on the canonical name.
+      const trimmedName = input.name.trim();
+      const dupes: Array<{
+        id: string;
+        slug: string;
+        name: string;
+        originCountryIso2: string;
+        defaultImageUrl: string | null;
+        match: 'barcode' | 'name';
+      }> = [];
+      if (input.barcode) {
+        const byBarcode = await ctx.db
+          .select({
+            id: foodItems.id,
+            slug: foodItems.slug,
+            name: foodItems.name,
+            originCountryIso2: foodItems.originCountryIso2,
+            defaultImageUrl: foodItems.defaultImageUrl,
+          })
+          .from(foodItems)
+          .where(eq(foodItems.barcode, input.barcode))
+          .limit(3);
+        for (const r of byBarcode) dupes.push({ ...r, match: 'barcode' });
+      }
+      if (dupes.length === 0) {
+        const pattern = `%${trimmedName.replace(/[%_]/g, '')}%`;
+        const byName = await ctx.db
+          .select({
+            id: foodItems.id,
+            slug: foodItems.slug,
+            name: foodItems.name,
+            originCountryIso2: foodItems.originCountryIso2,
+            defaultImageUrl: foodItems.defaultImageUrl,
+          })
+          .from(foodItems)
+          .where(
+            and(
+              eq(foodItems.originCountryIso2, input.originCountryIso2),
+              ilike(foodItems.name, pattern),
+            ),
+          )
+          .limit(3);
+        for (const r of byName) dupes.push({ ...r, match: 'name' });
+      }
+
+      const [created] = await ctx.db
+        .insert(foodItemCandidates)
+        .values({
+          name: trimmedName,
+          aka: input.aka ?? [],
+          categorySlug: input.categorySlug,
+          originCountryIso2: input.originCountryIso2,
+          description: input.description,
+          proposedImages: input.proposedImages ?? [],
+          barcode: input.barcode ?? null,
+          submittedById: ctx.user.id,
+        })
+        .returning();
+      return { candidate: created, possibleDuplicates: dupes };
+    }),
 
   proposeImage: protectedProcedure
+    .use(ugcMutationLimit)
     .input(proposeFoodItemImageInput)
     .mutation(async ({ ctx, input }) => {
       const item = await ctx.db.query.foodItems.findFirst({
@@ -501,16 +573,25 @@ export const catalogRouter = router({
           .returning();
         return created;
       } catch (e) {
-        // Most likely cause is the unique (item, user, url) constraint
-        // — surfaces as 409 to the client without leaking stack traces.
+        const code =
+          (e as { code?: string } | undefined)?.code ??
+          (e instanceof Error && /\b23505\b/.test(e.message) ? '23505' : undefined);
+        if (code === '23505') {
+          throw new TRPCError({
+            code: 'CONFLICT',
+            message: 'You already proposed this image for this product.',
+          });
+        }
+        console.error('[catalog.proposeImage] insert failed', e);
         throw new TRPCError({
-          code: 'CONFLICT',
-          message: e instanceof Error ? e.message : 'Image already proposed',
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Could not save image proposal. Please retry.',
         });
       }
     }),
 
   upvoteImage: protectedProcedure
+    .use(rateLimited({ scope: 'catalog.upvote', perMinute: 60, perDay: 1000 }))
     .input(upvoteFoodItemImageInput)
     .mutation(async ({ ctx, input }) => {
       const proposal = await ctx.db.query.foodItemImageProposals.findFirst({
@@ -570,12 +651,33 @@ export const catalogRouter = router({
   adminCatalogUgcQueue: adminProcedure
     .input(adminCatalogUgcQueueInput)
     .query(async ({ ctx, input }) => {
+      const candidateConditions = [eq(foodItemCandidates.status, input.candidateStatus)];
+      if (input.countryIso2) {
+        candidateConditions.push(
+          eq(foodItemCandidates.originCountryIso2, input.countryIso2.toUpperCase()),
+        );
+      }
+      if (input.categorySlug) {
+        candidateConditions.push(eq(foodItemCandidates.categorySlug, input.categorySlug));
+      }
+      if (input.submitterId) {
+        candidateConditions.push(eq(foodItemCandidates.submittedById, input.submitterId));
+      }
+
       const candidates = await ctx.db
         .select()
         .from(foodItemCandidates)
-        .where(eq(foodItemCandidates.status, 'pending'))
+        .where(and(...candidateConditions))
         .orderBy(asc(foodItemCandidates.createdAt))
         .limit(input.candidateLimit);
+
+      const imageConditions = [eq(foodItemImageProposals.status, input.imageProposalStatus)];
+      if (input.submitterId) {
+        imageConditions.push(eq(foodItemImageProposals.submittedById, input.submitterId));
+      }
+      if (input.countryIso2) {
+        imageConditions.push(eq(foodItems.originCountryIso2, input.countryIso2.toUpperCase()));
+      }
 
       const imageProposals = await ctx.db
         .select({
@@ -585,11 +687,174 @@ export const catalogRouter = router({
         })
         .from(foodItemImageProposals)
         .innerJoin(foodItems, eq(foodItemImageProposals.foodItemId, foodItems.id))
-        .where(eq(foodItemImageProposals.status, 'pending'))
+        .where(and(...imageConditions))
         .orderBy(desc(foodItemImageProposals.votes), asc(foodItemImageProposals.createdAt))
         .limit(input.imageProposalLimit);
 
       return { candidates, imageProposals };
+    }),
+
+  adminBulkReviewFoodItemCandidates: adminProcedure
+    .input(adminBulkReviewFoodItemCandidateInput)
+    .mutation(async ({ ctx, input }) => {
+      let updated = 0;
+      let approvedItems = 0;
+      const errors: { id: string; error: string }[] = [];
+      for (const id of input.ids) {
+        try {
+          const result = await ctx.db.transaction(async () => {
+            const candidate = await ctx.db.query.foodItemCandidates.findFirst({
+              where: eq(foodItemCandidates.id, id),
+            });
+            if (!candidate || candidate.status !== 'pending') {
+              return { skipped: true as const };
+            }
+            if (input.status === 'rejected') {
+              await ctx.db
+                .update(foodItemCandidates)
+                .set({
+                  status: 'rejected',
+                  moderatorId: ctx.user.id,
+                  moderatorNote: input.moderatorNote ?? null,
+                  updatedAt: new Date(),
+                })
+                .where(eq(foodItemCandidates.id, id));
+              await ctx.db.insert(moderationActions).values({
+                actorId: ctx.user.id,
+                action: 'catalog_reject_item',
+                note: input.moderatorNote ?? null,
+                metadata: { candidateId: id, name: candidate.name },
+              });
+              return { skipped: false as const, approved: false as const };
+            }
+            // approved bulk path
+            const country = await ctx.db.query.countries.findFirst({
+              where: eq(countries.iso2, candidate.originCountryIso2.toUpperCase()),
+            });
+            const cat = await ctx.db.query.categories.findFirst({
+              where: eq(categories.slug, candidate.categorySlug),
+            });
+            if (!country || !cat) {
+              throw new TRPCError({
+                code: 'BAD_REQUEST',
+                message: `Bad country/category on ${candidate.name}`,
+              });
+            }
+            const firstImg = candidate.proposedImages[0];
+            const variantSource = imageVariantSourceFromProposedTag(firstImg?.source);
+            const slug = await uniqueFoodItemSlug(ctx.db, candidate.name);
+            const [row] = await ctx.db
+              .insert(foodItems)
+              .values({
+                slug,
+                name: candidate.name,
+                aka: candidate.aka,
+                originCountryIso2: country.iso2,
+                categoryId: cat.id,
+                description: candidate.description?.trim() || 'No description provided.',
+                defaultImageUrl: firstImg?.url ?? undefined,
+                imageVariants: firstImg
+                  ? { large: firstImg.url, source: variantSource }
+                  : ({} as { large?: string; source?: CatalogImageVariantSource }),
+                verifiedAt: new Date(),
+                submittedById: candidate.submittedById,
+              })
+              .returning();
+            await ctx.db
+              .update(foodItemCandidates)
+              .set({
+                status: 'approved',
+                moderatorId: ctx.user.id,
+                moderatorNote: input.moderatorNote ?? null,
+                updatedAt: new Date(),
+                mergedIntoItemId: null,
+              })
+              .where(eq(foodItemCandidates.id, id));
+            await ctx.db.insert(moderationActions).values({
+              actorId: ctx.user.id,
+              action: 'catalog_approve_item',
+              note: input.moderatorNote ?? null,
+              metadata: { candidateId: id, foodItemId: row?.id, slug: row?.slug },
+            });
+            return { skipped: false as const, approved: true as const };
+          });
+          if (!result.skipped) {
+            updated += 1;
+            if (result.approved) approvedItems += 1;
+          }
+        } catch (e) {
+          errors.push({ id, error: e instanceof Error ? e.message : 'failed' });
+        }
+      }
+      if (approvedItems > 0) {
+        await ctx.enqueueEvent({ name: 'catalog.reindex', data: {} });
+      }
+      return { updated, approved: approvedItems, errors };
+    }),
+
+  adminBulkReviewFoodItemImageProposals: adminProcedure
+    .input(adminBulkReviewFoodItemImageProposalInput)
+    .mutation(async ({ ctx, input }) => {
+      let updated = 0;
+      let setDefault = 0;
+      for (const id of input.ids) {
+        const proposal = await ctx.db.query.foodItemImageProposals.findFirst({
+          where: eq(foodItemImageProposals.id, id),
+        });
+        if (!proposal || proposal.status !== 'pending') continue;
+        if (input.status === 'rejected') {
+          await ctx.db
+            .update(foodItemImageProposals)
+            .set({
+              status: 'rejected',
+              moderatorId: ctx.user.id,
+              moderatorNote: input.moderatorNote ?? null,
+            })
+            .where(eq(foodItemImageProposals.id, id));
+          await ctx.db.insert(moderationActions).values({
+            actorId: ctx.user.id,
+            action: 'catalog_reject_image',
+            note: input.moderatorNote ?? null,
+            metadata: { proposalId: id, foodItemId: proposal.foodItemId },
+          });
+          updated += 1;
+          continue;
+        }
+        const item = await ctx.db.query.foodItems.findFirst({
+          where: eq(foodItems.id, proposal.foodItemId),
+        });
+        if (!item) continue;
+        const variantSource = imageVariantSourceFromProposalSource(proposal.source);
+        const patch: Partial<typeof foodItems.$inferInsert> = {};
+        if (!item.defaultImageUrl) {
+          patch.defaultImageUrl = proposal.url;
+          patch.imageVariants = { large: proposal.url, source: variantSource };
+          patch.updatedAt = new Date();
+          setDefault += 1;
+        }
+        if (Object.keys(patch).length > 0) {
+          await ctx.db.update(foodItems).set(patch).where(eq(foodItems.id, item.id));
+        }
+        await ctx.db
+          .update(foodItemImageProposals)
+          .set({
+            status: 'approved',
+            moderatorId: ctx.user.id,
+            moderatorNote: input.moderatorNote ?? null,
+          })
+          .where(eq(foodItemImageProposals.id, id));
+        await ctx.db.insert(moderationActions).values({
+          actorId: ctx.user.id,
+          action: 'catalog_approve_image',
+          note: input.moderatorNote ?? null,
+          metadata: { proposalId: id, foodItemId: item.id, becameDefault: !item.defaultImageUrl },
+        });
+        updated += 1;
+      }
+      if (setDefault > 0) {
+        await ctx.enqueueEvent({ name: 'catalog.reindex', data: {} });
+      }
+      return { updated, setDefault };
     }),
 
   adminReviewFoodItemCandidate: adminProcedure
@@ -623,6 +888,12 @@ export const catalogRouter = router({
           .update(foodItemCandidates)
           .set(modPatch)
           .where(eq(foodItemCandidates.id, input.id));
+        await ctx.db.insert(moderationActions).values({
+          actorId: ctx.user.id,
+          action: 'catalog_duplicate_item',
+          note: input.moderatorNote ?? null,
+          metadata: { candidateId: input.id, mergedIntoItemId: merged.id, name: candidate.name },
+        });
         return { ok: true as const, action: 'duplicate' as const, mergedIntoItemId: merged.id };
       }
 
@@ -631,6 +902,12 @@ export const catalogRouter = router({
           .update(foodItemCandidates)
           .set(modPatch)
           .where(eq(foodItemCandidates.id, input.id));
+        await ctx.db.insert(moderationActions).values({
+          actorId: ctx.user.id,
+          action: 'catalog_reject_item',
+          note: input.moderatorNote ?? null,
+          metadata: { candidateId: input.id, name: candidate.name },
+        });
         return { ok: true as const, action: 'rejected' as const };
       }
 
@@ -693,6 +970,12 @@ export const catalogRouter = router({
         return row;
       });
 
+      await ctx.db.insert(moderationActions).values({
+        actorId: ctx.user.id,
+        action: 'catalog_approve_item',
+        note: input.moderatorNote ?? null,
+        metadata: { candidateId: input.id, foodItemId: created.id, slug: created.slug },
+      });
       await ctx.enqueueEvent({ name: 'catalog.reindex', data: {} });
 
       return {
@@ -723,6 +1006,12 @@ export const catalogRouter = router({
             moderatorNote: input.moderatorNote ?? null,
           })
           .where(eq(foodItemImageProposals.id, input.id));
+        await ctx.db.insert(moderationActions).values({
+          actorId: ctx.user.id,
+          action: 'catalog_reject_image',
+          note: input.moderatorNote ?? null,
+          metadata: { proposalId: input.id, foodItemId: proposal.foodItemId },
+        });
         return { ok: true as const, action: 'rejected' as const };
       }
 
@@ -752,6 +1041,17 @@ export const catalogRouter = router({
           moderatorNote: input.moderatorNote ?? null,
         })
         .where(eq(foodItemImageProposals.id, input.id));
+
+      await ctx.db.insert(moderationActions).values({
+        actorId: ctx.user.id,
+        action: 'catalog_approve_image',
+        note: input.moderatorNote ?? null,
+        metadata: {
+          proposalId: input.id,
+          foodItemId: item.id,
+          becameDefault: !item.defaultImageUrl,
+        },
+      });
 
       if (Object.keys(patch).length > 0) {
         await ctx.enqueueEvent({ name: 'catalog.reindex', data: {} });

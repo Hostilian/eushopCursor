@@ -41,8 +41,12 @@ async function run() {
     originCountryIso2: r.originCountryIso2,
     countryName: countryBy.get(r.originCountryIso2)?.name ?? '',
     categorySlug: catBy.get(r.categoryId)?.slug ?? '',
-    brandSlug: r.brandId ? brandBy.get(r.brandId)?.slug ?? null : null,
-    brandName: r.brandId ? brandBy.get(r.brandId)?.name ?? null : null,
+    brandSlug: r.brandId ? (brandBy.get(r.brandId)?.slug ?? null) : null,
+    brandName: r.brandId ? (brandBy.get(r.brandId)?.name ?? null) : null,
+    defaultImageUrl: r.defaultImageUrl,
+    imageVariants: r.imageVariants,
+    barcode: r.barcode,
+    openFoodFactsId: r.openFoodFactsId,
     createdAt: r.createdAt.toISOString(),
   }));
 

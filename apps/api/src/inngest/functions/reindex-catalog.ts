@@ -34,6 +34,10 @@ export const reindexCatalog = inngest.createFunction(
           originCountryIso2: foodItems.originCountryIso2,
           categoryId: foodItems.categoryId,
           brandId: foodItems.brandId,
+          defaultImageUrl: foodItems.defaultImageUrl,
+          imageVariants: foodItems.imageVariants,
+          barcode: foodItems.barcode,
+          openFoodFactsId: foodItems.openFoodFactsId,
           createdAt: foodItems.createdAt,
         })
         .from(foodItems);
@@ -55,8 +59,12 @@ export const reindexCatalog = inngest.createFunction(
         originCountryIso2: r.originCountryIso2,
         countryName: countryBy.get(r.originCountryIso2)?.name ?? '',
         categorySlug: catBy.get(r.categoryId)?.slug ?? '',
-        brandSlug: r.brandId ? brandBy.get(r.brandId)?.slug ?? null : null,
-        brandName: r.brandId ? brandBy.get(r.brandId)?.name ?? null : null,
+        brandSlug: r.brandId ? (brandBy.get(r.brandId)?.slug ?? null) : null,
+        brandName: r.brandId ? (brandBy.get(r.brandId)?.name ?? null) : null,
+        defaultImageUrl: r.defaultImageUrl,
+        imageVariants: r.imageVariants,
+        barcode: r.barcode,
+        openFoodFactsId: r.openFoodFactsId,
         createdAt: r.createdAt instanceof Date ? r.createdAt.toISOString() : r.createdAt,
       }));
 

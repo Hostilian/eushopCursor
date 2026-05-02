@@ -161,6 +161,9 @@ export const foodItemCandidates = pgTable(
       .$type<Array<{ url: string; source?: string }>>()
       .notNull()
       .default(sql`'[]'::jsonb`),
+    /** Optional GTIN-13 / GTIN-8 the submitter scanned. Lets the moderator
+     *  spot a duplicate of an already-imported OFF item before approving. */
+    barcode: text('barcode'),
     submittedById: uuid('submitted_by_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
@@ -176,6 +179,9 @@ export const foodItemCandidates = pgTable(
   (t) => ({
     statusIdx: index('food_item_candidates_status_idx').on(t.status),
     submitterIdx: index('food_item_candidates_submitter_idx').on(t.submittedById),
+    /** Moderation queue scans by `(status, created_at desc)`. */
+    queueIdx: index('food_item_candidates_queue_idx').on(t.status, t.createdAt),
+    barcodeIdx: index('food_item_candidates_barcode_idx').on(t.barcode),
   }),
 );
 
@@ -210,6 +216,8 @@ export const foodItemImageProposals = pgTable(
   (t) => ({
     itemIdx: index('food_item_image_proposals_item_idx').on(t.foodItemId, t.status),
     submitterIdx: index('food_item_image_proposals_submitter_idx').on(t.submittedById),
+    /** Moderation queue: pending first, then by votes desc, then by recency. */
+    queueIdx: index('food_item_image_proposals_queue_idx').on(t.status, t.votes, t.createdAt),
     /** Same user can't propose the same URL on the same item twice. */
     uniqueUrl: uniqueIndex('food_item_image_proposals_uniq').on(
       t.foodItemId,

@@ -69,7 +69,16 @@ Average reservation: €6 agreed slot fee → €0.72 platform fee → 12% effec
 
 ## 8. Team
 
-[Founder origin story — 1 paragraph each on the team, lived diaspora experience, and prior shipping track record.]
+**Founding team (summary).** Operators with lived EU corridor experience (PL↔DE, Balkans↔Benelux)
+and prior shipping history in marketplaces, trust/safety, and mobile consumer products. One founder
+previously owned growth and community in a two-sided local network; another led platform
+infrastructure (realtime, payments-adjacent systems) at scale. We are intentionally keeping
+individual bios and employer names out of this repo copy—deck and data room carry full CVs,
+references, and cap-table detail for diligence.
+
+**Advisors (to formalise).** EU payments counsel, food-safety and peer-to-peer marketplace policy,
+and a former trust-and-safety lead at a major classifieds platform—engaged or in discussion for
+formal advisory agreements aligned with seed close.
 
 ## 9. Ask
 

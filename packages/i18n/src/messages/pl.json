@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Sloty na wyjazdach, ogłoszenia w pobliżu i otwarte poszukiwania — jedna sieć.",
+  "tagline": "Wolne miejsce w bagażu, sąsiedzkie udostępnienia i to, czego szukasz—na jednej mapie.",
   "hero": {
-    "eyebrow": "Trasy i sloty · Spiżarnia · Poszukiwania",
-    "body": "Opublikuj wolne miejsce w bagażu na trasach, które i tak pokonujesz, podziel się tym, co przywiozłeś z domu w komórce 5 km, albo dodaj poszukiwanie — dopasowane wyjazdy i ogłoszenia same się zgłoszą. Ta sama mapa od miasta, czytelne profile, czat aż do konkretnego miejsca przekazania.",
+    "eyebrow": "Wyjazdy · W pobliżu · Poszukiwania",
+    "body": "Zaoferuj wolne miejsce w bagażu na lotach, na które i tak lecisz. Podziel się czymś z domu w swojej komórce 5 km. Albo napisz, czego szukasz—pasujące wyjazdy i oferty w okolicy mogą cię znaleźć. Ta sama mapa od miasta, czytelne profile, czat aż do prostego przekazania.",
     "discoverCta": "Odkrywaj w pobliżu",
     "favsLabel": "Wyróżniki z katalogu"
   },
@@ -13,16 +13,16 @@
     "countriesSeeAll": "Zobacz wszystkie ({count})",
     "categoriesEyebrow": "Przeglądaj według ochoty",
     "categoriesHeading": "Kategorie.",
-    "editorialEyebrow": "Dwie strony, jedna sieć",
-    "editorialTitle": "Trzy sposoby wymiany, jedna sieć.",
-    "editorialBody": "Oferty wyjazdów ze slotami do rezerwacji, otwarte poszukiwania i ogłoszenia „ze spiżarni” dzielą tę samą siatkę odkrywania. Obok chodzi o to, co masz w torbie; na trasie o zapasowy kilogram w bagażu. Najpierw kontakt — rozliczenia zostają między wami, dopóki nie pojawią się regulowane płatności w aplikacji.",
-    "pillar1Title": "Najpierw miejsce i trasa.",
-    "pillar1Body": "Odkrywanie opiera się na miastach, korytarzach i punktach przekazania—nie tylko na fladze kraju na mapie.",
-    "pillar2Title": "Dwa sposoby wymiany.",
-    "pillar2Body": "Opublikuj wolną pojemność bagażową na podróże, które i tak robisz, albo dodaj poszukiwanie, żeby wyjazdy i ogłoszenia się dopasowały. Spiżarnia nadal ma „opłatę znalazcy”; sloty na wyjazdach mają osobno uzgodnioną stawkę za slot. Najpierw cena stała; licytacje później w roadmapie, tam gdzie da się je wdrożyć porządnie.",
-    "pillar3Title": "Rozliczenia zostają między wami.",
+    "editorialEyebrow": "Jak to się układa",
+    "editorialTitle": "Jedna mapa. Trzy sposoby, by się spotkać.",
+    "editorialBody": "Pojemność na wyjazdach, lokalne ogłoszenia i otwarte poszukiwania trafiają na tę samą powierzchnię odkrywania. Sąsiad może chcieć to, co masz w torbie; ktoś na twojej trasie może mieć miejsce na to, czego brakuje. My tylko łączymy—układ zostaje między wami, dopóki nie pojawią się płatności w aplikacji.",
+    "pillar1Title": "Najpierw miasta i trasy.",
+    "pillar1Body": "Przeglądasz według miejsca i korytarza—gdzie jesteś, dokąd jedziesz—a nie tylko według flagi na mapie.",
+    "pillar2Title": "Dwa rodzaje wymiany.",
+    "pillar2Body": "Opublikuj wolne miejsce w bagażu na podróże, które i tak robisz, albo dodaj poszukiwanie i pozwól, by oferty same przyszły. Codzienne udostępnienia mają małą opłatę znalazcy; sloty na wyjazdach—uzgodnioną stawkę za slot. Dziś ceny stałe; później precyzyjniejsze rozliczenia, gdy uda się je wdrożyć porządnie.",
+    "pillar3Title": "Układ zostaje między wami.",
     "pillar3Body": "Ustalacie w czacie i płacicie osobiście lub poza aplikacją, dopóki nie pojawią się regulowane płatności in-app. Dziś nie dotykamy waszych pieniędzy.",
-    "ctaBandBody": "Podziel się tym, co masz, dodaj poszukiwanie lub przygotuj się do publikowania pojemności na trasach wraz z rozwojem funkcji—zawsze w komórce 5 km, żeby odbiory były praktyczne."
+    "ctaBandBody": "Podziel się tym, co przywiozłeś, napisz, czego potrzebujesz, albo ogłoś miejsce na wyjeździe, gdy narzędzia wystartują—zawsze w komórce 5 km, by spotkania były realne."
   },
   "nav": {
     "discover": "Odkryj",
@@ -46,12 +46,13 @@
     "signIn": "Zaloguj się",
     "signUp": "Dołącz",
     "postListing": "Podziel się tym, co masz",
-    "postRequest": "Dodaj poszukiwanie",
+    "postRequest": "Powiedz, czego szukasz",
     "message": "Wiadomość",
     "viewAll": "Zobacz wszystko"
   },
   "search": {
-    "placeholder": "Szukaj jedzenia, tras lub miast…"
+    "placeholder": "Szukaj jedzenia, tras lub miast…",
+    "inputAriaLabel": "Szukaj w katalogu"
   },
   "country": {
     "intro": "Sprowadź do siebie smak {country}."
@@ -72,8 +73,8 @@
     "title": "Szukam: {item}"
   },
   "empty": {
-    "listings": "Pusto w okolicy — bądź pierwszy.",
-    "requests": "Brak poszukiwań w Twoim promieniu.",
+    "listings": "Brak lokalnych udostępnień w tej komórce—zacznij pierwszy.",
+    "requests": "Brak otwartych poszukiwań w Twoim promieniu.",
     "search": "Nic nie znaleziono dla „{q}\"."
   },
   "footer": {
@@ -102,8 +103,10 @@
     "categories": "Kategorie",
     "catalogItems": "Pozycje w katalogu",
     "brands": "Marki",
-    "showcaseListings": "Ogłoszenia demo",
-    "stripFootnote": "Te liczby opisują pakietowy katalog (i ewentualnie kafelki demo), a nie GMV ani rejestracje na produkcji.",
+    "demoShowcaseListings": "Oferty showcase (demo)",
+    "demoShowcaseRequests": "Poszukiwania showcase (demo)",
+    "demoShowcaseTrips": "Podróże showcase (demo)",
+    "stripFootnote": "Te liczby opisują kuratorski katalog, a nie GMV ani rejestracje na produkcji.",
     "stripFootnoteSources": "Historyczne odniesienia migracyjne:"
   },
   "mobile": {

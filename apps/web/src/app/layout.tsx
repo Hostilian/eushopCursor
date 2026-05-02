@@ -21,18 +21,18 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Eushop — Trip slots, pantry listings & requests',
+    default: 'Eushop — Trips, local shares & open asks',
     template: '%s · Eushop',
   },
   description:
-    'EU-first peer marketplace: reservable suitcase slots on trips you already take, open requests, and nearby pantry listings with a finder’s fee—city-first discovery, clear profiles, chat-first handoffs.',
+    'EU-first introductions: spare luggage space on flights you already take, neighbourhood shares with a finder’s fee, and open asks—city-first discovery, clear profiles, chat down to a simple handoff.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eushop.eu'),
   openGraph: {
     type: 'website',
     siteName: 'Eushop',
-    title: 'Eushop — Trip slots, pantry listings & requests',
+    title: 'Eushop — Trips, local shares & open asks',
     description:
-      'List trip capacity, post what you want, or share pantry odds-and-ends—same map, same profiles, same practical handoffs.',
+      'Offer trip space, share from home, or name what you need—one map, real profiles, practical meetups.',
   },
   alternates: { canonical: '/' },
 };

@@ -1,45 +1,25 @@
 /**
- * Demo mode is a single, explicit, cookie-backed flag that lets us show a
- * curated showcase dataset on top of the real (live, possibly empty) database.
- *
- * Why this exists:
- *   - Investors and Y Combinator demos can't tolerate empty states the first
- *     time they open the homepage.
- *   - Production data must never silently fall back to fictional rows. If the
- *     DB is empty, the UI should *say* it's empty (or invite the visitor to
- *     post something).
- *
- * How it's set:
- *   - A visit to `/?demo=1` sets the cookie via `middleware.ts`.
- *   - A visit to `/?demo=0` clears it.
- *   - Once set, `isDemoModeEnabled()` returns true on the server and the
- *     `<DemoModeBanner />` shows a clear "Demo data — not real listings"
- *     marker so nobody confuses it with production traffic.
- *
- * What it controls:
- *   - The home `<KpiStrip />` and `<Hero />` showcase counts.
- *   - The `/discover` empty state (a small showcase rail instead of nothing).
- *   - The `/requests` empty state (likewise).
- *   - The `/traction` page never honours demo mode — investors must always see
- *     the *real* numbers there, even if they're zero.
+ * Demo mode is opt-in via ENABLE_DEMO_MODE and cookie `eushop_demo=1` (set via `?demo=1`).
+ * Production defaults: flag unset → no cookie handling, no showcase data.
+ * Staging / sales demos: set ENABLE_DEMO_MODE=1 and share `/?demo=1` once to populate the cookie.
  */
 
 import { cookies } from 'next/headers';
 
 export const DEMO_MODE_COOKIE = 'eushop_demo';
 
-/** Server-side check; safe inside React Server Components and route handlers. */
+/** Sync check for middleware and server code that cannot use cookies(). */
+export function isDemoModeEnvEnabled(): boolean {
+  const v = process.env.ENABLE_DEMO_MODE?.trim().toLowerCase();
+  return v === '1' || v === 'true' || v === 'yes';
+}
+
 export async function isDemoModeEnabled(): Promise<boolean> {
+  if (!isDemoModeEnvEnabled()) return false;
   try {
     const jar = await cookies();
     return jar.get(DEMO_MODE_COOKIE)?.value === '1';
   } catch {
     return false;
   }
-}
-
-/** Client-side fallback that reads `document.cookie`. */
-export function isDemoModeEnabledClient(): boolean {
-  if (typeof document === 'undefined') return false;
-  return document.cookie.split('; ').some((c) => c === `${DEMO_MODE_COOKIE}=1`);
 }

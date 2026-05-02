@@ -80,6 +80,9 @@ export const tripOffers = pgTable(
       .default('5'),
     currency: text('currency').notNull().default('EUR'),
     notes: text('notes'),
+    /** Optional hints for buyers (not enforced). */
+    spareWeightKg: integer('spare_weight_kg'),
+    spareVolumeLiters: integer('spare_volume_liters'),
     /** Items the seller commits to bringing back regardless of reservations.
      *  Helps the matcher prioritise this trip for buyers asking for those. */
     intendedItemIds: jsonb('intended_item_ids')

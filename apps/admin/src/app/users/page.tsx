@@ -1,10 +1,5 @@
-/**
- * Real users-and-moderation surface. The original screen showed six fictional
- * personas to fill the white space. That's gone — admins now see whatever
- * the moderation queue and profiles table actually contain. Empty is fine.
- */
-
 import { api } from '../../lib/trpc-server';
+import { setVerifiedBringer } from './actions';
 
 type ModerationRow = {
   id: string;
@@ -16,7 +11,10 @@ type ModerationRow = {
   createdAt: Date;
 };
 
-export default async function AdminUsersPage() {
+type AdminUsersPageProps = { searchParams: Promise<{ err?: string; ok?: string }> };
+
+export default async function AdminUsersPage({ searchParams }: AdminUsersPageProps) {
+  const sp = await searchParams;
   let queue: ModerationRow[] = [];
   let queueError: string | null = null;
   try {
@@ -34,6 +32,52 @@ export default async function AdminUsersPage() {
         Open reports surface here. Resolve or dismiss each report from the API directly until the
         admin auth wraps land. Showing real rows only — no synthetic fillers.
       </p>
+
+      {sp.err ? (
+        <div className="border-danger/30 bg-danger/5 text-danger rounded-2xl border p-4 text-sm">
+          {sp.err}
+        </div>
+      ) : null}
+      {sp.ok === 'verified-bringer' ? (
+        <div className="border-ink/10 bg-porcelain text-ink rounded-2xl border p-4 text-sm">
+          Verified-bringer badge updated.
+        </div>
+      ) : null}
+
+      <section className="border-ink/10 max-w-xl rounded-2xl border bg-white p-6">
+        <h2 className="text-ink font-serif text-xl">Verified bringer (KYC review)</h2>
+        <p className="text-ink/70 mt-2 text-xs">
+          After Veriff/Onfido (or manual review), grant or revoke the{' '}
+          <code className="text-ink">verified_bringer</code> badge on a user&apos;s profile. Audit
+          entries appear in <a href="/audit">Audit</a>.
+        </p>
+        <form action={setVerifiedBringer} className="mt-4 space-y-3">
+          <label className="text-ash block text-xs font-medium tracking-wider uppercase">
+            User ID (UUID)
+            <input name="userId" required className="form-input mt-1 w-full font-mono text-sm" />
+          </label>
+          <label className="text-ink flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              name="verified"
+              value="true"
+              defaultChecked
+              className="rounded"
+            />
+            Grant badge (uncheck to revoke)
+          </label>
+          <label className="text-ash block text-xs font-medium tracking-wider uppercase">
+            Note (optional)
+            <textarea name="note" rows={2} className="form-input mt-1 w-full text-sm" />
+          </label>
+          <button
+            type="submit"
+            className="bg-ink text-paper hover:bg-ink/90 rounded-xl px-4 py-2 text-sm font-medium"
+          >
+            Apply
+          </button>
+        </form>
+      </section>
 
       {queueError ? (
         <div className="border-danger/30 bg-danger/5 text-danger rounded-2xl border p-4 text-sm">

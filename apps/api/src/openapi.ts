@@ -62,5 +62,14 @@ export const openApiDocument = {
       get: { summary: 'Inngest sync', responses: { '200': { description: 'Inngest' } } },
       post: { summary: 'Inngest invoke', responses: { '200': { description: 'Inngest' } } },
     },
+    '/webhooks/stripe': {
+      post: {
+        summary: 'Stripe Connect webhooks (configure signing in production)',
+        responses: {
+          '200': { description: 'Event acknowledged' },
+          '501': { description: 'Webhook secret not configured' },
+        },
+      },
+    },
   },
 } as const;

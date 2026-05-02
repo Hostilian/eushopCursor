@@ -10,7 +10,9 @@ const DEV_FALLBACK_SECRET =
   'dev-only-not-for-production-openssl-rand-base64-32-chars-min-ok-xxxxxxxx';
 
 const envSecret = process.env.BETTER_AUTH_SECRET;
-if (process.env.NODE_ENV === 'production') {
+/** Next sets `NODE_ENV=production` during `next build`; skip strict check then. */
+const isNextProductionBuild = process.env.NEXT_PHASE === 'phase-production-build';
+if (process.env.NODE_ENV === 'production' && !isNextProductionBuild) {
   if (!envSecret || envSecret.length < 32 || envSecret === DEV_FALLBACK_SECRET) {
     throw new Error(
       'BETTER_AUTH_SECRET must be set to a random value of at least 32 characters in production (not the dev fallback).',

@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Slot viaggio, annunci vicino a te e richieste aperte — una sola rete.",
+  "tagline": "Spazio in più in valigia, condivisioni vicino a te e ciò che cerchi—tutto sulla stessa mappa.",
   "hero": {
-    "eyebrow": "Rotte e slot · Dispensa · Richieste",
-    "body": "Pubblica capacità libera sui viaggi che fai già, condividi ciò che porti da casa in una cella di 5 km o apri una richiesta perché viaggi e annunci corrispondenti ti trovino. Stessa mappa incentrata sulla città, profili chiari, chat fino a un punto di passaggio concreto.",
+    "eyebrow": "Viaggi · Vicino a te · Richieste",
+    "body": "Offri spazio libero nel bagaglio sui voli che fai già. Condividi qualcosa di casa nella tua cella di 5 km. O di’ cosa cerchi—viaggi e offerte vicine possono trovarti. Stessa mappa centrata sulla città, profili chiari, chat fino a un passaggio di mano semplice.",
     "discoverCta": "Scopri vicino a te",
     "favsLabel": "In evidenza dal catalogo"
   },
@@ -13,16 +13,16 @@
     "countriesSeeAll": "Vedi tutti i {count}",
     "categoriesEyebrow": "Per voglia",
     "categoriesHeading": "Categorie.",
-    "editorialEyebrow": "Due lati, una rete",
-    "editorialTitle": "Tre modi di scambiare, una sola rete.",
-    "editorialBody": "Offerte di viaggio con slot prenotabili, richieste aperte e annunci di dispensa condividono la stessa griglia. Accanto serve ciò che riporti in una borsa; in rotta si vende il chilo libero in stiva. Prima le presentazioni — il pagamento resta tra voi finché non arrivano pagamenti in-app regolamentati.",
-    "pillar1Title": "Luogo e percorso prima di tutto.",
-    "pillar1Body": "La scoperta si basa su città, corridoi e punti di consegna—non solo su una bandiera paese sulla mappa.",
-    "pillar2Title": "Due modi di scambiare.",
-    "pillar2Body": "Pubblica capacità bagaglio sui viaggi che fai già, o apri una richiesta perché viaggi e annunci facciano match. La dispensa resta con «compenso ricerca»; i viaggi usano una tariffa per slot concordata. Prezzo fisso per primo; aste dopo, nella roadmap dove possiamo implementarle bene.",
-    "pillar3Title": "Il pagamento resta tra voi.",
+    "editorialEyebrow": "Come si incastra",
+    "editorialTitle": "Una mappa. Tre modi per incontrarvi.",
+    "editorialBody": "Capacità di viaggio, annunci locali e richieste aperte compaiono sulla stessa superficie di scoperta. Il vicino potrebbe volere ciò che hai nella borsa; qualcuno sulla tua rotta potrebbe avere spazio per ciò che ti manca. Noi facciamo da tramite—l’accordo resta vostro finché non arrivano i pagamenti in-app.",
+    "pillar1Title": "Città e rotte prima di tutto.",
+    "pillar1Body": "Navighi per luogo e corridoio—dove sei, dove vai—non solo per una bandiera sulla mappa.",
+    "pillar2Title": "Due tipi di scambio.",
+    "pillar2Body": "Pubblica spazio libero in bagaglio sui viaggi che fai già, o apri una richiesta e lascia arrivare le offerte. Le condivisioni quotidiane usano un piccolo compenso di ricerca; gli slot viaggio una tariffa per slot concordata. Prezzi fissi oggi; prezzi più intelligenti quando potremo implementarli bene.",
+    "pillar3Title": "L’accordo resta tra voi.",
     "pillar3Body": "Vi accordate in chat e regolate di persona o fuori app finché non arrivano pagamenti in-app regolamentati. Oggi non tocchiamo i vostri soldi.",
-    "ctaBandBody": "Condividi le scorte, pubblica una richiesta o preparati a postare capacità viaggio man mano che i flussi escono—sempre in una cella di 5 km così i passaggi restano pratici."
+    "ctaBandBody": "Condividi ciò che hai portato, di’ cosa ti serve o elenca spazio viaggio quando escono gli strumenti—sempre in una cella di 5 km così gli incontri restano pratici."
   },
   "nav": {
     "discover": "Scopri",
@@ -46,12 +46,13 @@
     "signIn": "Accedi",
     "signUp": "Iscriviti",
     "postListing": "Condividi le tue scorte",
-    "postRequest": "Pubblica una richiesta",
+    "postRequest": "Di cosa hai bisogno",
     "message": "Messaggio",
     "viewAll": "Vedi tutto"
   },
   "search": {
-    "placeholder": "Cerca cibi, percorsi o città…"
+    "placeholder": "Cerca cibi, percorsi o città…",
+    "inputAriaLabel": "Cerca nel catalogo"
   },
   "country": {
     "intro": "Porta a casa il sapore di {country}."
@@ -72,8 +73,8 @@
     "title": "Cerco {item}"
   },
   "empty": {
-    "listings": "Ancora nulla qui vicino — sii il primo.",
-    "requests": "Nessuna richiesta nel tuo raggio.",
+    "listings": "Ancora nessuna condivisione locale in questa cella—sii il primo.",
+    "requests": "Ancora nessuna richiesta aperta nel tuo raggio.",
     "search": "Niente trovato per «{q}»."
   },
   "footer": {
@@ -102,8 +103,10 @@
     "categories": "Categorie",
     "catalogItems": "Articoli in catalogo",
     "brands": "Marchi",
-    "showcaseListings": "Annunci showcase",
-    "stripFootnote": "Questi numeri descrivono il catalogo incluso nel pacchetto (e facoltativamente tile demo), non GMV o iscrizioni in produzione.",
+    "demoShowcaseListings": "Annunci showcase (demo)",
+    "demoShowcaseRequests": "Richieste showcase (demo)",
+    "demoShowcaseTrips": "Viaggi showcase (demo)",
+    "stripFootnote": "Questi numeri descrivono il catalogo curato, non GMV o iscrizioni in produzione.",
     "stripFootnoteSources": "Citazioni storiche sulle migrazioni:"
   },
   "mobile": {

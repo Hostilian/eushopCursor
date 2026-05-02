@@ -9,7 +9,7 @@ export default async function AdminListingsPage() {
     const trpc = await api();
     rows = await trpc.listings.recent({ limit: 24 });
   } catch {
-    /* mock fallback inside router when DB empty */
+    /* offline — empty list, no synthetic listings */
   }
 
   return (

@@ -1,0 +1,73 @@
+# Optional deploy helper: wire secrets to your Coolify/SSH host or replace steps with
+# your registry push + remote compose. Trigger manually after CI is green.
+name: Deploy (smoke + data tasks)
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_base_url:
+        description: 'Public API base URL for health check (e.g. https://api.eushop.eu)'
+        required: true
+        type: string
+      web_base_url:
+        description: 'Public web base URL (e.g. https://eushop.eu)'
+        required: true
+        type: string
+      admin_base_url:
+        description: 'Public admin base URL (optional; skip with empty)'
+        required: false
+        type: string
+      run_migrate:
+        description: 'Run database migrations (requires DATABASE_URL secret)'
+        required: false
+        type: boolean
+        default: false
+      run_search_index:
+        description: 'Run pnpm search:index (requires Meili + DB secrets if indexing)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  deploy-tasks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Migrate database
+        if: inputs.run_migrate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: pnpm --filter @eushop/db migrate
+
+      - name: Reindex search
+        if: inputs.run_search_index
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          MEILI_HOST: ${{ secrets.MEILI_HOST }}
+          MEILI_MASTER_KEY: ${{ secrets.MEILI_MASTER_KEY }}
+        run: pnpm search:index
+
+      - name: Smoke — API health
+        run: curl -fsS "${{ inputs.api_base_url }}/health"
+
+      - name: Smoke — web
+        run: curl -fsSI "${{ inputs.web_base_url }}" | head -n 5
+
+      - name: Smoke — admin (optional)
+        if: inputs.admin_base_url != ''
+        run: curl -fsSI "${{ inputs.admin_base_url }}" | head -n 5

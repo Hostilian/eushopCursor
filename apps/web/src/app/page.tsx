@@ -19,10 +19,6 @@ import { showcaseListings } from '../lib/showcase';
 import { COUNTRIES } from '@eushop/catalog-data';
 
 function showcaseCards(): LiveListingCard[] {
-  // Showcase listings are deterministic, drawn from the curated catalog, and
-  // shown only when the demo cookie is set (see lib/demo-mode.ts). They use
-  // a country-tinted swatch instead of a fake photo so nothing on the page
-  // pretends to be a real product photo.
   return showcaseListings().map((s) => ({
     id: s.id,
     freeformName: s.itemName,
@@ -123,7 +119,7 @@ export default async function HomePage() {
             </div>
             <Button asChild variant="accent" size="lg">
               <Link href="/listings/new">
-                Start a listing <ArrowRight className="ml-1 h-4 w-4" />
+                {t('cta.postListing')} <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
           </div>

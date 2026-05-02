@@ -2,6 +2,7 @@ import { db, foodItems, notifications, requests, tripOffers } from '@eushop/db';
 import { decode, neighborsWithinRadius } from '@eushop/geo';
 import { and, eq, gte, inArray, ne, or, sql } from 'drizzle-orm';
 import { inngest } from '../client.js';
+import { escapeHtml, notifyExternalChannels } from '../notify.js';
 
 /**
  * When a buyer posts a request, notify **sellers** with an open trip whose
@@ -66,6 +67,23 @@ export const matchTripsForOpenRequest = inngest.createFunction(
         });
       }
       return seen.size;
+    });
+
+    await step.run('notify-sellers-external', async () => {
+      const seen = new Set<string>();
+      for (const trip of trips) {
+        if (seen.has(trip.sellerId)) continue;
+        seen.add(trip.sellerId);
+        const route = `${trip.originCity} → ${trip.destinationCity}`;
+        await notifyExternalChannels({
+          userId: trip.sellerId,
+          emailSubject: `A buyer near ${request.approximateCity} matches your ${route} trip`,
+          emailHtml: `<p>Someone near <strong>${escapeHtml(request.approximateCity)}</strong> is looking for "<em>${escapeHtml(request.freeformText)}</em>" and your trip <strong>${escapeHtml(route)}</strong> may match.</p><p><a href="https://eushop.eu/requests/${request.id}">View this request</a></p>`,
+          pushTitle: 'New buyer match',
+          pushBody: `${request.freeformText} near ${request.approximateCity}`,
+          pushData: { kind: 'system', requestId: request.id, tripOfferId: trip.id },
+        });
+      }
     });
 
     return { tripRows: trips.length, sellersNotified: notified };

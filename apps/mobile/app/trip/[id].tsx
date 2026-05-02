@@ -44,24 +44,43 @@ export default function TripDetailScreen() {
   const { trip } = data;
   const agreedFee = Number(fee) || 0;
   const platformFee = calculatePlatformFeeCents(Math.round(agreedFee * 100)) / 100;
+  const minFee = Number(trip.defaultPerSlotFee) || 0;
+  const submitting = reserve.isPending;
 
-  const submit = async () => {
+  const submit = () => {
     if (!picker.freeformName?.trim()) {
       Alert.alert('Pick an item', 'Tell the traveller what to grab.');
       return;
     }
-    try {
-      await reserve.mutateAsync({
-        tripOfferId: trip.id,
-        foodItemId: picker.foodItemId,
-        freeformText: picker.freeformName.trim(),
-        qty: Number(qty) || 1,
-        agreedFinderFee: agreedFee,
-      });
-      Alert.alert('Slot reserved', 'The traveller has been notified.');
-    } catch (e) {
-      Alert.alert('Could not reserve', e instanceof Error ? e.message : 'Try again.');
+    if (agreedFee + 1e-6 < minFee) {
+      Alert.alert('Below minimum', `This trip requires at least €${minFee.toFixed(2)}.`);
+      return;
     }
+    Alert.alert(
+      'Confirm reservation',
+      `${qty}× ${picker.freeformName} for €${agreedFee.toFixed(2)} (+ €${platformFee.toFixed(2)} platform fee).`,
+      [
+        { text: 'Back', style: 'cancel' },
+        {
+          text: 'Reserve',
+          style: 'default',
+          onPress: async () => {
+            try {
+              await reserve.mutateAsync({
+                tripOfferId: trip.id,
+                foodItemId: picker.foodItemId,
+                freeformText: picker.freeformName!.trim(),
+                qty: Number(qty) || 1,
+                agreedFinderFee: agreedFee,
+              });
+              Alert.alert('Slot reserved', 'The traveller has been notified.');
+            } catch (e) {
+              Alert.alert('Could not reserve', e instanceof Error ? e.message : 'Try again.');
+            }
+          },
+        },
+      ],
+    );
   };
 
   return (
@@ -114,8 +133,17 @@ export default function TripDetailScreen() {
           </View>
         </View>
 
-        <TouchableOpacity onPress={submit} className="bg-ink mt-2 rounded-full py-4">
-          <Text className="text-paper text-center font-medium">Reserve this slot</Text>
+        <TouchableOpacity
+          accessibilityRole="button"
+          accessibilityLabel="Reserve this slot"
+          accessibilityState={{ disabled: submitting }}
+          onPress={submit}
+          disabled={submitting}
+          className={`mt-2 rounded-full py-4 ${submitting ? 'bg-ink/60' : 'bg-ink'}`}
+        >
+          <Text className="text-paper text-center font-medium">
+            {submitting ? 'Reserving…' : 'Reserve this slot'}
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

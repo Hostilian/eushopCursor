@@ -1,6 +1,7 @@
 import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
 import { OPEN_FOOD_FACTS_ATTRIBUTION } from '@eushop/catalog-data/openfoodfacts';
 import { countryPalette } from '@eushop/design-tokens';
+import type { RouterOutputs } from '@eushop/api-router';
 import { ArrowRight, MapPin, Tag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,6 +11,8 @@ import { Nav } from '../../../components/layout/nav';
 import { Badge } from '../../../components/ui/badge';
 import { Button } from '../../../components/ui/button';
 import { api } from '../../../lib/trpc-server';
+
+type ItemBySlugResult = RouterOutputs['catalog']['itemBySlug'];
 
 export function generateStaticParams() {
   return FOOD_ITEMS.map((i) => ({ slug: i.slug }));
@@ -27,18 +30,21 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
   };
 
   // Fetch the live row so we can render real images + propagate attribution
-  // when the item came from Open Food Facts.
+  // when the item came from Open Food Facts. The router result is a discriminated
+  // union of "live db row" vs "seeded fallback"; we read both shapes safely.
   let liveImage: string | null = null;
   let imageSource: 'off' | 'r2' | 'user' | null = null;
   try {
     const trpc = await api();
-    const live = await trpc.catalog.itemBySlug({ slug });
-    const variants = (
-      live as unknown as { imageVariants?: { large?: string; source?: 'off' | 'r2' | 'user' } }
-    ).imageVariants;
-    liveImage =
-      variants?.large ?? (live as unknown as { defaultImageUrl?: string }).defaultImageUrl ?? null;
-    imageSource = variants?.source ?? null;
+    const live: ItemBySlugResult = await trpc.catalog.itemBySlug({ slug });
+    if (live && typeof live === 'object' && 'imageVariants' in live && live.imageVariants) {
+      const variants = live.imageVariants as { large?: string; source?: 'off' | 'r2' | 'user' };
+      liveImage = variants.large ?? null;
+      imageSource = variants.source ?? null;
+    }
+    if (!liveImage && live && typeof live === 'object' && 'defaultImageUrl' in live) {
+      liveImage = (live as { defaultImageUrl?: string | null }).defaultImageUrl ?? null;
+    }
   } catch {
     /* item only exists in seed; OFF attribution does not apply */
   }
@@ -173,9 +179,9 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
           <div>
             <p className="text-ash text-xs tracking-widest uppercase">How to get it</p>
             <p className="text-ink/80 mt-3 text-pretty">
-              Search nearby listings or matching trips, message the other party, agree on a pantry
-              finder&apos;s fee or a trip slot fee, and pick a meet-up spot. Cash or app — your
-              choice; we don&apos;t take a cut on the goods themselves today.
+              Search nearby listings or matching trips, message the other party, agree on a
+              finder&apos;s fee for a local share or a trip slot fee, and pick a meet-up spot. Cash
+              or app — your choice; we don&apos;t take a cut on the goods themselves today.
             </p>
             <Button asChild variant="link" className="mt-2">
               <Link href={`/discover?item=${item.slug}`}>

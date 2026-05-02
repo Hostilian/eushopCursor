@@ -6,7 +6,7 @@ export default async function AdminRequestsPage() {
     const trpc = await api();
     rows = await trpc.requests.feed({ limit: 24 });
   } catch {
-    /* mock */
+    /* offline — no synthetic rows */
   }
 
   return (

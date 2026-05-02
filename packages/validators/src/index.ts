@@ -315,6 +315,11 @@ export const proposeFoodItemInput = z.object({
   categorySlug: slug,
   originCountryIso2: isoCountry,
   description: z.string().max(600).optional(),
+  /** GTIN-13 or GTIN-8 the submitter scanned (pure digits). Optional. */
+  barcode: z
+    .string()
+    .regex(/^\d{8,14}$/, 'Barcode must be 8–14 digits')
+    .optional(),
   proposedImages: z
     .array(
       z.object({
@@ -350,11 +355,38 @@ export const catalogSearchWithSuggestionsInput = z.object({
 export type CatalogSearchWithSuggestionsInput = z.infer<typeof catalogSearchWithSuggestionsInput>;
 
 /** Admin catalog UGC queues (candidates + pending image proposals). */
+export const foodItemCandidateStatusEnum = z.enum(['pending', 'approved', 'rejected', 'duplicate']);
+export const foodItemImageProposalStatusEnum = z.enum(['pending', 'approved', 'rejected']);
+
 export const adminCatalogUgcQueueInput = z.object({
   candidateLimit: z.number().int().min(1).max(100).default(40),
   imageProposalLimit: z.number().int().min(1).max(100).default(40),
+  candidateStatus: foodItemCandidateStatusEnum.default('pending'),
+  imageProposalStatus: foodItemImageProposalStatusEnum.default('pending'),
+  countryIso2: isoCountry.optional(),
+  categorySlug: slug.optional(),
+  submitterId: z.string().uuid().optional(),
 });
 export type AdminCatalogUgcQueueInput = z.infer<typeof adminCatalogUgcQueueInput>;
+
+export const adminBulkReviewFoodItemImageProposalInput = z.object({
+  ids: z.array(z.string().uuid()).min(1).max(50),
+  status: z.enum(['approved', 'rejected']),
+  moderatorNote: z.string().max(500).optional(),
+});
+export type AdminBulkReviewFoodItemImageProposalInput = z.infer<
+  typeof adminBulkReviewFoodItemImageProposalInput
+>;
+
+export const adminBulkReviewFoodItemCandidateInput = z.object({
+  ids: z.array(z.string().uuid()).min(1).max(50),
+  /** Bulk path supports approve/reject only; duplicate needs a single merge target. */
+  status: z.enum(['approved', 'rejected']),
+  moderatorNote: z.string().max(500).optional(),
+});
+export type AdminBulkReviewFoodItemCandidateInput = z.infer<
+  typeof adminBulkReviewFoodItemCandidateInput
+>;
 
 export const adminReviewFoodItemCandidateInput = z
   .object({
@@ -400,6 +432,9 @@ export const createTripOfferInput = z.object({
   defaultPerSlotFee: z.number().min(0).max(999),
   currency: currencyCode.default('EUR'),
   notes: z.string().max(600).optional(),
+  /** Optional buyer-facing capacity hints (not enforced). */
+  spareWeightKg: z.number().int().min(1).max(500).optional(),
+  spareVolumeLiters: z.number().int().min(1).max(500).optional(),
   intendedItemIds: z.array(z.string().uuid()).max(20).optional(),
 });
 export type CreateTripOfferInput = z.infer<typeof createTripOfferInput>;

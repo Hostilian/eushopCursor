@@ -4,10 +4,12 @@ import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
 import { EmptyState, ErrorState } from '@eushop/ui-web';
 import { Search as SearchIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { trpc } from '../../lib/trpc';
 
 export function SearchClient() {
+  const t = useTranslations('search');
   const [q, setQ] = useState('');
   const remote = trpc.catalog.search.useQuery(
     { q, limit: 30 },
@@ -36,9 +38,9 @@ export function SearchClient() {
           autoFocus
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Krówki, Stroopwafels, Mastiha…"
+          placeholder={t('placeholder')}
           className="text-ink placeholder:text-ash w-full bg-transparent text-lg focus:outline-none"
-          aria-label="Search the catalog"
+          aria-label={t('inputAriaLabel')}
           type="search"
         />
       </label>

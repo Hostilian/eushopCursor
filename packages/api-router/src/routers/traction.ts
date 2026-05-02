@@ -6,7 +6,7 @@ import { publicProcedure, router } from '../trpc';
 /**
  * Live counters used by the public `/traction` page and the admin dashboard.
  *
- * This router never consults the showcase / demo dataset. Even when the
+ * This router reads the database only — never static marketing fallbacks. Even when the
  * database is empty, it returns honest zeros — investors are looking at this
  * page specifically to read real numbers.
  */

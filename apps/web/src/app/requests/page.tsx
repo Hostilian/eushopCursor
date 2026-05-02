@@ -1,4 +1,4 @@
-import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
+import { COUNTRIES } from '@eushop/catalog-data';
 import { countryPalette } from '@eushop/design-tokens';
 import { EmptyState, ErrorState } from '@eushop/ui-web';
 import { ArrowRight, MapPin, Sparkles } from 'lucide-react';
@@ -7,9 +7,9 @@ import { Footer } from '../../components/layout/footer';
 import { Nav } from '../../components/layout/nav';
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../components/ui/button';
+import { api } from '../../lib/trpc-server';
 import { isDemoModeEnabled } from '../../lib/demo-mode';
 import { showcaseRequests } from '../../lib/showcase';
-import { api } from '../../lib/trpc-server';
 
 export const metadata = {
   title: 'Open requests',
@@ -30,7 +30,6 @@ type RequestRow = {
 };
 
 export default async function RequestsPage() {
-  const demo = await isDemoModeEnabled();
   let liveRequests: RequestRow[] = [];
   let serviceError = false;
   try {
@@ -47,8 +46,8 @@ export default async function RequestsPage() {
   } catch {
     serviceError = true;
   }
-
-  const showcase = liveRequests.length === 0 && demo ? showcaseRequests() : [];
+  const demo = await isDemoModeEnabled();
+  const demoRequests = liveRequests.length === 0 && !serviceError && demo ? showcaseRequests() : [];
 
   return (
     <>
@@ -85,24 +84,6 @@ export default async function RequestsPage() {
               />
             ))}
           </ul>
-        ) : showcase.length > 0 ? (
-          <ul className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-            {showcase.map((r) => (
-              <RequestCard
-                key={r.id}
-                title={r.itemName}
-                city={r.city}
-                countryIso2={r.countryIso2}
-                radius={r.radiusKm}
-                maxFee={r.maxFee}
-                description={
-                  r.itemSlug
-                    ? FOOD_ITEMS.find((i) => i.slug === r.itemSlug)?.description
-                    : undefined
-                }
-              />
-            ))}
-          </ul>
         ) : serviceError ? (
           <ErrorState
             className="mt-12"
@@ -119,6 +100,20 @@ export default async function RequestsPage() {
               </>
             }
           />
+        ) : demoRequests.length > 0 ? (
+          <ul className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+            {demoRequests.map((r) => (
+              <RequestCard
+                key={r.id}
+                title={r.title}
+                description={r.description}
+                city={r.city}
+                countryIso2={r.countryIso2}
+                radius={r.radiusKm}
+                maxFee={r.maxFinderFee}
+              />
+            ))}
+          </ul>
         ) : (
           <EmptyRequests />
         )}

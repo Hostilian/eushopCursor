@@ -106,20 +106,74 @@ export const tripsRouter = router({
       where: eq(tripOffers.id, input.id),
     });
     if (!trip) throw new TRPCError({ code: 'NOT_FOUND' });
-    const reservations = await ctx.db
-      .select({
-        id: tripReservations.id,
-        buyerId: tripReservations.buyerId,
-        status: tripReservations.status,
-        freeformText: tripReservations.freeformText,
-        qty: tripReservations.qty,
-        agreedFinderFee: tripReservations.agreedFinderFee,
-        createdAt: tripReservations.createdAt,
-      })
+
+    const isSeller = ctx.user?.id === trip.sellerId;
+    if (isSeller) {
+      const reservations = await ctx.db
+        .select({
+          id: tripReservations.id,
+          buyerId: tripReservations.buyerId,
+          status: tripReservations.status,
+          freeformText: tripReservations.freeformText,
+          qty: tripReservations.qty,
+          agreedFinderFee: tripReservations.agreedFinderFee,
+          createdAt: tripReservations.createdAt,
+        })
+        .from(tripReservations)
+        .where(eq(tripReservations.tripOfferId, trip.id))
+        .orderBy(desc(tripReservations.createdAt));
+      return {
+        trip: publicTrip(trip),
+        viewerIsSeller: true as const,
+        reservations,
+      };
+    }
+
+    // For everyone else expose only aggregate counts so trip URLs do not leak
+    // who reserved what.
+    const counts = await ctx.db
+      .select({ status: tripReservations.status, count: sql<number>`count(*)::int` })
       .from(tripReservations)
       .where(eq(tripReservations.tripOfferId, trip.id))
-      .orderBy(desc(tripReservations.createdAt));
-    return { trip: publicTrip(trip), reservations };
+      .groupBy(tripReservations.status);
+    const summary = {
+      pending: 0,
+      confirmed: 0,
+      completed: 0,
+      cancelled: 0,
+    };
+    for (const row of counts) {
+      const k = row.status as keyof typeof summary;
+      if (k in summary) summary[k] = row.count;
+    }
+
+    // Buyers may see *their own* row(s) on this trip if they are signed in.
+    const ownReservations = ctx.user
+      ? await ctx.db
+          .select({
+            id: tripReservations.id,
+            status: tripReservations.status,
+            freeformText: tripReservations.freeformText,
+            qty: tripReservations.qty,
+            agreedFinderFee: tripReservations.agreedFinderFee,
+            createdAt: tripReservations.createdAt,
+          })
+          .from(tripReservations)
+          .where(
+            and(
+              eq(tripReservations.tripOfferId, trip.id),
+              eq(tripReservations.buyerId, ctx.user.id),
+            ),
+          )
+          .orderBy(desc(tripReservations.createdAt))
+      : [];
+
+    return {
+      trip: publicTrip(trip),
+      viewerIsSeller: false as const,
+      reservationSummary: summary,
+      ownReservations,
+    };
   }),
 
   recent: publicProcedure.input(tripsRecentInput).query(async ({ ctx, input }) => {
@@ -174,6 +228,8 @@ export const tripsRouter = router({
         defaultPerSlotFee: String(input.defaultPerSlotFee),
         currency: input.currency,
         notes: input.notes,
+        spareWeightKg: input.spareWeightKg ?? null,
+        spareVolumeLiters: input.spareVolumeLiters ?? null,
         intendedItemIds: input.intendedItemIds ?? [],
       })
       .returning();
@@ -208,6 +264,21 @@ export const tripsRouter = router({
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'This trip is not accepting reservations',
+      });
+    }
+    if (trip.departAt.getTime() < Date.now()) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'This trip has already departed',
+      });
+    }
+
+    // Enforce floor: buyer's offer must meet the seller's per-slot fee.
+    const defaultFeeNumber = Number(trip.defaultPerSlotFee);
+    if (Number.isFinite(defaultFeeNumber) && input.agreedFinderFee + 1e-6 < defaultFeeNumber) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: `Minimum finder fee for this trip is ${trip.currency} ${defaultFeeNumber.toFixed(2)}`,
       });
     }
 
@@ -356,6 +427,15 @@ export const tripsRouter = router({
       if (reservation.buyerId !== ctx.user.id) throw new TRPCError({ code: 'FORBIDDEN' });
       if (reservation.status !== 'pending' && reservation.status !== 'confirmed') {
         throw new TRPCError({ code: 'BAD_REQUEST', message: 'Cannot cancel from this state' });
+      }
+      const trip = await ctx.db.query.tripOffers.findFirst({
+        where: eq(tripOffers.id, reservation.tripOfferId),
+      });
+      if (trip && trip.departAt.getTime() < Date.now()) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Trip has already departed; contact the traveller via chat',
+        });
       }
       await ctx.db
         .update(tripReservations)

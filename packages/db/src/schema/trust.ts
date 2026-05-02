@@ -1,21 +1,14 @@
 import { sql } from 'drizzle-orm';
-import {
-  index,
-  integer,
-  jsonb,
-  pgEnum,
-  pgTable,
-  text,
-  timestamp,
-  uuid,
-} from 'drizzle-orm/pg-core';
+import { index, integer, jsonb, pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { users } from './auth';
 import { conversations } from './messaging';
 
 export const reviews = pgTable(
   'reviews',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     conversationId: uuid('conversation_id')
       .notNull()
       .references(() => conversations.id, { onDelete: 'cascade' }),
@@ -27,7 +20,10 @@ export const reviews = pgTable(
       .references(() => users.id, { onDelete: 'cascade' }),
     rating: integer('rating').notNull(),
     comment: text('comment'),
-    tags: jsonb('tags').$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+    tags: jsonb('tags')
+      .$type<string[]>()
+      .notNull()
+      .default(sql`'[]'::jsonb`),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => ({
@@ -53,12 +49,19 @@ export const reportReasonEnum = pgEnum('report_reason', [
   'other',
 ]);
 
-export const reportStatusEnum = pgEnum('report_status', ['open', 'reviewing', 'resolved', 'dismissed']);
+export const reportStatusEnum = pgEnum('report_status', [
+  'open',
+  'reviewing',
+  'resolved',
+  'dismissed',
+]);
 
 export const reports = pgTable(
   'reports',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     reporterId: uuid('reporter_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
@@ -85,19 +88,29 @@ export const moderationActionEnum = pgEnum('moderation_action_type', [
   'resolve_report',
   'dismiss_report',
   'note',
+  'catalog_approve_item',
+  'catalog_reject_item',
+  'catalog_duplicate_item',
+  'catalog_approve_image',
+  'catalog_reject_image',
 ]);
 
 export const moderationActions = pgTable(
   'moderation_actions',
   {
-    id: uuid('id').primaryKey().default(sql`uuid_generate_v4()`),
+    id: uuid('id')
+      .primaryKey()
+      .default(sql`uuid_generate_v4()`),
     reportId: uuid('report_id').references(() => reports.id, { onDelete: 'set null' }),
     actorId: uuid('actor_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     action: moderationActionEnum('action').notNull(),
     note: text('note'),
-    metadata: jsonb('metadata').$type<Record<string, unknown>>().notNull().default(sql`'{}'::jsonb`),
+    metadata: jsonb('metadata')
+      .$type<Record<string, unknown>>()
+      .notNull()
+      .default(sql`'{}'::jsonb`),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => ({

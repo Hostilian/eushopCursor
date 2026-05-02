@@ -5,36 +5,39 @@ import { isDemoModeEnabled } from '../../lib/demo-mode';
 import { showcaseStats } from '../../lib/showcase';
 
 /**
- * Hero KPI strip. By default it shows only counts that are *true today*:
- *
- *  - The size of the curated catalog (countries / categories / items).
- *  - In demo mode, four extra showcase tiles drawn from the showcase dataset
- *    so the page never feels empty during a YC partner walkthrough.
- *
- * Live counts that depend on real user activity (signups, listings, trips,
- * GMV) live on `/traction`, never here. The traction page is the place
- * investors look for "real numbers", and it never honours demo mode.
+ * KPI strip: curated catalog scale (countries, categories, items, brands).
+ * With demo mode on, extra tiles show illustrative marketplace counts from the showcase dataset.
+ * Live marketplace metrics stay on `/traction`.
  */
 export async function KpiStrip() {
   const t = await getTranslations('kpi');
   const tNav = await getTranslations('nav');
   const demo = await isDemoModeEnabled();
+  const stats = showcaseStats();
   const baseTiles = [
     { label: t('euCountries'), value: STATS.countries },
     { label: t('categories'), value: STATS.categories },
     { label: t('catalogItems'), value: STATS.items },
+    { label: t('brands'), value: STATS.brands },
   ];
   const tiles = demo
-    ? [...baseTiles, { label: t('showcaseListings'), value: showcaseStats().liveListings }]
-    : [...baseTiles, { label: t('brands'), value: STATS.brands }];
+    ? [
+        ...baseTiles,
+        { label: t('demoShowcaseListings'), value: stats.liveListings },
+        { label: t('demoShowcaseRequests'), value: stats.openRequests },
+        { label: t('demoShowcaseTrips'), value: stats.tripOffers },
+      ]
+    : baseTiles;
 
   return (
     <section className="border-ink/10 bg-parchment/60 border-y">
-      <div className="container-editorial grid grid-cols-2 gap-6 py-12 md:grid-cols-4 md:gap-10 md:py-16">
-        {tiles.map((t) => (
-          <div key={t.label} className="text-center md:text-left">
-            <p className="text-ink font-serif text-4xl tabular-nums md:text-5xl">{t.value}</p>
-            <p className="text-ash mt-2 text-xs tracking-widest uppercase">{t.label}</p>
+      <div
+        className={`container-editorial grid grid-cols-2 gap-6 py-12 md:gap-10 md:py-16 ${demo ? 'md:grid-cols-4 lg:grid-cols-7' : 'md:grid-cols-4'}`}
+      >
+        {tiles.map((tile) => (
+          <div key={tile.label} className="text-center md:text-left">
+            <p className="text-ink font-serif text-4xl tabular-nums md:text-5xl">{tile.value}</p>
+            <p className="text-ash mt-2 text-xs tracking-widest uppercase">{tile.label}</p>
           </div>
         ))}
       </div>

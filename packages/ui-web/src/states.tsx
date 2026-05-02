@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { cn } from './cn';
 
-type ToneClass = string;
-
 interface BaseStateProps {
   title: React.ReactNode;
   description?: React.ReactNode;
@@ -24,7 +22,7 @@ function State({
   className,
   role = 'status',
   tone,
-}: BaseStateProps & { tone: ToneClass }) {
+}: BaseStateProps & { tone: string }) {
   return (
     <div className={cn(baseShell, tone, className)} role={role} aria-live="polite">
       {icon ? <div className="text-3xl">{icon}</div> : null}

@@ -29,6 +29,34 @@
       "when": 1809542400000,
       "tag": "0003_image_proposal_moderation",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1809628800000,
+      "tag": "0004_trip_spare_capacity",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1809715200000,
+      "tag": "0005_trip_invariants",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1809801600000,
+      "tag": "0006_catalog_ugc_dupes",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1809888000000,
+      "tag": "0007_catalog_moderation_actions",
+      "breakpoints": true
     }
   ]
 }

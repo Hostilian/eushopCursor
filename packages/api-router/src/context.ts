@@ -1,5 +1,6 @@
 import { auth } from '@eushop/auth';
 import { db } from '@eushop/db/client';
+import { Inngest } from 'inngest';
 import { MeiliSearch } from 'meilisearch';
 
 const meili = new MeiliSearch({
@@ -27,6 +28,23 @@ export interface CreateContextOptions {
 }
 
 const noopEnqueue: EnqueueEvent = async () => {};
+
+let inngestEnqueueClient: Inngest | null = null;
+
+/**
+ * Emit Inngest events from Next.js Server Components / Server Actions that call
+ * `createCaller` with the same `INNGEST_EVENT_KEY` as `apps/api`. When the key
+ * is unset, returns `undefined` and {@link createContext} falls back to a no-op.
+ */
+export function enqueueEventFromEnv(): EnqueueEvent | undefined {
+  const key = process.env.INNGEST_EVENT_KEY?.trim();
+  if (!key) return undefined;
+  inngestEnqueueClient ??= new Inngest({ id: 'eushop-trpc-caller', eventKey: key });
+  const client = inngestEnqueueClient;
+  return async (event) => {
+    await client.send({ name: event.name as never, data: event.data as never });
+  };
+}
 
 export async function createContext({ headers, enqueueEvent }: CreateContextOptions) {
   const session = await auth.api.getSession({ headers }).catch(() => null);

@@ -228,7 +228,7 @@ export function ListingForm() {
 
       <div className="flex items-center justify-between">
         <p className="text-ash text-xs">
-          By posting you confirm you're a private individual sharing personal pantry stock.
+          By posting you confirm you're a private individual sharing personal items from home.
         </p>
         <Button type="submit" disabled={submitting} size="lg">
           {submitting ? 'Posting…' : 'Publish listing'}

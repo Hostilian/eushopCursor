@@ -11,11 +11,10 @@ import { Button } from '../ui/button';
  * to country B, advertises a number of suitcase slots, and (optionally)
  * commits to specific items they will definitely grab.
  *
- * Geographic capture is intentionally minimal: free-text city plus a
- * "Use my location" pinpoint for the *destination* (where the seller will
- * meet buyers). The origin location is approximated to the country
- * centroid via `/api/geo/centroid` for now; production uses the real
- * coordinates entered through the address autocomplete (a future PR).
+ * Geographic capture: free-text cities plus optional browser pins for origin
+ * and destination (meeting area). When unpinned, coordinates fall back to static
+ * country centroids. Optional spare weight/volume hints help buyers; they are
+ * not enforced server-side.
  */
 
 const SECONDS_DAY = 24 * 60 * 60;
@@ -61,6 +60,7 @@ export function TripOfferForm() {
   const [originCity, setOriginCity] = useState('');
   const [destinationIso, setDestinationIso] = useState('DE');
   const [destinationCity, setDestinationCity] = useState('');
+  const [originCoords, setOriginCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [destCoords, setDestCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [departInDays, setDepartInDays] = useState(7);
   const [returnInDays, setReturnInDays] = useState<number | ''>(10);
@@ -69,26 +69,32 @@ export function TripOfferForm() {
   const [notes, setNotes] = useState('');
   const [intended, setIntended] = useState<IntendedItem[]>([]);
   const [picker, setPicker] = useState<ProductPickerSelection>({ photos: [] });
+  const [locatingOrigin, setLocatingOrigin] = useState(false);
   const [locating, setLocating] = useState(false);
+  const [spareWeightKg, setSpareWeightKg] = useState<number | ''>('');
+  const [spareVolumeLiters, setSpareVolumeLiters] = useState<number | ''>('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<string | null>(null);
 
   const create = trpc.trips.create.useMutation();
 
-  const useMyLocation = () => {
+  const pinLocation = (
+    setCoords: (c: { lat: number; lng: number }) => void,
+    setBusy: (b: boolean) => void,
+  ) => {
     if (!('geolocation' in navigator)) {
       setError('Browser geolocation unavailable.');
       return;
     }
-    setLocating(true);
+    setBusy(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setDestCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-        setLocating(false);
+        setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setBusy(false);
       },
       (err) => {
-        setLocating(false);
+        setBusy(false);
         setError(err.message ?? 'Could not read location.');
       },
       { timeout: 8_000 },
@@ -121,7 +127,7 @@ export function TripOfferForm() {
           return;
         }
         const dest = destCoords ?? COUNTRY_CENTROIDS[destinationIso] ?? { lat: 50, lng: 10 };
-        const orig = COUNTRY_CENTROIDS[originIso] ?? { lat: 50, lng: 10 };
+        const orig = originCoords ?? COUNTRY_CENTROIDS[originIso] ?? { lat: 50, lng: 10 };
         const departAt = new Date(Date.now() + departInDays * SECONDS_DAY * 1000);
         const returnAt =
           returnInDays === ''
@@ -142,6 +148,16 @@ export function TripOfferForm() {
             defaultPerSlotFee,
             currency: 'EUR',
             notes: notes || undefined,
+            spareWeightKg: (() => {
+              if (spareWeightKg === '') return undefined;
+              const n = Number.parseInt(String(spareWeightKg), 10);
+              return Number.isFinite(n) ? n : undefined;
+            })(),
+            spareVolumeLiters: (() => {
+              if (spareVolumeLiters === '') return undefined;
+              const n = Number.parseInt(String(spareVolumeLiters), 10);
+              return Number.isFinite(n) ? n : undefined;
+            })(),
             intendedItemIds: intended.map((i) => i.foodItemId).filter((id): id is string => !!id),
           });
           setDone(trip.id);
@@ -156,13 +172,24 @@ export function TripOfferForm() {
       <div className="grid gap-6 md:grid-cols-2">
         <Field label="Flying out of">
           <CountrySelect value={originIso} onChange={setOriginIso} />
-          <input
-            value={originCity}
-            onChange={(e) => setOriginCity(e.target.value)}
-            placeholder="Warsaw, Lisbon, Athens…"
-            className="form-input mt-2"
-            required
-          />
+          <div className="mt-2 flex gap-2">
+            <input
+              value={originCity}
+              onChange={(e) => setOriginCity(e.target.value)}
+              placeholder="Warsaw, Lisbon, Athens…"
+              className="form-input flex-1"
+              required
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => pinLocation(setOriginCoords, setLocatingOrigin)}
+              disabled={locatingOrigin}
+            >
+              {locatingOrigin ? '…' : originCoords ? 'Origin pinned' : 'Pin origin'}
+            </Button>
+          </div>
         </Field>
         <Field label="Heading to">
           <CountrySelect value={destinationIso} onChange={setDestinationIso} />
@@ -178,7 +205,7 @@ export function TripOfferForm() {
               type="button"
               variant="outline"
               size="sm"
-              onClick={useMyLocation}
+              onClick={() => pinLocation(setDestCoords, setLocating)}
               disabled={locating}
             >
               {locating ? '…' : destCoords ? 'Pinned' : 'Pin me'}
@@ -218,6 +245,45 @@ export function TripOfferForm() {
             value={slotsTotal}
             onChange={(e) => setSlotsTotal(Number.parseInt(e.target.value) || 1)}
             className="form-input"
+          />
+        </Field>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <Field
+          label="Spare weight hint (kg, optional)"
+          hint="Rough carry capacity you want buyers to see — not a hard limit."
+        >
+          <input
+            type="number"
+            min={1}
+            max={500}
+            value={spareWeightKg}
+            onChange={(e) =>
+              setSpareWeightKg(
+                e.target.value === '' ? '' : Number.parseInt(e.target.value, 10) || '',
+              )
+            }
+            className="form-input"
+            placeholder="e.g. 12"
+          />
+        </Field>
+        <Field
+          label="Spare volume hint (liters, optional)"
+          hint="Suitcase volume ballpark for buyers."
+        >
+          <input
+            type="number"
+            min={1}
+            max={500}
+            value={spareVolumeLiters}
+            onChange={(e) =>
+              setSpareVolumeLiters(
+                e.target.value === '' ? '' : Number.parseInt(e.target.value, 10) || '',
+              )
+            }
+            className="form-input"
+            placeholder="e.g. 40"
           />
         </Field>
       </div>

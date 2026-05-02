@@ -18,11 +18,11 @@ export function MobilePreview() {
             bar tuned for one-handed use between shifts.
           </p>
           <p className="text-ash mt-6 text-sm">
-            Run{' '}
+            Preview the native UI in the simulator, or{' '}
             <code className="bg-ink/5 rounded px-1.5 py-0.5 text-xs">
               pnpm --filter @eushop/mobile web
             </code>{' '}
-            for Expo Web during demos.
+            for Expo Web.
           </p>
         </div>
 

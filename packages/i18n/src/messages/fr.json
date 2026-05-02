@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Créneaux voyage, annonces près de vous et demandes ouvertes — un seul réseau.",
+  "tagline": "Place bagage, partages du quartier et ce que vous cherchez—tout sur une carte.",
   "hero": {
-    "eyebrow": "Routes & créneaux · Garde-manger · Demandes",
-    "body": "Publiez la capacité libre sur les trajets que vous faites déjà, partagez les restes ramenés de chez vous dans une cellule de 5 km, ou ouvrez une demande pour que trajets et annonces correspondants vous trouvent. Même carte centrée sur les villes, profils clairs, chat jusqu’au point de remise concret.",
+    "eyebrow": "Trajets · Près de chez vous · Demandes",
+    "body": "Proposez de la place libre dans vos bagages sur les vols que vous prenez déjà. Partagez quelque chose de chez vous dans votre cellule de 5 km. Ou dites ce que vous cherchez—des trajets et des offres à proximité peuvent vous trouver. Même carte centrée ville, profils clairs, chat jusqu’à une remise simple.",
     "discoverCta": "Découvrir près de chez vous",
     "favsLabel": "Sélection du catalogue"
   },
@@ -13,16 +13,16 @@
     "countriesSeeAll": "Voir les {count}",
     "categoriesEyebrow": "Par envie",
     "categoriesHeading": "Catégories.",
-    "editorialEyebrow": "Deux côtés, un réseau",
-    "editorialTitle": "Trois façons d’échanger, un seul réseau.",
-    "editorialBody": "Offres de trajet avec créneaux réservables, demandes ouvertes et annonces de proximité partagent la même grille. À côté, on veut ce que vous ramenez dans un tote ; sur la route, on vend le kilo libre en soute. D’abord la mise en relation — le règlement reste entre vous tant que les paiements in-app réglementés n’existent pas.",
-    "pillar1Title": "Lieu et trajet d’abord.",
-    "pillar1Body": "La découverte s’appuie sur les villes, les corridors et les points de remise—pas seulement sur un drapeau pays sur la carte.",
-    "pillar2Title": "Deux façons d’échanger.",
-    "pillar2Body": "Publiez la capacité bagage sur les voyages que vous faites déjà, ou ouvrez une demande pour laisser trajets et annonces matcher. Le garde-manger garde des « frais de recherche » ; les trajets utilisent un prix par créneau convenu. Prix fixe d’abord ; enchères ensuite sur la feuille de route, là où nous pouvons les livrer proprement.",
-    "pillar3Title": "Le règlement reste entre vous.",
+    "editorialEyebrow": "Comment ça s’assemble",
+    "editorialTitle": "Une carte. Trois façons de se rencontrer.",
+    "editorialBody": "Capacité voyage, annonces locales et demandes ouvertes apparaissent sur la même surface de découverte. Votre voisin veut peut-être ce que vous avez dans le tote ; quelqu’un sur votre trajet a peut-être de la place pour ce qui vous manque. Nous faisons l’introduction—l’accord reste le vôtre tant que les paiements in-app n’existent pas.",
+    "pillar1Title": "Villes et trajets d’abord.",
+    "pillar1Body": "Vous parcourez par lieu et corridor—où vous êtes, où vous allez—pas seulement un drapeau sur la carte.",
+    "pillar2Title": "Deux types d’échange.",
+    "pillar2Body": "Publiez de la place libre dans vos bagages sur les voyages que vous faites déjà, ou ouvrez une demande et laissez venir les offres. Les partages du quotidien utilisent un petit frais de recherche ; les créneaux voyage un prix par créneau convenu. Prix fixes aujourd’hui ; tarification plus fine quand nous pourrons la livrer proprement.",
+    "pillar3Title": "L’accord reste entre vous.",
     "pillar3Body": "Vous convenez dans le chat et réglez en personne ou hors plateforme tant que les paiements in-app réglementés n’existent pas. Nous ne touchons pas à votre argent aujourd’hui.",
-    "ctaBandBody": "Partagez vos provisions, lancez une recherche ou préparez la publication de capacité voyage au fil des mises en ligne—toujours dans une cellule de 5 km pour garder des remises praticables."
+    "ctaBandBody": "Partagez ce que vous avez ramené, dites ce qu’il vous faut, ou annoncez de la place voyage quand les outils arrivent—toujours dans une cellule de 5 km pour des remises réalistes."
   },
   "nav": {
     "discover": "Découvrir",
@@ -46,12 +46,13 @@
     "signIn": "Se connecter",
     "signUp": "Rejoindre",
     "postListing": "Partager vos provisions",
-    "postRequest": "Lancer une recherche",
+    "postRequest": "Dites ce dont vous avez besoin",
     "message": "Message",
     "viewAll": "Tout voir"
   },
   "search": {
-    "placeholder": "Aliments, trajets ou villes…"
+    "placeholder": "Aliments, trajets ou villes…",
+    "inputAriaLabel": "Rechercher dans le catalogue"
   },
   "country": {
     "intro": "Faites venir le goût de {country} chez vous."
@@ -72,8 +73,8 @@
     "title": "Recherche {item}"
   },
   "empty": {
-    "listings": "Personne dans le coin pour l'instant — soyez le premier.",
-    "requests": "Aucune recherche dans le périmètre.",
+    "listings": "Pas encore de partages locaux dans cette cellule—soyez le premier.",
+    "requests": "Pas encore de demandes ouvertes dans votre rayon.",
     "search": "Rien trouvé pour « {q} »."
   },
   "footer": {
@@ -102,8 +103,10 @@
     "categories": "Catégories",
     "catalogItems": "Articles du catalogue",
     "brands": "Marques",
-    "showcaseListings": "Annonces vitrine",
-    "stripFootnote": "Ces chiffres décrivent le catalogue embarqué (et éventuellement la vitrine démo), pas le GMV ni les inscriptions en production.",
+    "demoShowcaseListings": "Annonces showcase (démo)",
+    "demoShowcaseRequests": "Demandes showcase (démo)",
+    "demoShowcaseTrips": "Trajets showcase (démo)",
+    "stripFootnote": "Ces chiffres décrivent le catalogue curé, pas le GMV ni les inscriptions en production.",
     "stripFootnoteSources": "Sources historiques sur les migrations :"
   },
   "mobile": {

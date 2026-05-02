@@ -51,8 +51,9 @@ regulated payments.
   and an admin moderation cockpit.
 - **Investor surfaces** — public `/manifesto`, live `/traction` (real DB counts,
   never invented), and a token-gated `/investors` deck rendered from
-  `apps/web/content/pitch.md`. Optional `?demo=1` cookie surfaces a clearly
-  labelled showcase dataset for board meetings without polluting production.
+  `apps/web/content/pitch.md`. Optional `ENABLE_DEMO_MODE` + `?demo=1` on staging
+  shows a **labelled** catalog-derived showcase when the DB is empty; production
+  leaves this off so empty states stay honest.
 
 **Roadmap (direction of travel)**
 
@@ -82,6 +83,8 @@ reservation is the take rate that powers the YC-style unit economics in
 
 ## Layout
 
+Human-oriented docs live in **[docs/README.md](docs/README.md)** (operations under `docs/ops/`). Code layout:
+
 ```
 apps/
   web/        Next.js 15 marketing + product
@@ -93,7 +96,7 @@ packages/
   api-router/      tRPC routers (per domain)
   db/              Drizzle schema, migrations, seed
   auth/            Better Auth instance
-  ui-web/          shared web primitives (currently inside apps/web)
+  ui-web/          shared web primitives (Button, Badge, empty states, …)
   design-tokens/   palette, type, radii, country palettes
   validators/      Zod schemas reused everywhere
   catalog-data/    EU food seed (~150 canonical items, growing)
@@ -101,6 +104,24 @@ packages/
   geo/             geohash + privacy helpers
   config/          shared eslint / tsconfig / prettier
 ```
+
+## Production & operations
+
+Start at **[docs/README.md](docs/README.md)** for the full index. Essentials:
+
+**Launch checklist (minimal)**
+
+- Set `BETTER_AUTH_SECRET`, `DATABASE_URL`, and all auth/API URLs for the target domain.
+- Leave `ENABLE_DEMO_MODE` unset in production unless you run a dedicated staging/demo host; `/traction` must stay real-only.
+- Set `NEXT_PUBLIC_LEGAL_*` and `NEXT_PUBLIC_PRESS_EMAIL` on the web app so `/imprint` and `/press` show counsel-approved text, not bracketed placeholders.
+- Optional: `INVESTOR_ACCESS_TOKENS` for `/investors`; the route stays token-gated and is `Disallow` in `robots.txt`.
+
+- **[docs/ops/environment.md](docs/ops/environment.md)** — env matrix from `.env.example`, including `BETTER_AUTH_SECRET` (never use the admin build placeholder in live).
+- **[docs/ops/deploy-runbook.md](docs/ops/deploy-runbook.md)** — migrations, `search:index`, PartyKit, smoke checks.
+- **[docs/ops/stripe-connect.md](docs/ops/stripe-connect.md)** — Connect, `payments` tRPC, `/webhooks/stripe`.
+- **[docs/ops/verified-bringer-kyc.md](docs/ops/verified-bringer-kyc.md)** — KYC and admin badge tooling.
+- **[docs/ops/observability.md](docs/ops/observability.md)** — Sentry, PostHog EU, runbooks.
+- **GitHub**: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) — optional manual deploy checklist.
 
 ## Local development
 
@@ -110,7 +131,7 @@ Prerequisites: **Node 20.11+**, **pnpm 9+**, **Docker Desktop**.
 
 - **pnpm via Corepack (recommended)** matches the root `package.json` `packageManager` field. Run `corepack enable` once (if Windows reports `EPERM` under `C:\Program Files\nodejs`, use an elevated terminal once), then from the repo root: `corepack prepare pnpm@9.12.0 --activate`. You can always invoke that build as `corepack pnpm …` (for example `corepack pnpm install`, `corepack pnpm verify`) if a global shim is misbehaving.
 - A broken **global** install from `npm install -g pnpm` can leave `@pnpm/exe/pnpm` empty and make Git Bash fail with `This: command not found`. Prefer `npm uninstall -g pnpm` and Corepack instead.
-- **PowerShell 5.1** does not treat `&&` as a command separator. Use **`pnpm verify`** (typecheck, lint, build) instead of pasting `pnpm typecheck && pnpm lint && pnpm build`, or run each script on its own line.
+- **PowerShell 5.1** does not treat `&&` as a command separator. Use **`pnpm verify`** (format check, typecheck, lint, unit tests, build — same bar as CI) instead of chaining scripts manually, or run each script on its own line.
 - **Husky**: committed hooks here only run **Node** and **lint-staged** (see `.husky/pre-commit`). They do not call `pnpm`. If you use `~/.config/husky/init.sh`, keep it free of a broken global `pnpm`, or rely on Corepack as above.
 - **`next build` / ENOENT**: The `@eushop/web` production script removes `apps/web/.next` and `tsconfig.tsbuildinfo` before each `next build` so Turbo/CI does not reuse a half-written output (avoids sporadic `Cannot find module …` / `PageNotFoundError` on Windows). For `next dev`, if the dev server acts up, stop it and delete `apps/web/.next` manually. Rarely, antivirus scanning `.next` during a build can still cause races—retry once.
 
@@ -119,10 +140,12 @@ Prerequisites: **Node 20.11+**, **pnpm 9+**, **Docker Desktop**.
 | What you need | Command | Typical ports |
 | --- | --- | --- |
 | **A — Web UI only** (marketing, static pages, no local API) | `pnpm dev:web` | `:3000` |
-| **B — Web + API** (tRPC, auth, needs DB + search from Docker or your own URLs in `.env`) | `pnpm demo` | `:3000`, `:3001` |
-| **B + local data services** (Postgres, Meilisearch, Redis, Mailhog) | `pnpm demo:stack` | same + Docker services |
+| **B — Web + API** (tRPC, auth, needs DB + search from Docker or your own URLs in `.env`) | `pnpm dev:web-api` (alias: `pnpm demo`) | `:3000`, `:3001` |
+| **B + local data services** (Postgres, Meilisearch, Redis, Mailhog) | `pnpm dev:stack` (alias: `pnpm demo:stack`) | same + Docker services |
 
 Magic links: without `RESEND_API_KEY`, sign-in links are **logged to the API console** (use Mailhog at `:8025` when the stack is up). With `RESEND_API_KEY` and `EMAIL_FROM` set, magic links are sent via **Resend**.
+
+Background jobs: set **`INNGEST_EVENT_KEY`** in the root `.env` (it is already listed in `turbo.json` `globalEnv`). The API uses it to send events; **Next.js** (`apps/web`, `apps/admin`) uses the same key when Server Components / Server Actions call tRPC locally so flows like **`catalog.reindex` after UGC approval** and **`trip.offer.created`** are not silently dropped. If a key is missing, those calls no-op safely.
 
 ```bash
 pnpm install

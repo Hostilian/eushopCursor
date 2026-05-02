@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Trip-Slots, Vorrat in der Nähe und Gesuche – ein Netz, eine Karte.",
+  "tagline": "Mehr Platz im Koffer, Nachbarschafts-Teilen und was du suchst—alles auf einer Karte.",
   "hero": {
-    "eyebrow": "Routen & Slots · Vorrat · Gesuche",
-    "body": "Stell freie Kofferplätze auf Fahrten ein, die du ohnehin machst, teile Reste aus dem Heimaturlaub in einer 5-km-Zelle oder schreib ein Gesuch – passende Trips und Anzeigen finden dich. Dieselbe stadtnahe Karte, klare Profile, Chat bis zum konkreten Treffpunkt.",
+    "eyebrow": "Reisen · In deiner Nähe · Gesuche",
+    "body": "Biete freien Platz im Gepäck auf Flügen, die du ohnehin nimmst. Teile etwas von zu Hause in deiner 5-km-Zelle. Oder sag, wonach du suchst—passende Reisen und Angebote in der Nähe können dich finden. Dieselbe stadtnahe Karte, klare Profile, Chat bis zur einfachen Übergabe.",
     "discoverCta": "In deiner Nähe entdecken",
     "favsLabel": "Katalog-Highlights"
   },
@@ -13,16 +13,16 @@
     "countriesSeeAll": "Alle {count} ansehen",
     "categoriesEyebrow": "Nach Gelüst stöbern",
     "categoriesHeading": "Kategorien.",
-    "editorialEyebrow": "Zwei Seiten, ein Netz",
-    "editorialTitle": "Drei Arten zu handeln, ein Netz.",
-    "editorialBody": "Trip-Angebote mit reservierbaren Slots, offene Gesuche und Vorrat in der Nähe teilen sich dieselbe Entdeckungskarte. Nebenan geht es um das, was du in der Tasche hast; auf der Route um das freie Kilo im Aufgabegepäck. Erst die Vermittlung – Zahlung bleibt zwischen euch, bis regulierte In-App-Zahlungen kommen.",
-    "pillar1Title": "Ort und Route zuerst.",
-    "pillar1Body": "Entdecken folgt Städten, Korridoren und Übergabeorten—nicht nur einer Länderflagge auf der Karte.",
-    "pillar2Title": "Zwei Arten zu handeln.",
-    "pillar2Body": "Freie Gepäckkapazität auf Fahrten, die du sowieso machst, oder ein Gesuch, damit Trips und Anzeigen matchen. Vorrat nutzt weiter „Finderlohn“; Trip-Slots einen vereinbarten Slot-Preis. Festpreise zuerst; Wettbewerbsgebote folgen auf der Roadmap, wo wir sie sauber liefern können.",
-    "pillar3Title": "Abwicklung bleibt bei euch.",
+    "editorialEyebrow": "So hängt es zusammen",
+    "editorialTitle": "Eine Karte. Drei Wege zum Treffen.",
+    "editorialBody": "Reisekapazität, lokale Anzeigen und offene Gesuche erscheinen auf derselben Entdeckungsfläche. Dein Nachbar will vielleicht, was du in der Tasche hast; jemand auf deiner Route hat vielleicht Platz für das, wonach du dich sehnst. Wir vermitteln—der Deal bleibt bei euch, bis In-App-Zahlungen kommen.",
+    "pillar1Title": "Städte und Routen zuerst.",
+    "pillar1Body": "Du stöberst nach Ort und Korridor—wo du bist, wohin du fährst—nicht nur nach einer Flagge auf der Karte.",
+    "pillar2Title": "Zwei Arten des Tauschs.",
+    "pillar2Body": "Veröffentliche freien Gepäckraum auf Fahrten, die du sowieso machst, oder schreib ein Gesuch und lass Angebote kommen. Alltags-Teilen nutzt einen kleinen Finderlohn; Trip-Slots einen vereinbarten Preis pro Slot. Heute Festpreise; später schlauere Preise, wenn wir es sauber ausliefern können.",
+    "pillar3Title": "Der Deal bleibt bei euch.",
     "pillar3Body": "Ihr vereinbart im Chat und zahlt persönlich oder außerhalb der App, bis regulierte In-App-Zahlungen kommen. Heute berühren wir euer Geld nicht.",
-    "ctaBandBody": "Teile deine Mitbringsel, schreib ein Gesuch oder bereite Trip-Kapazität vor, sobald die Flows live gehen—immer innerhalb einer 5-km-Zelle, damit Übergaben praktikabel bleiben."
+    "ctaBandBody": "Teile deine Mitbringsel, sag, was du brauchst, oder liste Reiseplatz ein, sobald die Tools live sind—immer in einer 5-km-Zelle, damit Treffen praktikabel bleiben."
   },
   "nav": {
     "discover": "Entdecken",
@@ -46,12 +46,13 @@
     "signIn": "Anmelden",
     "signUp": "Mitmachen",
     "postListing": "Mitbringsel teilen",
-    "postRequest": "Gesuch aufgeben",
+    "postRequest": "Sag, was du brauchst",
     "message": "Nachricht",
     "viewAll": "Alle ansehen"
   },
   "search": {
-    "placeholder": "Lebensmittel, Routen oder Städte suchen…"
+    "placeholder": "Lebensmittel, Routen oder Städte suchen…",
+    "inputAriaLabel": "Katalog durchsuchen"
   },
   "country": {
     "intro": "Hol dir den Geschmack von {country} nach Hause."
@@ -72,8 +73,8 @@
     "title": "Suche {item}"
   },
   "empty": {
-    "listings": "Noch nichts in der Nähe – sei der Erste!",
-    "requests": "Keine Gesuche im Umkreis. Gerade still.",
+    "listings": "Noch keine lokalen Teile in dieser Zelle—leg los.",
+    "requests": "Noch keine offenen Gesuche in deinem Umkreis.",
     "search": "Nichts gefunden für „{q}\"."
   },
   "footer": {
@@ -102,8 +103,10 @@
     "categories": "Kategorien",
     "catalogItems": "Katalogartikel",
     "brands": "Marken",
-    "showcaseListings": "Showcase-Anzeigen",
-    "stripFootnote": "Diese Zahlen beschreiben den gebündelten Katalog (und optional Demo-Kacheln), nicht Live-GMV oder Anmeldungen.",
+    "demoShowcaseListings": "Showcase-Inserate (Demo)",
+    "demoShowcaseRequests": "Showcase-Gesuche (Demo)",
+    "demoShowcaseTrips": "Showcase-Reisen (Demo)",
+    "stripFootnote": "Diese Zahlen beschreiben den kuratierten Katalog, nicht Live-GMV oder Anmeldungen.",
     "stripFootnoteSources": "Historische Migrationsnachweise:"
   },
   "mobile": {

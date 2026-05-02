@@ -113,8 +113,9 @@ export const importOpenFoodFactsBatch = inngest.createFunction(
       return { inserted, updated, skipped };
     });
 
-    if (result.inserted > 0) {
-      // Push the freshly imported docs into Meili so the picker can see them.
+    if (result.inserted > 0 || result.updated > 0) {
+      // Push fresh and refreshed docs into Meili so the picker reflects the
+      // new image variants/descriptions, not just first-seen barcodes.
       await step.sendEvent('trigger-reindex', {
         name: 'catalog.reindex',
         data: {},

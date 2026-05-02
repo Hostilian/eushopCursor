@@ -1,0 +1,45 @@
+# Production environment matrix
+
+Copy from [`.env.example`](../../.env.example) and set **real** values per deployment (Coolify, Vercel, bare metal, etc.). Never commit secrets.
+
+## Required for a functioning marketplace
+
+| Variable | Used by | Production notes |
+|----------|---------|-------------------|
+| `DATABASE_URL` | API, migrations, Drizzle | TLS URL, pooler if serverless workers; run `pnpm --filter @eushop/db migrate` on deploy. |
+| `REDIS_URL` | API (rate limits, sessions if configured) | Persistent Redis; EU region. |
+| `BETTER_AUTH_SECRET` | `@eushop/auth`, web/admin builds | **≥32 characters**, must **not** equal the dev fallback string in [`packages/auth/src/index.ts`](../../packages/auth/src/index.ts). Set in **every** runtime that imports `auth` (API, web SSR, admin). The admin app’s local build script only injects a throwaway value when this is **unset**—production deploys **must** set the real secret. |
+| `BETTER_AUTH_URL` | Auth | Public API base, e.g. `https://api.eushop.eu`. |
+| `NEXT_PUBLIC_SITE_URL` | Web, sitemap, OG | Canonical site URL, e.g. `https://eushop.eu`. |
+| `NEXT_PUBLIC_API_URL` | Web, admin (tRPC from browser) | Public API origin for `/trpc`. |
+| `MEILI_HOST` / `MEILI_MASTER_KEY` | API indexing | Production Meilisearch; rotate master key; run `pnpm search:index` after deploy/migrations when needed. |
+| `INNGEST_EVENT_KEY` / `INNGEST_SIGNING_KEY` | API, Inngest dashboard | Same event pipeline as configured in Inngest Cloud; signing key for `/api/inngest`. |
+
+## Email, storage, realtime
+
+| Variable | Notes |
+|----------|--------|
+| `RESEND_API_KEY` / `EMAIL_FROM` | Magic links and transactional mail; without key, dev logs links (see README). |
+| `R2_*` / `R2_PUBLIC_URL` | Media uploads; align `NEXT_PUBLIC_MEDIA_HOSTNAME` with `next/image` remote patterns if needed. |
+| `PARTYKIT_HOST` | Production PartyKit URL; match `NEXT_PUBLIC_PARTYKIT_HOST` on web/mobile. |
+| `EXPO_PUSH_ACCESS_TOKEN` | Expo push for mobile prod. |
+
+## Optional / feature flags
+
+| Variable | Notes |
+|----------|--------|
+| `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | See [stripe-connect.md](./stripe-connect.md). |
+| `VERIFF_API_KEY` (or your KYC vendor) | See [verified-bringer-kyc.md](./verified-bringer-kyc.md). |
+| `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` | See [observability.md](./observability.md). |
+| `POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_KEY`, `POSTHOG_HOST` | EU PostHog; respect consent banner. |
+| `INVESTOR_ACCESS_TOKENS` | Comma-separated tokens for `/investors`; rotate per policy. |
+| `ENABLE_DEMO_MODE` | Set to `1` only on staging or controlled demos so `?demo=1` can show a labelled catalog showcase. Omit in production. |
+| `NEXT_PUBLIC_LEGAL_REGISTERED_NAME`, `NEXT_PUBLIC_LEGAL_REGISTERED_OFFICE`, `NEXT_PUBLIC_LEGAL_REGISTER_ID`, `NEXT_PUBLIC_LEGAL_VAT_ID`, `NEXT_PUBLIC_LEGAL_SUPERVISORY_NOTE` | Imprint (`/imprint`); required for launch copy (defaults are bracketed dev hints). |
+| `NEXT_PUBLIC_PRESS_EMAIL` | Press contact shown on `/press`; defaults to `press@eushop.eu` if unset. |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`, Apple vars | Social login when enabled. |
+
+## CI reference
+
+GitHub Actions [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) sets a **non-secret** `BETTER_AUTH_SECRET` for builds only. Production values must come from your secret store, not from CI defaults.
+
+CI exports `MEILI_HOST` / `MEILI_MASTER_KEY` but does **not** start Meilisearch or Redis containers — `pnpm build` must not require a live Meili or Redis connection at compile time. Runtime features that need those services belong in integration tests or staging, not in the default build graph.

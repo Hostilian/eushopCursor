@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Eushop",
-    "description": "EU-first trips, open requests, and pantry listings—reservable suitcase slots, finder-fee pickups in a 5 km cell, location-first discovery.",
+    "description": "EU-first trips, open asks, and local shares—spare luggage space, finder-fee pickups in a 5 km cell, location-first discovery.",
     "slug": "eushop",
     "scheme": "eushop",
     "version": "0.1.0",

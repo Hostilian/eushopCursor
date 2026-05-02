@@ -1,6 +1,7 @@
 import { db, notifications, requests, tripOffers, tripReservations } from '@eushop/db';
 import { and, eq, gte, inArray, isNotNull, lte, ne, or, sql } from 'drizzle-orm';
 import { inngest } from '../client.js';
+import { escapeHtml, notifyExternalChannels } from '../notify.js';
 
 /**
  * When a buyer reserves a slot on a trip, ping the seller and warm-cache the
@@ -27,6 +28,17 @@ export const notifyReservationCreated = inngest.createFunction(
         title: 'New reservation on your trip',
         body: `${reservation.qty}× ${reservation.freeformText} — agreed €${reservation.agreedFinderFee}.`,
         data: { reservationId: reservation.id, tripOfferId: trip.id },
+      });
+    });
+    await step.run('notify-seller-external', async () => {
+      const route = `${trip.originCity} → ${trip.destinationCity}`;
+      await notifyExternalChannels({
+        userId: trip.sellerId,
+        emailSubject: `New reservation on your ${route} trip`,
+        emailHtml: `<p>You have a new reservation on your trip <strong>${escapeHtml(route)}</strong>:</p><ul><li>${reservation.qty}× ${escapeHtml(reservation.freeformText)}</li><li>Agreed fee: €${reservation.agreedFinderFee}</li></ul><p><a href="https://eushop.eu/trips/${trip.id}">Open in Eushop</a></p>`,
+        pushTitle: 'New reservation',
+        pushBody: `${reservation.qty}× ${reservation.freeformText} — €${reservation.agreedFinderFee}`,
+        pushData: { kind: 'trip-reservation', reservationId: reservation.id, tripOfferId: trip.id },
       });
     });
     return { ok: true };
@@ -93,13 +105,32 @@ export const notifyTripDepartureFanout = inngest.createFunction(
         });
       }
     });
+    await step.run('notify-external', async () => {
+      for (const r of reservations) {
+        await notifyExternalChannels({
+          userId: r.buyerId,
+          emailSubject: 'Your Eushop trip leaves soon',
+          emailHtml: `<p>Your trip leaves in about 48 hours.</p><p>Confirm the handoff window and pickup spot with the traveller in chat.</p><p><a href="https://eushop.eu/reservations">Open my reservations</a></p>`,
+          pushTitle: 'Trip leaves in 48h',
+          pushBody: 'Coordinate the handoff with the traveller.',
+          pushData: {
+            kind: 'trip-departure-soon',
+            reservationId: r.id,
+            tripOfferId: r.tripOfferId,
+          },
+        });
+      }
+    });
     return { notified: reservations.length };
   },
 );
 
 /**
  * Cron: trips whose `depart_at` is in the past and `status = open` get
- * auto-closed. Without this, stale offers clutter search.
+ * auto-**closed** (not "completed"). Reservation completion is a separate
+ * concept that requires the seller (or buyer) to confirm a successful handoff;
+ * using `closed` here keeps the time-out behaviour distinct from end-of-flow
+ * completion so the admin can tell the two apart.
  */
 export const autoCloseStaleTrips = inngest.createFunction(
   { id: 'auto-close-stale-trips' },
@@ -108,7 +139,7 @@ export const autoCloseStaleTrips = inngest.createFunction(
     const result = await step.run('close', async () => {
       const rows = await db
         .update(tripOffers)
-        .set({ status: 'completed', updatedAt: new Date() })
+        .set({ status: 'closed', updatedAt: new Date() })
         .where(and(eq(tripOffers.status, 'open'), lte(tripOffers.departAt, new Date())))
         .returning({ id: tripOffers.id });
       return rows.length;
@@ -170,6 +201,19 @@ export const matchRequestToTrip = inngest.createFunction(
           title: 'A trip matches your request',
           body: `Someone is flying ${trip.originCity} → ${trip.destinationCity} and may be able to bring what you asked for.`,
           data: { requestId: r.id, tripOfferId: trip.id },
+        });
+      }
+    });
+    await step.run('notify-buyers-external', async () => {
+      const route = `${trip.originCity} → ${trip.destinationCity}`;
+      for (const r of rows) {
+        await notifyExternalChannels({
+          userId: r.buyerId,
+          emailSubject: `A trip matches your Eushop request (${route})`,
+          emailHtml: `<p>Someone is flying <strong>${escapeHtml(route)}</strong> and may be able to bring what you asked for.</p><p><a href="https://eushop.eu/trips/${trip.id}">View this trip</a></p>`,
+          pushTitle: 'Trip matches your request',
+          pushBody: route,
+          pushData: { kind: 'new-request-match', requestId: r.id, tripOfferId: trip.id },
         });
       }
     });

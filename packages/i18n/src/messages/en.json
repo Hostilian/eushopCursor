@@ -1,9 +1,9 @@
 {
   "brand": "Eushop",
-  "tagline": "Trip slots, pantry listings, and open requests—one peer map.",
+  "tagline": "Extra bag space, neighbourhood shares, and what you're looking for—all on one map.",
   "hero": {
-    "eyebrow": "Routes & slots · Pantry · Requests",
-    "body": "List spare suitcase capacity on trips you already take, share odds-and-ends from home in a 5 km cell, or post what you want so matching trips and listings can find you. Same city-first map, clear profiles, chat that leads to a practical handoff.",
+    "eyebrow": "Trips · Near you · Asks",
+    "body": "Offer spare room in luggage on flights you're already taking. Share something from home within your 5 km cell. Or say what you're after—matching trips and nearby offers can find you. Same city-first map, clear profiles, chat down to a simple handoff.",
     "discoverCta": "Discover near you",
     "favsLabel": "Catalog spotlight"
   },
@@ -13,16 +13,16 @@
     "countriesSeeAll": "See all {count}",
     "categoriesEyebrow": "Browse by craving",
     "categoriesHeading": "Categories.",
-    "editorialEyebrow": "Two sides, one network",
-    "editorialTitle": "Three ways to trade, one network.",
-    "editorialBody": "Trip offers with reservable slots, open requests, and nearby pantry listings share the same discovery grid. Someone next door may want what you brought in a tote; someone on a route you fly may sell the spare kilo in checked luggage. Introductions first—settlement stays between you until regulated payments ship.",
-    "pillar1Title": "Place and route first.",
-    "pillar1Body": "Discovery is built around cities, corridors, and handoff points—not only a country flag on a map.",
-    "pillar2Title": "Two ways to trade.",
-    "pillar2Body": "Publish spare luggage capacity on trips you already take, or post a request so trips and listings can match. Pantry trades still use a finder’s fee label; trip slots use an agreed per-slot fee. Fixed prices first; competitive bids when we can ship them cleanly.",
-    "pillar3Title": "Settlement stays between you.",
+    "editorialEyebrow": "How it fits together",
+    "editorialTitle": "One map. Three ways to meet.",
+    "editorialBody": "Trip capacity, local listings, and open requests all show up on the same discovery surface. Your neighbour might want what's in your tote; someone on your route might have room for what you crave. We make the introduction—the deal stays yours until in-app payments arrive.",
+    "pillar1Title": "Cities and routes first.",
+    "pillar1Body": "You browse by place and corridor—where you are, where you're going—not just a flag on the map.",
+    "pillar2Title": "Two kinds of exchange.",
+    "pillar2Body": "Publish spare luggage space on trips you already take, or open a request and let offers come to you. Everyday shares use a small finder's fee; trip slots use a fee you agree per slot. Fixed prices today; smarter pricing when we can ship it cleanly.",
+    "pillar3Title": "The deal stays between you.",
     "pillar3Body": "You agree terms in chat and settle in person or off-platform unless and until regulated in-app payments arrive. We never hold your money today.",
-    "ctaBandBody": "Share what you brought, post a request, or get ready to publish trip capacity as those flows roll out—always within a 5 km cell of where you are so handoffs stay practical."
+    "ctaBandBody": "Share what you brought, name what you need, or list trip space as those tools roll out—always within a 5 km cell so meetups stay practical."
   },
   "nav": {
     "discover": "Discover",
@@ -46,12 +46,13 @@
     "signIn": "Sign in",
     "signUp": "Join Eushop",
     "postListing": "Share what you brought",
-    "postRequest": "Post a request",
+    "postRequest": "Say what you need",
     "message": "Message",
     "viewAll": "View all"
   },
   "search": {
-    "placeholder": "Search foods, routes, or cities…"
+    "placeholder": "Search foods, routes, or cities…",
+    "inputAriaLabel": "Search the catalog"
   },
   "country": {
     "intro": "Bring a taste of {country} to your doorstep."
@@ -72,8 +73,8 @@
     "title": "Looking for {item}"
   },
   "empty": {
-    "listings": "No one's posted nearby — be the first to share your stash.",
-    "requests": "No open requests in your radius. Quiet for now.",
+    "listings": "No local shares in this cell yet—be the first.",
+    "requests": "No open asks in your radius yet.",
     "search": "We couldn't find anything for \"{q}\"."
   },
   "footer": {
@@ -102,8 +103,10 @@
     "categories": "Categories",
     "catalogItems": "Catalog items",
     "brands": "Brands",
-    "showcaseListings": "Showcase listings",
-    "stripFootnote": "These numbers describe the curated catalog seed (and optional demo tiles), not live GMV or signups.",
+    "demoShowcaseListings": "Showcase listings (demo)",
+    "demoShowcaseRequests": "Showcase requests (demo)",
+    "demoShowcaseTrips": "Showcase trips (demo)",
+    "stripFootnote": "These numbers describe the curated catalog seed, not live GMV or signups.",
     "stripFootnoteSources": "Historic migration citations:"
   },
   "mobile": {

@@ -6,9 +6,9 @@ import { Footer } from '../../components/layout/footer';
 import { Nav } from '../../components/layout/nav';
 import { Badge } from '../../components/ui/badge';
 import { Button } from '../../components/ui/button';
-import { isDemoModeEnabled } from '../../lib/demo-mode';
-import { showcaseTrips } from '../../lib/showcase';
 import { api } from '../../lib/trpc-server';
+import { isDemoModeEnabled } from '../../lib/demo-mode';
+import { showcaseTrips as showcaseTripOffers } from '../../lib/showcase';
 
 export const metadata = {
   title: 'Trips · Diaspora marketplace',
@@ -32,10 +32,11 @@ type TripRow = {
   slotsTotal: number;
   defaultPerSlotFee: string;
   notes: string | null;
+  spareWeightKg: number | null;
+  spareVolumeLiters: number | null;
 };
 
 export default async function TripsPage() {
-  const demo = await isDemoModeEnabled();
   let trips: TripRow[] = [];
   let serviceError = false;
   try {
@@ -44,8 +45,11 @@ export default async function TripsPage() {
   } catch {
     serviceError = true;
   }
-
-  const showcase = trips.length === 0 && demo ? showcaseTrips() : [];
+  const demo = await isDemoModeEnabled();
+  const demoTrips: TripRow[] =
+    trips.length === 0 && !serviceError && demo
+      ? (showcaseTripOffers() as unknown as TripRow[])
+      : [];
 
   return (
     <>
@@ -88,25 +92,29 @@ export default async function TripsPage() {
                 slotsAvailable={t.slotsAvailable}
                 feePerSlot={Number(t.defaultPerSlotFee)}
                 notes={t.notes}
+                spareWeightKg={t.spareWeightKg}
+                spareVolumeLiters={t.spareVolumeLiters}
               />
             ))}
           </ul>
-        ) : showcase.length > 0 ? (
+        ) : demoTrips.length > 0 ? (
           <ul className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {showcase.map((t) => (
+            {demoTrips.map((t) => (
               <TripCard
                 key={t.id}
                 id={t.id}
-                fromIso={t.fromIso}
-                fromCity={t.fromCity}
-                toIso={t.toIso}
-                toCity={t.toCity}
-                departText={t.departIn}
+                fromIso={t.originCountryIso2}
+                fromCity={t.originCity}
+                toIso={t.destinationCountryIso2}
+                toCity={t.destinationCity}
+                departText={formatDeparture(t.departAt)}
                 slotsTotal={t.slotsTotal}
                 slotsAvailable={t.slotsAvailable}
-                feePerSlot={t.defaultPerSlotFee}
-                notes={null}
-                showcase
+                feePerSlot={Number(t.defaultPerSlotFee)}
+                notes={t.notes}
+                spareWeightKg={t.spareWeightKg}
+                spareVolumeLiters={t.spareVolumeLiters}
+                demoShowcase
               />
             ))}
           </ul>
@@ -151,7 +159,9 @@ function TripCard({
   slotsAvailable,
   feePerSlot,
   notes,
-  showcase,
+  spareWeightKg,
+  spareVolumeLiters,
+  demoShowcase,
 }: {
   id: string;
   fromIso: string;
@@ -163,7 +173,9 @@ function TripCard({
   slotsAvailable: number;
   feePerSlot: number;
   notes: string | null;
-  showcase?: boolean;
+  spareWeightKg?: number | null;
+  spareVolumeLiters?: number | null;
+  demoShowcase?: boolean;
 }) {
   const from = COUNTRIES.find((c) => c.iso2 === fromIso);
   const to = COUNTRIES.find((c) => c.iso2 === toIso);
@@ -179,6 +191,13 @@ function TripCard({
         </span>
       </div>
       <p className="text-ash text-sm">Departs {departText}</p>
+      {spareWeightKg != null || spareVolumeLiters != null ? (
+        <p className="text-ink/60 text-xs">
+          {spareWeightKg != null ? `~${spareWeightKg} kg spare` : null}
+          {spareWeightKg != null && spareVolumeLiters != null ? ' · ' : null}
+          {spareVolumeLiters != null ? `~${spareVolumeLiters} L volume hint` : null}
+        </p>
+      ) : null}
       {notes ? <p className="text-ink/70 line-clamp-3 text-sm">{notes}</p> : null}
       <div className="text-ash mt-auto flex flex-wrap items-center gap-2 text-xs">
         <Badge variant="soft">
@@ -189,9 +208,9 @@ function TripCard({
           <MapPin className="h-3 w-3" /> {to?.name}
         </Badge>
       </div>
-      <Button asChild variant={showcase ? 'outline' : 'primary'}>
-        <Link href={showcase ? '/trips' : `/trips/${id}`}>
-          {showcase ? 'Showcase trip' : 'Reserve a slot'}
+      <Button asChild variant={demoShowcase ? 'outline' : 'primary'}>
+        <Link href={demoShowcase ? '/trips' : `/trips/${id}`}>
+          {demoShowcase ? 'Showcase trip' : 'Reserve a slot'}
         </Link>
       </Button>
     </li>

@@ -32,6 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/manifesto',
     '/traction',
     '/investors',
+    '/sources',
     '/safety/handoff-protocol',
   ].map((path) => ({
     url: `${base}${path}`,
