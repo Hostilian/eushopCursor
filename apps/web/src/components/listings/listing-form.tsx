@@ -1,9 +1,10 @@
 'use client';
 
-import { Camera, MapPin, X } from 'lucide-react';
-import Image from 'next/image';
+import { CATEGORIES } from '@eushop/catalog-data';
+import { MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { trpc } from '../../lib/trpc';
+import { ProductPicker, type ProductPickerSelection } from '../catalog/product-picker';
 import { Button } from '../ui/button';
 
 const FRESHNESS = [
@@ -43,29 +44,24 @@ export function ListingForm() {
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const presign = trpc.media.presign.useMutation();
   const create = trpc.listings.create.useMutation();
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setState((s) => ({ ...s, [k]: v }));
 
-  const onPhoto = async (file: File) => {
-    try {
-      const presigned = await presign.mutateAsync({
-        filename: file.name,
-        contentType: file.type as 'image/jpeg' | 'image/png' | 'image/webp' | 'image/avif',
-        byteLength: file.size,
-        purpose: 'listing',
-      });
-      // For real R2 uploads we'd PUT the file here. Dev mode returns a placeholder URL we just record.
-      if (!presigned.uploadUrl.startsWith('data:')) {
-        await fetch(presigned.uploadUrl, { method: 'PUT', headers: presigned.headers, body: file });
-      }
-      set('photos', [...state.photos, { url: presigned.publicUrl }]);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Upload failed');
-    }
+  const pickerValue: ProductPickerSelection = {
+    foodItemId: state.foodItemId,
+    freeformName: state.freeformName,
+    photos: state.photos,
   };
+
+  const onPickerChange = (next: ProductPickerSelection) =>
+    setState((s) => ({
+      ...s,
+      foodItemId: next.foodItemId,
+      freeformName: next.freeformName ?? '',
+      photos: next.photos,
+    }));
 
   const submit = async () => {
     setError(null);
@@ -120,13 +116,15 @@ export function ListingForm() {
       }}
       className="space-y-8"
     >
-      <Field label="What did you bring?" hint="Krówki, Stroopwafels, half a wheel of Manchego…">
-        <input
-          required
-          value={state.freeformName}
-          onChange={(e) => set('freeformName', e.target.value)}
-          className="form-input"
-          placeholder="Wedel Mieszanka Wedlowska tin (300g)"
+      <Field
+        label="What did you bring?"
+        hint="Search the catalog and pick a product photo, or upload your own."
+      >
+        <ProductPicker
+          value={pickerValue}
+          onChange={onPickerChange}
+          purpose="listing"
+          proposeCategoryOptions={CATEGORIES.map((c) => ({ slug: c.slug, name: c.name }))}
         />
       </Field>
 
@@ -223,46 +221,6 @@ export function ListingForm() {
           >
             {locating ? 'Locating…' : state.location ? '✓ Located' : 'Use my location'}
           </button>
-        </div>
-      </Field>
-
-      <Field label="Photos" hint="Up to 8. We resize and strip EXIF on upload.">
-        <div className="grid grid-cols-3 gap-3 md:grid-cols-4">
-          {state.photos.map((p, idx) => (
-            <div
-              key={idx}
-              className="group bg-bone relative aspect-square overflow-hidden rounded-2xl"
-            >
-              <Image src={p.url} alt="" fill unoptimized sizes="120px" className="object-cover" />
-              <button
-                type="button"
-                onClick={() =>
-                  set(
-                    'photos',
-                    state.photos.filter((_, i) => i !== idx),
-                  )
-                }
-                className="bg-ink/80 text-paper absolute top-2 right-2 inline-flex h-7 w-7 items-center justify-center rounded-full opacity-0 transition-opacity group-hover:opacity-100"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            </div>
-          ))}
-          {state.photos.length < 8 ? (
-            <label className="border-ink/20 bg-paper text-ash hover:border-ink/40 hover:text-ink flex aspect-square cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-dashed">
-              <Camera className="h-5 w-5" />
-              <span className="text-xs">Add photo</span>
-              <input
-                type="file"
-                accept="image/*"
-                hidden
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) void onPhoto(f);
-                }}
-              />
-            </label>
-          ) : null}
         </div>
       </Field>
 

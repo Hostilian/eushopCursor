@@ -21,15 +21,18 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Eushop — Luggage space on your route',
+    default: 'Eushop — Spare bag space & finder’s fees',
     template: '%s · Eushop',
   },
   description:
-    'City- and location-first marketplace: list spare suitcase capacity (dates, legs, size/weight) with fixed price or bids; post wants with a finder’s fee. Social-style profiles, eBay-smooth flows.',
+    'City-first marketplace for both: spare suitcase capacity on routes you fly (fixed price or bids, on the roadmap) and finder’s fees for things you want someone to locate and hand off. Clear profiles, low-friction chat.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eushop.eu'),
   openGraph: {
     type: 'website',
     siteName: 'Eushop',
+    title: 'Eushop — Spare bag space & finder’s fees',
+    description:
+      'List spare luggage room on real journeys, or name a finder’s fee for what you want found—same city-first network, same profiles and chat.',
   },
   alternates: { canonical: '/' },
 };

@@ -1,5 +1,75 @@
 # Changelog
 
+## 0.2.0 — 2026-05-02 — Trip marketplace pivot
+
+> Suitcase capacity is the new last-mile.
+
+The narrative reframe. Pantry listings and requests stay as primitives, but the
+primary monetisable surface is now **trip offers + reservations**: a verified
+diaspora user announces a trip with N suitcase slots, buyers reserve specific
+items at an agreed finder's fee, and the platform charges
+`max(€1.50, 12% × finderFee)` on each confirmation.
+
+### All mock data killed
+- Deleted `packages/mock-data` entirely (every fictional listing, request, user,
+  conversation, message, audit row).
+- `mock-fallback.ts` kept only for the curated catalog (countries, categories,
+  brands, items). User-generated endpoints now return real data or `[]` — never
+  synthetic rows.
+- `?demo=1` cookie surfaces a small, deterministically-generated showcase
+  dataset derived from `@eushop/catalog-data`, with a banner pinned above the
+  nav reading *"Demo data — illustrative only. Switch to live →"*. Investors
+  see a populated app for screenshots without us lying about traction.
+- Honest empty states everywhere: home, discover, requests, listings, admin
+  moderation queue, mobile today screen.
+
+### Trip marketplace spine
+- New schemas in `packages/db/src/schema/trips.ts`: `trip_offers`,
+  `trip_reservations`, `payouts`, with status enums and PostGIS `geographyPoint`
+  endpoints. Migration `0002_trip_marketplace.sql`.
+- New tRPC router `packages/api-router/src/routers/trips.ts` — `create`,
+  `byRoute`, `feedNear`, `byId`, `mineAsSeller`, `mineReservations`,
+  `reserve`, `confirmReservation`, `rejectReservation`,
+  `completeReservation`, `cancelReservation`. Atomic slot decrement and
+  platform-fee calculation live in the reserve mutation.
+- Validators in `packages/validators` for the full trip lifecycle, plus
+  `calculatePlatformFeeCents` helper.
+- Web routes: `/trips`, `/trips/new`, `/trips/[id]`, `/reservations`.
+- Mobile mirrors under `apps/mobile/app/(tabs)/trips.tsx`, `app/trip/new.tsx`,
+  `app/trip/[id].tsx`.
+- Inngest workflows: `notify-reservation-created`,
+  `notify-trip-departure-soon` + fanout, `auto-close-stale-trips`.
+
+### Hybrid product catalog with real images
+- `food_items` extended with `barcode`, `openFoodFactsId`, `imageVariants`,
+  `verifiedAt`, `submittedById`. New tables `food_item_candidates`,
+  `food_item_image_proposals`, `food_item_image_votes` for the UGC pipeline.
+- `packages/catalog-data/src/openfoodfacts/` — read-only CC-BY-SA client over
+  the Open Food Facts public API. Inngest `import-openfoodfacts-batch` +
+  daily cron to seed unverified rows for the moderation queue.
+- New tRPC procedures `catalog.proposeItem`, `catalog.proposeImage`,
+  `catalog.upvoteImage`, `catalog.searchWithSuggestions`.
+- New `media.fetchRemoteImage` mutation downloads + re-hosts user-pasted
+  image URLs on R2 (strips EXIF, prevents hotlinking).
+- `ProductPicker` component (web + mobile mirror) — debounced catalog search,
+  three image candidates per result, upload / paste-URL / propose-product
+  fallbacks. Wired into listing form, request form, trip-offer form,
+  reservation form.
+- `apps/web/src/app/items/[slug]/page.tsx` renders the real catalog image and
+  attributes Open Food Facts when the source warrants.
+
+### Investor / YC readiness
+- New `/manifesto` — the long-form public pitch.
+- New `/traction` — live counts via `traction.liveCounts` and a 12-week
+  growth sparkline via `traction.weeklyGrowth`. Real numbers only; if it's
+  zero, it says zero.
+- New `/investors` — token-gated long-form deck, rendered from
+  `apps/web/content/pitch.md` via a tiny dependency-free Markdown renderer.
+  Tokens configured via `INVESTOR_ACCESS_TOKENS` env var; without one the
+  page renders a public stub plus links to /manifesto and /traction.
+- New `apps/web/src/components/demo-mode-banner.tsx`.
+- README rewritten to lead with the new manifesto.
+
 ## 0.1.0 — 2026-05-02 — MVP scaffold
 
 The full Eushop monorepo is in place. All 11 phases of the original plan are

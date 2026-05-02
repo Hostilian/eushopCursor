@@ -1,8 +1,23 @@
-import { catalogQuery } from '@eushop/validators';
+import { searchOpenFoodFacts } from '@eushop/catalog-data';
+import {
+  catalogQuery,
+  catalogSearchWithSuggestionsInput,
+  proposeFoodItemImageInput,
+  proposeFoodItemInput,
+  upvoteFoodItemImageInput,
+} from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
 import { and, asc, desc, eq, ilike, or, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { brands, categories, countries, foodItems } from '@eushop/db';
+import {
+  brands,
+  categories,
+  countries,
+  foodItemCandidates,
+  foodItemImageProposals,
+  foodItemImageVotes,
+  foodItems,
+} from '@eushop/db';
 import {
   fallbackBrands,
   fallbackCategories,
@@ -15,7 +30,7 @@ import {
   withFallback,
   withListFallback,
 } from '../lib/mock-fallback';
-import { publicProcedure, router } from '../trpc';
+import { protectedProcedure, publicProcedure, router } from '../trpc';
 
 export const catalogRouter = router({
   countries: publicProcedure.query(async ({ ctx }) =>
@@ -259,6 +274,244 @@ export const catalogRouter = router({
             originCountryIso2: it.originCountryIso2,
             description: it.description,
           }));
+      }
+    }),
+
+  /**
+   * Picker-grade search. First hits Meili (then Postgres trigram, then the
+   * curated catalog fallback), then optionally enriches with Open Food Facts
+   * candidates that are *not yet in our index*. The remote results are
+   * tagged `source: 'remote'` so the UI can offer a one-click "Pull this in"
+   * button which routes through `proposeItem`.
+   */
+  searchWithSuggestions: publicProcedure
+    .input(catalogSearchWithSuggestionsInput)
+    .query(async ({ ctx, input }) => {
+      type Hit = {
+        id: string;
+        slug?: string;
+        name: string;
+        originCountryIso2: string;
+        description: string;
+        imageVariants?: { thumb?: string; small?: string; large?: string };
+        images: string[];
+        source: 'local' | 'remote';
+        barcode?: string | null;
+        openFoodFactsId?: string | null;
+      };
+      const hits: Hit[] = [];
+      const seenSlugs = new Set<string>();
+      const seenBarcodes = new Set<string>();
+
+      try {
+        const result = await ctx.meili.index('food_items').search<{
+          id: string;
+          name: string;
+          slug: string;
+          originCountryIso2: string;
+          description: string;
+          imageVariants?: { thumb?: string; small?: string; large?: string };
+          defaultImageUrl?: string;
+          barcode?: string;
+          openFoodFactsId?: string;
+        }>(input.q, { limit: input.limit });
+        for (const h of result.hits) {
+          const images = [h.imageVariants?.large, h.imageVariants?.small, h.defaultImageUrl]
+            .filter((u): u is string => !!u)
+            .slice(0, 3);
+          hits.push({
+            id: h.id,
+            slug: h.slug,
+            name: h.name,
+            originCountryIso2: h.originCountryIso2,
+            description: h.description,
+            imageVariants: h.imageVariants,
+            images,
+            source: 'local',
+            barcode: h.barcode,
+            openFoodFactsId: h.openFoodFactsId,
+          });
+          if (h.slug) seenSlugs.add(h.slug);
+          if (h.barcode) seenBarcodes.add(h.barcode);
+        }
+      } catch {
+        // Meili offline; fall through to DB / catalog.
+      }
+
+      if (hits.length < input.limit) {
+        try {
+          const pattern = `%${input.q.replace(/[%_]/g, '')}%`;
+          const rows = await ctx.db
+            .select()
+            .from(foodItems)
+            .where(or(ilike(foodItems.name, pattern), ilike(foodItems.description, pattern)))
+            .limit(input.limit);
+          for (const r of rows) {
+            if (seenSlugs.has(r.slug)) continue;
+            const images = [r.imageVariants?.large, r.imageVariants?.small, r.defaultImageUrl]
+              .filter((u): u is string => !!u)
+              .slice(0, 3);
+            hits.push({
+              id: r.id,
+              slug: r.slug,
+              name: r.name,
+              originCountryIso2: r.originCountryIso2,
+              description: r.description,
+              imageVariants: r.imageVariants,
+              images,
+              source: 'local',
+              barcode: r.barcode,
+              openFoodFactsId: r.openFoodFactsId,
+            });
+            seenSlugs.add(r.slug);
+            if (r.barcode) seenBarcodes.add(r.barcode);
+          }
+        } catch {
+          /* DB offline */
+        }
+      }
+
+      if (hits.length === 0) {
+        const q = input.q.toLowerCase();
+        for (const it of fallbackItems(
+          (s) => s.name.toLowerCase().includes(q) || s.description.toLowerCase().includes(q),
+        ).slice(0, input.limit)) {
+          if (seenSlugs.has(it.slug)) continue;
+          hits.push({
+            id: it.id,
+            slug: it.slug,
+            name: it.name,
+            originCountryIso2: it.originCountryIso2,
+            description: it.description,
+            images: [],
+            source: 'local',
+            barcode: null,
+            openFoodFactsId: null,
+          });
+          seenSlugs.add(it.slug);
+        }
+      }
+
+      if (input.includeRemote && hits.length < input.limit) {
+        const remote = await searchOpenFoodFacts(input.q, {
+          limit: input.limit - hits.length,
+        }).catch(() => []);
+        for (const r of remote) {
+          if (r.barcode && seenBarcodes.has(r.barcode)) continue;
+          hits.push({
+            id: `off:${r.barcode ?? r.name}`,
+            name: r.name,
+            originCountryIso2: r.originCountryIso2 ?? 'EU',
+            description: r.description ?? '',
+            images: r.images.slice(0, 3),
+            source: 'remote',
+            barcode: r.barcode ?? null,
+            openFoodFactsId: r.barcode ?? null,
+          });
+        }
+      }
+
+      return hits.slice(0, input.limit);
+    }),
+
+  /* -------------------------------------------------------------- *
+   * UGC: propose new product / propose alternate image / upvote.    *
+   * -------------------------------------------------------------- */
+
+  proposeItem: protectedProcedure.input(proposeFoodItemInput).mutation(async ({ ctx, input }) => {
+    const [created] = await ctx.db
+      .insert(foodItemCandidates)
+      .values({
+        name: input.name,
+        aka: input.aka ?? [],
+        categorySlug: input.categorySlug,
+        originCountryIso2: input.originCountryIso2,
+        description: input.description,
+        proposedImages: input.proposedImages ?? [],
+        submittedById: ctx.user.id,
+      })
+      .returning();
+    return created;
+  }),
+
+  proposeImage: protectedProcedure
+    .input(proposeFoodItemImageInput)
+    .mutation(async ({ ctx, input }) => {
+      const item = await ctx.db.query.foodItems.findFirst({
+        where: eq(foodItems.id, input.foodItemId),
+      });
+      if (!item) throw new TRPCError({ code: 'NOT_FOUND' });
+      try {
+        const [created] = await ctx.db
+          .insert(foodItemImageProposals)
+          .values({
+            foodItemId: input.foodItemId,
+            url: input.url,
+            source: input.source,
+            submittedById: ctx.user.id,
+          })
+          .returning();
+        return created;
+      } catch (e) {
+        // Most likely cause is the unique (item, user, url) constraint
+        // — surfaces as 409 to the client without leaking stack traces.
+        throw new TRPCError({
+          code: 'CONFLICT',
+          message: e instanceof Error ? e.message : 'Image already proposed',
+        });
+      }
+    }),
+
+  upvoteImage: protectedProcedure
+    .input(upvoteFoodItemImageInput)
+    .mutation(async ({ ctx, input }) => {
+      const proposal = await ctx.db.query.foodItemImageProposals.findFirst({
+        where: eq(foodItemImageProposals.id, input.proposalId),
+      });
+      if (!proposal) throw new TRPCError({ code: 'NOT_FOUND' });
+      try {
+        await ctx.db.insert(foodItemImageVotes).values({
+          proposalId: input.proposalId,
+          userId: ctx.user.id,
+        });
+      } catch {
+        // Already voted — idempotent return.
+        return { ok: true, alreadyVoted: true as const, votes: proposal.votes };
+      }
+      const [updated] = await ctx.db
+        .update(foodItemImageProposals)
+        .set({ votes: sql`${foodItemImageProposals.votes} + 1` })
+        .where(eq(foodItemImageProposals.id, input.proposalId))
+        .returning();
+      return {
+        ok: true,
+        alreadyVoted: false as const,
+        votes: updated?.votes ?? proposal.votes + 1,
+      };
+    }),
+
+  imagesForItem: publicProcedure
+    .input(
+      z.object({
+        foodItemId: z.string().uuid(),
+        limit: z.number().int().min(1).max(20).default(6),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      try {
+        return await ctx.db
+          .select()
+          .from(foodItemImageProposals)
+          .where(
+            and(
+              eq(foodItemImageProposals.foodItemId, input.foodItemId),
+              eq(foodItemImageProposals.status, 'approved'),
+            ),
+          )
+          .orderBy(desc(foodItemImageProposals.votes))
+          .limit(input.limit);
+      } catch {
+        return [];
       }
     }),
 });

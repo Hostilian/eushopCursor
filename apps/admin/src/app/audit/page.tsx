@@ -1,21 +1,73 @@
 /**
- * Audit log surface. Will hook into the moderation_actions table once a
- * dedicated `trust.auditLog` query lands; until then we render an honest
- * placeholder rather than synthetic events that could mislead a reviewer.
+ * Audit log from `moderation_actions`, joined to actor email for review context.
  */
-export default function AdminAuditPage() {
+
+import { api } from '../../lib/trpc-server';
+
+type AuditRow = {
+  id: string;
+  reportId: string | null;
+  actorId: string;
+  actorEmail: string;
+  action: string;
+  note: string | null;
+  metadata: Record<string, unknown>;
+  createdAt: Date;
+};
+
+export default async function AdminAuditPage() {
+  let rows: AuditRow[] = [];
+  let loadError: string | null = null;
+  try {
+    const trpc = await api();
+    rows = (await trpc.trust.auditLog()) as AuditRow[];
+  } catch (e) {
+    loadError = e instanceof Error ? e.message : 'Could not load audit log.';
+  }
+
   return (
     <div className="space-y-6">
       <h1 className="text-ink font-serif text-3xl">Audit log</h1>
       <p className="text-ink/70 max-w-xl text-sm">
-        Every moderation action — listing removals, user suspensions, report resolutions — will
-        stream into this view from the <code>moderation_actions</code> table. Wiring lands with the
-        Stripe Connect milestone (see <code>CHANGELOG.md</code>); until then this view stays
-        intentionally empty so nothing here is invented.
+        Moderation actions (report resolutions, dismissals, and future listing or user actions) as
+        stored in <code>moderation_actions</code>. Newest first, capped at 100 rows.
       </p>
-      <div className="border-ink/10 bg-porcelain rounded-2xl border p-8 text-center">
-        <p className="text-ink/70 text-sm">No moderation actions recorded yet.</p>
-      </div>
+
+      {loadError ? (
+        <div className="border-danger/30 bg-danger/5 text-danger rounded-2xl border p-4 text-sm">
+          {loadError}
+        </div>
+      ) : null}
+
+      {rows.length === 0 && !loadError ? (
+        <div className="border-ink/10 bg-porcelain rounded-2xl border p-8 text-center">
+          <p className="text-ink/70 text-sm">No moderation actions recorded yet.</p>
+        </div>
+      ) : (
+        <ul className="grid gap-4">
+          {rows.map((r) => (
+            <li key={r.id} className="border-ink/10 rounded-2xl border bg-white p-5">
+              <p className="text-ink font-mono text-xs">{r.id}</p>
+              <p className="text-ink mt-2 font-serif text-lg">{r.action}</p>
+              <p className="text-ash mt-1 text-sm">
+                Actor: <span className="font-mono text-xs">{r.actorEmail}</span>
+              </p>
+              {r.reportId ? (
+                <p className="text-ash mt-1 font-mono text-xs">Report {r.reportId}</p>
+              ) : null}
+              {r.note ? <p className="text-ink/70 mt-3 text-sm">{r.note}</p> : null}
+              {Object.keys(r.metadata ?? {}).length > 0 ? (
+                <pre className="text-ash bg-porcelain/80 mt-2 max-h-32 overflow-auto rounded-lg p-2 font-mono text-xs">
+                  {JSON.stringify(r.metadata, null, 2)}
+                </pre>
+              ) : null}
+              <p className="text-ash mt-4 text-xs tracking-widest uppercase">
+                {r.createdAt instanceof Date ? r.createdAt.toISOString() : String(r.createdAt)}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

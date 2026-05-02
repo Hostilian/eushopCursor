@@ -1,25 +1,60 @@
 # Eushop
 
-A **city- and location-first** peer marketplace. Travelers publish real journeys—start
-and end places, dates, legs (e.g. Kilimanjaro → Fiji → Antarctica), and **spare luggage
-capacity**: volume, dimensions, weight limits, and what they are willing to carry. Others
-can **buy that capacity** at a listed price or compete in **bids**, the same way
-familiar marketplaces surface offers and demand.
+> **Suitcase capacity is the new last-mile.**
 
-Alongside that, people who want something specific can still post **requests** and offer a
-**finder's fee**—so the product is both “I have extra space on this trip” (often the
-stronger commercial lane for the platform) and “someone find this for me.”
+Eushop is the diaspora trip & errand marketplace for the EU. Two hundred million
+Europeans live somewhere other than where they grew up — and most of them are flying
+home in the next ninety days with three empty kilos in their checked bag. We are the
+coordination layer that turns those wasted kilos into cravings finally met.
 
-Discovery is tied to **places and routes**, not a single country filter: your city,
-your corridor, your handoff point. Profiles are meant to feel **social and trustworthy**
-(clear photo, identity cues) while browsing, offers, and checkout-style flows aim to
-feel **as seamless as eBay**—fast scan, clear price or auction state, low friction to
-message and close a deal.
+Three primitives, one network:
 
-> Eushop is a discovery & messaging layer. Settlement, customs, carrier rules, and
-> liability stay between the parties unless and until the product adds regulated
-> payment flows. Many handoffs stay local; multi-leg trips are first-class in how
-> routes are described.
+1. **Trip offers** — a verified diaspora user announces a trip ("Munich → Warsaw,
+   May 14, 6 suitcase slots, here's what I'll grab"), each slot reservable at an
+   agreed finder's fee. *Reservations are the monetisable event.*
+2. **Open requests** — a buyer posts what they want; matching trips and listings
+   in the same corridor or 5 km cell light it up automatically.
+3. **Pantry listings** — neighbourhood-scale finder-fee posts ("half a tin of
+   Krówki, €3, pickup at Goetheplatz") with privacy-preserving geohash discovery.
+
+We charge a small platform fee on each confirmed reservation:
+`platformFee = max(€1.50, 12% × finderFee)`. Settlement of the goods themselves stays
+between the parties — we are introductions, identity, and chat, not customs, freight,
+or regulated payments.
+
+> Discovery is tied to **places, routes, and corridors**. Profiles are photo-forward
+> and trust-graphed. Listings and trips render with a 5 km privacy cell and
+> deterministic jitter so handoffs stay practical without exposing anyone's home.
+
+## Product scope (shipped vs roadmap)
+
+**In this repo today**
+
+- **Trip marketplace** (`/trips`, `/trips/new`, `/reservations`) on web and mobile,
+  backed by `trip_offers`, `trip_reservations`, `payouts` schemas and a full
+  `trips` tRPC router (create / search / reserve / confirm / complete / cancel).
+- **Hybrid product catalog** — curated EU foods + Open Food Facts importer
+  (CC-BY-SA, attributed in-app) + UGC moderation queue (`food_item_candidates`,
+  `food_item_image_proposals`).
+- **Product picker** with three image candidates, photo upload, paste-image-URL
+  (server-side download + R2 re-host), and "propose this product" UGC flow.
+- **Pantry listings & requests** with PostGIS, Meilisearch, and 5 km geohash cells.
+- **Realtime chat** (PartyKit Durable Objects), Better Auth, Inngest workflows
+  (Open Food Facts importer, trip-reservation notifications, departure reminders),
+  and an admin moderation cockpit.
+- **Investor surfaces** — public `/manifesto`, live `/traction` (real DB counts,
+  never invented), and a token-gated `/investors` deck rendered from
+  `apps/web/content/pitch.md`. Optional `?demo=1` cookie surfaces a clearly
+  labelled showcase dataset for board meetings without polluting production.
+
+**Roadmap (direction of travel)**
+
+- **Stripe Connect** wire-up so platform fees actually collect on confirmation.
+- **Verified-bringer badge** (Veriff/Onfido passport-country attestation).
+- **Group-buys**, restock alerts, pickup hubs, multilingual catalog search,
+  city leaderboards. Tracked in `[/roadmap](apps/web/src/app/roadmap/page.tsx)`.
+
+EU-first by construction. Hosting in Hetzner Falkenstein, CDN via Cloudflare EU.
 
 ## Stack (validated 2026)
 
@@ -33,8 +68,10 @@ message and close a deal.
 - **Storage** — Cloudflare R2
 - **Hosting** — Hetzner Cloud (EU) + Coolify · Cloudflare CDN
 
-Trip offers and reservations are modeled in the DB (`packages/db` trip tables) as the
-monetisable complement to listings and requests.
+The trip marketplace (`trip_offers`, `trip_reservations`, `payouts`) is the
+monetisable complement to listings and requests; the platform fee on each confirmed
+reservation is the take rate that powers the YC-style unit economics in
+`apps/web/content/pitch.md`.
 
 ## Layout
 
@@ -61,6 +98,14 @@ packages/
 ## Local development
 
 Prerequisites: **Node 20.11+**, **pnpm 9+**, **Docker Desktop**.
+
+### Windows (PowerShell 5.x, Git Bash, Husky)
+
+- **pnpm via Corepack (recommended)** matches the root `package.json` `packageManager` field. Run `corepack enable` once (if Windows reports `EPERM` under `C:\Program Files\nodejs`, use an elevated terminal once), then from the repo root: `corepack prepare pnpm@9.12.0 --activate`. You can always invoke that build as `corepack pnpm …` (for example `corepack pnpm install`, `corepack pnpm verify`) if a global shim is misbehaving.
+- A broken **global** install from `npm install -g pnpm` can leave `@pnpm/exe/pnpm` empty and make Git Bash fail with `This: command not found`. Prefer `npm uninstall -g pnpm` and Corepack instead.
+- **PowerShell 5.1** does not treat `&&` as a command separator. Use **`pnpm verify`** (typecheck, lint, build) instead of pasting `pnpm typecheck && pnpm lint && pnpm build`, or run each script on its own line.
+- **Husky**: committed hooks here only run **Node** and **lint-staged** (see `.husky/pre-commit`). They do not call `pnpm`. If you use `~/.config/husky/init.sh`, keep it free of a broken global `pnpm`, or rely on Corepack as above.
+- **`next build` / ENOENT**: If a production build fails with missing files under `apps/web/.next` (for example `build-manifest.json` or `pages-manifest.json`), delete `apps/web/.next` and `apps/web/tsconfig.tsbuildinfo`, ensure nothing else is touching that folder, and run `pnpm --filter @eushop/web build` again. Aggressive antivirus or parallel tools scanning `.next` can occasionally race the build on Windows.
 
 ```bash
 pnpm install

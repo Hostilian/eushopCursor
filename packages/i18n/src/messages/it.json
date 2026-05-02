@@ -1,13 +1,44 @@
 {
   "brand": "Eushop",
-  "tagline": "Un sapore di casa, dietro l'angolo.",
+  "tagline": "Spazio libero nel tuo viaggio — e un compenso ricerca per ciò che vuoi.",
+  "hero": {
+    "eyebrow": "Posto in valigia · richieste con compenso ricerca",
+    "body": "Nello stesso mercato elenchi lo spazio avanzo nei bagagli sui viaggi che già fai e fissi un compenso ricerca perché qualcuno vicino — o sulla rotta giusta — trovi ciò che ti serve e te lo consegni. Stessa mappa incentrata sulla città, stessi profili chiari, stesso percorso diretto all’accordo.",
+    "discoverCta": "Scopri vicino a te",
+    "favsLabel": "In evidenza dal catalogo"
+  },
+  "home": {
+    "countriesEyebrow": "Dall’Unione",
+    "countriesHeading": "Un assaggio di {count} paesi d’origine.",
+    "countriesSeeAll": "Vedi tutti i {count}",
+    "categoriesEyebrow": "Per voglia",
+    "categoriesHeading": "Categorie.",
+    "editorialEyebrow": "Due lati, una rete",
+    "editorialTitle": "Capacità libera e compenso ricerca nello stesso posto.",
+    "editorialBody": "Eushop collega viaggi e domanda. Qualcuno vicino vuole solo ciò che riporti in una borsa; qualcuno che attraversa fusi orari vende il chilo libero in stiva. Punto su presentazioni, identità visibile e chat che porta a un passo successivo chiaro.",
+    "pillar1Title": "Luogo e percorso prima di tutto.",
+    "pillar1Body": "La scoperta si basa su città, corridoi e punti di consegna—non solo su una bandiera paese sulla mappa.",
+    "pillar2Title": "Due modi di scambiare.",
+    "pillar2Body": "Pubblica capacità bagaglio sui viaggi che fai già, o apri una richiesta con compenso per qualcosa di specifico. Prezzo fisso per primo; aste competitive dopo, nella roadmap dove possiamo implementarle bene.",
+    "pillar3Title": "Il pagamento resta tra voi.",
+    "pillar3Body": "Vi accordate in chat e regolate di persona o fuori app finché non arrivano pagamenti in-app regolamentati. Oggi non tocchiamo i vostri soldi.",
+    "ctaBandBody": "Condividi le scorte, pubblica una richiesta o preparati a postare capacità viaggio man mano che i flussi escono—sempre in una cella di 5 km così i passaggi restano pratici."
+  },
   "nav": {
     "discover": "Scopri",
+    "trips": "Viaggi",
     "countries": "Paesi",
     "requests": "Richieste",
     "listings": "I miei annunci",
     "messages": "Messaggi",
-    "profile": "Profilo"
+    "profile": "Profilo",
+    "pitch": "Pitch",
+    "press": "Stampa",
+    "roadmap": "Roadmap",
+    "changelog": "Changelog",
+    "manifesto": "Manifesto",
+    "investors": "Investitori",
+    "traction": "Trazione"
   },
   "cta": {
     "signIn": "Accedi",
@@ -18,7 +49,7 @@
     "viewAll": "Vedi tutto"
   },
   "search": {
-    "placeholder": "Cerca Krówki, Stroopwafels, Mastiha…"
+    "placeholder": "Cerca cibi, percorsi o città…"
   },
   "country": {
     "intro": "Porta a casa il sapore di {country}."
@@ -47,6 +78,58 @@
     "privacy": "Privacy",
     "terms": "Termini",
     "imprint": "Note legali"
+  },
+  "footerCompany": {
+    "column": "Eushop",
+    "about": "Chi siamo",
+    "howItWorks": "Come funziona",
+    "safety": "Sicurezza",
+    "manifesto": "Manifesto",
+    "pitch": "Pitch",
+    "investors": "Investitori",
+    "traction": "Trazione",
+    "press": "Stampa",
+    "roadmap": "Roadmap",
+    "changelog": "Changelog",
+    "dataExport": "Esportazione dati (GDPR)"
+  },
+  "kpi": {
+    "euCountries": "Paesi UE",
+    "categories": "Categorie",
+    "catalogItems": "Articoli in catalogo",
+    "brands": "Marchi",
+    "showcaseListings": "Annunci showcase"
+  },
+  "mobile": {
+    "onboardingEyebrow": "Eushop",
+    "onboardingTitle": "Tre passi.",
+    "onboardingSubtitle": "La stessa storia sul web, nell’admin e qui — ottimizzata per il pollice.",
+    "onboardingDiscoverTitle": "Scopri",
+    "onboardingDiscoverBody": "Sfoglia paesi e annunci nel tuo raggio: i pin restano in una cella di 5 km.",
+    "onboardingShareTitle": "Condividi",
+    "onboardingShareBody": "Pubblica cosa hai portato da casa. Imposta una piccola ricompensa e incontrati in pubblico.",
+    "onboardingMeetTitle": "Incontra",
+    "onboardingMeetBody": "Messaggi in app, appuntamento al bar o in stazione, pagamento di persona. Non tocchiamo i soldi.",
+    "onboardingCta": "Entra nell’app →",
+    "todayEyebrow": "Oggi vicino a te",
+    "todayTitle": "Novità nella tua cella.",
+    "todaySubtitle": "Annunci veri in una cella di 5 km intorno a te. Trascina per aggiornare.",
+    "kpiLive": "Live",
+    "kpiCell": "Cella",
+    "kpiHandoff": "Consegna",
+    "emptyTitle": "Silenzio nella tua cella",
+    "emptyHint": "Sii il primo — o pubblica una richiesta e ti avvisiamo quando arriva qualcosa di adatto."
+  },
+  "admin": {
+    "sidebarOverview": "Panoramica",
+    "sidebarListings": "Annunci",
+    "sidebarRequests": "Richieste",
+    "sidebarUsers": "Utenti",
+    "sidebarCatalog": "Catalogo",
+    "sidebarAudit": "Registro audit",
+    "productName": "Eushop",
+    "productTag": "Admin",
+    "mobileHeader": "Eushop Admin"
   },
   "auth": {
     "signedOut": "Disconnesso.",

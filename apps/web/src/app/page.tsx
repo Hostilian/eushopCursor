@@ -71,14 +71,17 @@ export default async function HomePage() {
         <section className="container-editorial mt-24">
           <div className="flex items-end justify-between gap-6">
             <div>
-              <p className="text-ash text-xs tracking-widest uppercase">From around the union</p>
+              <p className="text-ash text-xs tracking-widest uppercase">
+                {t('home.countriesEyebrow')}
+              </p>
               <h2 className="text-ink mt-2 font-serif text-4xl md:text-5xl">
-                A taste of {countries.length} home countries.
+                {t('home.countriesHeading', { count: countries.length })}
               </h2>
             </div>
             <Button asChild variant="link">
               <Link href="/countries" className="hidden sm:flex">
-                See all {COUNTRIES.length} <ArrowRight className="ml-1 h-4 w-4" />
+                {t('home.countriesSeeAll', { count: COUNTRIES.length })}{' '}
+                <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -86,34 +89,29 @@ export default async function HomePage() {
         </section>
 
         <section className="container-editorial mt-24">
-          <p className="text-ash text-xs tracking-widest uppercase">Browse by craving</p>
-          <h2 className="text-ink mt-2 font-serif text-4xl md:text-5xl">Categories.</h2>
+          <p className="text-ash text-xs tracking-widest uppercase">
+            {t('home.categoriesEyebrow')}
+          </p>
+          <h2 className="text-ink mt-2 font-serif text-4xl md:text-5xl">
+            {t('home.categoriesHeading')}
+          </h2>
           <CategoryShelf categories={categories} />
         </section>
 
         <MobilePreview />
 
         <EditorialBlock
-          eyebrow="A new kind of marketplace"
-          title="The neighbour with the suitcase, found."
-          body="Eushop is not a shop. We are the introduction. Someone in your city brought back the Krówki, the Mastiha, the Sült. Set a small finder's fee, share approximate location, agree on a coffee-shop handoff. We just make the meeting possible."
+          eyebrow={t('home.editorialEyebrow')}
+          title={t('home.editorialTitle')}
+          body={t('home.editorialBody')}
           ctaLabel={t('cta.postListing')}
           ctaHref="/listings/new"
         />
 
         <section className="container-editorial mt-24 grid gap-8 md:grid-cols-3">
-          <Pillar
-            title="Approximate, on purpose."
-            body="We never reveal precise addresses. Pins jitter inside a 5 km cell — meet at a café, a metro stop, your office lobby. Up to you."
-          />
-          <Pillar
-            title="Niche, not bulk."
-            body="No commercial sellers. Just neighbours sharing what they brought back from a trip home. Single jars. Half a chocolate box. The good stuff."
-          />
-          <Pillar
-            title="No payments handled."
-            body="You agree the finder's fee in chat and settle in person. Cash, Revolut, your call. We never touch your money."
-          />
+          <Pillar title={t('home.pillar1Title')} body={t('home.pillar1Body')} />
+          <Pillar title={t('home.pillar2Title')} body={t('home.pillar2Body')} />
+          <Pillar title={t('home.pillar3Title')} body={t('home.pillar3Body')} />
         </section>
 
         <section className="container-editorial bg-ink text-paper mt-32 rounded-[2.5rem] p-10 md:p-16">
@@ -121,10 +119,7 @@ export default async function HomePage() {
             <div className="max-w-xl">
               <Badge variant="accent">Open beta · 2026</Badge>
               <h2 className="mt-4 font-serif text-4xl md:text-5xl">{t('cta.postListing')}</h2>
-              <p className="text-paper/70 mt-3">
-                Brought back a tin of Wedel, a wheel of Manchego, a tube of Aromat? Share it within
-                a 5 km cell of where you live and earn a small finder's fee.
-              </p>
+              <p className="text-paper/70 mt-3">{t('home.ctaBandBody')}</p>
             </div>
             <Button asChild variant="accent" size="lg">
               <Link href="/listings/new">

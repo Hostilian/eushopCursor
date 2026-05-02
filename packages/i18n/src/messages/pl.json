@@ -1,13 +1,44 @@
 {
   "brand": "Eushop",
-  "tagline": "Smak domu, tuż za rogiem.",
+  "tagline": "Wolne miejsce w podróży — i opłata znalazcy za to, czego chcesz.",
+  "hero": {
+    "eyebrow": "Miejsce w bagażu · poszukiwania z opłatą znalazcy",
+    "body": "Na jednym rynku możesz wystawić wolne miejsce w bagażu na trasach, które i tak pokonujesz, i wyznaczyć opłatę znalazcy, żeby ktoś w pobliżu — albo na właściwej trasie — zdobył to, czego szukasz, i przekazał przy spotkaniu. Ta sama mapa zaczynająca się od miasta, te same czytelne profile, ten sam prosty tor do umowy.",
+    "discoverCta": "Odkrywaj w pobliżu",
+    "favsLabel": "Wyróżniki z katalogu"
+  },
+  "home": {
+    "countriesEyebrow": "Z całej Unii",
+    "countriesHeading": "Smak {count} krajów ojczystych.",
+    "countriesSeeAll": "Zobacz wszystkie ({count})",
+    "categoriesEyebrow": "Przeglądaj według ochoty",
+    "categoriesHeading": "Kategorie.",
+    "editorialEyebrow": "Dwie strony, jedna sieć",
+    "editorialTitle": "Wolna pojemność i opłata znalazcy w jednym miejscu.",
+    "editorialBody": "Eushop łączy podróże z popytem. Ktoś obok może potrzebować tylko tego, co masz w torbie; ktoś przeskakujący strefy sprzeda zapasowy kilogram w bagażu rejestrowanym. Stawiamy na kontakty, widoczną tożsamość i czat prowadzący do jasnego kolejnego kroku.",
+    "pillar1Title": "Najpierw miejsce i trasa.",
+    "pillar1Body": "Odkrywanie opiera się na miastach, korytarzach i punktach przekazania—nie tylko na fladze kraju na mapie.",
+    "pillar2Title": "Dwa sposoby wymiany.",
+    "pillar2Body": "Opublikuj wolną pojemność bagażową na podróże, które i tak robisz, albo dodaj poszukiwanie z opłatą znalazcy. Najpierw cena stała; konkurencyjne licytacje później w roadmapie, tam gdzie da się je wdrożyć porządnie.",
+    "pillar3Title": "Rozliczenia zostają między wami.",
+    "pillar3Body": "Ustalacie w czacie i płacicie osobiście lub poza aplikacją, dopóki nie pojawią się regulowane płatności in-app. Dziś nie dotykamy waszych pieniędzy.",
+    "ctaBandBody": "Podziel się tym, co masz, dodaj poszukiwanie lub przygotuj się do publikowania pojemności na trasach wraz z rozwojem funkcji—zawsze w komórce 5 km, żeby odbiory były praktyczne."
+  },
   "nav": {
     "discover": "Odkryj",
+    "trips": "Wyjazdy",
     "countries": "Kraje",
     "requests": "Poszukiwania",
     "listings": "Moje ogłoszenia",
     "messages": "Wiadomości",
-    "profile": "Profil"
+    "profile": "Profil",
+    "pitch": "Pitch",
+    "press": "Media",
+    "roadmap": "Roadmapa",
+    "changelog": "Dziennik zmian",
+    "manifesto": "Manifest",
+    "investors": "Inwestorzy",
+    "traction": "Wyniki"
   },
   "cta": {
     "signIn": "Zaloguj się",
@@ -18,7 +49,7 @@
     "viewAll": "Zobacz wszystko"
   },
   "search": {
-    "placeholder": "Szukaj Krówki, Stroopwafels, Mastiha…"
+    "placeholder": "Szukaj jedzenia, tras lub miast…"
   },
   "country": {
     "intro": "Sprowadź do siebie smak {country}."
@@ -47,6 +78,58 @@
     "privacy": "Prywatność",
     "terms": "Regulamin",
     "imprint": "Impressum"
+  },
+  "footerCompany": {
+    "column": "Eushop",
+    "about": "O nas",
+    "howItWorks": "Jak to działa",
+    "safety": "Bezpieczeństwo",
+    "manifesto": "Manifest",
+    "pitch": "Pitch",
+    "investors": "Inwestorzy",
+    "traction": "Wyniki",
+    "press": "Media",
+    "roadmap": "Roadmapa",
+    "changelog": "Dziennik zmian",
+    "dataExport": "Eksport danych (RODO)"
+  },
+  "kpi": {
+    "euCountries": "Kraje UE",
+    "categories": "Kategorie",
+    "catalogItems": "Pozycje w katalogu",
+    "brands": "Marki",
+    "showcaseListings": "Ogłoszenia demo"
+  },
+  "mobile": {
+    "onboardingEyebrow": "Eushop",
+    "onboardingTitle": "Trzy kroki.",
+    "onboardingSubtitle": "Ta sama historia w webie, panelu admin i tutaj — pod kciuk.",
+    "onboardingDiscoverTitle": "Odkrywaj",
+    "onboardingDiscoverBody": "Przeglądaj kraje i ogłoszenia w promieniu — pinezki zostają w komórce 5 km.",
+    "onboardingShareTitle": "Dziel się",
+    "onboardingShareBody": "Opublikuj, co przywiozłeś z domu. Ustal niewielką opłatę znalazcy i spotkajcie się publicznie.",
+    "onboardingMeetTitle": "Spotkaj się",
+    "onboardingMeetBody": "Czat w aplikacji, ustalenie w kawiarni lub na dworcu, płatność na miejscu. Nie dotykamy gotówki.",
+    "onboardingCta": "Wejdź do aplikacji →",
+    "todayEyebrow": "Dziś w pobliżu",
+    "todayTitle": "Świeże w Twojej komórce.",
+    "todaySubtitle": "Prawdziwe ogłoszenia w komórce 5 km wokół Ciebie. Pociągnij, by odświeżyć.",
+    "kpiLive": "Na żywo",
+    "kpiCell": "Komórka",
+    "kpiHandoff": "Przekazanie",
+    "emptyTitle": "Cisza w Twojej komórce",
+    "emptyHint": "Bądź pierwszy — albo dodaj poszukiwanie, damy znać, gdy pojawi się pasujące ogłoszenie lub trasa."
+  },
+  "admin": {
+    "sidebarOverview": "Przegląd",
+    "sidebarListings": "Ogłoszenia",
+    "sidebarRequests": "Poszukiwania",
+    "sidebarUsers": "Użytkownicy",
+    "sidebarCatalog": "Katalog",
+    "sidebarAudit": "Dziennik audytu",
+    "productName": "Eushop",
+    "productTag": "Admin",
+    "mobileHeader": "Eushop Admin"
   },
   "auth": {
     "signedOut": "Wylogowano.",

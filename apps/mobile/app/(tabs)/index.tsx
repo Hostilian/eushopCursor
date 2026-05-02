@@ -1,11 +1,11 @@
 import { countryPalette } from '@eushop/design-tokens';
-import { Surface } from '@eushop/ui-mobile';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Card } from '../../src/components/Card';
 import { EmptyState } from '../../src/components/EmptyState';
 import { KpiTile } from '../../src/components/KpiTile';
+import { Surface } from '../../src/components/Surface';
 import { trpc } from '../../src/lib/trpc';
 
 export default function TodayScreen() {

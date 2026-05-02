@@ -1,11 +1,11 @@
 /**
  * Trip & reservation tables.
  *
- * Eushop's monetisable primitive is a *trip offer*: a verified diaspora user
- * announces an upcoming trip from country A to country B, advertises a number
- * of suitcase slots, and accepts reservations from buyers in their destination
- * city. Each reservation locks in an agreed finder's fee + the platform fee
- * Eushop will collect when the seller marks the reservation completed.
+ * Eushop's monetisable primitive is a *trip offer*: a traveler publishes a real
+ * route (city/location-first, multi-leg supported), dates, spare luggage capacity
+ * (volume, dimensions, weight), and pricing mode (fixed or bid). Buyers reserve
+ * capacity; each reservation locks fees + platform cut when the seller marks
+ * the reservation completed.
  *
  * The table layout intentionally mirrors `listings` and `requests` so that
  * geo helpers (`@eushop/geo`), the messaging spine, and the Inngest match

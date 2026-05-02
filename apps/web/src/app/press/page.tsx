@@ -9,10 +9,10 @@ export default function PressPage() {
     >
       <div className="text-ink/80 max-w-2xl space-y-8 text-lg leading-relaxed">
         <p>
-          <strong className="text-ink">Boilerplate:</strong> Eushop is a pan-European discovery and
-          messaging service that helps people find niche regional foods from neighbours nearby. The
-          platform never handles payments or logistics; users agree finder&apos;s fees and meet in
-          public.
+          <strong className="text-ink">Boilerplate:</strong> Eushop is a city- and route-first peer
+          marketplace for spare luggage capacity on real journeys and for finder-fee requests when
+          someone wants something specific. Discovery is place-based; settlement and logistics stay
+          between the parties unless regulated in-app payments are offered later.
         </p>
         <p>
           <strong className="text-ink">Logo:</strong> Use the wordmark &quot;Eushop&quot; in

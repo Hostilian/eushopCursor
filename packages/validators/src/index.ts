@@ -225,3 +225,148 @@ export const presignUploadInput = z.object({
   purpose: z.enum(['listing', 'avatar', 'food-item']),
 });
 export type PresignUploadInput = z.infer<typeof presignUploadInput>;
+
+/**
+ * Server-side image fetch. Lets a user paste a Google image URL, then the
+ * server downloads, validates, strips EXIF and re-hosts on R2 so we never
+ * hotlink a third party. Body limits + content-type allow-list match
+ * `presignUploadInput` for parity.
+ */
+export const fetchRemoteImageInput = z.object({
+  url: z.string().url().max(2048),
+  purpose: z.enum(['listing', 'food-item', 'food-item-proposal']).default('food-item-proposal'),
+});
+export type FetchRemoteImageInput = z.infer<typeof fetchRemoteImageInput>;
+
+// ---------- Catalog UGC ------------------------------------------------------
+
+/** Submit a brand new product to the curated catalog. */
+export const proposeFoodItemInput = z.object({
+  name: z.string().min(2).max(120),
+  aka: z.array(z.string().min(1).max(60)).max(8).optional(),
+  categorySlug: slug,
+  originCountryIso2: isoCountry,
+  description: z.string().max(600).optional(),
+  proposedImages: z
+    .array(
+      z.object({
+        url: z.string().url(),
+        source: z.string().max(40).optional(),
+      }),
+    )
+    .max(6)
+    .optional(),
+});
+export type ProposeFoodItemInput = z.infer<typeof proposeFoodItemInput>;
+
+/** Suggest an additional image for an existing canonical product. */
+export const proposeFoodItemImageInput = z.object({
+  foodItemId: z.string().uuid(),
+  url: z.string().url(),
+  source: z.enum(['r2', 'user-url', 'off']).default('r2'),
+});
+export type ProposeFoodItemImageInput = z.infer<typeof proposeFoodItemImageInput>;
+
+export const upvoteFoodItemImageInput = z.object({
+  proposalId: z.string().uuid(),
+});
+export type UpvoteFoodItemImageInput = z.infer<typeof upvoteFoodItemImageInput>;
+
+export const catalogSearchWithSuggestionsInput = z.object({
+  q: z.string().min(1).max(120),
+  limit: z.number().int().min(1).max(20).default(8),
+  /** When true the server also asks Open Food Facts for matches not yet in
+   *  our index, so the picker can offer to "pull this in". */
+  includeRemote: z.boolean().default(true),
+});
+export type CatalogSearchWithSuggestionsInput = z.infer<typeof catalogSearchWithSuggestionsInput>;
+
+// ---------- Trip marketplace -------------------------------------------------
+
+export const createTripOfferInput = z.object({
+  originCountryIso2: isoCountry,
+  originCity: z.string().min(1).max(80),
+  originLocation: latLng,
+  destinationCountryIso2: isoCountry,
+  destinationCity: z.string().min(1).max(80),
+  destinationLocation: latLng,
+  departAt: z.coerce.date().refine((d) => d.getTime() > Date.now() - 60_000, {
+    message: 'Departure must be in the future',
+  }),
+  returnAt: z.coerce.date().optional(),
+  slotsTotal: z.number().int().min(1).max(40),
+  defaultPerSlotFee: z.number().min(0).max(999),
+  currency: currencyCode.default('EUR'),
+  notes: z.string().max(600).optional(),
+  intendedItemIds: z.array(z.string().uuid()).max(20).optional(),
+});
+export type CreateTripOfferInput = z.infer<typeof createTripOfferInput>;
+
+export const tripSearchInput = z.object({
+  fromIso: isoCountry.optional(),
+  toIso: isoCountry.optional(),
+  fromCity: z.string().max(80).optional(),
+  toCity: z.string().max(80).optional(),
+  /** Date range as ms epoch — keeps the wire format JSON-safe. */
+  departFromMs: z.number().int().optional(),
+  departToMs: z.number().int().optional(),
+  /** Only show trips with available slots when true. */
+  onlyOpen: z.boolean().default(true),
+  limit: z.number().int().min(1).max(60).default(24),
+});
+export type TripSearchInput = z.infer<typeof tripSearchInput>;
+
+export const tripFeedNearInput = z.object({
+  near: latLng,
+  radiusKm: z.number().min(1).max(500).default(100),
+  /** Origin or destination side of the trip near the user. Buyers usually
+   *  search from their *destination* (where they want the items delivered),
+   *  but power users can flip this to discover sellers in their origin city. */
+  side: z.enum(['origin', 'destination']).default('destination'),
+  limit: z.number().int().min(1).max(60).default(20),
+});
+export type TripFeedNearInput = z.infer<typeof tripFeedNearInput>;
+
+export const reserveSlotInput = z.object({
+  tripOfferId: z.string().uuid(),
+  foodItemId: z.string().uuid().optional(),
+  freeformText: z.string().min(2).max(160),
+  qty: z.number().int().min(1).max(20).default(1),
+  /** Buyer's offered fee. Server validates that it meets or exceeds the trip
+   *  default unless the offer says otherwise. */
+  agreedFinderFee: z.number().min(0).max(999),
+});
+export type ReserveSlotInput = z.infer<typeof reserveSlotInput>;
+
+export const confirmReservationInput = z.object({
+  reservationId: z.string().uuid(),
+});
+export type ConfirmReservationInput = z.infer<typeof confirmReservationInput>;
+
+export const completeReservationInput = z.object({
+  reservationId: z.string().uuid(),
+});
+export type CompleteReservationInput = z.infer<typeof completeReservationInput>;
+
+export const cancelReservationInput = z.object({
+  reservationId: z.string().uuid(),
+  reason: z.string().max(280).optional(),
+});
+export type CancelReservationInput = z.infer<typeof cancelReservationInput>;
+
+/**
+ * Eushop's take rate. Single source of truth — clients display this and the
+ * server enforces it.
+ *
+ *   platformFee = max(€1.50, 12% × finderFee)
+ *
+ * Implemented in cents to avoid float drift; callers convert back to euros
+ * for display.
+ */
+export const PLATFORM_FEE_FLOOR_CENTS = 150;
+export const PLATFORM_FEE_RATE = 0.12;
+
+export function calculatePlatformFeeCents(finderFeeCents: number): number {
+  const proportional = Math.round(finderFeeCents * PLATFORM_FEE_RATE);
+  return Math.max(PLATFORM_FEE_FLOOR_CENTS, proportional);
+}

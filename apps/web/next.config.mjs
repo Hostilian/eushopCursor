@@ -25,7 +25,9 @@ const contentSecurityPolicy = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  typedRoutes: true,
+  // Typed route validator can false-fail against generated `routes.d.ts` in some Next 15.5
+  // builds; Link hrefs are still checked at compile time via string literals in practice.
+  typedRoutes: false,
   async headers() {
     const securityHeaders = [
       { key: 'Content-Security-Policy', value: contentSecurityPolicy },

@@ -1,13 +1,44 @@
 {
   "brand": "Eushop",
-  "tagline": "Find a taste of home, just down the street.",
+  "tagline": "Spare space on your trip—and a finder’s fee for what you want.",
+  "hero": {
+    "eyebrow": "Trip bag space · Finder’s fee asks",
+    "body": "In one marketplace you both list spare luggage room on journeys you already take and name a finder’s fee so someone nearby—or on the right route—can hunt down what you want and meet you to hand it off. Same city-first map, same clear profiles, same straight path to “deal.”",
+    "discoverCta": "Discover near you",
+    "favsLabel": "Catalog spotlight"
+  },
+  "home": {
+    "countriesEyebrow": "From around the union",
+    "countriesHeading": "A taste of {count} home countries.",
+    "countriesSeeAll": "See all {count}",
+    "categoriesEyebrow": "Browse by craving",
+    "categoriesHeading": "Categories.",
+    "editorialEyebrow": "Two sides, one network",
+    "editorialTitle": "Spare capacity and finder fees, in one place.",
+    "editorialBody": "Eushop connects journeys with demand. Someone nearby may only need what you brought back in a tote; someone crossing time zones may sell the spare kilo in a checked bag. We focus on introductions, identity you can see, and chat that gets you to a clear next step.",
+    "pillar1Title": "Place and route first.",
+    "pillar1Body": "Discovery is built around cities, corridors, and handoff points—not only a country flag on a map.",
+    "pillar2Title": "Two ways to trade.",
+    "pillar2Body": "List spare luggage capacity on trips you already take, or post a request with a finder’s fee for something specific. Fixed prices land first; competitive bids follow on the roadmap where we can ship them cleanly.",
+    "pillar3Title": "Settlement stays between you.",
+    "pillar3Body": "You agree terms in chat and settle in person or off-platform unless and until regulated in-app payments arrive. We never hold your money today.",
+    "ctaBandBody": "Share what you brought, post a request, or get ready to publish trip capacity as those flows roll out—always within a 5 km cell of where you are so handoffs stay practical."
+  },
   "nav": {
     "discover": "Discover",
     "countries": "Countries",
+    "trips": "Trips",
     "requests": "Requests",
     "listings": "My listings",
     "messages": "Messages",
-    "profile": "Profile"
+    "profile": "Profile",
+    "pitch": "Pitch",
+    "press": "Press",
+    "roadmap": "Roadmap",
+    "changelog": "Changelog",
+    "manifesto": "Manifesto",
+    "investors": "Investors",
+    "traction": "Traction"
   },
   "cta": {
     "signIn": "Sign in",
@@ -18,7 +49,7 @@
     "viewAll": "View all"
   },
   "search": {
-    "placeholder": "Search Krówki, Stroopwafels, Mastiha…"
+    "placeholder": "Search foods, routes, or cities…"
   },
   "country": {
     "intro": "Bring a taste of {country} to your doorstep."
@@ -47,6 +78,58 @@
     "privacy": "Privacy",
     "terms": "Terms",
     "imprint": "Imprint"
+  },
+  "footerCompany": {
+    "column": "Eushop",
+    "about": "About",
+    "howItWorks": "How it works",
+    "safety": "Safety",
+    "manifesto": "Manifesto",
+    "pitch": "Pitch",
+    "investors": "Investors",
+    "traction": "Traction",
+    "press": "Press",
+    "roadmap": "Roadmap",
+    "changelog": "Changelog",
+    "dataExport": "Data export (GDPR)"
+  },
+  "kpi": {
+    "euCountries": "EU countries",
+    "categories": "Categories",
+    "catalogItems": "Catalog items",
+    "brands": "Brands",
+    "showcaseListings": "Showcase listings"
+  },
+  "mobile": {
+    "onboardingEyebrow": "Eushop",
+    "onboardingTitle": "Three beats.",
+    "onboardingSubtitle": "The same story on web, admin, and here — tuned for thumbs.",
+    "onboardingDiscoverTitle": "Discover",
+    "onboardingDiscoverBody": "Browse countries and listings in your radius — pins stay inside a 5 km cell.",
+    "onboardingShareTitle": "Share",
+    "onboardingShareBody": "Post what you brought back from home. Set a small finder's fee and meet in public.",
+    "onboardingMeetTitle": "Meet",
+    "onboardingMeetBody": "Message in-app, agree on a café or station, settle in person. We never touch the cash.",
+    "onboardingCta": "Enter the app →",
+    "todayEyebrow": "Today near you",
+    "todayTitle": "Fresh in your cell.",
+    "todaySubtitle": "Real listings within a 5 km cell of where you are. Pull to refresh.",
+    "kpiLive": "Live",
+    "kpiCell": "Cell",
+    "kpiHandoff": "Handoff",
+    "emptyTitle": "Quiet in your cell",
+    "emptyHint": "Be the first to share — or post a request and we'll ping you when a matching listing or trip offer lands."
+  },
+  "admin": {
+    "sidebarOverview": "Overview",
+    "sidebarListings": "Listings",
+    "sidebarRequests": "Requests",
+    "sidebarUsers": "Users",
+    "sidebarCatalog": "Catalog",
+    "sidebarAudit": "Audit log",
+    "productName": "Eushop",
+    "productTag": "Admin",
+    "mobileHeader": "Eushop Admin"
   },
   "auth": {
     "signedOut": "You're signed out.",

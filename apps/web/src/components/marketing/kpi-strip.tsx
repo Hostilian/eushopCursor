@@ -1,4 +1,5 @@
 import { STATS } from '@eushop/catalog-data';
+import { getTranslations } from 'next-intl/server';
 import { isDemoModeEnabled } from '../../lib/demo-mode';
 import { showcaseStats } from '../../lib/showcase';
 
@@ -14,15 +15,16 @@ import { showcaseStats } from '../../lib/showcase';
  * investors look for "real numbers", and it never honours demo mode.
  */
 export async function KpiStrip() {
+  const t = await getTranslations('kpi');
   const demo = await isDemoModeEnabled();
   const baseTiles = [
-    { label: 'EU countries', value: STATS.countries },
-    { label: 'Categories', value: STATS.categories },
-    { label: 'Catalog items', value: STATS.items },
+    { label: t('euCountries'), value: STATS.countries },
+    { label: t('categories'), value: STATS.categories },
+    { label: t('catalogItems'), value: STATS.items },
   ];
   const tiles = demo
-    ? [...baseTiles, { label: 'Showcase listings', value: showcaseStats().liveListings }]
-    : [...baseTiles, { label: 'Brands', value: STATS.brands }];
+    ? [...baseTiles, { label: t('showcaseListings'), value: showcaseStats().liveListings }]
+    : [...baseTiles, { label: t('brands'), value: STATS.brands }];
 
   return (
     <section className="border-ink/10 bg-parchment/60 border-y">

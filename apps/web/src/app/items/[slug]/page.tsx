@@ -1,12 +1,15 @@
 import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
+import { OPEN_FOOD_FACTS_ATTRIBUTION } from '@eushop/catalog-data/openfoodfacts';
 import { countryPalette } from '@eushop/design-tokens';
 import { ArrowRight, MapPin, Tag } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Footer } from '../../../components/layout/footer';
 import { Nav } from '../../../components/layout/nav';
 import { Badge } from '../../../components/ui/badge';
 import { Button } from '../../../components/ui/button';
+import { api } from '../../../lib/trpc-server';
 
 export function generateStaticParams() {
   return FOOD_ITEMS.map((i) => ({ slug: i.slug }));
@@ -22,6 +25,23 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
     accent: '#FAF7F2',
     ink: '#1A1612',
   };
+
+  // Fetch the live row so we can render real images + propagate attribution
+  // when the item came from Open Food Facts.
+  let liveImage: string | null = null;
+  let imageSource: 'off' | 'r2' | 'user' | null = null;
+  try {
+    const trpc = await api();
+    const live = await trpc.catalog.itemBySlug({ slug });
+    const variants = (
+      live as unknown as { imageVariants?: { large?: string; source?: 'off' | 'r2' | 'user' } }
+    ).imageVariants;
+    liveImage =
+      variants?.large ?? (live as unknown as { defaultImageUrl?: string }).defaultImageUrl ?? null;
+    imageSource = variants?.source ?? null;
+  } catch {
+    /* item only exists in seed; OFF attribution does not apply */
+  }
   const related = FOOD_ITEMS.filter(
     (i) => i.originCountryIso2 === item.originCountryIso2 && i.slug !== item.slug,
   ).slice(0, 4);
@@ -66,11 +86,35 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
         >
           <div className="container-editorial grid grid-cols-1 gap-12 py-20 md:grid-cols-12 md:py-28">
             <div className="md:col-span-5">
-              <div className="aspect-square w-full max-w-md rounded-[2.5rem] border border-white/15 bg-black/20 p-10">
-                <div className="flex h-full items-center justify-center text-9xl">
-                  {country?.flagEmoji ?? '🇪🇺'}
-                </div>
+              <div className="relative aspect-square w-full max-w-md overflow-hidden rounded-[2.5rem] border border-white/15 bg-black/20">
+                {liveImage ? (
+                  <Image
+                    src={liveImage}
+                    alt={item.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    className="object-cover"
+                    unoptimized
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center p-10 text-9xl">
+                    {country?.flagEmoji ?? '🇪🇺'}
+                  </div>
+                )}
               </div>
+              {imageSource === 'off' ? (
+                <p className="mt-3 max-w-md text-xs opacity-70">
+                  {OPEN_FOOD_FACTS_ATTRIBUTION}.{' '}
+                  <a
+                    href="https://world.openfoodfacts.org/"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="underline"
+                  >
+                    openfoodfacts.org
+                  </a>
+                </p>
+              ) : null}
             </div>
             <div className="md:col-span-7">
               <Link

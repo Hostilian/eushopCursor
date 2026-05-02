@@ -1,13 +1,44 @@
 {
   "brand": "Eushop",
-  "tagline": "Ein Stück Heimat, gleich um die Ecke.",
+  "tagline": "Freiraum auf deiner Route – und ein Finderlohn für das, was du willst.",
+  "hero": {
+    "eyebrow": "Platz im Gepäck · Gesuche mit Finderlohn",
+    "body": "Auf einem Marktplatz tust du beides: freien Platz in deinen Koffern auf Fahrten listen, die du sowieso machst, und einen Finderlohn nennen, damit jemand in der Nähe – oder auf der passenden Route – dir beschafft, was du sucht, und es dir übergibt. Dieselbe stadtnahe Karte, dieselben klaren Profile, derselbe schnelle Weg zum Handel.",
+    "discoverCta": "In deiner Nähe entdecken",
+    "favsLabel": "Katalog-Highlights"
+  },
+  "home": {
+    "countriesEyebrow": "Aus der Union",
+    "countriesHeading": "Ein Stück {count} Heimatländer.",
+    "countriesSeeAll": "Alle {count} ansehen",
+    "categoriesEyebrow": "Nach Gelüst stöbern",
+    "categoriesHeading": "Kategorien.",
+    "editorialEyebrow": "Zwei Seiten, ein Netz",
+    "editorialTitle": "Freie Kapazität und Finderlohn an einem Ort.",
+    "editorialBody": "Eushop verbindet Reisen mit Nachfrage. Jemand in der Nähe braucht vielleicht nur, was du in der Tasche hast; jemand über Zeitzonen hinweg verkauft das freie Kilo im Check-in. Wir setzen auf Kontakte, sichtbare Identität und Chat, der zu klaren nächsten Schritten führt.",
+    "pillar1Title": "Ort und Route zuerst.",
+    "pillar1Body": "Entdecken folgt Städten, Korridoren und Übergabeorten—nicht nur einer Länderflagge auf der Karte.",
+    "pillar2Title": "Zwei Arten zu handeln.",
+    "pillar2Body": "Freie Gepäckkapazität auf Fahrten, die du sowieso machst, oder ein Gesuch mit Finderlohn. Festpreise zuerst; Wettbewerbsgebote folgen auf der Roadmap, wo wir sie sauber liefern können.",
+    "pillar3Title": "Abwicklung bleibt bei euch.",
+    "pillar3Body": "Ihr vereinbart im Chat und zahlt persönlich oder außerhalb der App, bis regulierte In-App-Zahlungen kommen. Heute berühren wir euer Geld nicht.",
+    "ctaBandBody": "Teile deine Mitbringsel, schreib ein Gesuch oder bereite Trip-Kapazität vor, sobald die Flows live gehen—immer innerhalb einer 5-km-Zelle, damit Übergaben praktikabel bleiben."
+  },
   "nav": {
     "discover": "Entdecken",
     "countries": "Länder",
+    "trips": "Reisen",
     "requests": "Gesuche",
     "listings": "Meine Anzeigen",
     "messages": "Nachrichten",
-    "profile": "Profil"
+    "profile": "Profil",
+    "pitch": "Pitch",
+    "press": "Presse",
+    "roadmap": "Roadmap",
+    "changelog": "Changelog",
+    "manifesto": "Manifest",
+    "investors": "Investoren",
+    "traction": "Zahlen"
   },
   "cta": {
     "signIn": "Anmelden",
@@ -18,7 +49,7 @@
     "viewAll": "Alle ansehen"
   },
   "search": {
-    "placeholder": "Suche Krówki, Stroopwafels, Mastiha…"
+    "placeholder": "Lebensmittel, Routen oder Städte suchen…"
   },
   "country": {
     "intro": "Hol dir den Geschmack von {country} nach Hause."
@@ -47,6 +78,58 @@
     "privacy": "Datenschutz",
     "terms": "AGB",
     "imprint": "Impressum"
+  },
+  "footerCompany": {
+    "column": "Eushop",
+    "about": "Über uns",
+    "howItWorks": "So funktioniert's",
+    "safety": "Sicherheit",
+    "manifesto": "Manifest",
+    "pitch": "Pitch",
+    "investors": "Investoren",
+    "traction": "Zahlen",
+    "press": "Presse",
+    "roadmap": "Roadmap",
+    "changelog": "Changelog",
+    "dataExport": "Datenexport (DSGVO)"
+  },
+  "kpi": {
+    "euCountries": "EU-Länder",
+    "categories": "Kategorien",
+    "catalogItems": "Katalogartikel",
+    "brands": "Marken",
+    "showcaseListings": "Showcase-Anzeigen"
+  },
+  "mobile": {
+    "onboardingEyebrow": "Eushop",
+    "onboardingTitle": "Drei Schritte.",
+    "onboardingSubtitle": "Dieselbe Geschichte im Web, im Admin und hier — für Daumen optimiert.",
+    "onboardingDiscoverTitle": "Entdecken",
+    "onboardingDiscoverBody": "Stöbere in Ländern und Anzeigen in deinem Umkreis — Pins bleiben in einer 5-km-Zelle.",
+    "onboardingShareTitle": "Teilen",
+    "onboardingShareBody": "Poste, was du von zu Hause mitgebracht hast. Setz einen kleinen Finderlohn und triff dich an einem öffentlichen Ort.",
+    "onboardingMeetTitle": "Treffen",
+    "onboardingMeetBody": "Chat in der App, trefft euch im Café oder am Bahnhof, bezahlt vor Ort. Wir berühren kein Bargeld.",
+    "onboardingCta": "App öffnen →",
+    "todayEyebrow": "Heute in deiner Nähe",
+    "todayTitle": "Frisch in deiner Zelle.",
+    "todaySubtitle": "Echte Anzeigen in einer 5-km-Zelle um dich herum. Zum Aktualisieren ziehen.",
+    "kpiLive": "Live",
+    "kpiCell": "Zelle",
+    "kpiHandoff": "Übergabe",
+    "emptyTitle": "Still in deiner Zelle",
+    "emptyHint": "Sei der Erste — oder schreib ein Gesuch, wir melden uns, sobald etwas Passendes landet."
+  },
+  "admin": {
+    "sidebarOverview": "Übersicht",
+    "sidebarListings": "Anzeigen",
+    "sidebarRequests": "Gesuche",
+    "sidebarUsers": "Nutzer",
+    "sidebarCatalog": "Katalog",
+    "sidebarAudit": "Audit-Log",
+    "productName": "Eushop",
+    "productTag": "Admin",
+    "mobileHeader": "Eushop Admin"
   },
   "auth": {
     "signedOut": "Du bist abgemeldet.",

@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
+# Uses Node + local lint-staged only (no pnpm) so Git Bash is not tied to a global pnpm shim.
 cd "$(dirname "$0")/.." || exit 1
 exec node "./node_modules/lint-staged/bin/lint-staged.js"

@@ -9,15 +9,18 @@ import { Button } from '../ui/button';
 
 const links = [
   { href: '/discover', key: 'nav.discover' },
+  { href: '/trips', key: 'nav.trips' },
   { href: '/countries', key: 'nav.countries' },
   { href: '/requests', key: 'nav.requests' },
 ] as const;
 
 const investorLinks = [
-  { href: '/pitch', label: 'Pitch' },
-  { href: '/press', label: 'Press' },
-  { href: '/roadmap', label: 'Roadmap' },
-  { href: '/changelog', label: 'Changelog' },
+  { href: '/manifesto', key: 'nav.manifesto' as const },
+  { href: '/traction', key: 'nav.traction' as const },
+  { href: '/investors', key: 'nav.investors' as const },
+  { href: '/pitch', key: 'nav.pitch' as const },
+  { href: '/roadmap', key: 'nav.roadmap' as const },
+  { href: '/changelog', key: 'nav.changelog' as const },
 ] as const;
 
 export function Nav() {
@@ -57,7 +60,7 @@ export function Nav() {
               href={l.href}
               className="text-ash hover:text-ink text-xs tracking-widest uppercase transition-colors"
             >
-              {l.label}
+              {t(l.key)}
             </Link>
           ))}
         </nav>
@@ -115,7 +118,7 @@ export function Nav() {
               className="text-ink/80 hover:bg-parchment rounded-xl px-3 py-2 text-sm"
               onClick={() => setOpen(false)}
             >
-              {l.label}
+              {t(l.key)}
             </Link>
           ))}
           <div className="border-ink/10 mt-4 flex flex-col gap-2 border-t pt-4">

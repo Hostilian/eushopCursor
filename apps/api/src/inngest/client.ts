@@ -6,6 +6,24 @@ type Events = {
   'message.sent': { data: { conversationId: string; messageId: string; senderId: string } };
   'media.uploaded': { data: { key: string; url: string; userId: string } };
   'catalog.reindex': { data: Record<string, never> };
+  /** Manually triggered by `pnpm catalog:import-off` or the admin "Import"
+   *  button. Pulls a paginated batch of EU products from Open Food Facts
+   *  and upserts them as unverified rows. */
+  'catalog.import-openfoodfacts': {
+    data: {
+      categoryTag?: string;
+      query?: string;
+      page?: number;
+      pageSize?: number;
+    };
+  };
+  /** Created when a buyer reserves a slot. Triggers seller notification +
+   *  the matcher so other open requests for the same item get a heads-up. */
+  'trip.reservation.created': {
+    data: { reservationId: string; tripOfferId: string; buyerId: string };
+  };
+  /** Cron-driven: 48h before a trip departs, ping all reservation holders. */
+  'trip.departure.imminent': { data: { tripOfferId: string } };
 };
 
 export const inngest = new Inngest({

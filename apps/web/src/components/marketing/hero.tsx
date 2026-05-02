@@ -31,7 +31,7 @@ export function Hero() {
           transition={{ duration: reduce ? 0 : 0.6 }}
           className="text-ash text-xs tracking-widest uppercase"
         >
-          A pan-EU marketplace for niche regional foods
+          {t('hero.eyebrow')}
         </motion.p>
         <motion.h1
           initial={reduce ? false : { opacity: 0, y: 16 }}
@@ -51,8 +51,7 @@ export function Hero() {
           }}
           className="text-ink/70 mt-6 max-w-2xl text-lg text-pretty"
         >
-          The Polish nurse in Munich. The Greek bartender in Lisbon. The Estonian designer in
-          Stockholm. They know what they want — they just need someone who brought it back.
+          {t('hero.body')}
         </motion.p>
 
         <motion.div
@@ -66,10 +65,13 @@ export function Hero() {
           className="mt-10 flex flex-wrap items-center gap-3"
         >
           <Button asChild size="lg" variant="primary">
-            <Link href="/discover">Discover near you</Link>
+            <Link href="/discover">{t('hero.discoverCta')}</Link>
           </Button>
           <Button asChild size="lg" variant="outline">
             <Link href="/listings/new">{t('cta.postListing')}</Link>
+          </Button>
+          <Button asChild size="lg" variant="outline">
+            <Link href="/requests/new">{t('cta.postRequest')}</Link>
           </Button>
         </motion.div>
 
@@ -79,7 +81,7 @@ export function Hero() {
           transition={{ duration: reduce ? 0 : 1.2, delay: reduce ? 0 : 0.4 }}
           className="text-ash mt-16 flex flex-wrap items-center gap-2 text-xs tracking-widest uppercase"
         >
-          <span className="text-ash/60">Currently traded</span>
+          <span className="text-ash/60">{t('hero.favsLabel')}</span>
           {FAVS.map((f) => (
             <span
               key={f}

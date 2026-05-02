@@ -1,17 +1,21 @@
 'use client';
 
+import { CATEGORIES } from '@eushop/catalog-data';
 import { MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { trpc } from '../../lib/trpc';
+import { ProductPicker, type ProductPickerSelection } from '../catalog/product-picker';
 import { Button } from '../ui/button';
 
 export function RequestForm() {
-  const [item, setItem] = useState('');
+  const [picker, setPicker] = useState<ProductPickerSelection>({ photos: [] });
   const [notes, setNotes] = useState('');
   const [city, setCity] = useState('');
   const [radius, setRadius] = useState(25);
   const [maxFee, setMaxFee] = useState<number | ''>(10);
   const [notify, setNotify] = useState(true);
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [locating, setLocating] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,26 +24,59 @@ export function RequestForm() {
 
   if (done) {
     return (
-      <div className="rounded-3xl border border-ink/10 bg-porcelain p-12 text-center">
-        <p className="font-serif text-3xl text-ink">Request posted.</p>
-        <p className="mt-3 text-ink/70">We'll notify you as soon as someone within {radius} km lists it.</p>
+      <div className="border-ink/10 bg-porcelain rounded-3xl border p-12 text-center">
+        <p className="text-ink font-serif text-3xl">Request posted.</p>
+        <p className="text-ink/70 mt-3">
+          We'll notify you as soon as someone within {radius} km lists it — or posts a trip from the
+          right country.
+        </p>
       </div>
     );
   }
+
+  const useMyLocation = () => {
+    if (!('geolocation' in navigator)) {
+      setError('Your browser does not support geolocation.');
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setLocating(false);
+      },
+      (err) => {
+        setLocating(false);
+        setError(err.message || 'Could not read your location.');
+      },
+      { enableHighAccuracy: false, timeout: 8_000 },
+    );
+  };
 
   return (
     <form
       onSubmit={async (e) => {
         e.preventDefault();
-        setSubmitting(true);
         setError(null);
+        if (!picker.freeformName?.trim()) {
+          setError('Tell us what you’re looking for.');
+          return;
+        }
+        if (!coords) {
+          setError(
+            'We need your approximate location so we can search nearby. Tap "Use my location".',
+          );
+          return;
+        }
+        setSubmitting(true);
         try {
           await create.mutateAsync({
-            freeformText: item,
+            foodItemId: picker.foodItemId,
+            freeformText: picker.freeformName.trim(),
             notes: notes || undefined,
             maxFinderFee: maxFee === '' ? undefined : Number(maxFee),
             currency: 'EUR',
-            location: { lat: 52.52, lng: 13.405 },
+            location: coords,
             approximateCity: city,
             radiusKm: radius,
             notifyOnMatch: notify,
@@ -54,12 +91,11 @@ export function RequestForm() {
       className="space-y-8"
     >
       <Field label="What are you looking for?">
-        <input
-          required
-          value={item}
-          onChange={(e) => setItem(e.target.value)}
-          placeholder="Krówki Mleczne — original Wedel"
-          className="form-input"
+        <ProductPicker
+          value={picker}
+          onChange={setPicker}
+          purpose="food-item-proposal"
+          proposeCategoryOptions={CATEGORIES.map((c) => ({ slug: c.slug, name: c.name }))}
         />
       </Field>
 
@@ -74,8 +110,8 @@ export function RequestForm() {
       </Field>
 
       <Field label="Your approximate city / district">
-        <div className="flex items-center gap-2 rounded-2xl border border-ink/10 bg-paper px-4">
-          <MapPin className="h-4 w-4 text-ash" />
+        <div className="border-ink/10 bg-paper flex items-center gap-2 rounded-2xl border px-4">
+          <MapPin className="text-ash h-4 w-4" />
           <input
             required
             value={city}
@@ -83,6 +119,14 @@ export function RequestForm() {
             placeholder="Munich Glockenbach"
             className="form-input border-0 bg-transparent px-0"
           />
+          <button
+            type="button"
+            disabled={locating}
+            onClick={useMyLocation}
+            className="text-ash hover:text-ink shrink-0 text-xs underline underline-offset-2"
+          >
+            {locating ? 'Locating…' : coords ? '✓ Located' : 'Use my location'}
+          </button>
         </div>
       </Field>
 
@@ -95,10 +139,13 @@ export function RequestForm() {
             step={5}
             value={radius}
             onChange={(e) => setRadius(Number(e.target.value))}
-            className="w-full accent-saffron-600"
+            className="accent-saffron-600 w-full"
           />
         </Field>
-        <Field label="Max finder's fee (EUR)" hint="Sellers will see this when they decide to list.">
+        <Field
+          label="Max finder's fee (EUR)"
+          hint="Sellers will see this when they decide to list."
+        >
           <input
             type="number"
             min={0}
@@ -109,17 +156,17 @@ export function RequestForm() {
         </Field>
       </div>
 
-      <label className="flex items-center gap-3 text-sm text-ink/80">
+      <label className="text-ink/80 flex items-center gap-3 text-sm">
         <input
           type="checkbox"
           checked={notify}
           onChange={(e) => setNotify(e.target.checked)}
-          className="h-4 w-4 rounded accent-saffron-600"
+          className="accent-saffron-600 h-4 w-4 rounded"
         />
-        Notify me the moment a matching listing appears
+        Notify me the moment a matching listing or trip appears
       </label>
 
-      {error ? <p className="text-sm text-danger">{error}</p> : null}
+      {error ? <p className="text-danger text-sm">{error}</p> : null}
 
       <div className="flex items-center justify-end">
         <Button type="submit" disabled={submitting} size="lg">
@@ -146,11 +193,19 @@ export function RequestForm() {
   );
 }
 
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
+function Field({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: React.ReactNode;
+}) {
   return (
     <label className="block">
-      <span className="block text-sm font-medium text-ink">{label}</span>
-      {hint ? <span className="mt-0.5 block text-xs text-ash">{hint}</span> : null}
+      <span className="text-ink block text-sm font-medium">{label}</span>
+      {hint ? <span className="text-ash mt-0.5 block text-xs">{hint}</span> : null}
       <div className="mt-2">{children}</div>
     </label>
   );

@@ -1,8 +1,8 @@
 import { submitReportInput, submitReviewInput } from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
-import { eq, sql } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { z } from 'zod';
-import { conversations, moderationActions, profiles, reports, reviews } from '@eushop/db';
+import { conversations, moderationActions, profiles, reports, reviews, users } from '@eushop/db';
 import { adminProcedure, protectedProcedure, publicProcedure, router } from '../trpc';
 
 export const trustRouter = router({
@@ -64,6 +64,25 @@ export const trustRouter = router({
   // ---- admin / moderation queue --------------------------------------------
   moderationQueue: adminProcedure.query(async ({ ctx }) => {
     return ctx.db.select().from(reports).where(eq(reports.status, 'open')).limit(50);
+  }),
+
+  /** Moderation audit trail for admin review (backed by `moderation_actions`). */
+  auditLog: adminProcedure.query(async ({ ctx }) => {
+    return ctx.db
+      .select({
+        id: moderationActions.id,
+        reportId: moderationActions.reportId,
+        actorId: moderationActions.actorId,
+        actorEmail: users.email,
+        action: moderationActions.action,
+        note: moderationActions.note,
+        metadata: moderationActions.metadata,
+        createdAt: moderationActions.createdAt,
+      })
+      .from(moderationActions)
+      .innerJoin(users, eq(users.id, moderationActions.actorId))
+      .orderBy(desc(moderationActions.createdAt))
+      .limit(100);
   }),
 
   resolveReport: adminProcedure

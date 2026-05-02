@@ -2,6 +2,11 @@ import { EditorialPageLayout } from '../../components/marketing/editorial-page';
 
 const PHASES = [
   {
+    q: 'Q1 2026',
+    title: 'Trip & luggage capacity',
+    body: 'First-class flows to publish real routes, dates, spare volume/weight, and legs. Match travellers to catalog items and freeform requests—still location-first.',
+  },
+  {
     q: 'Q2 2026',
     title: 'Trust & density',
     body: 'Moderation tooling, repeat-handoff prompts, corridor playbooks.',
@@ -9,12 +14,12 @@ const PHASES = [
   {
     q: 'Q3 2026',
     title: 'Payments (where legal)',
-    body: 'Optional in-app settlement for small finder fees in pilot countries.',
+    body: 'Optional in-app settlement for finder fees and trip capacity; fixed price first, then pilot auctions where regulation allows.',
   },
   {
     q: 'Q4 2026',
-    title: 'Native polish',
-    body: 'Offline maps for cells, richer item graph, retailer opt-in exports.',
+    title: 'Profiles & native polish',
+    body: 'Photo-first profiles and reputation signals; offline maps for cells, richer item graph, retailer opt-in exports.',
   },
 ];
 

@@ -9,7 +9,7 @@
     "pnpm": ">=9"
   },
   "scripts": {
-    "build": "node ./node_modules/turbo/bin/turbo run build",
+    "build": "node ./node_modules/turbo/bin/turbo run build --concurrency=1",
     "dev": "node ./node_modules/turbo/bin/turbo run dev",
     "lint": "node ./node_modules/turbo/bin/turbo run lint",
     "typecheck": "node ./node_modules/turbo/bin/turbo run typecheck",
@@ -43,10 +43,10 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "prettier --write"
+      "node ./node_modules/prettier/bin/prettier.cjs --write"
     ],
     "*.{json,md,yml,yaml}": [
-      "prettier --write"
+      "node ./node_modules/prettier/bin/prettier.cjs --write"
     ]
   }
 }

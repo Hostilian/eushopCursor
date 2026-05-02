@@ -1,13 +1,44 @@
 {
   "brand": "Eushop",
-  "tagline": "Un sabor a casa, a la vuelta de la esquina.",
+  "tagline": "Espacio libre en tu viaje — y una tarifa de búsqueda por lo que quieres.",
+  "hero": {
+    "eyebrow": "Hueco en la maleta · pedidos con tarifa de búsqueda",
+    "body": "En un solo mercado publicas hueco libre en tu equipaje en trayectos que ya haces y fijas una tarifa de búsqueda para que alguien cerca — o en la ruta adecuada — localice lo que necesitas y te lo entregue. El mismo mapa centrado en la ciudad, los mismos perfiles claros, el mismo camino directo al trato.",
+    "discoverCta": "Descubrir cerca de ti",
+    "favsLabel": "Destacados del catálogo"
+  },
+  "home": {
+    "countriesEyebrow": "Por la Unión",
+    "countriesHeading": "Un sabor de {count} países de origen.",
+    "countriesSeeAll": "Ver los {count}",
+    "categoriesEyebrow": "Por antojo",
+    "categoriesHeading": "Categorías.",
+    "editorialEyebrow": "Dos lados, una red",
+    "editorialTitle": "Capacidad libre y tarifas de búsqueda en un solo sitio.",
+    "editorialBody": "Eushop conecta viajes con demanda. Alguien cerca solo necesita lo que trajiste en una bolsa; alguien que cruza husos vende el kilo libre en facturado. Nos centramos en presentaciones, identidad visible y chat que lleva a un siguiente paso claro.",
+    "pillar1Title": "Lugar y ruta primero.",
+    "pillar1Body": "El descubrimiento se apoya en ciudades, corredores y puntos de entrega—no solo en una bandera en el mapa.",
+    "pillar2Title": "Dos formas de intercambiar.",
+    "pillar2Body": "Publica capacidad de equipaje en viajes que ya haces, o lanza una búsqueda con tarifa para algo concreto. Precio fijo primero; pujas competitivas después en la hoja de ruta donde podamos implementarlas bien.",
+    "pillar3Title": "El pago queda entre vosotros.",
+    "pillar3Body": "Acordáis en el chat y cobráis en persona o fuera de la app hasta que lleguen pagos in-app regulados. Hoy no tocamos vuestro dinero.",
+    "ctaBandBody": "Comparte lo que trajiste, pide algo o prepárate a publicar capacidad de viaje según vayan saliendo los flujos—siempre en una celda de 5 km para que las entregas sean prácticas."
+  },
   "nav": {
     "discover": "Descubrir",
+    "trips": "Viajes",
     "countries": "Países",
     "requests": "Búsquedas",
     "listings": "Mis anuncios",
     "messages": "Mensajes",
-    "profile": "Perfil"
+    "profile": "Perfil",
+    "pitch": "Pitch",
+    "press": "Prensa",
+    "roadmap": "Hoja de ruta",
+    "changelog": "Historial de cambios",
+    "manifesto": "Manifiesto",
+    "investors": "Inversores",
+    "traction": "Tracción"
   },
   "cta": {
     "signIn": "Iniciar sesión",
@@ -18,7 +49,7 @@
     "viewAll": "Ver todo"
   },
   "search": {
-    "placeholder": "Busca Krówki, Stroopwafels, Mastiha…"
+    "placeholder": "Busca comidas, rutas o ciudades…"
   },
   "country": {
     "intro": "Trae el sabor de {country} a tu puerta."
@@ -47,6 +78,58 @@
     "privacy": "Privacidad",
     "terms": "Términos",
     "imprint": "Aviso legal"
+  },
+  "footerCompany": {
+    "column": "Eushop",
+    "about": "Acerca de",
+    "howItWorks": "Cómo funciona",
+    "safety": "Seguridad",
+    "manifesto": "Manifiesto",
+    "pitch": "Pitch",
+    "investors": "Inversores",
+    "traction": "Tracción",
+    "press": "Prensa",
+    "roadmap": "Hoja de ruta",
+    "changelog": "Historial de cambios",
+    "dataExport": "Exportación de datos (RGPD)"
+  },
+  "kpi": {
+    "euCountries": "Países UE",
+    "categories": "Categorías",
+    "catalogItems": "Artículos del catálogo",
+    "brands": "Marcas",
+    "showcaseListings": "Anuncios demo"
+  },
+  "mobile": {
+    "onboardingEyebrow": "Eushop",
+    "onboardingTitle": "Tres pasos.",
+    "onboardingSubtitle": "La misma historia en web, admin y aquí — pensada para el pulgar.",
+    "onboardingDiscoverTitle": "Descubrir",
+    "onboardingDiscoverBody": "Explora países y anuncios en tu radio: los pins siguen en una celda de 5 km.",
+    "onboardingShareTitle": "Compartir",
+    "onboardingShareBody": "Publica lo que trajiste de casa. Pon una tarifa de búsqueda y quedad en un sitio público.",
+    "onboardingMeetTitle": "Quedar",
+    "onboardingMeetBody": "Chat en la app, acordáis un café o estación, pagáis en persona. No tocamos el dinero.",
+    "onboardingCta": "Entrar en la app →",
+    "todayEyebrow": "Hoy cerca de ti",
+    "todayTitle": "Fresco en tu celda.",
+    "todaySubtitle": "Anuncios reales en una celda de 5 km a tu alrededor. Desliza para actualizar.",
+    "kpiLive": "En vivo",
+    "kpiCell": "Celda",
+    "kpiHandoff": "Entrega",
+    "emptyTitle": "Silencio en tu celda",
+    "emptyHint": "Sé el primero — o publica una búsqueda y te avisamos cuando haya algo que encaje."
+  },
+  "admin": {
+    "sidebarOverview": "Resumen",
+    "sidebarListings": "Anuncios",
+    "sidebarRequests": "Búsquedas",
+    "sidebarUsers": "Usuarios",
+    "sidebarCatalog": "Catálogo",
+    "sidebarAudit": "Registro de auditoría",
+    "productName": "Eushop",
+    "productTag": "Admin",
+    "mobileHeader": "Eushop Admin"
   },
   "auth": {
     "signedOut": "Sesión cerrada.",

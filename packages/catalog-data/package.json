@@ -10,7 +10,8 @@
     "./countries": "./src/countries.ts",
     "./categories": "./src/categories.ts",
     "./brands": "./src/brands.ts",
-    "./items": "./src/items.ts"
+    "./items": "./src/items.ts",
+    "./openfoodfacts": "./src/openfoodfacts/index.ts"
   },
   "scripts": {
     "lint": "node ../../node_modules/eslint/bin/eslint.js -c ../config/eslint.config.js .",

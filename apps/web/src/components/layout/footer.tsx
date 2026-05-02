@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 export function Footer() {
   const t = useTranslations();
+  const tc = useTranslations('footerCompany');
   return (
     <footer className="border-ink/10 bg-parchment mt-32 border-t py-16">
       <div className="container-editorial grid gap-12 md:grid-cols-4">
@@ -19,28 +20,37 @@ export function Footer() {
         </div>
 
         <div className="space-y-3">
-          <p className="text-ash text-xs tracking-widest uppercase">Eushop</p>
+          <p className="text-ash text-xs tracking-widest uppercase">{tc('column')}</p>
           <ul className="text-ink/80 space-y-2 text-sm">
             <li>
-              <Link href="/about">About</Link>
+              <Link href="/about">{tc('about')}</Link>
             </li>
             <li>
-              <Link href="/how-it-works">How it works</Link>
+              <Link href="/how-it-works">{tc('howItWorks')}</Link>
             </li>
             <li>
-              <Link href="/safety">Safety</Link>
+              <Link href="/safety">{tc('safety')}</Link>
             </li>
             <li>
-              <Link href="/pitch">Pitch</Link>
+              <Link href="/manifesto">{tc('manifesto')}</Link>
             </li>
             <li>
-              <Link href="/press">Press</Link>
+              <Link href="/traction">{tc('traction')}</Link>
             </li>
             <li>
-              <Link href="/roadmap">Roadmap</Link>
+              <Link href="/investors">{tc('investors')}</Link>
             </li>
             <li>
-              <Link href="/changelog">Changelog</Link>
+              <Link href="/pitch">{tc('pitch')}</Link>
+            </li>
+            <li>
+              <Link href="/press">{tc('press')}</Link>
+            </li>
+            <li>
+              <Link href="/roadmap">{tc('roadmap')}</Link>
+            </li>
+            <li>
+              <Link href="/changelog">{tc('changelog')}</Link>
             </li>
           </ul>
         </div>
@@ -58,7 +68,7 @@ export function Footer() {
               <Link href="/imprint">{t('footer.imprint')}</Link>
             </li>
             <li>
-              <Link href="/data-export">Data export (GDPR)</Link>
+              <Link href="/data-export">{tc('dataExport')}</Link>
             </li>
           </ul>
         </div>
