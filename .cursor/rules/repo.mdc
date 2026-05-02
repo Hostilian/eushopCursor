@@ -10,6 +10,12 @@ alwaysApply: false
 - **Lane B (API/data):** `apps/api/**`, `apps/party/**`, `packages/api-router/**`, `packages/db/**`, `packages/auth/**`, `packages/validators/**`, `packages/geo/**`.
 - **Coordinate before editing:** root `package.json`, `turbo.json`, `.env.example`, `README.md`, `docker-compose.yml`, `.github/workflows/**`, `pnpm-lock.yaml`.
 
+# Claim files (merge safety)
+
+Before any **non-trivial** edit, add or update `claims/EUSHOP-<lane>-<nnn>.yaml` (see `claims/_template.yaml`) and run **`pnpm claims:check`**. If the tool reports an overlap, narrow `touches`, split the task, or wait for the conflicting claim to merge.
+
+**Hotspot sub-lanes (one active claim each, globally):** `H1-router`, `H2-context`, `H3-schema`, `H4-i18n`, `H5-shell`, `H6-deps` — definitions in `AGENTS.md` and `claims/README.md`.
+
 # Windows PowerShell 5.1
 
 - Do **not** use `&&` in the shell; use separate lines, `;`, or `cmd /c "a && b"`.

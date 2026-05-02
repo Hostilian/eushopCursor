@@ -1,4 +1,10 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import createNextIntlPlugin from 'next-intl/plugin';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const monorepoRoot = path.join(__dirname, '../..');
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
@@ -14,6 +20,8 @@ const extraImageHost = process.env.NEXT_PUBLIC_MEDIA_HOSTNAME?.trim();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
+  outputFileTracingRoot: monorepoRoot,
   reactStrictMode: true,
   // Typed route validator can false-fail against generated `routes.d.ts` in some Next 15.5
   // builds; Link hrefs are still checked at compile time via string literals in practice.

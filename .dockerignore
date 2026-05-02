@@ -1,0 +1,33 @@
+# Dependencies and caches (installed inside the image)
+node_modules
+**/node_modules
+.turbo
+**/.turbo
+
+# Git and IDE
+.git
+.github
+.cursor
+**/.DS_Store
+
+# Next.js build artifacts (rebuilt in image)
+**/.next
+**/out
+
+# Test and local artifacts
+**/playwright-report
+**/test-results
+**/coverage
+**/*.tsbuildinfo
+
+# Env files (inject at runtime)
+.env
+.env.*
+!.env.example
+
+# Mobile / Party local (not needed for server images)
+apps/mobile/.expo
+apps/mobile/dist
+
+# Docs and misc (optional shrink; comment out if your build reads these)
+# docs

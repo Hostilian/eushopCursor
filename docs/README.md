@@ -22,6 +22,8 @@
 
 Dependency updates: [`.github/dependabot.yml`](../.github/dependabot.yml) (weekly npm/pnpm, grouped PRs).
 
+Branch protection (GitHub settings): [github-branch-protection.md](github-branch-protection.md).
+
 ### Operations quick links
 
 - [Environment variables](ops/environment.md) — full matrix from `.env.example`

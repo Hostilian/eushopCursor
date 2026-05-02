@@ -1,3 +1,9 @@
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const monorepoRoot = path.join(__dirname, '../..');
+
 const isProd = process.env.NODE_ENV === 'production';
 
 const contentSecurityPolicy = [
@@ -16,6 +22,8 @@ const contentSecurityPolicy = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
+  outputFileTracingRoot: monorepoRoot,
   reactStrictMode: true,
   async headers() {
     const securityHeaders = [

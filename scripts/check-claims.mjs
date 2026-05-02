@@ -22,11 +22,15 @@ const YAML = loadOptionalMod('yaml');
 const picomatch = loadOptionalMod('picomatch');
 
 if (!YAML?.parse) {
-  console.error('claims:check: missing hoisted `yaml` in node_modules (run pnpm install from repo root).');
+  console.error(
+    'claims:check: missing hoisted `yaml` in node_modules (run pnpm install from repo root).',
+  );
   process.exit(1);
 }
 if (!picomatch?.isMatch) {
-  console.error('claims:check: missing hoisted `picomatch` in node_modules (run pnpm install from repo root).');
+  console.error(
+    'claims:check: missing hoisted `picomatch` in node_modules (run pnpm install from repo root).',
+  );
   process.exit(1);
 }
 
@@ -34,7 +38,14 @@ const PIC_OPTS = { dot: true };
 
 const STATUSES = new Set(['queued', 'claimed', 'in_review', 'done']);
 const LANES = new Set(['A', 'B', 'O']);
-const HOTSPOT_IDS = new Set(['H1-router', 'H2-context', 'H3-schema', 'H4-i18n', 'H5-shell', 'H6-deps']);
+const HOTSPOT_IDS = new Set([
+  'H1-router',
+  'H2-context',
+  'H3-schema',
+  'H4-i18n',
+  'H5-shell',
+  'H6-deps',
+]);
 
 /** @type {{ id: string, patterns: string[] }[]} */
 const HOTSPOTS = [
@@ -59,7 +70,10 @@ const HOTSPOTS = [
 const STALE_DAYS = Number(process.env.CLAIMS_STALE_WARN_DAYS ?? '14');
 
 function norm(p) {
-  return p.replace(/\\/g, '/').replace(/^\/+/, '').replace(/\/+$/, (m, off, s) => (off === s.length - 1 ? '' : m));
+  return p
+    .replace(/\\/g, '/')
+    .replace(/^\/+/, '')
+    .replace(/\/+$/, (m, off, s) => (off === s.length - 1 ? '' : m));
 }
 
 function isGlob(p) {
@@ -104,7 +118,8 @@ function asStringArray(v, field, claimId) {
   if (!Array.isArray(v)) throw new Error(`${claimId}: "${field}" must be a YAML array of strings`);
   const out = [];
   for (const x of v) {
-    if (typeof x !== 'string' || !x.trim()) throw new Error(`${claimId}: "${field}" entries must be non-empty strings`);
+    if (typeof x !== 'string' || !x.trim())
+      throw new Error(`${claimId}: "${field}" entries must be non-empty strings`);
     out.push(x.trim());
   }
   return out;
@@ -165,7 +180,8 @@ function main() {
       errors.push(`${id}: lane must be one of: A, B, O`);
     } else {
       const exp = expectedLaneFromId(id);
-      if (exp && lane !== exp) errors.push(`${id}: lane "${lane}" does not match id (expected ${exp})`);
+      if (exp && lane !== exp)
+        errors.push(`${id}: lane "${lane}" does not match id (expected ${exp})`);
     }
 
     const status = doc.status;
@@ -174,7 +190,8 @@ function main() {
     }
 
     for (const f of ['branch', 'owner', 'verify']) {
-      if (typeof doc[f] !== 'string' || !doc[f].trim()) errors.push(`${id}: "${f}" must be a non-empty string`);
+      if (typeof doc[f] !== 'string' || !doc[f].trim())
+        errors.push(`${id}: "${f}" must be a non-empty string`);
     }
 
     let touches = [];
@@ -196,23 +213,37 @@ function main() {
     let hotspot_sub_lane = null;
     if (hsl !== undefined && hsl !== null && hsl !== 'null') {
       if (typeof hsl !== 'string' || !HOTSPOT_IDS.has(hsl)) {
-        errors.push(`${id}: hotspot_sub_lane must be null or one of: ${[...HOTSPOT_IDS].join(', ')}`);
+        errors.push(
+          `${id}: hotspot_sub_lane must be null or one of: ${[...HOTSPOT_IDS].join(', ')}`,
+        );
       } else {
         hotspot_sub_lane = hsl;
       }
     }
 
     if (status === 'done') {
-      warnings.push(`${id}: status is "done" but file still exists — delete ${file} after merge (see claims/README.md)`);
+      warnings.push(
+        `${id}: status is "done" but file still exists — delete ${file} after merge (see claims/README.md)`,
+      );
     }
 
     const st = fs.statSync(file);
     const ageDays = (Date.now() - st.mtimeMs) / (86400 * 1000);
     if ((status === 'claimed' || status === 'in_review') && ageDays > STALE_DAYS) {
-      warnings.push(`${id}: claim file older than ~${STALE_DAYS} days (${Math.round(ageDays)}d) — still ${status}?`);
+      warnings.push(
+        `${id}: claim file older than ~${STALE_DAYS} days (${Math.round(ageDays)}d) — still ${status}?`,
+      );
     }
 
-    claims.push({ file, id, lane: lane ?? '', status: status ?? '', touches, hotspot_sub_lane, branch: doc.branch ?? '' });
+    claims.push({
+      file,
+      id,
+      lane: lane ?? '',
+      status: status ?? '',
+      touches,
+      hotspot_sub_lane,
+      branch: doc.branch ?? '',
+    });
   }
 
   const active = claims.filter((c) => c.status !== 'done');
@@ -230,7 +261,9 @@ function main() {
     }
     if (c.hotspot_sub_lane) {
       if (!inferred.has(c.hotspot_sub_lane)) {
-        errors.push(`${c.id}: hotspot_sub_lane "${c.hotspot_sub_lane}" does not match any touch (expand touches or fix hotspot_sub_lane)`);
+        errors.push(
+          `${c.id}: hotspot_sub_lane "${c.hotspot_sub_lane}" does not match any touch (expand touches or fix hotspot_sub_lane)`,
+        );
       }
     }
     for (const hid of inferred) {
@@ -241,7 +274,9 @@ function main() {
   for (const h of HOTSPOTS) {
     const ids = [...new Set(hotspotToClaimIds.get(h.id) ?? [])];
     if (ids.length > 1) {
-      errors.push(`Hotspot ${h.id}: multiple active claims (${ids.join(', ')}) — sequence merges or split work`);
+      errors.push(
+        `Hotspot ${h.id}: multiple active claims (${ids.join(', ')}) — sequence merges or split work`,
+      );
     }
   }
 

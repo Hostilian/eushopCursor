@@ -16,6 +16,14 @@ From [`.env.example`](../../.env.example):
 | `STRIPE_CONNECT_CLIENT_ID` | Optional OAuth-style flows if you add them |
 | `KYC_VENDOR` | Optional label surfaced on `payments.capabilities` / manifesto |
 
+## Webhook logs (operators)
+
+After signature verification and idempotency, the API logs one JSON line per event:
+
+`[stripe webhook] {"type":"…","evt":"evt_…","stripeObjectId":"…","reservationId":…,"financialKind":…}`
+
+Search logs in staging/production to trace disputes, refunds, and PaymentIntent transitions alongside `financial_events` and admin **Payments**.
+
 ## tRPC: `payments`
 
 Implemented in [`packages/api-router/src/routers/payments.ts`](../../packages/api-router/src/routers/payments.ts):

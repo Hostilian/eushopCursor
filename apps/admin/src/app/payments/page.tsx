@@ -15,10 +15,12 @@ const STATUS_PRESETS = [
 export default async function AdminPaymentsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; updatedAfter?: string }>;
 }) {
   const sp = await searchParams;
   const statusFilter = sp.status?.trim() || undefined;
+  const updatedAfterRaw = sp.updatedAfter?.trim() || undefined;
+  const updatedAfter = updatedAfterRaw ? new Date(`${updatedAfterRaw}T00:00:00.000Z`) : undefined;
 
   let reservationRows: Awaited<
     ReturnType<Awaited<ReturnType<typeof api>>['payments']['adminListReservationPayments']>
@@ -29,10 +31,11 @@ export default async function AdminPaymentsPage({
   let loadError: string | null = null;
   try {
     const trpc = await api();
+    const paymentQuery: { limit: number; status?: string; updatedAfter?: Date } = { limit: 200 };
+    if (statusFilter) paymentQuery.status = statusFilter;
+    if (updatedAfter) paymentQuery.updatedAfter = updatedAfter;
     [reservationRows, payoutRows] = await Promise.all([
-      trpc.payments.adminListReservationPayments(
-        statusFilter ? { status: statusFilter, limit: 200 } : { limit: 200 },
-      ),
+      trpc.payments.adminListReservationPayments(paymentQuery),
       trpc.payments.adminListPayouts(),
     ]);
   } catch (e) {
@@ -68,13 +71,22 @@ export default async function AdminPaymentsPage({
               ))}
             </select>
           </label>
+          <label className="text-ash flex flex-col gap-1 text-xs">
+            Updated on or after (UTC)
+            <input
+              type="date"
+              name="updatedAfter"
+              defaultValue={updatedAfterRaw ?? ''}
+              className="border-ink/15 bg-paper text-ink rounded-lg border px-3 py-2 text-sm"
+            />
+          </label>
           <button
             type="submit"
             className="bg-ink text-paper rounded-lg px-4 py-2 text-sm font-medium"
           >
             Apply filter
           </button>
-          {statusFilter ? (
+          {statusFilter || updatedAfterRaw ? (
             <Link
               href="/payments"
               className="text-saffron-700 text-sm underline underline-offset-2"
