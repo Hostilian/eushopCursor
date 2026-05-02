@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '../components/ui/button';
+import { captureClientException } from '../lib/observability';
 
 export default function RootErrorBoundary({
   error,
@@ -13,6 +14,7 @@ export default function RootErrorBoundary({
 }) {
   useEffect(() => {
     console.error(error);
+    void captureClientException(error);
   }, [error]);
 
   return (

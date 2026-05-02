@@ -29,4 +29,8 @@ Internal tracker aligned with [legal-launch-checklist.md](./legal-launch-checkli
 | Reservations list | High-level refunds/disputes pointer + Terms link. |
 | Reservation / pay step | Hold vs capture; disputes summary + Terms anchor. |
 
+## Operator / engineering (P0)
+
+- Staging Stripe E2E and webhook idempotency checks: [stripe-e2e-matrix.md](./stripe-e2e-matrix.md) (Priority 0 section). Does not replace counsel sign-off above.
+
 Last updated: product copy reflects optional trip checkout; **counsel must approve** before production claims.

@@ -10,3 +10,5 @@ Run **two** background agents max for this repo unless scopes are disjoint.
 **Orchestrator (human):** root configs, CI, `.env.example`, `README.md`, lockfile.
 
 After 2–3 tasks per lane, run `pnpm verify` once (format, typecheck, lint, unit tests, build — matches CI), then resume agents.
+
+**Merge-safe parallel backlog:** [docs/cursor-parallel-backlog.md](docs/cursor-parallel-backlog.md) (task IDs, claim blocks, hotspot files).

@@ -2,9 +2,9 @@
 
 > **Get something from somewhere. Bring something for someone.**
 
-Eushop is the open peer layer for **trips**, **neighbours**, and **open asks**: spare
+Eushop is the open peer layer for **trips**, **locals**, and **open asks**: spare
 luggage capacity on routes people are already taking, finder-fee shares between
-neighbours, and open asks that notify matching supply. Discovery, identity, and chat
+locals, and open asks that notify matching supply. Discovery, identity, and chat
 first; trip reservations can use **Stripe Connect** holds when enabled — see ops docs — while many listings still settle off-platform.
 
 The category is global. We are launching in dense **EU diaspora corridors** because that

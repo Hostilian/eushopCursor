@@ -57,6 +57,9 @@ ios/
 tmp/
 temp/
 
+# Never commit package sources mirrored under app node_modules (workspace hoisting glitches)
+apps/**/node_modules/@eushop/
+
 # database
 *.db
 *.sqlite

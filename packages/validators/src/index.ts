@@ -493,18 +493,19 @@ export const reserveSlotInput = z.object({
 });
 export type ReserveSlotInput = z.infer<typeof reserveSlotInput>;
 
-export const confirmReservationInput = z.object({
+/** Shared UUID param for trip reservation lifecycle procedures. */
+export const tripReservationIdInput = z.object({
   reservationId: z.string().uuid(),
 });
+export type TripReservationIdInput = z.infer<typeof tripReservationIdInput>;
+
+export const confirmReservationInput = tripReservationIdInput;
 export type ConfirmReservationInput = z.infer<typeof confirmReservationInput>;
 
-export const completeReservationInput = z.object({
-  reservationId: z.string().uuid(),
-});
+export const completeReservationInput = tripReservationIdInput;
 export type CompleteReservationInput = z.infer<typeof completeReservationInput>;
 
-export const cancelReservationInput = z.object({
-  reservationId: z.string().uuid(),
+export const cancelReservationInput = tripReservationIdInput.extend({
   reason: z.string().max(280).optional(),
 });
 export type CancelReservationInput = z.infer<typeof cancelReservationInput>;
@@ -527,4 +528,24 @@ export const PLATFORM_FEE_RATE = 0.12;
 export function calculatePlatformFeeCents(finderFeeCents: number): number {
   const proportional = Math.round(finderFeeCents * PLATFORM_FEE_RATE);
   return Math.min(PLATFORM_FEE_CAP_CENTS, proportional);
+}
+
+/**
+ * Converts the buyer's agreed slot fee (euros) into cent amounts and fixed-decimal
+ * strings for `trip_reservations` rows — keeps reserve + display math aligned.
+ */
+export function reservationMonetaryFieldsFromAgreedEuros(agreedFinderFeeEuros: number): {
+  finderFeeCents: number;
+  platformFeeCents: number;
+  agreedFinderFee: string;
+  platformFee: string;
+} {
+  const finderFeeCents = Math.round(agreedFinderFeeEuros * 100);
+  const platformFeeCents = calculatePlatformFeeCents(finderFeeCents);
+  return {
+    finderFeeCents,
+    platformFeeCents,
+    agreedFinderFee: (finderFeeCents / 100).toFixed(2),
+    platformFee: (platformFeeCents / 100).toFixed(2),
+  };
 }

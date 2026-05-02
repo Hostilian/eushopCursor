@@ -7,11 +7,11 @@ import {
 } from '@eushop/geo';
 import {
   cancelReservationInput,
-  calculatePlatformFeeCents,
   completeReservationInput,
   confirmReservationInput,
   createTripOfferInput,
   refundReservationInput,
+  reservationMonetaryFieldsFromAgreedEuros,
   reserveSlotInput,
   tripFeedNearInput,
   tripSearchInput,
@@ -47,7 +47,7 @@ import { protectedProcedure, publicProcedure, router } from '../trpc';
  *   - `slotsAvailable` decrements *atomically* when a buyer reserves; we use a
  *     UPDATE … WHERE slots_available > 0 RETURNING to avoid a race.
  *   - Platform fee is computed on the server and frozen on the reservation row
- *     (see `validators.calculatePlatformFeeCents`).
+ *     (see `validators.reservationMonetaryFieldsFromAgreedEuros`).
  *   - Public listings expose only the cell-jittered coordinates, mirroring how
  *     `listings.near` redacts seller addresses.
  */
@@ -306,7 +306,7 @@ export const tripsRouter = router({
     if (Number.isFinite(defaultFeeNumber) && input.agreedFinderFee + 1e-6 < defaultFeeNumber) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: `Minimum finder fee for this trip is ${trip.currency} ${defaultFeeNumber.toFixed(2)}`,
+        message: `Minimum slot fee for this trip is ${trip.currency} ${defaultFeeNumber.toFixed(2)}`,
       });
     }
 
@@ -320,8 +320,8 @@ export const tripsRouter = router({
       throw new TRPCError({ code: 'BAD_REQUEST', message: 'No slots remaining' });
     }
 
-    const finderFeeCents = Math.round(input.agreedFinderFee * 100);
-    const platformFeeCents = calculatePlatformFeeCents(finderFeeCents);
+    const { finderFeeCents, platformFeeCents, agreedFinderFee, platformFee } =
+      reservationMonetaryFieldsFromAgreedEuros(input.agreedFinderFee);
 
     let created;
     try {
@@ -333,8 +333,8 @@ export const tripsRouter = router({
           foodItemId: input.foodItemId,
           freeformText: input.freeformText,
           qty: input.qty,
-          agreedFinderFee: (finderFeeCents / 100).toFixed(2),
-          platformFee: (platformFeeCents / 100).toFixed(2),
+          agreedFinderFee,
+          platformFee,
           currency: trip.currency,
         })
         .returning();

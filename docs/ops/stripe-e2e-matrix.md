@@ -2,6 +2,15 @@
 
 Companion to [stripe-connect.md](./stripe-connect.md). Use for QA staging and reconciliation playbooks.
 
+## Priority 0 — operator checklist (sell-ready)
+
+Track these on each staging / pre-prod cut (see [cursor-parallel-backlog.md](../cursor-parallel-backlog.md) `EUSHOP-O-001`, `EUSHOP-B-001`):
+
+| Task | Owner | Notes |
+|------|-------|--------|
+| Run Stripe trip checkout E2E in test mode once | Ops | Use matrix below; fix gaps in ops docs, not in this table. |
+| Webhook replay / idempotency spot-check | Ops | Duplicate `Stripe-Signature` replay should not double-insert `financial_events`; see handler logs + DB. |
+
 ## Happy paths (manual QA)
 
 | Step | Seller Connect | Buyer | Expected |

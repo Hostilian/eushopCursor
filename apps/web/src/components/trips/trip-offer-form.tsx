@@ -1,6 +1,7 @@
 'use client';
 
 import { COUNTRIES } from '@eushop/catalog-data';
+import Image from 'next/image';
 import { useState } from 'react';
 import { trpc } from '../../lib/trpc';
 import { ProductPicker, type ProductPickerSelection } from '../catalog/product-picker';
@@ -329,8 +330,14 @@ export function TripOfferForm() {
                 className="border-ink/10 bg-paper inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs"
               >
                 {it.photo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={it.photo} alt="" className="h-5 w-5 rounded-full object-cover" />
+                  <Image
+                    src={it.photo}
+                    alt=""
+                    width={20}
+                    height={20}
+                    className="h-5 w-5 rounded-full object-cover"
+                    unoptimized={it.photo.startsWith('data:') || it.photo.startsWith('blob:')}
+                  />
                 ) : null}
                 <span>{it.freeformName}</span>
                 <button

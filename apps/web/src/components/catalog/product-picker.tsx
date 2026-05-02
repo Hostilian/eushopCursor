@@ -98,7 +98,7 @@ export function ProductPicker({
   const onUpload = async (file: File) => {
     setError(null);
     if (!CONTENT_TYPES.includes(file.type as ContentType)) {
-      setError('Please choose a JPEG, PNG, WebP or AVIF image.');
+      setError(t('errorFileType'));
       return;
     }
     setUploading(true);
@@ -122,7 +122,7 @@ export function ProductPicker({
         photos: [...value.photos, { url: presigned.publicUrl }],
       });
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Upload failed');
+      setError(e instanceof Error ? e.message : t('errorUploadFailed'));
     } finally {
       setUploading(false);
     }
@@ -143,7 +143,7 @@ export function ProductPicker({
       });
       setPasteUrl('');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not fetch the image');
+      setError(e instanceof Error ? e.message : t('errorFetchImage'));
     }
   };
 
@@ -170,7 +170,7 @@ export function ProductPicker({
         />
         {value.foodItemId ? (
           <span className="border-saffron-300 bg-saffron-50 text-saffron-800 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs">
-            <Check className="h-3 w-3" /> Catalog match
+            <Check className="h-3 w-3" /> {t('catalogMatch')}
           </span>
         ) : null}
       </div>
@@ -192,7 +192,7 @@ export function ProductPicker({
                       type="button"
                       onClick={() => selectHit(hit, src)}
                       className="border-ink/10 hover:border-ink/30 relative h-14 w-14 overflow-hidden rounded-xl border"
-                      aria-label={`Use image ${i + 1} for ${hit.name}`}
+                      aria-label={t('useImageForAria', { n: i + 1, name: hit.name })}
                     >
                       <Image
                         src={src}
@@ -215,7 +215,7 @@ export function ProductPicker({
                     <p className="text-ink truncate font-medium">{hit.name}</p>
                     {hit.source === 'remote' ? (
                       <span className="text-ash inline-flex items-center gap-1 text-[10px] tracking-widest uppercase">
-                        <Sparkles className="h-3 w-3" /> via OFF
+                        <Sparkles className="h-3 w-3" /> {t('openFoodFactsShort')}
                       </span>
                     ) : null}
                   </div>
@@ -227,7 +227,7 @@ export function ProductPicker({
                   size="sm"
                   onClick={() => selectHit(hit)}
                 >
-                  {value.foodItemId === hit.id ? 'Selected' : 'Use this'}
+                  {value.foodItemId === hit.id ? t('selected') : t('useThis')}
                 </Button>
               </div>
             </li>
@@ -236,15 +236,15 @@ export function ProductPicker({
       ) : null}
 
       {debouncedQ.length >= 2 && search.data && search.data.length === 0 ? (
-        <p className="text-ash text-xs">
-          Nothing in our catalog yet. Use the actions below to add what you have.
-        </p>
+        <p className="text-ash text-xs">{t('emptyCatalogHint')}</p>
       ) : null}
 
       <div className="border-ink/10 bg-bone/40 grid gap-3 rounded-2xl border p-4 sm:grid-cols-3">
         <label className="border-ink/15 hover:border-ink/30 bg-paper flex cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-dashed p-4 text-center text-xs">
           <Upload className="text-ash h-4 w-4" />
-          <span className="text-ink font-medium">{uploading ? 'Uploading…' : 'Upload photo'}</span>
+          <span className="text-ink font-medium">
+            {uploading ? t('uploading') : t('uploadPhoto')}
+          </span>
           <input
             ref={fileRef}
             type="file"
@@ -259,13 +259,13 @@ export function ProductPicker({
         </label>
         <div className="border-ink/15 bg-paper rounded-xl border p-3">
           <div className="text-ash flex items-center gap-1 text-xs">
-            <Link2 className="h-3.5 w-3.5" /> Paste an image URL
+            <Link2 className="h-3.5 w-3.5" /> {t('pasteUrlLabel')}
           </div>
           <div className="mt-2 flex gap-2">
             <input
               value={pasteUrl}
               onChange={(e) => setPasteUrl(e.target.value)}
-              placeholder="https://…"
+              placeholder={t('pasteUrlPlaceholder')}
               className="form-input flex-1 px-3 py-1.5 text-xs"
             />
             <Button
@@ -275,12 +275,10 @@ export function ProductPicker({
               onClick={() => void onPaste()}
               disabled={!pasteUrl || fetchRemote.isPending}
             >
-              {fetchRemote.isPending ? '…' : 'Add'}
+              {fetchRemote.isPending ? t('pasteUrlPending') : t('pasteUrlAdd')}
             </Button>
           </div>
-          <p className="text-ash mt-1 text-[10px]">
-            We download, strip EXIF, and re-host on Eushop.
-          </p>
+          <p className="text-ash mt-1 text-[10px]">{t('pasteUrlFootnote')}</p>
         </div>
         <button
           type="button"
@@ -288,10 +286,8 @@ export function ProductPicker({
           className="border-saffron-300 bg-saffron-50 hover:border-saffron-500 text-saffron-900 flex flex-col items-center justify-center gap-1 rounded-xl border border-dashed p-4 text-center text-xs"
         >
           <Plus className="h-4 w-4" />
-          <span className="font-medium">Propose this product</span>
-          <span className="text-saffron-700/80 text-[10px]">
-            Adds it to the catalog after review
-          </span>
+          <span className="font-medium">{t('proposeProduct')}</span>
+          <span className="text-saffron-700/80 text-[10px]">{t('proposeProductHint')}</span>
         </button>
       </div>
 
@@ -334,7 +330,7 @@ export function ProductPicker({
               setShowProposeModal(false);
               onChange({ ...value, freeformName: input.name, proposedNewItem: true });
             } catch (e) {
-              setError(e instanceof Error ? e.message : 'Could not submit');
+              setError(e instanceof Error ? e.message : t('errorSubmitProposal'));
             }
           }}
         />
@@ -359,6 +355,7 @@ function ProposeItemModal({
     description?: string;
   }) => Promise<void>;
 }) {
+  const t = useTranslations('productPicker');
   const [name, setName] = useState(initialName);
   const [categorySlug, setCategorySlug] = useState(categoryOptions[0]?.slug ?? 'snacks');
   const [iso, setIso] = useState('PL');
@@ -369,24 +366,21 @@ function ProposeItemModal({
     <div className="bg-ink/30 fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="bg-paper w-full max-w-lg space-y-4 rounded-3xl p-6">
         <div>
-          <h3 className="text-ink font-serif text-2xl">Propose a product</h3>
-          <p className="text-ash mt-1 text-xs">
-            We&apos;ll review and merge it into the catalog so the next neighbour can find it
-            instantly.
-          </p>
+          <h3 className="text-ink font-serif text-2xl">{t('proposeModalTitle')}</h3>
+          <p className="text-ash mt-1 text-xs">{t('proposeModalBody')}</p>
         </div>
         <label className="block">
-          <span className="text-ink text-sm font-medium">Product name</span>
+          <span className="text-ink text-sm font-medium">{t('proposeName')}</span>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="form-input mt-1 w-full"
-            placeholder="Wedel Mieszanka 300g tin"
+            placeholder={t('proposeNamePlaceholder')}
           />
         </label>
         <div className="grid grid-cols-2 gap-3">
           <label className="block">
-            <span className="text-ink text-sm font-medium">Category</span>
+            <span className="text-ink text-sm font-medium">{t('proposeCategory')}</span>
             <select
               value={categorySlug}
               onChange={(e) => setCategorySlug(e.target.value)}
@@ -403,28 +397,28 @@ function ProposeItemModal({
             </select>
           </label>
           <label className="block">
-            <span className="text-ink text-sm font-medium">Origin (ISO2)</span>
+            <span className="text-ink text-sm font-medium">{t('proposeOriginIso2')}</span>
             <input
               value={iso}
               onChange={(e) => setIso(e.target.value.toUpperCase().slice(0, 2))}
               className="form-input mt-1 w-full"
-              placeholder="PL"
+              placeholder={t('proposeOriginPlaceholder')}
             />
           </label>
         </div>
         <label className="block">
-          <span className="text-ink text-sm font-medium">Description (optional)</span>
+          <span className="text-ink text-sm font-medium">{t('proposeDescription')}</span>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             className="form-input mt-1 w-full"
-            placeholder="Soft milk-fudge sweets in red waxy paper, beloved at every Polish wedding."
+            placeholder={t('proposeDescriptionPlaceholder')}
           />
         </label>
         <div className="flex justify-end gap-2 pt-2">
           <Button type="button" variant="ghost" onClick={onCancel} disabled={busy}>
-            Cancel
+            {t('proposeCancel')}
           </Button>
           <Button
             type="button"
@@ -439,7 +433,7 @@ function ProposeItemModal({
               }
             }}
           >
-            {busy ? 'Submitting…' : 'Submit for review'}
+            {busy ? t('proposeSubmitting') : t('proposeSubmit')}
           </Button>
         </div>
       </div>

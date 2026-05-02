@@ -35,3 +35,16 @@ export async function initWebSentry(side: 'server' | 'client'): Promise<void> {
     // Package isn't installed — fall back to console-only error reporting.
   }
 }
+
+/** Report to Sentry from a Client Component when `NEXT_PUBLIC_SENTRY_DSN` is set. */
+export async function captureClientException(err: unknown): Promise<void> {
+  if (!process.env.NEXT_PUBLIC_SENTRY_DSN) return;
+  try {
+    type SentryMod = { captureException: (e: unknown) => void };
+    const specifier = '@sentry/nextjs';
+    const mod = (await import(/* @vite-ignore */ specifier)) as unknown as SentryMod;
+    mod.captureException(err);
+  } catch {
+    // Optional dependency
+  }
+}

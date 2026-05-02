@@ -4,7 +4,7 @@
 
 - **Legal / product**: [`docs/ops/terms-privacy-payments-review.md`](docs/ops/terms-privacy-payments-review.md); Terms/Privacy updated for trip checkout, Stripe, refunds/chargebacks; reservations + pay step copy with `/terms` anchors.
 - **Ops**: [`docs/ops/stripe-reconciliation-repair.md`](docs/ops/stripe-reconciliation-repair.md); admin **Payments** lists `payouts` via `payments.adminListPayouts`; [`docs/ops/corridor-playbooks.md`](docs/ops/corridor-playbooks.md), [`docs/ops/build-runtime.md`](docs/ops/build-runtime.md).
-- **Tests**: [`trips-confirm-reservation.test.ts`](packages/api-router/src/routers/trips-confirm-reservation.test.ts), [`stripe-webhook.test.ts`](apps/api/src/routes/stripe-webhook.test.ts) (Vitest includes `apps/api`).
+- **Tests**: [`trips-confirm-reservation.test.ts`](packages/api-router/src/routers/trips-confirm-reservation.test.ts) (valid UUID inputs), [`stripe-webhook.test.ts`](apps/api/src/routes/stripe-webhook.test.ts) (Vitest includes `apps/api`).
 - **Analytics**: PostHog initializes only after **analytics consent** (`Providers` + [`consent-banner`](apps/web/src/components/layout/consent-banner.tsx)).
 - **i18n**: `reservationPayment` + payments notices; `productPicker.searchPlaceholder`; mobile chat uses shared `en.json` chat keys; [`pitch.md`](apps/web/content/pitch.md) “how to read this deck”.
 

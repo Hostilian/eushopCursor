@@ -93,7 +93,9 @@ export const listingsRouter = router({
   }),
 
   byId: publicProcedure.input(listingByPublicIdInput).query(async ({ ctx, input }) => {
-    const row = await ctx.db.query.listings.findFirst({ where: eq(listings.id, input.id) });
+    const row = await ctx.db.query.listings.findFirst({
+      where: and(eq(listings.id, input.id), eq(listings.status, 'live' as const)),
+    });
     if (!row) throw new TRPCError({ code: 'NOT_FOUND' });
     let item = null;
     if (row.foodItemId) {

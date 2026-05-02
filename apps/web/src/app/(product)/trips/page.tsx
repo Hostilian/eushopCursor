@@ -219,7 +219,14 @@ function TripCard({
         </Badge>
       </div>
       <Button asChild variant={demoShowcase ? 'outline' : 'primary'}>
-        <Link href={demoShowcase ? '/trips' : `/trips/${id}`}>
+        <Link
+          href={demoShowcase ? '/trips' : `/trips/${id}`}
+          aria-label={
+            demoShowcase
+              ? `${showcaseCta}: ${fromCity} → ${toCity}`
+              : `${reserveCta}: ${fromCity} → ${toCity}, ${departText}`
+          }
+        >
           {demoShowcase ? showcaseCta : reserveCta}
         </Link>
       </Button>

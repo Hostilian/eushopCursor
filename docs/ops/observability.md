@@ -9,7 +9,7 @@
 ## PostHog (optional)
 
 - Use `POSTHOG_KEY` / `NEXT_PUBLIC_POSTHOG_KEY` and EU `POSTHOG_HOST` (default in `.env.example`).
-- Wire through the existing consent banner—do not load trackers before consent.
+- **Consent-first:** [`apps/web/src/providers.tsx`](../../apps/web/src/providers.tsx) only calls `initPostHog()` when `localStorage` (`eushop.consent.v1`) already has `analytics: true`; [`consent-banner.tsx`](../../apps/web/src/components/layout/consent-banner.tsx) calls `initPostHog()` when the user taps **Accept analytics**. Do not initialize before that.
 
 ## Runbooks (quick)
 

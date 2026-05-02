@@ -54,12 +54,12 @@ export default function TripDetailScreen() {
       return;
     }
     if (agreedFee + 1e-6 < minFee) {
-      Alert.alert('Below minimum', `This trip requires at least €${minFee.toFixed(2)}.`);
+      Alert.alert('Below minimum', `Minimum slot fee for this trip is €${minFee.toFixed(2)}.`);
       return;
     }
     Alert.alert(
       'Confirm reservation',
-      `${qty}× ${picker.freeformName} for €${agreedFee.toFixed(2)} (+ €${platformFee.toFixed(2)} platform fee).`,
+      `${qty}× ${picker.freeformName}: €${agreedFee.toFixed(2)} slot fee + €${platformFee.toFixed(2)} platform fee.`,
       [
         { text: 'Back', style: 'cancel' },
         {

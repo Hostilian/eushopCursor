@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { PLATFORM_FEE_CAP_CENTS, PLATFORM_FEE_RATE, calculatePlatformFeeCents } from './index';
+import {
+  PLATFORM_FEE_CAP_CENTS,
+  PLATFORM_FEE_RATE,
+  calculatePlatformFeeCents,
+  reservationMonetaryFieldsFromAgreedEuros,
+} from './index';
 
 describe('calculatePlatformFeeCents', () => {
   it('returns 0 for a 0 fee', () => {
@@ -58,5 +63,21 @@ describe('calculatePlatformFeeCents', () => {
       expect(fee).toBeGreaterThanOrEqual(last);
       last = fee;
     }
+  });
+});
+
+describe('reservationMonetaryFieldsFromAgreedEuros', () => {
+  it('matches cent math used on trip reserve', () => {
+    const out = reservationMonetaryFieldsFromAgreedEuros(10);
+    expect(out.finderFeeCents).toBe(1000);
+    expect(out.platformFeeCents).toBe(calculatePlatformFeeCents(1000));
+    expect(out.agreedFinderFee).toBe('10.00');
+    expect(out.platformFee).toBe((out.platformFeeCents / 100).toFixed(2));
+  });
+
+  it('handles fractional euros with rounding', () => {
+    const out = reservationMonetaryFieldsFromAgreedEuros(3.33);
+    expect(out.finderFeeCents).toBe(333);
+    expect(out.agreedFinderFee).toBe('3.33');
   });
 });

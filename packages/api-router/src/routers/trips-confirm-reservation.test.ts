@@ -20,9 +20,11 @@ type TripRow = {
   destinationLocation: { lat: number; lng: number };
 };
 
+const RESERVATION_ID = '22222222-2222-2222-2222-222222222222';
+
 const baseTrip: TripRow = {
   id: '11111111-1111-1111-1111-111111111111',
-  sellerId: 'seller-1',
+  sellerId: '33333333-3333-3333-3333-333333333333',
   status: 'open',
   defaultPerSlotFee: '10.00',
   slotsAvailable: 1,
@@ -44,9 +46,9 @@ function makeConfirmCtx(opts: {
   } | null;
 }) {
   const reservation = {
-    id: 'res-confirm-1',
+    id: RESERVATION_ID,
     tripOfferId: baseTrip.id,
-    buyerId: 'buyer-1',
+    buyerId: '44444444-4444-4444-4444-444444444444',
     status: 'pending',
     qty: 1,
     agreedFinderFee: '10.00',
@@ -95,7 +97,7 @@ function makeConfirmCtx(opts: {
     db,
     meili: {} as any,
     auth: {} as any,
-    user: { id: 'seller-1', email: 's@e.com', role: 'user' } as any,
+    user: { id: baseTrip.sellerId, email: 's@e.com', role: 'user' } as any,
     headers: new Headers(),
     enqueueEvent: vi.fn(async () => {}),
   };
@@ -115,7 +117,7 @@ describe('tripsRouter.confirmReservation', () => {
     const capture = vi.spyOn(stripeLib, 'capturePaymentIntent');
     const { ctx, financialInserts } = makeConfirmCtx({ payment: null });
     const caller = callerFactory(ctx as any);
-    const out = await caller.confirmReservation({ reservationId: 'res-confirm-1' });
+    const out = await caller.confirmReservation({ reservationId: RESERVATION_ID });
     expect(out?.status).toBe('confirmed');
     expect(capture).not.toHaveBeenCalled();
     expect(financialInserts).toHaveLength(0);
@@ -135,7 +137,7 @@ describe('tripsRouter.confirmReservation', () => {
       },
     });
     const caller = callerFactory(ctx as any);
-    await caller.confirmReservation({ reservationId: 'res-confirm-1' });
+    await caller.confirmReservation({ reservationId: RESERVATION_ID });
     expect(stripeLib.capturePaymentIntent).toHaveBeenCalledWith('pi_abc');
     expect(financialInserts.length).toBeGreaterThanOrEqual(1);
     expect(financialInserts[0]).toMatchObject({

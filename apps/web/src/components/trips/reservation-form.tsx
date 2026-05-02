@@ -110,8 +110,8 @@ export function ReservationForm({
           })}
         </p>
         <ul className="text-ash space-y-1 text-xs">
-          <li>{t('feeLabel', { value: agreedFee.toFixed(2) }) || `€${agreedFee.toFixed(2)}`}</li>
-          <li>€{platformFee}</li>
+          <li>{t('confirmSlotFeeLine', { amount: agreedFee.toFixed(2) })}</li>
+          <li>{t('confirmPlatformFeeLine', { amount: platformFee })}</li>
         </ul>
         {error ? (
           <p role="alert" className="text-danger text-xs">
@@ -195,11 +195,13 @@ export function ReservationForm({
           <span>€{agreedFee.toFixed(2)}</span>
         </div>
         <div className="text-ash mt-1 flex items-center justify-between">
-          <span>{t('feeHint', { floor: defaultFee.toFixed(2) })}</span>
+          <span>{t('platformFeeLabel')}</span>
           <span>€{platformFee}</span>
         </div>
         <div className="text-ink border-ink/10 mt-2 flex items-center justify-between border-t pt-2 font-medium">
-          <span>{destinationCity}</span>
+          <span>
+            {t('summaryTotalLabel')} · {destinationCity}
+          </span>
           <span>€{(agreedFee + Number(platformFee)).toFixed(2)}</span>
         </div>
       </div>

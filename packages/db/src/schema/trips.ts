@@ -153,6 +153,8 @@ export const tripReservations = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => ({
+    /** Hot path: seller/buyer reservation lists filter on trip + status — revisit
+     *  with `EXPLAIN ANALYZE` under prod-like volume before adding partial indexes. */
     tripIdx: index('trip_reservations_trip_idx').on(t.tripOfferId, t.status),
     buyerIdx: index('trip_reservations_buyer_idx').on(t.buyerId),
     foodIdx: index('trip_reservations_food_idx').on(t.foodItemId),

@@ -262,7 +262,7 @@ describe('tripsRouter.reserve', () => {
       }),
     ).rejects.toMatchObject({
       code: 'BAD_REQUEST',
-      message: /minimum finder fee/i,
+      message: /minimum slot fee/i,
     });
   });
 
