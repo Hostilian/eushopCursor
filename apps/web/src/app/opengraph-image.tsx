@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-export const alt = 'Eushop — Find a taste of home';
+export const alt = 'Eushop — Luggage space & finder fees';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -22,12 +22,12 @@ export default function OgImage() {
       <div
         style={{ fontSize: 28, letterSpacing: '0.35em', textTransform: 'uppercase', opacity: 0.75 }}
       >
-        EU · peer marketplace
+        City-to-city · luggage & requests
       </div>
-      <div>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div style={{ fontSize: 84, lineHeight: 1.05, fontWeight: 500, maxWidth: 900 }}>Eushop</div>
         <div style={{ marginTop: 24, fontSize: 36, opacity: 0.88, maxWidth: 820 }}>
-          Find a taste of home, just down the street.
+          Sell spare bag space on your route — or post a want with a finder’s fee.
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>

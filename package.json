@@ -2,7 +2,7 @@
   "name": "eushop",
   "version": "0.1.0",
   "private": true,
-  "description": "Pan-EU niche food discovery marketplace — find Krówki, Stroopwafels, Mastiha and Liverwurst near you.",
+  "description": "City-to-city peer marketplace — spare luggage capacity on real routes (price or bids) plus finder-fee requests; location-first discovery and rich profiles.",
   "packageManager": "pnpm@9.12.0",
   "engines": {
     "node": ">=20.11.0",

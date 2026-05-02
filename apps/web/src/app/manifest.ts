@@ -2,16 +2,17 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Eushop — Niche EU food near you',
+    name: 'Eushop — Luggage space & finder fees',
     short_name: 'Eushop',
-    description: 'Find Krówki, Stroopwafels, Mastiha and more from neighbours in your city.',
+    description:
+      'City-to-city marketplace: sell spare bag capacity on your routes (fixed price or bids) or post requests with a finder’s fee. Rich profiles, low-friction deals.',
     start_url: '/',
     display: 'standalone',
     background_color: '#FAF7F2',
     theme_color: '#1A1612',
     lang: 'en',
     orientation: 'portrait-primary',
-    categories: ['food', 'lifestyle', 'shopping'],
+    categories: ['travel', 'shopping', 'lifestyle', 'social'],
     icons: [
       {
         src: '/icon.svg',

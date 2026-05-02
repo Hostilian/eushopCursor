@@ -1,11 +1,25 @@
 # Eushop
 
-A pan-EU lead-generation marketplace where diaspora users discover fellow countrymen nearby
-who hold stashes of niche home-country foods (Krówki, Stroopwafels, Mastiha, Liverwurst,
-Sült…), connect via in-app chat, and arrange a "finder's fee" handoff off-platform.
+A **city- and location-first** peer marketplace. Travelers publish real journeys—start
+and end places, dates, legs (e.g. Kilimanjaro → Fiji → Antarctica), and **spare luggage
+capacity**: volume, dimensions, weight limits, and what they are willing to carry. Others
+can **buy that capacity** at a listed price or compete in **bids**, the same way
+familiar marketplaces surface offers and demand.
 
-> Eushop is a discovery & messaging service. We do **not** handle payments, package, ship,
-> or verify food safety. Buyers and sellers settle in person.
+Alongside that, people who want something specific can still post **requests** and offer a
+**finder's fee**—so the product is both “I have extra space on this trip” (often the
+stronger commercial lane for the platform) and “someone find this for me.”
+
+Discovery is tied to **places and routes**, not a single country filter: your city,
+your corridor, your handoff point. Profiles are meant to feel **social and trustworthy**
+(clear photo, identity cues) while browsing, offers, and checkout-style flows aim to
+feel **as seamless as eBay**—fast scan, clear price or auction state, low friction to
+message and close a deal.
+
+> Eushop is a discovery & messaging layer. Settlement, customs, carrier rules, and
+> liability stay between the parties unless and until the product adds regulated
+> payment flows. Many handoffs stay local; multi-leg trips are first-class in how
+> routes are described.
 
 ## Stack (validated 2026)
 
@@ -18,6 +32,9 @@ Sült…), connect via in-app chat, and arrange a "finder's fee" handoff off-pla
 - **Jobs** — Inngest
 - **Storage** — Cloudflare R2
 - **Hosting** — Hetzner Cloud (EU) + Coolify · Cloudflare CDN
+
+Trip offers and reservations are modeled in the DB (`packages/db` trip tables) as the
+monetisable complement to listings and requests.
 
 ## Layout
 
@@ -65,6 +82,7 @@ pnpm dev
 ```
 
 Then open:
+
 - http://localhost:3000 — web
 - http://localhost:3001 — api
 - http://localhost:3002 — admin
@@ -73,18 +91,17 @@ Then open:
 
 ## Catalog seed
 
-The seed catalog (`packages/catalog-data`) covers the major niche EU foods. It is
-intentionally biased toward "you can't easily find this in a regular EU supermarket
-outside its origin country" — Krówki, Stroopwafels, Mastiha, Liverwurst, Sült, Halloumi,
-Kremšnita, Manner, Túró Rudi, Pastéis de nata and many more. Every country has a country
-landing page that doubles as an editorial.
+The seed catalog (`packages/catalog-data`) still powers **niche EU foods** and country
+editorial pages—Krówki, Stroopwafels, Mastiha, Liverwurst, Sült, Halloumi, and many more.
+That remains useful for finder-fee “taste of home” listings; **trip / luggage** surfaces
+are orthogonal and keyed off routes and capacity metadata.
 
-| | |
-| --- | --- |
-| Countries | 30 (EU + EEA) |
-| Categories | 16 |
-| Brands | 50+ |
-| Food items | 150+ (curated) — admin UI grows the catalog |
+|              |                                      |
+| ------------ | ------------------------------------ |
+| Countries    | 30 (EU + EEA)                        |
+| Categories   | 16                                   |
+| Brands       | 50+                                  |
+| Food items   | 150+ (curated) — admin UI grows them |
 
 ## GDPR
 
@@ -92,10 +109,11 @@ Eushop is built EU-first:
 
 - All data hosted in EU regions (Hetzner Falkenstein, Cloudflare EU).
 - Approximate addresses only — geohash precision 5 (~5 km cell) is the maximum a
-  client ever receives. Pins are deterministically jittered inside the cell.
+  client ever receives for map-style discovery. Pins are deterministically jittered inside the cell.
 - Consent banner with EU "reject all" parity (default off for analytics).
 - One-click data export (`/profile` → Export my data) and account deletion.
-- Cascading FK deletes scrub listings, requests, messages, reviews, device tokens.
+- Cascading FK deletes scrub listings, requests, messages, reviews, device tokens (and
+  trip-related rows as those tables mature).
 
 ## Architecture
 
@@ -103,7 +121,7 @@ Eushop is built EU-first:
 Clients (Next.js web · Expo iOS/Android · Cloudflare CDN)
   ↓ tRPC v11
 Hono API (modular monolith)
-  ├─ identity / catalog / listings / requests
+  ├─ identity / catalog / listings / requests / trips
   ├─ messaging / media / trust / notifications
   └─ recommendations
         ↓

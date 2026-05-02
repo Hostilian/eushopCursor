@@ -21,11 +21,11 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Eushop — Find a taste of home',
+    default: 'Eushop — Luggage space on your route',
     template: '%s · Eushop',
   },
   description:
-    'A pan-EU marketplace where diaspora finds niche home-country food held by neighbours nearby. Krówki in Munich, Mastiha in Lisbon, Liverwurst in Madrid.',
+    'City- and location-first marketplace: list spare suitcase capacity (dates, legs, size/weight) with fixed price or bids; post wants with a finder’s fee. Social-style profiles, eBay-smooth flows.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eushop.eu'),
   openGraph: {
     type: 'website',
