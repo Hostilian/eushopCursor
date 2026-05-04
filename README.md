@@ -134,6 +134,15 @@ Start at **[docs/README.md](docs/README.md)** for the full index. Essentials:
 - **[docs/ops/verified-bringer-kyc.md](docs/ops/verified-bringer-kyc.md)** — KYC and admin badge tooling.
 - **[docs/ops/observability.md](docs/ops/observability.md)** — Sentry, PostHog EU, runbooks.
 - **GitHub**: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) — optional manual deploy checklist.
+- **GitHub Pages**: [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds the small static bundle under [`sites/gh-pages/`](sites/gh-pages/) (not the Next.js app — `apps/web` uses `output: 'standalone'`). In the repo, open **Settings → Pages → Build and deployment**, choose **GitHub Actions**, then run **Pages** (or push to `main` with changes under `sites/gh-pages/`).
+
+### Static export note
+
+The full product (tRPC, auth, dynamic routes) is not a candidate for `next export` without a dedicated static marketing slice. The Pages workflow exists so the repository can still ship a **real** static artifact for previews and links; production web remains on your normal host (see `docs/ops/deploy-runbook.md`).
+
+### Unused exports (ts-prune)
+
+There is no root `tsconfig.json`; run **`pnpm --filter <pkg> exec ts-prune`** per package, or see [`audit/dead-code-registry.md`](audit/dead-code-registry.md).
 
 ## Local development
 

@@ -2,7 +2,14 @@
 
 ## ts-prune
 
-`npx ts-prune` was attempted from repo root; it **failed** because there is no root `tsconfig.json` (monorepo uses per-package TypeScript projects). **Recommendation:** run per package, e.g. `pnpm --filter @eushop/api-router exec ts-prune`, or add a root solution tsconfig for tooling only.
+`npx ts-prune` from the repo root **fails** because there is no root `tsconfig.json` (this monorepo uses per-package projects). Use package-scoped runs instead, for example:
+
+```bash
+pnpm --filter @eushop/api-router exec ts-prune
+pnpm --filter @eushop/web exec ts-prune
+```
+
+If `ts-prune` is not installed in that package, use `pnpm --filter @eushop/web dlx ts-prune` (or `pnpm dlx ts-prune` from `cd apps/web` where a `tsconfig.json` exists). A root “solution” `tsconfig.json` is optional tooling only; do not add one unless `pnpm verify` stays green.
 
 ## Short / stub files
 
