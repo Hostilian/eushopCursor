@@ -2,6 +2,7 @@
  * Reads `config.json` written by `.github/workflows/pages.yml` at deploy time.
  */
 (function () {
+  const ossDeploy = document.getElementById('oss-deploy-doc');
   const docs = document.getElementById('repo-docs');
   const root = document.getElementById('repo-root');
   if (!docs || !root) return;
@@ -11,6 +12,9 @@
     .then((cfg) => {
       if (!cfg || typeof cfg.githubRepo !== 'string') return;
       const base = cfg.githubRepo.replace(/\/$/, '');
+      if (ossDeploy) {
+        ossDeploy.href = `${base}/blob/main/docs/ops/oss-self-hosted-deploy.md`;
+      }
       docs.href = `${base}/blob/main/docs/README.md`;
       root.href = base;
     })

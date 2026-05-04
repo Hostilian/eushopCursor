@@ -1,5 +1,6 @@
-# Publishes `sites/gh-pages/` to GitHub Pages via the official Actions + artifact flow
-# (not the legacy `gh-pages` git branch). Next.js `apps/web` stays standalone-hosted.
+# Optional static stub under sites/gh-pages/ — not the real Next.js app.
+# For the real web + API stack, see docs/ops/oss-self-hosted-deploy.md (Coolify / self-hosted FOSS).
+# Publishes via Actions + artifact flow (not the legacy gh-pages git branch).
 name: Pages
 
 on:

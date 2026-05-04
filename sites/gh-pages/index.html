@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Eushop — static mirror</title>
+    <title>Eushop — optional static stub</title>
     <meta
       name="description"
-      content="Peer marketplace for trips, locals, and open asks. This GitHub Pages site is a lightweight static mirror; the product runs on Next.js + API elsewhere."
+      content="Peer marketplace for trips, locals, and open asks. This GitHub Pages bundle is an optional static stub; the real app is Next.js + API (see the repository OSS self-hosted deploy doc)."
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -15,11 +15,13 @@
       <h1>Eushop</h1>
       <p class="tagline">Get something from somewhere. Bring something for someone.</p>
       <p>
-        This page is the <strong>static GitHub Pages</strong> bundle for the repository. The live web app is
-        <strong>Next.js&nbsp;15</strong> with a separate API (tRPC / Hono) and is not exported here —
-        <code>apps/web</code> uses <code>output: &apos;standalone&apos;</code> for production hosts (see README).
+        This page is an <strong>optional</strong> <strong>GitHub Pages</strong> stub for the repository — useful for a tiny
+        landing page, not a substitute for the product. The live web app is <strong>Next.js&nbsp;15</strong> with a
+        separate API (tRPC / Hono); it is not exported here — <code>apps/web</code> uses
+        <code>output: &apos;standalone&apos;</code> (see README).
       </p>
       <ul class="links">
+        <li><a id="oss-deploy-doc" href="#">Self-hosted deploy (real web + API)</a></li>
         <li><a id="repo-docs" href="#">Repository documentation index</a></li>
         <li><a id="repo-root" href="#">Repository home</a></li>
       </ul>

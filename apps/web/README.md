@@ -28,3 +28,7 @@ Port **3000** by default.
 | `src/i18n/request.ts` | next-intl locale loading |
 
 Operations and env: [docs/README.md](../../docs/README.md).
+
+## Deploy notes
+
+This app targets **self-hosted** production (Coolify + `deploy/web.Dockerfile` or pnpm build from repo root — see [docs/ops/oss-self-hosted-deploy.md](../../docs/ops/oss-self-hosted-deploy.md)). A **Vercel**-style proprietary host is **not** a maintained first-class path for this monorepo (no `vercel.json`); if you wire one yourself, mirror build commands from [docs/ops/hosting-contract.md](../../docs/ops/hosting-contract.md).

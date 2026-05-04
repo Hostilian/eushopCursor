@@ -1,6 +1,6 @@
 # Production environment matrix
 
-Copy from [`.env.example`](../../.env.example) and set **real** values per deployment (Coolify, Vercel, bare metal, etc.). Never commit secrets.
+Copy from [`.env.example`](../../.env.example) and set **real** values per deployment (Coolify, Docker/Kubernetes, bare metal, etc.). Never commit secrets.
 
 ## Required for a functioning marketplace
 

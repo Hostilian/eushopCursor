@@ -1,0 +1,24 @@
+id: EUSHOP-O-015
+lane: O
+sub_lane: null
+branch: agent/o-015-oss-coolify-deploy-docs
+owner: cursor-agent
+status: claimed
+touches:
+  - README.md
+  - docs/ops/deploy-runbook.md
+  - docs/ops/free-preview-deploy.md
+  - docs/ops/oss-self-hosted-deploy.md
+  - docs/ops/environment.md
+  - apps/web/README.md
+  - sites/gh-pages/index.html
+  - sites/gh-pages/site.js
+  - .github/workflows/pages.yml
+  - claims/EUSHOP-O-015.yaml
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm claims:check && pnpm verify
+notes: >
+  OSS-first deploy docs: Coolify-first self-hosted path, new oss-self-hosted-deploy.md,
+  free-preview-deploy.md as redirect; remove vercel.json and render.yaml; README,
+  runbook, gh-pages, pages.yml, environment.md, apps/web README aligned.

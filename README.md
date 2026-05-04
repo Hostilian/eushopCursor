@@ -68,6 +68,8 @@ regulated payments.
 
 Hosted in the EU by default — Hetzner Falkenstein, CDN via Cloudflare EU.
 
+**Show friends the real app (not the Pages stub):** self-host **Coolify** (MIT) on a VPS and run **web** + **API** as separate services from this repo — step-by-step in **[docs/ops/oss-self-hosted-deploy.md](docs/ops/oss-self-hosted-deploy.md)** (FOSS stack; VPS is typically low cost — see doc for honest “no free lunch at scale” notes). GitHub Pages here is only an **optional static stub**, not the product.
+
 ## Stack (validated 2026)
 
 - **Monorepo** — Turborepo + pnpm
@@ -78,7 +80,8 @@ Hosted in the EU by default — Hetzner Falkenstein, CDN via Cloudflare EU.
 - **Realtime** — PartyKit (Cloudflare Durable Objects)
 - **Jobs** — Inngest
 - **Storage** — Cloudflare R2
-- **Hosting** — Hetzner Cloud (EU) + Coolify · Cloudflare CDN
+- **Hosting (production)** — Hetzner Cloud (EU) + Coolify · Cloudflare CDN
+- **Preview / friend demos** — self-hosted Coolify + Docker or pnpm build ([OSS self-hosted deploy](docs/ops/oss-self-hosted-deploy.md)); GitHub Pages ships a static mirror only
 
 The trip marketplace (`trip_offers`, `trip_reservations`, `payouts`) is the
 monetisable complement to listings and requests; the platform fee on each confirmed
@@ -133,12 +136,12 @@ Start at **[docs/README.md](docs/README.md)** for the full index. Essentials:
 - **[docs/ops/stripe-connect.md](docs/ops/stripe-connect.md)** — Connect, `payments` tRPC, `/webhooks/stripe`.
 - **[docs/ops/verified-bringer-kyc.md](docs/ops/verified-bringer-kyc.md)** — KYC and admin badge tooling.
 - **[docs/ops/observability.md](docs/ops/observability.md)** — Sentry, PostHog EU, runbooks.
-- **GitHub**: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) — optional manual deploy checklist.
-- **GitHub Pages**: [`.github/workflows/pages.yml`](.github/workflows/pages.yml) builds the small static bundle under [`sites/gh-pages/`](sites/gh-pages/) (not the Next.js app — `apps/web` uses `output: 'standalone'`). In the repo, open **Settings → Pages → Build and deployment**, choose **GitHub Actions**, then run **Pages** (or push to `main` with changes under `sites/gh-pages/`).
+- **GitHub Actions**: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) — optional manual deploy checklist for production-style hosts.
+- **GitHub Pages (optional static stub only)**: [`.github/workflows/pages.yml`](.github/workflows/pages.yml) publishes the small bundle under [`sites/gh-pages/`](sites/gh-pages/) — useful for a lightweight repo landing page, **not** the Next.js app (`apps/web` uses `output: 'standalone'`). Enable with **Settings → Pages → Build and deployment → GitHub Actions**, then run **Pages** or push changes under `sites/gh-pages/`. For the real product stack, use **[docs/ops/oss-self-hosted-deploy.md](docs/ops/oss-self-hosted-deploy.md)** (or the short redirect **[docs/ops/free-preview-deploy.md](docs/ops/free-preview-deploy.md)**).
 
 ### Static export note
 
-The full product (tRPC, auth, dynamic routes) is not a candidate for `next export` without a dedicated static marketing slice. The Pages workflow exists so the repository can still ship a **real** static artifact for previews and links; production web remains on your normal host (see `docs/ops/deploy-runbook.md`).
+The full product (tRPC, auth, dynamic routes) is not a candidate for `next export` without a dedicated static marketing slice. The Pages workflow is an **optional** static mirror; **recommended** “show friends” deploys run the real stack self-hosted ([OSS self-hosted deploy](docs/ops/oss-self-hosted-deploy.md)). Production web on your own VPS stays per `docs/ops/deploy-runbook.md`.
 
 ### Unused exports (ts-prune)
 
