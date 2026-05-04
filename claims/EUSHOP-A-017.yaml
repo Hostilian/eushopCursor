@@ -1,0 +1,15 @@
+id: EUSHOP-A-017
+lane: A
+sub_lane: null
+branch: agent/a-017-prohibited-catalog
+owner: cursor-agent
+status: claimed
+touches:
+  - packages/catalog-data/src/prohibited.ts
+  - packages/catalog-data/src/prohibited.test.ts
+  - packages/catalog-data/src/index.ts
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm typecheck && pnpm lint
+notes: >
+  Add prohibited-phrase helpers for open-ask / listing copy (catalog-data package).

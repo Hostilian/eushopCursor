@@ -182,6 +182,7 @@
     "feePerSlot": "€{fee} per slot",
     "reserveCta": "Prenota un posto",
     "showcaseCta": "Showcase trip",
+    "verifiedBringer": "Bringer verificato",
     "today": "today",
     "tomorrow": "tomorrow",
     "inDays": "in {days} days"

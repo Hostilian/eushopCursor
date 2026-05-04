@@ -1,0 +1,34 @@
+name: Database migrate (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment label (informational only)'
+        required: false
+        default: 'staging'
+
+jobs:
+  migrate:
+    name: Migrate + optional search index
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Note
+        run: |
+          echo "Wire DATABASE_URL (and MEILI_* if using search:index) via GitHub Environment secrets"
+          echo "before enabling real migrate steps. This workflow is a template for ops teams."

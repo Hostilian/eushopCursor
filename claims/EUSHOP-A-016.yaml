@@ -1,0 +1,19 @@
+id: EUSHOP-A-016
+lane: A
+sub_lane: null
+branch: agent/a-016-ro-i18n
+owner: cursor-agent
+status: claimed
+touches:
+  - packages/i18n/src/index.ts
+  - packages/i18n/src/formatters.ts
+  - packages/i18n/src/messages/ro.json
+  - packages/i18n/src/messages/pl.json
+  - packages/i18n/src/messages/es.json
+  - packages/i18n/src/messages/fr.json
+  - packages/i18n/src/messages/it.json
+hotspot_sub_lane: H4-i18n
+depends_on: []
+verify: pnpm i18n:check && pnpm verify
+notes: >
+  Add Romanian (ro) locale with full key parity vs en.json; extend SUPPORTED_LOCALES.

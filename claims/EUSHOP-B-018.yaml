@@ -1,0 +1,13 @@
+id: EUSHOP-B-018
+lane: B
+sub_lane: null
+branch: agent/b-018-requests-policy
+owner: cursor-agent
+status: claimed
+touches:
+  - packages/api-router/src/routers/requests.ts
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Enforce catalog-data prohibited phrase check on requests.create; remove console.error in feed/near.

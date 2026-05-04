@@ -1,0 +1,22 @@
+id: EUSHOP-O-013
+lane: O
+sub_lane: null
+branch: agent/o-013-unified-plan
+owner: cursor-agent
+status: claimed
+touches:
+  - audit/
+  - handoffs/
+  - docs/ENVIRONMENT.md
+  - .github/workflows/
+  - .env.example
+  - lighthouserc.json
+  - package.json
+  - scripts/check-i18n-keys.mjs
+  - AGENTS.md
+  - docs/README.md
+depends_on: []
+verify: pnpm verify
+notes: >
+  Unified master plan implementation: Part 1 audit artifacts, Part 2 CI/env docs,
+  supporting files. Disjoint from EUSHOP-O-012 (AI_MANIFESTO.txt only).

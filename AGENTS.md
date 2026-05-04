@@ -35,3 +35,23 @@ Even across lanes **A** and **B**, two agents must not have open claims that bot
 After **2–3** tasks per lane, run **`pnpm verify`** once (format, typecheck, lint, unit tests, **claims:check**, build — matches CI), then resume agents.
 
 **Merge-safe parallel backlog:** [docs/cursor-parallel-backlog.md](docs/cursor-parallel-backlog.md) (task IDs, hotspots, backlog checkboxes).
+
+## Agent handoff template (`AI_MANIFESTO.txt` §9)
+
+After a substantive session, append or open `handoffs/YYYY-MM-DD.md` with:
+
+```yaml
+HANDOFF_OBJECTIVE: ''
+HANDOFF_STATUS:
+  completed: []
+  in_progress: []
+  not_started: []
+HANDOFF_TOUCHED_PATHS: []
+HANDOFF_CHECKS_RUN: []
+HANDOFF_BLOCKERS: []
+HANDOFF_ASSUMPTIONS: []
+HANDOFF_RISK_LEDGER: []
+HANDOFF_NEXT_STEP: ''
+```
+
+Separate **facts** from **assumptions**; label anything unverified.

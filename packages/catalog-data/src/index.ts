@@ -2,6 +2,7 @@ export * from './countries';
 export * from './categories';
 export * from './brands';
 export * from './items';
+export * from './prohibited';
 export { searchOpenFoodFacts } from './openfoodfacts';
 
 import { COUNTRIES } from './countries';

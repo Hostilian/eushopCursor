@@ -1,3 +1,4 @@
+import { findProhibitedOpenAskMatch } from '@eushop/catalog-data';
 import {
   decode,
   encode,
@@ -32,8 +33,7 @@ export const requestsRouter = router({
         .where(where)
         .orderBy(desc(requests.createdAt))
         .limit(input.limit);
-    } catch (e) {
-      console.error('[requests.feed] DB read failed', e);
+    } catch {
       return [];
     }
   }),
@@ -47,8 +47,7 @@ export const requestsRouter = router({
         .where(and(eq(requests.status, 'open'), inArray(requests.cellGeohash, cells)))
         .orderBy(desc(requests.createdAt))
         .limit(input.limit);
-    } catch (e) {
-      console.error('[requests.near] DB read failed', e);
+    } catch {
       return [];
     }
   }),
@@ -74,6 +73,15 @@ export const requestsRouter = router({
   }),
 
   create: protectedProcedure.input(createRequestInput).mutation(async ({ ctx, input }) => {
+    const combined = [input.freeformText, input.notes ?? ''].join('\n');
+    const blocked = findProhibitedOpenAskMatch(combined);
+    if (blocked) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message:
+          'This description cannot be posted on Eushop. Please remove restricted content and try again.',
+      });
+    }
     const indexHash = encode(input.location, PRECISION_INDEX);
     const cell = publicCell(indexHash);
     const country = roughCatalogCountryIso2FromLatLng(input.location) ?? 'EU';
