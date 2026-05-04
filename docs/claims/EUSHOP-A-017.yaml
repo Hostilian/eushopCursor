@@ -12,4 +12,4 @@ hotspot_sub_lane: null
 depends_on: []
 verify: pnpm typecheck && pnpm lint
 notes: >
-  Add prohibited-phrase helpers for open-ask / listing copy (catalog-data package).
+  Add prohibited-phrase helpers for open-ask / listing copy (catalog package).

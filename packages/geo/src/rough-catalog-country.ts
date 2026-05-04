@@ -1,4 +1,4 @@
-/** Axis-aligned WGS84 bounds for seed countries in `catalog-data` (rough, not legal borders). */
+/** Axis-aligned WGS84 bounds for seed countries in `catalog` (rough, not legal borders). */
 type Bbox = { iso2: string; south: number; north: number; west: number; east: number };
 
 const CATALOG_COUNTRY_BBOXES: Bbox[] = [

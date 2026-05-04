@@ -115,10 +115,10 @@ AUDIENCE: AUTONOMOUS_SOFTWARE_AGENTS
 - packages/db: schema and migrations.
 - packages/auth: auth integration.
 - packages/validators: shared validation contracts.
-- packages/i18n, ui-web, design-tokens, geo, catalog-data, config: shared support packages.
+- packages/i18n, ui, tokens, geo, catalog, config: shared support packages.
 
 4.2 LANE OWNERSHIP MODEL
-- Lane A (Web/UI): web + UI + i18n + tokens + catalog-data.
+- Lane A (Web/UI): web + UI + i18n + tokens + catalog.
 - Lane B (API/Data): api + party + router + db + auth + validators + geo.
 - Lane O (Orchestrator): root configs, lockfile/dependency coordination, CI, root docs.
 

@@ -59,7 +59,7 @@ FORBIDDEN:
 
 | Lane | Scope |
 |------|-------|
-| **Lane A** | Web UI, i18n, design tokens, catalog-data, mobile UI |
+| **Lane A** | Web UI, i18n, design tokens, catalog, mobile UI |
 | **Lane B** | API routers, DB schema/migrations, auth, validators, geo, PartyKit |
 | **Lane O** | Root config, CI/CD, monorepo orchestration, docs, lockfile |
 

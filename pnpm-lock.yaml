@@ -468,7 +468,7 @@ importers:
         version: link:../auth
       '@eushop/catalog':
         specifier: workspace:*
-        version: link:../catalog-data
+        version: link:../catalog
       '@eushop/db':
         specifier: workspace:*
         version: link:../db
@@ -551,7 +551,7 @@ importers:
     dependencies:
       '@eushop/catalog':
         specifier: workspace:*
-        version: link:../catalog-data
+        version: link:../catalog
       drizzle-orm:
         specifier: ^0.36.4
         version: 0.36.4(@cloudflare/workers-types@4.20240718.0)(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(@types/react@19.0.14)(expo-sqlite@15.0.6(expo@54.0.34(@babel/core@7.29.0)(@expo/metro-runtime@4.0.1(react-native@0.76.5(@babel/core@7.29.0)(@babel/preset-env@7.29.3(@babel/core@7.29.0))(@types/react@19.0.14)(react@19.2.5)))(expo-router@4.0.22)(react-native@0.76.5(@babel/core@7.29.0)(@babel/preset-env@7.29.3(@babel/core@7.29.0))(@types/react@19.0.14)(react@19.2.5))(react@19.2.5)(typescript@5.9.3))(react-native@0.76.5(@babel/core@7.29.0)(@babel/preset-env@7.29.3(@babel/core@7.29.0))(@types/react@19.0.14)(react@19.2.5))(react@19.2.5))(kysely@0.28.16)(postgres@3.4.9)(react@19.2.5)

@@ -10,4 +10,4 @@ hotspot_sub_lane: null
 depends_on: []
 verify: pnpm verify
 notes: >
-  Enforce catalog-data prohibited phrase check on requests.create; remove console.error in feed/near.
+  Enforce catalog prohibited phrase check on requests.create; remove console.error in feed/near.
