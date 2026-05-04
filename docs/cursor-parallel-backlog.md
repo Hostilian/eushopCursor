@@ -1,6 +1,6 @@
 # Cursor parallel backlog (merge-safe playbook)
 
-This document is the **operating queue** for humans and Cursor agents. It does **not** replace product specs: see [copy-inventory.md](copy-inventory.md), [ops/environment.md](ops/environment.md), and repo [AGENTS.md](../AGENTS.md).
+This document is the **operating queue** for humans and Cursor agents. It does **not** replace product specs: see [editorial.md](editorial.md), [ops/environment.md](ops/environment.md), and repo [AGENTS.md](../AGENTS.md).
 
 ---
 
@@ -102,9 +102,8 @@ touches:
 
 - [AGENTS.md](../AGENTS.md) — lanes, hotspots H1–H6, verify cadence, claim files
 - [`claims/README.md`](../claims/README.md) — claim file lifecycle
-- [copy-inventory.md](copy-inventory.md) — where copy lives
+- [editorial.md](editorial.md) — copy inventory, voice, EN-only policy
 - [ops/environment.md](ops/environment.md) — env matrix
-- [voice-glossary.md](voice-glossary.md) — terminology
 - [eslint-next-migration.md](eslint-next-migration.md) — lint migration
 
 ---
@@ -119,7 +118,7 @@ Add a **claim YAML** in `claims/` when starting work (see above). IDs are sugges
 
 - [ ] `[O]` **EUSHOP-O-001** Run documented Stripe staging E2E once; fix gaps in ops docs only if needed. _(human / staging)_
 - [ ] `[B]` **EUSHOP-B-001** Webhook replay idempotency spot-check (logs + DB) after deploy. _(human / staging)_
-- [ ] `[A]` **EUSHOP-A-001** Fee disclosure copy pass on web reservation + mobile trip screen (voice glossary). _(partial: mobile `tripDetailMobile.*`, web reservations notice — voice-glossary audit remains)_
+- [ ] `[A]` **EUSHOP-A-001** Fee disclosure copy pass on web reservation + mobile trip screen ([editorial.md](editorial.md) §2). _(partial: mobile `tripDetailMobile.*`, web reservations notice — audit remains)_
 - [x] `[B]` **EUSHOP-B-002** Confirm `removed` listings never appear in public `listings.*` queries; add regression test if missing.
 
 ### Phase 1 — Monetization (Stripe)
@@ -149,7 +148,7 @@ Add a **claim YAML** in `claims/` when starting work (see above). IDs are sugges
 ### Phase 4 — i18n and marketing
 
 - [x] `[A]` **EUSHOP-A-008** Migrate one marketing page at a time to `next-intl` (namespace per page). _(changelog done; continue manifesto, roadmap, … per page)_
-- [ ] `[A]` **EUSHOP-A-009** `manifesto` / `pitch` strings: inventory vs [i18n-english-surfaces.md](i18n-english-surfaces.md).
+- [ ] `[A]` **EUSHOP-A-009** `manifesto` / `pitch` strings: inventory vs [editorial.md](editorial.md) §3.
 - [ ] `[A]` **EUSHOP-A-010** Plural / ICU review for `trips.*` and `reservationForm.*` in all locales.
 - [ ] `[O]` **EUSHOP-O-003** Voice glossary cross-check after each marketing migration PR.
 

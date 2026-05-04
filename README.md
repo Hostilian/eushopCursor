@@ -126,7 +126,7 @@ Report vulnerabilities per **[SECURITY.md](SECURITY.md)** (contact, scope, and o
 
 ## Production & operations
 
-Start at **[docs/README.md](docs/README.md)** for the full index. Essentials:
+Start at **[docs/README.md](docs/README.md)** (hub) and **[docs/ops/README.md](docs/ops/README.md)** (ops index). Essentials:
 
 **Launch checklist (minimal)**
 
@@ -150,7 +150,7 @@ The full product (tRPC, auth, dynamic routes) is not a candidate for `next expor
 
 ### Unused exports (ts-prune)
 
-There is no root `tsconfig.json`; run **`pnpm --filter <pkg> exec ts-prune`** per package, or see [`audit/dead-code-registry.md`](audit/dead-code-registry.md).
+There is no root `tsconfig.json`; run **`pnpm --filter <pkg> exec ts-prune`** per package, or see [`docs/audit/dead-code-registry.md`](docs/audit/dead-code-registry.md).
 
 ## Local development
 

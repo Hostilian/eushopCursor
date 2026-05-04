@@ -133,7 +133,7 @@ grep -r '"userId":\s*"[0-9]"' -l  # fake user IDs
 grep -r "console\.log" --include="*.ts" --include="*.tsx" -l  # debug logs
 ```
 
-Create a file `audit/mock-data-registry.md` with every finding categorised as:
+Create a file `docs/audit/mock-data-registry.md` with every finding categorised as:
 - `REMOVE`: pure scaffolding with no live replacement needed
 - `REPLACE-WITH-SEED`: should become proper `db:seed` data
 - `REPLACE-WITH-REAL`: needs real API/DB integration
@@ -143,16 +143,16 @@ Create a file `audit/mock-data-registry.md` with every finding categorised as:
 
 ```bash
 # Find unused exports (install if needed: npx ts-prune)
-npx ts-prune --ignore "index.ts" > audit/unused-exports.txt
+npx ts-prune --ignore "index.ts" > docs/audit/unused-exports.txt
 
 # Find duplicate type definitions
-grep -r "^export type\|^export interface" --include="*.ts" | sort > audit/all-types.txt
+grep -r "^export type\|^export interface" --include="*.ts" | sort > docs/audit/all-types.txt
 
 # Find files with <10 lines that might be stubs
 find . -name "*.ts" -not -path "*/node_modules/*" -exec wc -l {} + | sort -n | head -50
 ```
 
-Document everything in `audit/dead-code-registry.md`.
+Document everything in `docs/audit/dead-code-registry.md`.
 
 ### TASK 1.4 — Architecture Health Check
 
@@ -163,7 +163,7 @@ For each domain router in `packages/api-router/src/`, verify:
 - [ ] Error handling returns typed errors (not raw throws)
 - [ ] No direct `fetch()` calls that should be tRPC procedures
 
-Document findings in `audit/architecture-gaps.md`.
+Document findings in `docs/audit/architecture-gaps.md`.
 
 ### TASK 1.5 — Investor Surface Audit
 
@@ -181,7 +181,7 @@ labelled "target" or "projected."
 ### ✅ AUDIT PHASE CHECKPOINT
 
 Before proceeding to Part 2, verify:
-- [ ] `audit/` directory exists with all 4 registry files
+- [ ] `docs/audit/` directory exists with all 4 registry files
 - [ ] Every mock/hardcoded item is categorised
 - [ ] No edits made to source files yet
 - [ ] `pnpm verify` runs clean (establish baseline)
@@ -316,7 +316,7 @@ BETTER_AUTH_URL=http://localhost:3000
 - `apps/web/src/env.ts` — validates NEXT_PUBLIC_ vars at build time
 - Apps MUST crash with a clear message if required vars are missing
 
-**2.3.c** Create `docs/ENVIRONMENT.md` with:
+**2.3.c** Document environment variables in `docs/README.md` (quick reference) and the full matrix in `docs/ops/environment.md` (content that lived in `docs/ENVIRONMENT.md` is merged into the docs hub). Include:
 - Full variable reference table
 - Which vars are required vs optional per environment
 - How to generate secrets locally
@@ -1135,7 +1135,7 @@ Root `README.md` must include:
 [Claim system explained clearly]
 
 ## Environment Setup
-[Link to docs/ENVIRONMENT.md]
+[Link to docs/README.md — Environment section]
 ```
 
 **Test the Quick Start**: Follow the README instructions from scratch in a clean directory. Fix every point where it breaks.
@@ -1217,7 +1217,7 @@ Generate OpenAPI spec from tRPC routes (use `trpc-openapi` or similar):
 ## PART 13: AGENT HANDOFF PROTOCOL
 ## ═══════════════════════════════════════════
 
-**After each work session, complete this template and commit it to `handoffs/YYYY-MM-DD.md`:**
+**After each work session, complete this template and commit it to `docs/handoffs/YYYY-MM-DD.md`:**
 
 ```yaml
 HANDOFF_OBJECTIVE: [exact task range worked on, e.g. "Part 3 Tasks 3.1–3.2"]

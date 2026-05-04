@@ -5,13 +5,12 @@ branch: agent/o-013-unified-plan
 owner: cursor-agent
 status: claimed
 touches:
-  - audit/architecture-gaps.md
-  - audit/mobile-parity-matrix.md
-  - audit/mock-data-registry.md
-  - audit/package-inventory.md
-  - audit/schema-hardening-queue.md
-  - handoffs/
-  - docs/ENVIRONMENT.md
+  - docs/audit/architecture-gaps.md
+  - docs/audit/mobile-parity-matrix.md
+  - docs/audit/mock-data-registry.md
+  - docs/audit/package-inventory.md
+  - docs/audit/schema-hardening-queue.md
+  - docs/handoffs/
   - .github/workflows/ci.yml
   - .github/workflows/db-migrate.yml
   - .github/workflows/deploy.yml
@@ -21,7 +20,6 @@ touches:
   - package.json
   - scripts/check-i18n-keys.mjs
   - AGENTS.md
-  - docs/README.md
 depends_on: []
 verify: pnpm verify
 notes: >

@@ -38,7 +38,7 @@ After **2–3** tasks per lane, run **`pnpm verify`** once (format, typecheck, l
 
 ## Agent handoff template (`AI_MANIFESTO.txt` §9)
 
-After a substantive session, append or open `handoffs/YYYY-MM-DD.md` with:
+After a substantive session, append or open `docs/handoffs/YYYY-MM-DD.md` with:
 
 ```yaml
 HANDOFF_OBJECTIVE: ''

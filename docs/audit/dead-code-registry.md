@@ -17,7 +17,7 @@ No automated `<10 lines` sweep in this audit pass. Prefer follow-up with package
 
 ## Duplicate types
 
-No `audit/all-types.txt` export in this pass (same reason — multi-project). **Next step:** optional CI job aggregating `export type` lines per package.
+No `docs/audit/all-types.txt` export in this pass (same reason — multi-project). **Next step:** optional CI job aggregating `export type` lines per package.
 
 ## Observations
 

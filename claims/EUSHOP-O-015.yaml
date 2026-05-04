@@ -8,12 +8,17 @@ touches:
   - README.md
   - .env.example
   - docs/README.md
+  - docs/editorial.md
   - docs/i18n-locale-matrix.md
   - docs/ops/deploy-runbook.md
   - docs/ops/free-preview-deploy.md
   - docs/ops/oss-self-hosted-deploy.md
   - docs/ops/zero-cost-stack.md
+  - docs/ops/README.md
   - docs/ops/environment.md
+  - docs/audit/
+  - docs/handoffs/
+  - EUSHOP_CURSOR_AGENT_MASTERPLAN.md
   - apps/web/README.md
   - sites/gh-pages/index.html
   - sites/gh-pages/site.js
