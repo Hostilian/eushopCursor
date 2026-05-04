@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Eushop — static mirror</title>
+    <meta
+      name="description"
+      content="Peer marketplace for trips, locals, and open asks. This GitHub Pages site is a lightweight static mirror; the product runs on Next.js + API elsewhere."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Eushop</h1>
+      <p class="tagline">Get something from somewhere. Bring something for someone.</p>
+      <p>
+        This page is the <strong>static GitHub Pages</strong> bundle for the repository. The live web app is
+        <strong>Next.js&nbsp;15</strong> with a separate API (tRPC / Hono) and is not exported here —
+        <code>apps/web</code> uses <code>output: &apos;standalone&apos;</code> for production hosts (see README).
+      </p>
+      <ul class="links">
+        <li><a id="repo-docs" href="#">Repository documentation index</a></li>
+        <li><a id="repo-root" href="#">Repository home</a></li>
+      </ul>
+      <p class="fineprint">
+        After enabling Pages (Settings → Pages → Build and deployment: GitHub Actions), this site is published from
+        the <code>pages.yml</code> workflow artifact, not from the legacy <code>gh-pages</code> git branch.
+      </p>
+    </main>
+    <script src="./site.js"></script>
+  </body>
+</html>

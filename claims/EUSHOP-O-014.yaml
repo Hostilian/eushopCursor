@@ -1,0 +1,18 @@
+id: EUSHOP-O-014
+lane: O
+sub_lane: null
+branch: agent/o-014-github-pages
+owner: cursor-agent
+status: claimed
+touches:
+  - README.md
+  - .github/workflows/pages.yml
+  - sites/gh-pages/
+  - audit/dead-code-registry.md
+  - claims/EUSHOP-O-013.yaml
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm claims:check && pnpm verify
+notes: >
+  GitHub Pages static bundle (sites/gh-pages) + pages.yml; README pointer; ts-prune doc;
+  narrow O-013 touches so workflows/audit do not overlap this claim.

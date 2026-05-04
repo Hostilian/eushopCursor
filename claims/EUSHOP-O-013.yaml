@@ -5,10 +5,17 @@ branch: agent/o-013-unified-plan
 owner: cursor-agent
 status: claimed
 touches:
-  - audit/
+  - audit/architecture-gaps.md
+  - audit/mobile-parity-matrix.md
+  - audit/mock-data-registry.md
+  - audit/package-inventory.md
+  - audit/schema-hardening-queue.md
   - handoffs/
   - docs/ENVIRONMENT.md
-  - .github/workflows/
+  - .github/workflows/ci.yml
+  - .github/workflows/db-migrate.yml
+  - .github/workflows/deploy.yml
+  - .github/workflows/docker-publish.yml
   - .env.example
   - lighthouserc.json
   - package.json
