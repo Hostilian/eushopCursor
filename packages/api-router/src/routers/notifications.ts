@@ -1,17 +1,28 @@
 import { and, desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
+import { uuidString } from '@eushop/validators';
 import { deviceTokens, notifications } from '@eushop/db';
 import { protectedProcedure, router } from '../trpc';
 
+const DEFAULT_NOTIFICATION_LIMIT = 50;
+const MAX_NOTIFICATION_LIMIT = 100;
+
 export const notificationsRouter = router({
-  list: protectedProcedure.query(async ({ ctx }) => {
-    return ctx.db
-      .select()
-      .from(notifications)
-      .where(eq(notifications.userId, ctx.user.id))
-      .orderBy(desc(notifications.createdAt))
-      .limit(50);
-  }),
+  list: protectedProcedure
+    .input(
+      z
+        .object({ limit: z.number().int().min(1).max(MAX_NOTIFICATION_LIMIT).optional() })
+        .optional(),
+    )
+    .query(async ({ ctx, input }) => {
+      const lim = Math.min(input?.limit ?? DEFAULT_NOTIFICATION_LIMIT, MAX_NOTIFICATION_LIMIT);
+      return ctx.db
+        .select()
+        .from(notifications)
+        .where(eq(notifications.userId, ctx.user.id))
+        .orderBy(desc(notifications.createdAt))
+        .limit(lim);
+    }),
 
   registerDevice: protectedProcedure
     .input(
@@ -46,7 +57,7 @@ export const notificationsRouter = router({
   }),
 
   markRead: protectedProcedure
-    .input(z.object({ id: z.string().uuid() }))
+    .input(z.object({ id: uuidString }))
     .mutation(async ({ ctx, input }) => {
       await ctx.db
         .update(notifications)

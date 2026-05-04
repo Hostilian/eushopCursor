@@ -1,0 +1,13 @@
+id: EUSHOP-B-027
+lane: B
+sub_lane: null
+branch: agent/b-027-notifications-limits
+owner: cursor-agent
+status: claimed
+touches:
+  - packages/api-router/src/routers/notifications.ts
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm typecheck && pnpm lint
+notes: >
+  Backlog B-016: cap notifications list query + use shared uuidString for markRead input.

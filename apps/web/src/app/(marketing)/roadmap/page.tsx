@@ -1,37 +1,28 @@
+import { getTranslations } from 'next-intl/server';
+
 import { EditorialPageLayout } from '../../../components/marketing/editorial-page';
 
-const PHASES = [
-  {
-    q: 'Q1 2026',
-    title: 'Trip & luggage capacity',
-    body: 'First-class flows to publish real routes, dates, spare volume/weight, and legs. Match travellers to catalog items and freeform requests—still location-first.',
-  },
-  {
-    q: 'Q2 2026',
-    title: 'Trust & density',
-    body: 'Moderation tooling, repeat-handoff prompts, corridor playbooks, Meilisearch tuning, and optional restock alerts for saved corridors.',
-  },
-  {
-    q: 'Q3 2026',
-    title: 'Payments (where legal)',
-    body: 'Optional in-app settlement for finder fees on local shares and for trip slot fees; fixed price first, then pilot auctions where regulation allows.',
-  },
-  {
-    q: 'Q4 2026',
-    title: 'Profiles & native polish',
-    body: 'Photo-first profiles and reputation signals; offline maps for cells, richer item graph, retailer opt-in exports.',
-  },
-];
+export async function generateMetadata() {
+  const t = await getTranslations('roadmapPage');
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+  };
+}
 
-export default function RoadmapPage() {
+export default async function RoadmapPage() {
+  const t = await getTranslations('roadmapPage');
+  const phases = [
+    { q: t('phase1Quarter'), title: t('phase1Title'), body: t('phase1Body') },
+    { q: t('phase2Quarter'), title: t('phase2Title'), body: t('phase2Body') },
+    { q: t('phase3Quarter'), title: t('phase3Title'), body: t('phase3Body') },
+    { q: t('phase4Quarter'), title: t('phase4Title'), body: t('phase4Body') },
+  ] as const;
+
   return (
-    <EditorialPageLayout
-      eyebrow="Roadmap"
-      title="Where we are headed."
-      subtitle="Indicative horizons — ship order may shift with regulation and community feedback."
-    >
+    <EditorialPageLayout eyebrow={t('eyebrow')} title={t('title')} subtitle={t('subtitle')}>
       <ul className="max-w-2xl space-y-8">
-        {PHASES.map((p) => (
+        {phases.map((p) => (
           <li key={p.q} className="border-ink/10 bg-porcelain/50 rounded-2xl border p-6">
             <p className="text-saffron-700 text-xs font-semibold tracking-widest uppercase">
               {p.q}

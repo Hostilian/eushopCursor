@@ -159,7 +159,7 @@ export const listingPhoto = z.object({
 export type ListingPhoto = z.infer<typeof listingPhoto>;
 
 export const createListingInput = z.object({
-  foodItemId: z.string().uuid().optional(),
+  foodItemId: uuidString.optional(),
   freeformName: z.string().min(2).max(80).optional(),
   brandName: z.string().max(80).optional(),
   notes: z.string().max(600).optional(),
@@ -176,7 +176,7 @@ export const createListingInput = z.object({
 export type CreateListingInput = z.infer<typeof createListingInput>;
 
 export const updateListingInput = createListingInput.partial().extend({
-  id: z.string().uuid(),
+  id: uuidString,
 });
 export type UpdateListingInput = z.infer<typeof updateListingInput>;
 
@@ -203,7 +203,7 @@ export type ListingSearchInput = z.infer<typeof listingSearchInput>;
 // ---------- Requests ---------------------------------------------------------
 
 export const createRequestInput = z.object({
-  foodItemId: z.string().uuid().optional(),
+  foodItemId: uuidString.optional(),
   freeformText: z.string().min(2).max(160),
   notes: z.string().max(600).optional(),
   maxFinderFee: z.number().min(0).max(999).optional(),
@@ -219,16 +219,16 @@ export type CreateRequestInput = z.infer<typeof createRequestInput>;
 // ---------- Messaging -------------------------------------------------------
 
 export const sendMessageInput = z.object({
-  conversationId: z.string().uuid(),
+  conversationId: uuidString,
   body: z.string().min(1).max(2000),
   attachments: z.array(listingPhoto).max(4).optional(),
 });
 export type SendMessageInput = z.infer<typeof sendMessageInput>;
 
 export const startConversationInput = z.object({
-  recipientId: z.string().uuid(),
-  listingId: z.string().uuid().optional(),
-  requestId: z.string().uuid().optional(),
+  recipientId: uuidString,
+  listingId: uuidString.optional(),
+  requestId: uuidString.optional(),
   body: z.string().min(1).max(2000),
 });
 export type StartConversationInput = z.infer<typeof startConversationInput>;
@@ -255,7 +255,7 @@ export const reviewTags = z.enum([
 export type ReviewTag = z.infer<typeof reviewTags>;
 
 export const submitReviewInput = z.object({
-  conversationId: z.string().uuid(),
+  conversationId: uuidString,
   rating: z.number().int().min(1).max(5),
   comment: z.string().max(600).optional(),
   tags: z.array(reviewTags).max(7).optional(),
@@ -277,7 +277,7 @@ export type ReportReason = z.infer<typeof reportReason>;
 
 export const submitReportInput = z.object({
   targetType: z.enum(['listing', 'request', 'user', 'message']),
-  targetId: z.string().uuid(),
+  targetId: uuidString,
   reason: reportReason,
   details: z.string().max(600).optional(),
 });
@@ -337,14 +337,14 @@ export type ProposeFoodItemInput = z.infer<typeof proposeFoodItemInput>;
 
 /** Suggest an additional image for an existing canonical product. */
 export const proposeFoodItemImageInput = z.object({
-  foodItemId: z.string().uuid(),
+  foodItemId: uuidString,
   url: z.string().url(),
   source: z.enum(['r2', 'user-url', 'off']).default('r2'),
 });
 export type ProposeFoodItemImageInput = z.infer<typeof proposeFoodItemImageInput>;
 
 export const upvoteFoodItemImageInput = z.object({
-  proposalId: z.string().uuid(),
+  proposalId: uuidString,
 });
 export type UpvoteFoodItemImageInput = z.infer<typeof upvoteFoodItemImageInput>;
 
@@ -368,12 +368,12 @@ export const adminCatalogUgcQueueInput = z.object({
   imageProposalStatus: foodItemImageProposalStatusEnum.default('pending'),
   countryIso2: isoCountry.optional(),
   categorySlug: slug.optional(),
-  submitterId: z.string().uuid().optional(),
+  submitterId: uuidString.optional(),
 });
 export type AdminCatalogUgcQueueInput = z.infer<typeof adminCatalogUgcQueueInput>;
 
 export const adminBulkReviewFoodItemImageProposalInput = z.object({
-  ids: z.array(z.string().uuid()).min(1).max(50),
+  ids: z.array(uuidString).min(1).max(50),
   status: z.enum(['approved', 'rejected']),
   moderatorNote: z.string().max(500).optional(),
 });
@@ -382,7 +382,7 @@ export type AdminBulkReviewFoodItemImageProposalInput = z.infer<
 >;
 
 export const adminBulkReviewFoodItemCandidateInput = z.object({
-  ids: z.array(z.string().uuid()).min(1).max(50),
+  ids: z.array(uuidString).min(1).max(50),
   /** Bulk path supports approve/reject only; duplicate needs a single merge target. */
   status: z.enum(['approved', 'rejected']),
   moderatorNote: z.string().max(500).optional(),
@@ -393,9 +393,9 @@ export type AdminBulkReviewFoodItemCandidateInput = z.infer<
 
 export const adminReviewFoodItemCandidateInput = z
   .object({
-    id: z.string().uuid(),
+    id: uuidString,
     status: z.enum(['approved', 'rejected', 'duplicate']),
-    mergedIntoItemId: z.string().uuid().optional(),
+    mergedIntoItemId: uuidString.optional(),
     moderatorNote: z.string().max(500).optional(),
   })
   .superRefine((val, ctx) => {
@@ -410,7 +410,7 @@ export const adminReviewFoodItemCandidateInput = z
 export type AdminReviewFoodItemCandidateInput = z.infer<typeof adminReviewFoodItemCandidateInput>;
 
 export const adminReviewFoodItemImageProposalInput = z.object({
-  id: z.string().uuid(),
+  id: uuidString,
   status: z.enum(['approved', 'rejected']),
   moderatorNote: z.string().max(500).optional(),
 });
@@ -429,7 +429,7 @@ export const connectOnboardingInput = z.object({
 export type ConnectOnboardingInput = z.infer<typeof connectOnboardingInput>;
 
 export const refundReservationInput = z.object({
-  reservationId: z.string().uuid(),
+  reservationId: uuidString,
   reason: z.enum(['duplicate', 'fraudulent', 'requested_by_customer']).optional(),
   /** Optional partial-refund amount in major units (EUR). Defaults to full. */
   amount: z.number().nonnegative().optional(),
@@ -456,7 +456,7 @@ export const createTripOfferInput = z.object({
   /** Optional buyer-facing capacity hints (not enforced). */
   spareWeightKg: z.number().int().min(1).max(500).optional(),
   spareVolumeLiters: z.number().int().min(1).max(500).optional(),
-  intendedItemIds: z.array(z.string().uuid()).max(20).optional(),
+  intendedItemIds: z.array(uuidString).max(20).optional(),
 });
 export type CreateTripOfferInput = z.infer<typeof createTripOfferInput>;
 
@@ -486,8 +486,8 @@ export const tripFeedNearInput = z.object({
 export type TripFeedNearInput = z.infer<typeof tripFeedNearInput>;
 
 export const reserveSlotInput = z.object({
-  tripOfferId: z.string().uuid(),
-  foodItemId: z.string().uuid().optional(),
+  tripOfferId: uuidString,
+  foodItemId: uuidString.optional(),
   freeformText: z.string().min(2).max(160),
   qty: z.number().int().min(1).max(20).default(1),
   /** Buyer's offered fee. Server validates that it meets or exceeds the trip
@@ -498,7 +498,7 @@ export type ReserveSlotInput = z.infer<typeof reserveSlotInput>;
 
 /** Shared UUID param for trip reservation lifecycle procedures. */
 export const tripReservationIdInput = z.object({
-  reservationId: z.string().uuid(),
+  reservationId: uuidString,
 });
 export type TripReservationIdInput = z.infer<typeof tripReservationIdInput>;
 

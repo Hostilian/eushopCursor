@@ -683,5 +683,43 @@
     "whyNowBody": "Post-Brexit re-shoring. Inflation that turned a €4 import into a €19 import. Open Food Facts maturing into a serious commons. The first cohort of European founders comfortable building a marketplace that is small, polite, rooted in European trust norms—and built to work anywhere people already travel.",
     "whyNowClosing": "The neighbour with the suitcase is already there. We are just turning on the light.",
     "signoff": "— The Eushop founding team. Munich, Warsaw, Lisbon, Athens, Tallinn."
+  },
+  "pitchPage": {
+    "metaTitle": "Pitch · Eushop",
+    "metaDescription": "Investor narrative: problem, wedge, GTM, and ask — without mixing historic statistics and forward-looking TAM.",
+    "eyebrow": "Investor narrative",
+    "title": "Eushop in one sitting.",
+    "subtitle": "Problem, wedge, GTM, and what we need next—without mixing historic statistics and forward-looking TAM.",
+    "problemTitle": "Problem",
+    "problemBody": "People are always on the move, and they bring things back for each other — but that trade is fragmented across group chats, DMs, and luck. There is no trusted layer for \"who near me, or on my route, has this niche thing right now?\" The category is global; we are starting where it is densest.",
+    "mobilityTitle": "Mobility context",
+    "solutionTitle": "Solution",
+    "solutionBody": "Eushop is discovery + messaging with privacy-preserving cells: trip reservations use an agreed slot fee; local shares and requests keep finder's-fee wording where it matches the schema. Handoffs stay in public. Web, admin, and Expo share one design language and one API surface (tRPC + Postgres + Meili).",
+    "gtmTitle": "GTM",
+    "gtmBody": "Wedge: dense EU corridors with community partners, then expand along rail and air hubs. Destination: a global peer layer for trips, locals, and open asks. Catalog is seeded; growth is user-generated listings, requests, and trip offers.",
+    "askTitle": "Ask",
+    "askBody": "Capital to harden trust & safety, ship native payments rails where legal, and hire a small moderation pod per time zone. We're building the polite corner of peer trade for things people already carry — starting in Europe, designed to travel.",
+    "mobilityBefore": "Large-scale cross-border residence inside Europe is a long-documented statistical fact. We cite official publications from 2007 and earlier (plus Eurostat's first 2007 headline release, documented in 2008) when we need that framing—see",
+    "mobilitySourcesLabel": "/sources",
+    "mobilityAfter": ". We do not treat a headline \"millions\" number as revenue TAM without a defined cohort and a matching source."
+  },
+  "roadmapPage": {
+    "metaTitle": "Roadmap · Eushop",
+    "metaDescription": "Indicative product horizons for trips, trust, payments, and native polish — ship order may shift.",
+    "eyebrow": "Roadmap",
+    "title": "Where we are headed.",
+    "subtitle": "Indicative horizons — ship order may shift with regulation and community feedback.",
+    "phase1Quarter": "Q1 2026",
+    "phase1Title": "Trip & luggage capacity",
+    "phase1Body": "First-class flows to publish real routes, dates, spare volume/weight, and legs. Match travellers to catalog items and freeform requests—still location-first.",
+    "phase2Quarter": "Q2 2026",
+    "phase2Title": "Trust & density",
+    "phase2Body": "Moderation tooling, repeat-handoff prompts, corridor playbooks, Meilisearch tuning, and optional restock alerts for saved corridors.",
+    "phase3Quarter": "Q3 2026",
+    "phase3Title": "Payments (where legal)",
+    "phase3Body": "Optional in-app settlement for finder fees on local shares and for trip slot fees; fixed price first, then pilot auctions where regulation allows.",
+    "phase4Quarter": "Q4 2026",
+    "phase4Title": "Profiles & native polish",
+    "phase4Body": "Photo-first profiles and reputation signals; offline maps for cells, richer item graph, retailer opt-in exports."
   }
 }

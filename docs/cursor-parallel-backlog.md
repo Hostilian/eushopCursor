@@ -112,7 +112,7 @@ touches:
 
 **Legend:** `[A]` Web/UI · `[B]` API/data · `[O]` Orchestrator
 
-Add a **claim YAML** in `claims/` when starting work (see above). IDs are suggestions—renumber if you add tasks in between.
+Add a **claim YAML** in `docs/claims/` when starting work (see above). IDs are suggestions—renumber if you add tasks in between.
 
 ### Priority 0 — Sell-ready closure
 
@@ -147,8 +147,8 @@ Add a **claim YAML** in `claims/` when starting work (see above). IDs are sugges
 
 ### Phase 4 — i18n and marketing
 
-- [x] `[A]` **EUSHOP-A-008** Migrate one marketing page at a time to `next-intl` (namespace per page). _(changelog done; continue manifesto, roadmap, … per page)_
-- [ ] `[A]` **EUSHOP-A-009** `manifesto` / `pitch` strings: inventory vs [editorial.md](editorial.md) section 3. _(manifesto page migrated to `manifestoPage.*`; pitch still pending)_
+- [x] `[A]` **EUSHOP-A-008** Migrate one marketing page at a time to `next-intl` (namespace per page). _(changelog, manifesto, pitch, roadmap; continue other marketing pages as needed.)_
+- [x] `[A]` **EUSHOP-A-009** `manifesto` / `pitch` strings: inventory vs [editorial.md](editorial.md) section 3. _(both pages use `next-intl`: `manifestoPage.*`, `pitchPage.*`; locale JSON aligned with `en`.)_
 - [ ] `[A]` **EUSHOP-A-010** Plural / ICU review for `trips.*` and `reservationForm.*` in all locales.
 - [ ] `[O]` **EUSHOP-O-003** Voice glossary cross-check after each marketing migration PR.
 
@@ -185,7 +185,7 @@ Add a **claim YAML** in `claims/` when starting work (see above). IDs are sugges
 - [ ] `[B]` **EUSHOP-B-013** `trips` router: extract fee/capture helpers for readability (no behaviour change).
 - [ ] `[B]` **EUSHOP-B-014** `listings` router: pagination cursor consistency.
 - [ ] `[B]` **EUSHOP-B-015** `requests` router: validate input edge cases.
-- [ ] `[B]` **EUSHOP-B-016** `notifications` router: batch size limits.
+- [x] `[B]` **EUSHOP-B-016** `notifications` router: batch size limits. _(list `limit` optional, default 50, max 100.)_
 - [x] `[B]` **EUSHOP-B-017** PartyKit: document message shape versioning in README. _(example envelope in `apps/party/README.md`)_
 - [ ] `[B]` **EUSHOP-B-018** Auth: session expiry messaging for mobile clients.
 - [x] `[B]` **EUSHOP-B-019** Geo: cell precision tests (unit). _(decode/publicCell/neighbours coverage in `packages/geo/src/geo.test.ts`)_

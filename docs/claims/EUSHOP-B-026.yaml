@@ -1,0 +1,13 @@
+id: EUSHOP-B-026
+lane: B
+sub_lane: null
+branch: agent/b-026-validators-uuid-sweep
+owner: cursor-agent
+status: claimed
+touches:
+  - packages/validators/src/index.ts
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm typecheck && pnpm lint && pnpm test:unit
+notes: >
+  Extend uuidString usage across remaining z.string().uuid() sites in validators index.
