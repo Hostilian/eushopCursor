@@ -12,11 +12,41 @@ const FAQ_IDS = [
   'demoMode',
   'deleteAccount',
   'reporting',
+  'dsaNotice',
   'analytics',
   'inngestJobs',
   'hrVolunteer',
   'languages',
   'legalNotAdvice',
+  'disputesBetweenUsers',
+  'stripeConnectSeller',
+  'chargebackProcess',
+  'vatAndTaxes',
+  'kycVerifiedBringer',
+  'minorsAllowed',
+  'prohibitedItemsExamples',
+  'crossBorderCustoms',
+  'listingVsRequest',
+  'tripCancellation',
+  'accountSuspension',
+  'chatRetention',
+  'photoGuidelines',
+  'insuranceNotProvided',
+  'lawEnforcementRequests',
+  'pressAndDMCA',
+  'accessibilityStatement',
+  'bugBounty',
+  'apiRateLimits',
+  'thirdPartyCookies',
+  'subProcessors',
+  'dataPortabilityFormat',
+  'parentalControls',
+  'brokerReselling',
+  'alcoholTobaccoRules',
+  'animalProductsRules',
+  'volunteerModeration',
+  'corridorDiscoveryBias',
+  'escalationToHuman',
 ] as const;
 
 export async function generateMetadata() {
@@ -48,6 +78,12 @@ export default async function HelpPage() {
         <Link href="/contact" className="text-ink mt-4 inline-block text-sm underline">
           /contact
         </Link>
+        <p className="text-ink/70 mt-4 text-sm">
+          <Link href="/safety/report" className="text-ink underline">
+            /safety/report
+          </Link>{' '}
+          — illegal content & serious abuse notices.
+        </p>
       </div>
     </EditorialPageLayout>
   );

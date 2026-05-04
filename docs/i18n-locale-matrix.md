@@ -23,7 +23,7 @@ This deep-fills missing keys in every other locale from English without overwrit
 
 `ar`, `fa`, and `he` use `dir: 'rtl'`; [`apps/web/src/app/layout.tsx`](../apps/web/src/app/layout.tsx) sets `<html dir>` accordingly.
 
-## Coverage tiers
+## Coverage tiers (stub vs translated)
 
 | Tier | Locales (examples) | Notes |
 |------|---------------------|--------|
@@ -32,3 +32,15 @@ This deep-fills missing keys in every other locale from English without overwrit
 | East Asia | `ja`, `ko`, `zh-CN` | `zh-CN` uses BCP-47 tag for filenames |
 | South / SE Asia | `hi`, `bn`, `id` | Stubs |
 | RTL | `ar`, `fa`, `he` | Layout tested; copy still EN until translated |
+
+## Human LQA priority (paid translation)
+
+Ship **Tier A** before paid marketing in target corridors, then widen.
+
+| LQA tier | Locales | Rationale |
+|----------|---------|-----------|
+| **A** | `de`, `pl`, `cs` | Highest-traffic EU diaspora / corridor thesis |
+| **B** | `fr`, `es`, `it`, `nl` | Large neighbour demand |
+| **C** | `ru`, `tr`, `ar`, `fa`, `hi`, `ja`, `ko`, `zh-CN`, `he`, `bn`, `id` | Wider Europe, MENA, South Asia, East Asia; RTL where marked in `localeMeta` |
+
+New locales (beyond the 34 in `index.ts`) should be added only via `pnpm i18n:bootstrap`, then registered in `SUPPORTED_LOCALES` with counsel/product sign-off.

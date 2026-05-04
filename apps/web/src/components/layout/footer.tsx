@@ -86,6 +86,9 @@ export function Footer() {
               <Link href="/imprint">{t('footer.imprint')}</Link>
             </li>
             <li>
+              <Link href="/safety/report">{t('footer.reportIllegal')}</Link>
+            </li>
+            <li>
               <Link href="/data-export">{tc('dataExport')}</Link>
             </li>
           </ul>

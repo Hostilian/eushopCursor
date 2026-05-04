@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Footer } from '../../../components/layout/footer';
 import { Nav } from '../../../components/layout/nav';
 
@@ -62,6 +64,15 @@ export default function TermsPage() {
           <p>
             Be kind. No harassment, no scams, no commercial spam. Report abuse. We will remove
             content and suspend accounts that violate this.
+          </p>
+
+          <h2 className="text-ink mt-10 font-serif text-2xl">Illegal content notices</h2>
+          <p>
+            For serious illegal content, organised fraud, or EU-style notices, use the dedicated{' '}
+            <Link href="/safety/report" className="text-ink underline underline-offset-4">
+              report page
+            </Link>{' '}
+            alongside in-app reporting tools.
           </p>
 
           <p className="text-ash mt-10 text-xs">

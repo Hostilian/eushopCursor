@@ -12,14 +12,16 @@ import { api } from '../../../lib/trpc-server';
 import { isDemoModeEnabled } from '../../../lib/demo-mode';
 import { showcaseRequests } from '../../../lib/showcase';
 
-export const metadata = {
-  title: 'Open requests',
-  description: 'See what your neighbours are asking for. Match on next trip or listing.',
-  openGraph: {
-    title: 'Open requests · Eushop',
-    description: 'See what your neighbours are asking for. Match on next trip or listing.',
-  },
-};
+export async function generateMetadata() {
+  const t = await getTranslations('requestsPage');
+  const title = t('metaTitle');
+  const description = t('metaDescription');
+  return {
+    title,
+    description,
+    openGraph: { title, description },
+  };
+}
 
 type RequestRow = {
   id: string;

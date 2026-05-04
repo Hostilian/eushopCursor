@@ -12,7 +12,6 @@ touches:
   - apps/web/src/app/(product)/requests/page.tsx
   - apps/web/src/components/layout/footer.tsx
   - packages/i18n/src/messages/
-  - packages/i18n/src/index.ts
 hotspot_sub_lane: H4-i18n
 depends_on: []
 verify: pnpm i18n:check && pnpm verify

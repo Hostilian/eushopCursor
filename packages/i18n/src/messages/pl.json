@@ -54,7 +54,8 @@
   "footer": {
     "privacy": "Prywatność",
     "terms": "Regulamin",
-    "imprint": "Impressum"
+    "imprint": "Impressum",
+    "reportIllegal": "Report illegal content"
   },
   "footerCompany": {
     "column": "Eushop",
@@ -461,6 +462,126 @@
       "legalNotAdvice": {
         "q": "Is this FAQ legal advice?",
         "a": "No. It summarises product behaviour. For regulated topics (food safety, customs, taxes) consult qualified professionals in your jurisdiction."
+      },
+      "disputesBetweenUsers": {
+        "q": "What if the other person does not show up or the item is wrong?",
+        "a": "Try chat first, then use report flows. Card holds and refunds follow payment partner rules when checkout is enabled; peer-to-peer cash handoffs are outside our settlement control."
+      },
+      "stripeConnectSeller": {
+        "q": "Who is the merchant of record on card payments?",
+        "a": "When Stripe Connect is enabled, disclosures on the checkout screen name the party authorised to capture funds. Eushop provides software introductions; your contract for the goods remains with the other participant unless stated otherwise at payment time."
+      },
+      "chargebackProcess": {
+        "q": "Can I charge back a trip fee?",
+        "a": "You may ask your bank per network rules. Outcomes are decided by the issuer and scheme, not by Eushop. We cooperate with lawful information requests from processors."
+      },
+      "vatAndTaxes": {
+        "q": "Does Eushop collect VAT on fees?",
+        "a": "Platform fee tax treatment depends on your country and our entity status—see checkout and receipt text when live. Cross-border food duties remain your responsibility."
+      },
+      "kycVerifiedBringer": {
+        "q": "What does a verified bringer badge mean?",
+        "a": "It signals an identity check passed with our vendor at the time shown. It is not a food-safety endorsement, customs guarantee, or insurance policy."
+      },
+      "minorsAllowed": {
+        "q": "Can minors use Eushop?",
+        "a": "You must meet the minimum age in your jurisdiction and be able to enter contracts. Parents or guardians handle accounts for younger household members where local law allows."
+      },
+      "prohibitedItemsExamples": {
+        "q": "What items are never allowed?",
+        "a": "Weapons, drugs, stolen goods, regulated medicines without prescription flows, and other illegal content. Food copy is filtered for obvious restricted phrases; evasion can lead to suspension."
+      },
+      "crossBorderCustoms": {
+        "q": "Who handles customs and import rules?",
+        "a": "Travellers and buyers are responsible for declarations, duties, and admissibility. Eushop does not clear shipments or act as a customs broker."
+      },
+      "listingVsRequest": {
+        "q": "What is the difference between a listing and an open request?",
+        "a": "Listings advertise something you have nearby. Open requests state something you want within a radius. Both use approximate map cells, not exact street addresses."
+      },
+      "tripCancellation": {
+        "q": "How do trip reservation cancellations work?",
+        "a": "Cancellation windows and refundability depend on the trip rules shown at booking and on processor capabilities. Read the trip detail screen before you authorise a hold."
+      },
+      "accountSuspension": {
+        "q": "When can my account be suspended?",
+        "a": "For repeated policy violations, fraud signals, illegal content, or safety risks. We aim to be proportionate; serious cases may be immediate."
+      },
+      "chatRetention": {
+        "q": "How long are chats kept?",
+        "a": "Retention follows our privacy policy and operational needs (moderation, disputes, legal holds). Export your data from profile where available."
+      },
+      "photoGuidelines": {
+        "q": "What photos are allowed?",
+        "a": "Accurate images of the item or context, no explicit imagery, no photos of third parties without consent, no QR codes that bypass in-app safety."
+      },
+      "insuranceNotProvided": {
+        "q": "Does Eushop insure parcels?",
+        "a": "No. Purchase travel or goods insurance independently if you need coverage for loss or spoilage."
+      },
+      "lawEnforcementRequests": {
+        "q": "How does Eushop handle law enforcement requests?",
+        "a": "We review warrants and lawful process with counsel, narrow scope where possible, and notify users when law permits."
+      },
+      "pressAndDMCA": {
+        "q": "I have a copyright complaint—where do I send it?",
+        "a": "Use the contact channel with full URLs, proof of ownership, and a good-faith statement. We process valid notices and counter-notices per applicable law."
+      },
+      "accessibilityStatement": {
+        "q": "What is your accessibility posture?",
+        "a": "We aim for keyboard navigation and readable contrast on core flows. Report blockers via contact with pages and assistive tech used."
+      },
+      "bugBounty": {
+        "q": "Do you run a bug bounty?",
+        "a": "See SECURITY.md for coordinated disclosure. Do not test against production without written permission."
+      },
+      "apiRateLimits": {
+        "q": "Are API calls rate limited?",
+        "a": "Yes. Automated scraping or credential stuffing may be blocked. Integrations should backoff and identify themselves responsibly."
+      },
+      "thirdPartyCookies": {
+        "q": "Which third parties see my activity?",
+        "a": "Only vendors listed in the privacy policy when enabled (e.g. analytics after consent, payment processors at checkout). No ads network sale of DMs."
+      },
+      "subProcessors": {
+        "q": "Where is the subprocessor list?",
+        "a": "Privacy policy and ops docs enumerate hosting, email, payments, and verification vendors as they are engaged."
+      },
+      "dataPortabilityFormat": {
+        "q": "What format is data export?",
+        "a": "JSON bundles from profile export where implemented; attachments may be links with expiry."
+      },
+      "parentalControls": {
+        "q": "Do you offer parental controls?",
+        "a": "Not as a dedicated product. Guardians should supervise minors’ device use and purchases."
+      },
+      "brokerReselling": {
+        "q": "Can I run a buying service on Eushop?",
+        "a": "Commercial brokerage and storefront behaviour violate our private-use terms and may be removed."
+      },
+      "alcoholTobaccoRules": {
+        "q": "Can I trade alcohol or tobacco?",
+        "a": "Only where explicitly allowed by local law and product settings. Many corridors disallow it—check regulations before posting."
+      },
+      "animalProductsRules": {
+        "q": "What about meat, dairy, or fish?",
+        "a": "Highly regulated. Many borders restrict fresh animal products. You are responsible for temperature chain and import rules."
+      },
+      "volunteerModeration": {
+        "q": "Do volunteers moderate content?",
+        "a": "Internal staff and contracted reviewers may handle queues. Community reports are inputs, not votes that auto-remove content."
+      },
+      "corridorDiscoveryBias": {
+        "q": "Why do I see certain countries first?",
+        "a": "Discovery blends distance, freshness, and safety signals. It is not pay-to-rank for individuals; marketing placements, if any, will be labelled."
+      },
+      "escalationToHuman": {
+        "q": "How do I reach a human?",
+        "a": "Use /contact with operations email when configured. Safety-critical issues should include URLs and timestamps for faster routing."
+      },
+      "dsaNotice": {
+        "q": "Where is the illegal content notice page?",
+        "a": "See /safety/report for the EU Digital Services Act-style notice and process summary. It complements in-app reporting buttons."
       }
     }
   },
@@ -494,9 +615,46 @@
     "explainerFees": "You agree the handoff and payment method in chat unless in-app card capture is enabled for your environment.",
     "explainerModeration": "Descriptions are checked against basic safety rules. Repeat abuse can lead to suspension.",
     "faqLink": "Read the full FAQ",
-    "faqLinkHref": "/help"
+    "faqLinkHref": "/help",
+    "metaTitle": "Open requests · Eushop",
+    "metaDescription": "See what neighbours are asking for. Match on your next trip or listing."
   },
   "requestsNew": {
     "explainerHint": "Be specific about product, quantity, and freshness. Avoid restricted or illegal items—see Help & FAQ."
+  },
+  "illegalContentReport": {
+    "metaTitle": "Report illegal content · Eushop",
+    "metaDescription": "How to notify Eushop about illegal content, safety risks, and serious policy breaches.",
+    "eyebrow": "Trust & safety",
+    "title": "Illegal content & serious abuse",
+    "subtitle": "Transparency summary for notices (including EU Digital Services Act-style reporting).",
+    "whatToReport": {
+      "title": "What belongs here",
+      "body": "Use this page when you need a durable public reference for serious issues that may not fit a single in-app button.",
+      "b1": "Illegal goods or services, credible threats, child safety concerns, non-consensual imagery, terrorism glorification, or malware distribution.",
+      "b2": "Large-scale fraud rings, impersonation of Eushop staff, or attempts to harvest credentials at scale.",
+      "b3": "Copyright or trademark disputes where you can supply ownership evidence.",
+      "b4": "EU illegal content notices: include your name, contact, item URL(s), unlawful nature, and good-faith statement."
+    },
+    "howToReport": {
+      "title": "How to send a notice",
+      "body": "Email the operations address configured for this deployment (see /contact). Subject lines like “Illegal content notice” or “DSA notice” help routing.",
+      "include": "Attach permalinks, UTC timestamps, screenshots, and any reference IDs from in-app reports. Multiple URLs in one mail are fine."
+    },
+    "process": {
+      "title": "What we do next",
+      "body": "We acknowledge receipt when possible, triage by severity, and may restrict visibility of content pending review. Timelines depend on volume and legal process; emergencies (imminent harm) are prioritised. Outcomes may include removal, account suspension, or referral to authorities when required."
+    },
+    "transparency": {
+      "title": "Transparency",
+      "body": "Aggregate enforcement statistics may be published when counsel agrees. Individual decisions are communicated to the notifier when policy allows."
+    },
+    "notLegal": {
+      "title": "Not legal advice",
+      "body": "This page summarises intent and routing. Final procedures follow counsel-approved policies and applicable law."
+    },
+    "contactLink": "Contact / operations",
+    "helpLink": "Help & FAQ",
+    "termsLink": "Terms"
   }
 }
