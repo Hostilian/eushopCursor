@@ -11,9 +11,8 @@ import { Badge } from '../../../../components/ui/badge';
 import { Button } from '../../../../components/ui/button';
 import { CountryHero } from '../../../../components/country/country-hero';
 
-export function generateStaticParams() {
-  return COUNTRIES.map((c) => ({ iso2: c.iso2.toLowerCase() }));
-}
+/** See items/[slug]/page — static prerender of many ISO routes fails on Windows workers. */
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,

@@ -1,7 +1,7 @@
 import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
 import { OPEN_FOOD_FACTS_ATTRIBUTION } from '@eushop/catalog-data/openfoodfacts';
-import { countryPalette } from '@eushop/design-tokens';
 import type { RouterOutputs } from '@eushop/api-router';
+import { countryPalette } from '@eushop/design-tokens';
 import { ArrowRight, MapPin, Tag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,9 +14,8 @@ import { api } from '../../../../lib/trpc-server';
 
 type ItemBySlugResult = RouterOutputs['catalog']['itemBySlug'];
 
-export function generateStaticParams() {
-  return FOOD_ITEMS.map((i) => ({ slug: i.slug }));
-}
+/** Avoid static prerender for hundreds of slugs — Next.js Windows workers hit `workUnitAsyncStorage` bugs. */
+export const dynamic = 'force-dynamic';
 
 export default async function ItemPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -29,9 +28,6 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
     ink: '#1A1612',
   };
 
-  // Fetch the live row so we can render real images + propagate attribution
-  // when the item came from Open Food Facts. The router result is a discriminated
-  // union of "live db row" vs "seeded fallback"; we read both shapes safely.
   let liveImage: string | null = null;
   let imageSource: 'off' | 'r2' | 'user' | null = null;
   try {
