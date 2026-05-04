@@ -7,7 +7,7 @@ This document is the **operating queue** for humans and Cursor agents. It does *
 ## How to use this file in Cursor
 
 1. **Read [docs/agents.md](agents.md)** before claiming work: lanes **A** (web/UI), **B** (API/data), **Orchestrator** (root/CI/lockfile), plus hotspot sub-lanes **H1–H6**.
-2. **Pick a task** below (or add one with a new `EUSHOP-*` id). Add `docs/claims/EUSHOP-<lane>-<nnn>.yaml` (copy from [`claims/_template.yaml`](claims/_template.yaml); filename must match `id`) before substantive edits—**no overlapping `touches`** with another active claim, and **one active claim per hotspot** (enforced by `pnpm claims:check` in CI).
+2. **Pick a task** below (or add one with a new `EUSHOP-*` id). Add `docs/claims/EUSHOP-<lane>-<nnn>.yaml` (copy from [`docs/claims/_template.yaml`](claims/_template.yaml); filename must match `id`) before substantive edits—**no overlapping `touches`** with another active claim, and **one active claim per hotspot** (enforced by `pnpm claims:check` in CI).
 3. **Run `pnpm verify`** after every 2–3 completed tasks per lane (same cadence as docs/agents.md).
 4. **One PR per branch**; rebase or merge `main` before final verify. Prefer **small PRs** so many agents can land serially without pain.
 
@@ -148,7 +148,7 @@ Add a **claim YAML** in `claims/` when starting work (see above). IDs are sugges
 ### Phase 4 — i18n and marketing
 
 - [x] `[A]` **EUSHOP-A-008** Migrate one marketing page at a time to `next-intl` (namespace per page). _(changelog done; continue manifesto, roadmap, … per page)_
-- [ ] `[A]` **EUSHOP-A-009** `manifesto` / `pitch` strings: inventory vs [editorial.md](editorial.md) section 3.
+- [ ] `[A]` **EUSHOP-A-009** `manifesto` / `pitch` strings: inventory vs [editorial.md](editorial.md) section 3. _(manifesto page migrated to `manifestoPage.*`; pitch still pending)_
 - [ ] `[A]` **EUSHOP-A-010** Plural / ICU review for `trips.*` and `reservationForm.*` in all locales.
 - [ ] `[O]` **EUSHOP-O-003** Voice glossary cross-check after each marketing migration PR.
 
@@ -186,10 +186,10 @@ Add a **claim YAML** in `claims/` when starting work (see above). IDs are sugges
 - [ ] `[B]` **EUSHOP-B-014** `listings` router: pagination cursor consistency.
 - [ ] `[B]` **EUSHOP-B-015** `requests` router: validate input edge cases.
 - [ ] `[B]` **EUSHOP-B-016** `notifications` router: batch size limits.
-- [ ] `[B]` **EUSHOP-B-017** PartyKit: document message shape versioning in README.
+- [x] `[B]` **EUSHOP-B-017** PartyKit: document message shape versioning in README. _(example envelope in `apps/party/README.md`)_
 - [ ] `[B]` **EUSHOP-B-018** Auth: session expiry messaging for mobile clients.
-- [ ] `[B]` **EUSHOP-B-019** Geo: cell precision tests (unit).
-- [ ] `[B]` **EUSHOP-B-020** Validators: shared zod for repeated UUID params.
+- [x] `[B]` **EUSHOP-B-019** Geo: cell precision tests (unit). _(decode/publicCell/neighbours coverage in `packages/geo/src/geo.test.ts`)_
+- [x] `[B]` **EUSHOP-B-020** Validators: shared zod for repeated UUID params. _(exported `uuidString`; core tRPC params refactored)_
 - [ ] `[B]` **EUSHOP-B-021** DB index review on `trip_reservations` hot paths (explain only + follow-up migration).
 - [x] `[B]` **EUSHOP-B-022** API `/health`: optional dependency checks flag (off by default).
 

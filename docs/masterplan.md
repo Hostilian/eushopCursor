@@ -35,11 +35,11 @@ narrative, defensible architecture, and investor surfaces that actually work.
 ```
 PRIORITY ORDER:
   1. Source code truth > this document
-  2. README.md / AGENTS.md / claims/README.md > this document
+  2. README.md / AGENTS.md / docs/claims/README.md > this document
   3. This document > any prior conversation context
 
 CLAIM RULE: Before touching any file listed in §4 hotspots, create
-  claims/EUSHOP-<LANE>-<NNN>.yaml first. Run `pnpm claims:check` before
+  docs/claims/EUSHOP-<LANE>-<NNN>.yaml first. Run `pnpm claims:check` before
   any merge-ready commit.
 
 VERIFY CADENCE: Run `pnpm verify` after every 2-3 task completions per lane.
@@ -196,7 +196,7 @@ Before proceeding to Part 2, verify:
 
 ### TASK 2.1 — Monorepo Config Modernisation (Lane O)
 
-Claim: `claims/EUSHOP-O-001.yaml`
+Claim: `docs/claims/EUSHOP-O-001.yaml`
 
 **2.1.a — Package.json hygiene**
 - Ensure all `workspace:*` dependencies are explicit (no floating versions)
@@ -249,7 +249,7 @@ pnpm build      # Must complete successfully
 
 ### TASK 2.2 — CI/CD Pipeline (Lane O)
 
-Claim: `claims/EUSHOP-O-002.yaml`
+Claim: `docs/claims/EUSHOP-O-002.yaml`
 
 Create/update `.github/workflows/`:
 
@@ -297,7 +297,7 @@ Add `concurrency` groups to prevent duplicate runs.
 
 ### TASK 2.3 — Environment Variable Governance (Lane O)
 
-Claim: `claims/EUSHOP-O-003.yaml`
+Claim: `docs/claims/EUSHOP-O-003.yaml`
 
 **2.3.a** Create `.env.example` at repo root with EVERY variable documented:
 ```bash
@@ -332,7 +332,7 @@ BETTER_AUTH_URL=http://localhost:3000
 
 ### TASK 3.1 — Schema Audit & Hardening (H3-schema)
 
-Claim: `claims/EUSHOP-B-001.yaml`
+Claim: `docs/claims/EUSHOP-B-001.yaml`
 
 Walk every table in `packages/db/src/schema/**`. For each:
 
@@ -380,7 +380,7 @@ pnpm typecheck    # Schema types must regenerate correctly
 
 ### TASK 3.2 — Seed Data Overhaul (Lane B)
 
-Claim: `claims/EUSHOP-B-002.yaml`
+Claim: `docs/claims/EUSHOP-B-002.yaml`
 
 **The golden rule: seed data must be BELIEVABLE, not just valid.**
 
@@ -426,7 +426,7 @@ pnpm search:index  # Meilisearch must index seeded data
 
 ### TASK 3.3 — Query Layer Hardening (Lane B)
 
-Claim: `claims/EUSHOP-B-003.yaml`
+Claim: `docs/claims/EUSHOP-B-003.yaml`
 
 Walk every router file in `packages/api-router/src/`. For each procedure:
 
@@ -471,7 +471,7 @@ in a loop MUST be refactored to use JOIN or Drizzle's `with()` (relation queries
 
 ### TASK 4.1 — Trip Marketplace Domain (Lane B)
 
-Claim: `claims/EUSHOP-B-004.yaml`
+Claim: `docs/claims/EUSHOP-B-004.yaml`
 
 Audit and harden the trip offer lifecycle:
 
@@ -504,7 +504,7 @@ export function calculatePlatformFee(agreedSlotFee: number): number {
 
 ### TASK 4.2 — Open Asks & Matching Domain (Lane B)
 
-Claim: `claims/EUSHOP-B-005.yaml`
+Claim: `docs/claims/EUSHOP-B-005.yaml`
 
 **Signal matching algorithm:**
 - When an ask is created, trigger an Inngest job to find matching trip offers
@@ -523,7 +523,7 @@ older than 30 days with no activity.
 
 ### TASK 4.3 — Local Listings Domain (Lane B)
 
-Claim: `claims/EUSHOP-B-006.yaml`
+Claim: `docs/claims/EUSHOP-B-006.yaml`
 
 **Privacy-preserving geohash — verify implementation:**
 - Stored geohash precision must be 6 characters (≈1.2km accuracy) for privacy
@@ -540,7 +540,7 @@ Claim: `claims/EUSHOP-B-006.yaml`
 
 ### TASK 4.4 — Auth & Trust Layer (Lane B)
 
-Claim: `claims/EUSHOP-B-007.yaml`
+Claim: `docs/claims/EUSHOP-B-007.yaml`
 
 **Session hardening:**
 - Verify Better Auth session cookies use `httpOnly: true`, `secure: true`, `sameSite: "lax"`
@@ -562,7 +562,7 @@ Claim: `claims/EUSHOP-B-007.yaml`
 
 ### TASK 4.5 — Realtime Chat (PartyKit) (Lane B)
 
-Claim: `claims/EUSHOP-B-008.yaml`
+Claim: `docs/claims/EUSHOP-B-008.yaml`
 
 Audit `apps/party`:
 - [ ] Room IDs must be scoped to reservation context (not arbitrary strings)
@@ -582,7 +582,7 @@ Audit `apps/party`:
 
 ### TASK 5.1 — Design System & Tokens (Lane A)
 
-Claim: `claims/EUSHOP-A-001.yaml`
+Claim: `docs/claims/EUSHOP-A-001.yaml`
 
 **5.1.a — Token audit**
 Review `packages/tokens`. Ensure:
@@ -621,7 +621,7 @@ Apply these principles across all UI:
 
 ### TASK 5.2 — Web App Overhaul (Lane A)
 
-Claim: `claims/EUSHOP-A-002.yaml`
+Claim: `docs/claims/EUSHOP-A-002.yaml`
 
 **5.2.a — App shell & navigation**
 Review `apps/web/src/app/layout.tsx` (H5-shell):
@@ -676,7 +676,7 @@ pnpm dev:web-api   # Must run without errors
 
 ### TASK 5.3 — Internationalisation Hardening (Lane A)
 
-Claim: `claims/EUSHOP-A-003.yaml` (H4-i18n)
+Claim: `docs/claims/EUSHOP-A-003.yaml` (H4-i18n)
 
 **Languages to support at launch:** EN, PL, RO (priority EU diaspora corridors)
 
@@ -712,7 +712,7 @@ This makes future Arabic/Hebrew support a one-line addition.
 
 ### TASK 5.4 — Mobile App Parity (Lane A)
 
-Claim: `claims/EUSHOP-A-004.yaml`
+Claim: `docs/claims/EUSHOP-A-004.yaml`
 
 Audit `apps/mobile` against web feature list:
 
@@ -744,7 +744,7 @@ For each gap: implement or file a roadmap claim. Do NOT leave empty screens.
 
 ### TASK 6.1 — Open Food Facts Integration (Lane B)
 
-Claim: `claims/EUSHOP-B-009.yaml`
+Claim: `docs/claims/EUSHOP-B-009.yaml`
 
 Audit `packages/catalog` and the Inngest ingestion workflow:
 
@@ -765,7 +765,7 @@ Create `packages/catalog/src/prohibited.ts`:
 
 ### TASK 6.2 — Search Quality (Lane B)
 
-Claim: `claims/EUSHOP-B-010.yaml`
+Claim: `docs/claims/EUSHOP-B-010.yaml`
 
 Review Meilisearch configuration:
 
@@ -808,7 +808,7 @@ Add synonym list for common corridor cities:
 
 ### TASK 7.1 — Real Metrics Infrastructure (Lane B)
 
-Claim: `claims/EUSHOP-B-011.yaml`
+Claim: `docs/claims/EUSHOP-B-011.yaml`
 
 **Every metric on investor surfaces must come from the DB.** Create:
 
@@ -838,7 +838,7 @@ This procedure feeds the investor dashboard. Zero hardcoded numbers.
 
 ### TASK 7.2 — Investor Surface Polish (Lane A)
 
-Claim: `claims/EUSHOP-A-005.yaml`
+Claim: `docs/claims/EUSHOP-A-005.yaml`
 
 **Manifesto page requirements:**
 - Clear mission statement (from §1.1 of AI_MANIFESTO: "Get something from somewhere. Bring something for someone.")
@@ -863,7 +863,7 @@ Claim: `claims/EUSHOP-A-005.yaml`
 
 ### TASK 7.3 — Demo Mode (Lane O)
 
-Claim: `claims/EUSHOP-O-004.yaml`
+Claim: `docs/claims/EUSHOP-O-004.yaml`
 
 Create a proper demo mode (controlled by `ENABLE_DEMO_MODE=true` env var):
 
@@ -888,7 +888,7 @@ When demo mode is disabled (production): seeded users cannot log in, demo flag n
 
 ### TASK 8.1 — Unit Test Coverage (Lane B)
 
-Claim: `claims/EUSHOP-B-012.yaml`
+Claim: `docs/claims/EUSHOP-B-012.yaml`
 
 Priority test targets (in order):
 
@@ -926,7 +926,7 @@ Target: **80% coverage on business-critical paths listed above.**
 
 ### TASK 8.2 — Integration Tests (Lane B)
 
-Claim: `claims/EUSHOP-B-013.yaml`
+Claim: `docs/claims/EUSHOP-B-013.yaml`
 
 Using Vitest + test DB (Docker Compose):
 
@@ -957,7 +957,7 @@ test('nearby listings query returns results within radius and not beyond', async
 
 ### TASK 8.3 — E2E Test Scaffolding (Lane A)
 
-Claim: `claims/EUSHOP-A-006.yaml`
+Claim: `docs/claims/EUSHOP-A-006.yaml`
 
 Set up Playwright. Priority flows:
 
@@ -972,7 +972,7 @@ These tests run in CI against demo-mode seeded data.
 
 ### TASK 8.4 — Performance Baseline (Lane O)
 
-Claim: `claims/EUSHOP-O-005.yaml`
+Claim: `docs/claims/EUSHOP-O-005.yaml`
 
 Using Lighthouse CI:
 
@@ -1001,7 +1001,7 @@ Add to CI: `pnpm lighthouse:ci`
 
 ### TASK 9.1 — API Security Audit (Lane B)
 
-Claim: `claims/EUSHOP-B-014.yaml`
+Claim: `docs/claims/EUSHOP-B-014.yaml`
 
 Walk every tRPC procedure and verify:
 
@@ -1018,7 +1018,7 @@ Walk every tRPC procedure and verify:
 
 ### TASK 9.2 — Secrets Audit (Lane O)
 
-Claim: `claims/EUSHOP-O-006.yaml`
+Claim: `docs/claims/EUSHOP-O-006.yaml`
 
 ```bash
 # Scan for accidentally committed secrets
@@ -1044,7 +1044,7 @@ Add `git-secrets` or `detect-secrets` pre-commit hook.
 
 ### TASK 10.1 — Admin App Completeness (Lane A)
 
-Claim: `claims/EUSHOP-A-007.yaml`
+Claim: `docs/claims/EUSHOP-A-007.yaml`
 
 Audit `apps/admin`. It MUST have working UI for:
 
@@ -1061,7 +1061,7 @@ Access control: Admin app must require `user.role === 'admin'`. No admin UI acce
 
 ### TASK 10.2 — Observability (Lane O)
 
-Claim: `claims/EUSHOP-O-007.yaml`
+Claim: `docs/claims/EUSHOP-O-007.yaml`
 
 **Structured logging:**
 All server logs must use JSON format with:
@@ -1111,7 +1111,7 @@ Remove ALL `console.log` debugging statements. Replace with structured logger.
 
 ### TASK 11.1 — README Overhaul (Lane O)
 
-Claim: `claims/EUSHOP-O-008.yaml`
+Claim: `docs/claims/EUSHOP-O-008.yaml`
 
 Root `README.md` must include:
 
@@ -1140,11 +1140,11 @@ Root `README.md` must include:
 
 **Test the Quick Start**: Follow the README instructions from scratch in a clean directory. Fix every point where it breaks.
 
-### TASK 11.2 — AGENTS.md (Lane O)
+### TASK 11.2 — Agent lane policy doc (Lane O)
 
-Claim: `claims/EUSHOP-O-009.yaml`
+Claim: `docs/claims/EUSHOP-O-009.yaml`
 
-The `AGENTS.md` file is for AI agents working on this codebase. It must include:
+Canonical policy for AI agents lives in **`docs/agents.md`** (root `AGENTS.md` is a short pointer). It must include:
 
 - Lane map and ownership
 - Hotspot list with serialisation rules
@@ -1152,11 +1152,11 @@ The `AGENTS.md` file is for AI agents working on this codebase. It must include:
 - Forbidden patterns list
 - Verify cadence requirements
 - Handoff template (from §9 of AI_MANIFESTO)
-- Link to `claims/README.md`
+- Link to `docs/claims/README.md`
 
 ### TASK 11.3 — API Documentation (Lane B)
 
-Claim: `claims/EUSHOP-B-015.yaml`
+Claim: `docs/claims/EUSHOP-B-015.yaml`
 
 Generate OpenAPI spec from tRPC routes (use `trpc-openapi` or similar):
 - All procedures documented with descriptions
@@ -1318,7 +1318,7 @@ We welcome contributions! Please read our contributing guide.
 
 <!-- ✅ CORRECT: Specific, actionable -->
 ## Contributing
-1. Create a claim file in `claims/` (see claims/README.md for format)
+1. Create a claim file in `docs/claims/` (see docs/claims/README.md for format)
 2. Run `pnpm claims:check` to validate
 3. Make your changes in the scoped files only
 4. Run `pnpm verify` — must pass fully

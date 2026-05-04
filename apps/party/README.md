@@ -14,3 +14,17 @@ Chat messages are JSON payloads over the PartyKit socket. When you change the cl
 4. Log unknown `v` values server-side during transitions; drop or ack with an error message the UI can show.
 
 Keep this section updated when the message contract changes.
+
+### Example envelope (illustrative)
+
+```json
+{
+  "v": 1,
+  "type": "chat.message",
+  "conversationId": "550e8400-e29b-41d4-a716-446655440000",
+  "body": "Hello — I can meet at Hauptbahnhof Saturday 10:00.",
+  "sentAt": "2026-05-05T09:15:00.000Z"
+}
+```
+
+Clients must ignore unknown top-level keys; servers should accept missing optional fields for older `v` values.

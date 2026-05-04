@@ -29,6 +29,9 @@ export const latLng = z.object({
   lng: z.number().gte(-180).lte(180),
 });
 
+/** Row id / UUID primary keys shared across tRPC inputs. */
+export const uuidString = z.string().uuid();
+
 // ---------- Auth -------------------------------------------------------------
 
 export const signUpInput = z.object({
@@ -59,11 +62,11 @@ export const profileUpdateInput = z.object({
 });
 export type ProfileUpdateInput = z.infer<typeof profileUpdateInput>;
 
-export const blockUserInput = z.object({ userId: z.string().uuid() });
+export const blockUserInput = z.object({ userId: uuidString });
 export type BlockUserInput = z.infer<typeof blockUserInput>;
 
 /** tRPC: any row addressed by a UUID primary key in the URL/body. */
-export const uuidIdParam = z.object({ id: z.string().uuid() });
+export const uuidIdParam = z.object({ id: uuidString });
 export type UuidIdParam = z.infer<typeof uuidIdParam>;
 
 /** tRPC: optional limit for `trips.recent`. */
@@ -89,18 +92,18 @@ export const listingFeedLimitInput = z
 export type ListingFeedLimitInput = z.infer<typeof listingFeedLimitInput>;
 
 /** tRPC: conversation row by UUID. */
-export const conversationUuidInput = z.object({ id: z.string().uuid() });
+export const conversationUuidInput = z.object({ id: uuidString });
 export type ConversationUuidInput = z.infer<typeof conversationUuidInput>;
 
 /** tRPC: paginate messages inside a conversation. */
-export const conversationMessagesInput = z.object({ conversationId: z.string().uuid() });
+export const conversationMessagesInput = z.object({ conversationId: uuidString });
 export type ConversationMessagesInput = z.infer<typeof conversationMessagesInput>;
 
 /** tRPC: request by opaque id (may be non-UUID in older rows). */
 export const requestByPublicIdInput = z.object({ id: z.string().min(1) });
 export type RequestByPublicIdInput = z.infer<typeof requestByPublicIdInput>;
 
-export const requestIdFieldInput = z.object({ requestId: z.string().uuid() });
+export const requestIdFieldInput = z.object({ requestId: uuidString });
 export type RequestIdFieldInput = z.infer<typeof requestIdFieldInput>;
 
 export const listingByCountryFeedInput = z.object({

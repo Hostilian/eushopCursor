@@ -223,7 +223,7 @@ function main() {
 
     if (status === 'done') {
       warnings.push(
-        `${id}: status is "done" but file still exists — delete ${file} after merge (see claims/README.md)`,
+        `${id}: status is "done" but file still exists — delete ${file} after merge (see docs/claims/README.md)`,
       );
     }
 

@@ -17,7 +17,7 @@ AUDIENCE: AUTONOMOUS_SOFTWARE_AGENTS
 - Primary source docs:
   - README.md
   - AGENTS.md
-  - claims/README.md
+  - docs/claims/README.md
   - docs/README.md
   - package.json
 - If this file conflicts with current source docs, agents MUST trust source docs and update this file.
@@ -134,7 +134,7 @@ AUDIENCE: AUTONOMOUS_SOFTWARE_AGENTS
 5. AGENT SAFETY AND GOVERNANCE PROTOCOL
 ================================================================
 5.1 CLAIMS ARE MANDATORY FOR SUBSTANTIVE EDITS
-- Before substantive edits, create claims/EUSHOP-<lane>-<nnn>.yaml.
+- Before substantive edits, create docs/claims/EUSHOP-<lane>-<nnn>.yaml.
 - claim.id MUST match claim filename.
 - claim.touches MUST list expected paths as precisely as possible.
 - Run pnpm claims:check before merge readiness.
