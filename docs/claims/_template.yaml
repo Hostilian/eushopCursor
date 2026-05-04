@@ -1,5 +1,5 @@
-# Copy to claims/EUSHOP-<lane>-<nnn>.yaml (filename must match `id`).
-# See claims/README.md for lifecycle and hotspot rules.
+# Copy to docs/claims/EUSHOP-<lane>-<nnn>.yaml (filename must match `id`).
+# See docs/claims/README.md for lifecycle and hotspot rules.
 
 id: EUSHOP-A-001
 lane: A

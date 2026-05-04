@@ -1,6 +1,6 @@
 'use client';
 
-import { CATEGORIES } from '@eushop/catalog-data';
+import { CATEGORIES } from '@eushop/catalog';
 import { MapPin } from 'lucide-react';
 import { useState } from 'react';
 import { trpc } from '../../lib/trpc';

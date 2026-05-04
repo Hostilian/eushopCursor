@@ -10,7 +10,7 @@ High-level steps for shipping Eushop (Coolify, Docker, or similar). Adjust names
 
 
 
-To run the **real** Next.js web app and Hono API (not the GitHub Pages static stub), follow **[oss-self-hosted-deploy.md](./oss-self-hosted-deploy.md)** — Coolify (or similar) on a VPS, separate services for API and web, migrations against hosted Postgres, optional Meili/Redis via Docker Compose patterns from repo root `docker-compose.yml`. **Software is FOSS; a VPS has a modest recurring cost** — there is no honest “forever zero” full stack without *some* compute.
+To run the **real** Next.js web app and Hono API (not the GitHub Pages static stub), follow **[oss-self-hosted-deploy.md](./oss-self-hosted-deploy.md)** — Coolify (or similar) on a VPS, separate services for API and web, migrations against hosted Postgres, optional Meili/Redis via Docker Compose patterns from [`infra/docker-compose.yml`](../../infra/docker-compose.yml). **Software is FOSS; a VPS has a modest recurring cost** — there is no honest “forever zero” full stack without *some* compute.
 
 
 

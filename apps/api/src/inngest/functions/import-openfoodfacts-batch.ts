@@ -2,7 +2,7 @@ import {
   listOpenFoodFactsByCategory,
   searchOpenFoodFacts,
   type OpenFoodFactsCandidate,
-} from '@eushop/catalog-data/openfoodfacts';
+} from '@eushop/catalog/openfoodfacts';
 import { brands, categories, db, foodItems } from '@eushop/db';
 import { eq, sql } from 'drizzle-orm';
 import { inngest } from '../client.js';

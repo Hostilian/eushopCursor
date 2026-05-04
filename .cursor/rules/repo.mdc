@@ -6,15 +6,15 @@ alwaysApply: false
 
 # Eushop parallel lanes
 
-- **Lane A (web/UI):** `apps/web/**`, `packages/ui-web/**`, `packages/i18n/**`, `packages/design-tokens/**`, `packages/catalog-data/**`.
+- **Lane A (web/UI):** `apps/web/**`, `packages/ui/**`, `packages/i18n/**`, `packages/tokens/**`, `packages/catalog/**`.
 - **Lane B (API/data):** `apps/api/**`, `apps/party/**`, `packages/api-router/**`, `packages/db/**`, `packages/auth/**`, `packages/validators/**`, `packages/geo/**`.
-- **Coordinate before editing:** root `package.json`, `turbo.json`, `.env.example`, `README.md`, `docker-compose.yml`, `.github/workflows/**`, `pnpm-lock.yaml`.
+- **Coordinate before editing:** root `package.json`, `turbo.json`, `.env.example`, `README.md`, `infra/docker-compose.yml`, `.github/workflows/**`, `pnpm-lock.yaml`.
 
 # Claim files (merge safety)
 
-Before any **non-trivial** edit, add or update `claims/EUSHOP-<lane>-<nnn>.yaml` (see `claims/_template.yaml`) and run **`pnpm claims:check`**. If the tool reports an overlap, narrow `touches`, split the task, or wait for the conflicting claim to merge.
+Before any **non-trivial** edit, add or update `docs/claims/EUSHOP-<lane>-<nnn>.yaml` (see `docs/claims/_template.yaml`) and run **`pnpm claims:check`**. If the tool reports an overlap, narrow `touches`, split the task, or wait for the conflicting claim to merge.
 
-**Hotspot sub-lanes (one active claim each, globally):** `H1-router`, `H2-context`, `H3-schema`, `H4-i18n`, `H5-shell`, `H6-deps` — definitions in `AGENTS.md` and `claims/README.md`.
+**Hotspot sub-lanes (one active claim each, globally):** `H1-router`, `H2-context`, `H3-schema`, `H4-i18n`, `H5-shell`, `H6-deps` — definitions in `docs/agents.md` and `docs/claims/README.md`.
 
 # Windows PowerShell 5.1
 

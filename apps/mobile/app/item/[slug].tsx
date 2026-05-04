@@ -1,5 +1,5 @@
-import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
-import { countryPalette } from '@eushop/design-tokens';
+import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog';
+import { countryPalette } from '@eushop/tokens';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';

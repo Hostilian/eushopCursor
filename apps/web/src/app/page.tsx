@@ -16,7 +16,7 @@ import { MobilePreview } from '../components/marketing/mobile-preview';
 import { api } from '../lib/trpc-server';
 import { isDemoModeEnabled } from '../lib/demo-mode';
 import { showcaseListings } from '../lib/showcase';
-import { COUNTRIES } from '@eushop/catalog-data';
+import { COUNTRIES } from '@eushop/catalog';
 
 function showcaseCards(): LiveListingCard[] {
   return showcaseListings().map((s) => ({

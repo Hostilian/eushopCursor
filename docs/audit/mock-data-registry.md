@@ -24,7 +24,7 @@ Scan date: 2026-05-04 (ripgrep `mock|placeholder` in `*.ts,*.tsx`; TODO/FIXME sa
 
 | file | note |
 |------|------|
-| `packages/design-tokens/src/index.ts` | single hit — verify if comment |
+| `packages/tokens/src/index.ts` | single hit — verify if comment |
 | `apps/web/.../handoff-protocol/page.tsx` | editorial |
 | `trips-confirm-reservation.test.ts` | test file |
 

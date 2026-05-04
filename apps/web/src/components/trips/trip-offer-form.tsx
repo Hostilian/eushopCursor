@@ -1,6 +1,6 @@
 'use client';
 
-import { COUNTRIES } from '@eushop/catalog-data';
+import { COUNTRIES } from '@eushop/catalog';
 import Image from 'next/image';
 import { useState } from 'react';
 import { trpc } from '../../lib/trpc';

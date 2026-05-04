@@ -1,8 +1,8 @@
-import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
-import { countryPalette } from '@eushop/design-tokens';
+import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog';
+import { countryPalette } from '@eushop/tokens';
 
 /**
- * Deterministic showcase rows derived from `@eushop/catalog-data` only when demo mode is on.
+ * Deterministic showcase rows derived from `@eushop/catalog` only when demo mode is on.
  * No synthetic user-generated IDs are mixed with production traffic except in this labelled path.
  */
 

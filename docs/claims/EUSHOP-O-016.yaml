@@ -1,0 +1,50 @@
+id: EUSHOP-O-016
+lane: O
+sub_lane: null
+branch: agent/o-016-minimal-root-infra
+owner: cursor-agent
+status: claimed
+touches:
+  - README.md
+  - CHANGELOG.md
+  - SECURITY.md
+  - package.json
+  - turbo.json
+  - pnpm-workspace.yaml
+  - tsconfig.base.json
+  - .env.example
+  - docker-compose.yml
+  - infra/docker-compose.yml
+  - infra/pages/
+  - sites/gh-pages/
+  - lighthouserc.json
+  - .config/lighthouserc.json
+  - tsconfig.tests.json
+  - .config/tsconfig.tests.json
+  - AGENTS.md
+  - docs/agents.md
+  - AI_MANIFESTO.txt
+  - docs/manifesto.md
+  - docs/masterplan.md
+  - EUSHOP_CURSOR_AGENT_MASTERPLAN.md
+  - docs/cursor-parallel-backlog.md
+  - docs/eslint-next-migration.md
+  - docs/handoffs/
+  - docs/i18n-locale-matrix.md
+  - docs/ops/
+  - docs/README.md
+  - docs/editorial.md
+  - apps/web/README.md
+  - .github/workflows/pages.yml
+  - .github/workflows/ci.yml
+  - scripts/check-claims.mjs
+  - docs/claims/
+  - claims/
+  - .cursor/README.md
+hotspot_sub_lane: H6-deps
+depends_on: []
+verify: pnpm claims:check && pnpm verify
+notes: >
+  Minimal root reorg: docs moves, .config tooling paths, infra/docker + gh-pages,
+  claims under docs/claims, workflow and script updates, SECURITY PII audit note.
+  Clears superseded O-012/O-013/O-015 claim files.

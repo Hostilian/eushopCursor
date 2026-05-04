@@ -1,4 +1,4 @@
-import { findProhibitedOpenAskMatch } from '@eushop/catalog-data';
+import { findProhibitedOpenAskMatch } from '@eushop/catalog';
 import {
   decode,
   encode,

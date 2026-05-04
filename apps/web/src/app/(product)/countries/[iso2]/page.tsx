@@ -1,6 +1,6 @@
-import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
-import { countryPalette } from '@eushop/design-tokens';
-import { EmptyState } from '@eushop/ui-web';
+import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog';
+import { countryPalette } from '@eushop/tokens';
+import { EmptyState } from '@eushop/ui';
 import type { Metadata } from 'next';
 import { ArrowRight, MapPin } from 'lucide-react';
 import Link from 'next/link';

@@ -1,7 +1,7 @@
 'use client';
 
-import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
-import { EmptyState, ErrorState } from '@eushop/ui-web';
+import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog';
+import { EmptyState, ErrorState } from '@eushop/ui';
 import { Search as SearchIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';

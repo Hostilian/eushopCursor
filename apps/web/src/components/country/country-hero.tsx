@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import type { CountrySeed } from '@eushop/catalog-data/countries';
+import type { CountrySeed } from '@eushop/catalog/countries';
 
 export function CountryHero({
   country,

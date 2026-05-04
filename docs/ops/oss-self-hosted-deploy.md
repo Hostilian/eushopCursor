@@ -4,7 +4,7 @@
 
 **Public contact:** set `NEXT_PUBLIC_OPERATIONS_EMAIL` and optional `NEXT_PUBLIC_OPERATIONS_PHONE_E164` on the web service so `/contact`, `/help`, `/careers`, and `/imprint` can show an operations line (configure in your secret store — do not commit personal addresses to git).
 
-Run the **real** stack — `@eushop/web` (Next.js 15) and `@eushop/api-server` (Hono + tRPC + Better Auth) — on **infrastructure you control**. This is the recommended path versus the optional [GitHub Pages static stub](../../sites/gh-pages/) (marketing shell only, no tRPC/auth parity).
+Run the **real** stack — `@eushop/web` (Next.js 15) and `@eushop/api-server` (Hono + tRPC + Better Auth) — on **infrastructure you control**. This is the recommended path versus the optional [GitHub Pages static stub](../../infra/pages/) (marketing shell only, no tRPC/auth parity).
 
 ## Why Coolify (primary)
 
@@ -29,7 +29,7 @@ Use **two (or three) Coolify applications** from the **same** Git repo, differen
 
 ## Data services
 
-**Postgres** — managed EU Postgres, or Postgres in Docker on the same host, or the repo’s [`docker-compose.yml`](../../docker-compose.yml) services as a **template** for Meili/Redis/Postgres sidecars (development defaults: `postgres`, `meilisearch`, `redis`; see compose file for ports and healthchecks).
+**Postgres** — managed EU Postgres, or Postgres in Docker on the same host, or the repo’s [`infra/docker-compose.yml`](../../infra/docker-compose.yml) services as a **template** for Meili/Redis/Postgres sidecars (development defaults: `postgres`, `meilisearch`, `redis`; see compose file for ports and healthchecks).
 
 **Meilisearch & Redis** — optional for a minimal UI demo; catalog search and some flows **degrade** without Meili (see `catalog.search` in `packages/api-router`). Redis: omit if you skip rate-limit / cache paths that require it; many features no-op when unset ([`.env.example`](../../.env.example)).
 

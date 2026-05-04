@@ -112,10 +112,10 @@ Packages to audit:
 - `packages/auth`
 - `packages/validators`
 - `packages/i18n`
-- `packages/ui-web`
-- `packages/design-tokens`
+- `packages/ui`
+- `packages/tokens`
 - `packages/geo`
-- `packages/catalog-data`
+- `packages/catalog`
 - `packages/config`
 
 ### TASK 1.2 — Mock Data & AI Slop Detection
@@ -585,7 +585,7 @@ Audit `apps/party`:
 Claim: `claims/EUSHOP-A-001.yaml`
 
 **5.1.a — Token audit**
-Review `packages/design-tokens`. Ensure:
+Review `packages/tokens`. Ensure:
 - Colour palette defined as semantic tokens, not raw hex values in components
 - Typography scale: 5–7 levels max, mapped to Tailwind config
 - Spacing scale: 4px base grid
@@ -746,7 +746,7 @@ For each gap: implement or file a roadmap claim. Do NOT leave empty screens.
 
 Claim: `claims/EUSHOP-B-009.yaml`
 
-Audit `packages/catalog-data` and the Inngest ingestion workflow:
+Audit `packages/catalog` and the Inngest ingestion workflow:
 
 - [ ] OFF ingestion job runs on a schedule (weekly recommended)
 - [ ] Moderation queue has a UI in `apps/admin` (not just DB entries)
@@ -756,7 +756,7 @@ Audit `packages/catalog-data` and the Inngest ingestion workflow:
 - [ ] Search integration: OFF products indexed in Meilisearch with EU-relevant languages
 
 **Prohibited items list:**
-Create `packages/catalog-data/src/prohibited.ts`:
+Create `packages/catalog/src/prohibited.ts`:
 - Restricted items (live animals, currency, pharmaceuticals without proof)
 - Legally complex items by corridor (verify customs rules for top 5 corridors)
 - This list must be checked at trip-ask matching time (server-side)
@@ -982,7 +982,7 @@ Minimum acceptable scores:
 - Best Practices: ≥ 90
 - SEO: ≥ 85
 
-Set up `lighthouserc.json` and add to CI. Fail PR if scores drop below thresholds.
+Set up [`.config/lighthouserc.json`](../.config/lighthouserc.json) and add to CI. Fail PR if scores drop below thresholds.
 
 Core Web Vitals targets:
 - LCP: < 2.5s

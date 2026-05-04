@@ -1,4 +1,4 @@
-import { searchOpenFoodFacts } from '@eushop/catalog-data';
+import { searchOpenFoodFacts } from '@eushop/catalog';
 import {
   adminBulkReviewFoodItemCandidateInput,
   adminBulkReviewFoodItemImageProposalInput,

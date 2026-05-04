@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@eushop/api-router": "workspace:*",
-    "@eushop/catalog-data": "workspace:*",
-    "@eushop/design-tokens": "workspace:*",
+    "@eushop/catalog": "workspace:*",
+    "@eushop/tokens": "workspace:*",
     "@eushop/i18n": "workspace:*",
     "@eushop/ui-mobile": "workspace:*",
     "@eushop/validators": "workspace:*",

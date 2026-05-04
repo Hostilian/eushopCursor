@@ -1,5 +1,5 @@
 {
-  "name": "@eushop/design-tokens",
+  "name": "@eushop/tokens",
   "version": "0.1.0",
   "private": true,
   "type": "module",

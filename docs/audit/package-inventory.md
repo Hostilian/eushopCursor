@@ -14,10 +14,10 @@ Generated: 2026-05-04. Source: `README.md`, `package.json` workspaces, spot chec
 | packages/auth | Better Auth | shipped | test doubles | n/a | unit tests | |
 | packages/validators | Zod + fee math | shipped | no | fee constants documented | platform-fee tests | Single source fee cents |
 | packages/i18n | Messages + locale list | shipped | no | JSON copy | none | EN/DE/FR/ES/IT/PL; RO added in unified plan |
-| packages/ui-web | Shared primitives | shipped | Storybook? | components | partial | |
-| packages/design-tokens | palette, type | shipped | no | tokens | none | |
+| packages/ui | Shared primitives | shipped | Storybook? | components | partial | |
+| packages/tokens | palette, type | shipped | no | tokens | none | |
 | packages/geo | geohash privacy | shipped | no | n/a | check geo pkg | |
-| packages/catalog-data | EU food seed + OFF | shipped | curated seed | static catalog | partial | |
+| packages/catalog | EU food seed + OFF | shipped | curated seed | static catalog | partial | |
 | packages/config | eslint/tsconfig | shipped | n/a | n/a | n/a | shared config |
 
 **Status legend:** shipped = production path exists; partial = roadmap items or uneven coverage.

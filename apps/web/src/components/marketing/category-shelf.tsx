@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { CATEGORIES, type CategorySeed } from '@eushop/catalog-data/categories';
+import { CATEGORIES, type CategorySeed } from '@eushop/catalog/categories';
 
 interface Cat {
   slug: string;

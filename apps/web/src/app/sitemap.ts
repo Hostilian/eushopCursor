@@ -1,4 +1,4 @@
-import { CATEGORIES, COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
+import { CATEGORIES, COUNTRIES, FOOD_ITEMS } from '@eushop/catalog';
 import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {

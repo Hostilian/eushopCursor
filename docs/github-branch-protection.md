@@ -20,4 +20,4 @@ Use on the repo that ships production (`main` or `release`). Adjust names to you
 ## Related
 
 - Merge-safe parallel work: [cursor-parallel-backlog.md](cursor-parallel-backlog.md)
-- Agent lanes: [AGENTS.md](../AGENTS.md)
+- Agent lanes: [docs/agents.md](agents.md)

@@ -1,1 +1,1 @@
-export { Badge } from '@eushop/ui-web';
+export { Badge } from '@eushop/ui';

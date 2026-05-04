@@ -1,6 +1,6 @@
-import { COUNTRIES } from '@eushop/catalog-data';
-import { countryPalette } from '@eushop/design-tokens';
-import { EmptyState, ErrorState } from '@eushop/ui-web';
+import { COUNTRIES } from '@eushop/catalog';
+import { countryPalette } from '@eushop/tokens';
+import { EmptyState, ErrorState } from '@eushop/ui';
 import { ArrowRight, MapPin, Sparkles } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';

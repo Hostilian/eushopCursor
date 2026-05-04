@@ -1,4 +1,4 @@
-import { ErrorState } from '@eushop/ui-web';
+import { ErrorState } from '@eushop/ui';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';

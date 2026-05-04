@@ -1,6 +1,6 @@
 # Schema hardening queue (Part 3 follow-up)
 
-Cross-reference with `EUSHOP_CURSOR_AGENT_MASTERPLAN.md` Part 3.1. **Do not execute as one mega-migration** — one H3-schema claim per slice.
+Cross-reference with [`docs/masterplan.md`](../masterplan.md) Part 3.1. **Do not execute as one mega-migration** — one H3-schema claim per slice.
 
 - [ ] Naming audit: plural `snake_case` tables, consistent FK column names, `SCREAMING_SNAKE` enums.
 - [ ] Index pass: FK columns, columns used in `packages/api-router` `.where()` clauses, PostGIS GIST, FTS GIN.

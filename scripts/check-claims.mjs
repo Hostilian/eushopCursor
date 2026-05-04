@@ -1,5 +1,5 @@
 /**
- * Validates claims/*.yaml: schema, touch overlaps between active claims,
+ * Validates docs/claims/*.yaml: schema, touch overlaps between active claims,
  * and at most one active claim per hotspot sub-lane.
  *
  * Uses transitive hoisted deps at repo root: `yaml`, `picomatch` (no new root dependency).
@@ -131,9 +131,9 @@ function expectedLaneFromId(id) {
 }
 
 function main() {
-  const claimsDir = path.join(repoRoot, 'claims');
+  const claimsDir = path.join(repoRoot, 'docs', 'claims');
   if (!fs.existsSync(claimsDir)) {
-    console.log('claims:check: no claims/ directory — ok');
+    console.log('claims:check: no docs/claims/ directory — ok');
     return;
   }
 

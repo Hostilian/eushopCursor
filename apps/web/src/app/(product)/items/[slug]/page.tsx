@@ -1,7 +1,7 @@
-import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
-import { OPEN_FOOD_FACTS_ATTRIBUTION } from '@eushop/catalog-data/openfoodfacts';
+import { COUNTRIES, FOOD_ITEMS } from '@eushop/catalog';
+import { OPEN_FOOD_FACTS_ATTRIBUTION } from '@eushop/catalog/openfoodfacts';
 import type { RouterOutputs } from '@eushop/api-router';
-import { countryPalette } from '@eushop/design-tokens';
+import { countryPalette } from '@eushop/tokens';
 import { ArrowRight, MapPin, Tag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';

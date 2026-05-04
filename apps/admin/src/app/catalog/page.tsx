@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CATEGORIES, STATS } from '@eushop/catalog-data';
+import { CATEGORIES, STATS } from '@eushop/catalog';
 
 export default function AdminCatalogPage() {
   return (

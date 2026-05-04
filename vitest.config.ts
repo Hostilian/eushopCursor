@@ -8,7 +8,7 @@ export default defineConfig({
       'packages/geo/src/**/*.test.ts',
       'packages/api-router/src/**/*.test.ts',
       'packages/validators/src/**/*.test.ts',
-      'packages/catalog-data/src/**/*.test.ts',
+      'packages/catalog/src/**/*.test.ts',
       'apps/api/src/**/*.test.ts',
     ],
   },

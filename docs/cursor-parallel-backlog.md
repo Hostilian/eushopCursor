@@ -1,14 +1,14 @@
 # Cursor parallel backlog (merge-safe playbook)
 
-This document is the **operating queue** for humans and Cursor agents. It does **not** replace product specs: see [editorial.md](editorial.md), [ops/environment.md](ops/environment.md), and repo [AGENTS.md](../AGENTS.md).
+This document is the **operating queue** for humans and Cursor agents. It does **not** replace product specs: see [editorial.md](editorial.md), [ops/environment.md](ops/environment.md), and [docs/agents.md](agents.md).
 
 ---
 
 ## How to use this file in Cursor
 
-1. **Read [AGENTS.md](../AGENTS.md)** before claiming work: lanes **A** (web/UI), **B** (API/data), **Orchestrator** (root/CI/lockfile), plus hotspot sub-lanes **H1–H6**.
-2. **Pick a task** below (or add one with a new `EUSHOP-*` id). Add a repo claim file [`claims/<id>.yaml`](../claims/_template.yaml) before substantive edits—**no overlapping `touches`** with another active claim, and **one active claim per hotspot** (enforced by `pnpm claims:check` in CI).
-3. **Run `pnpm verify`** after every 2–3 completed tasks per lane (same cadence as AGENTS.md).
+1. **Read [docs/agents.md](agents.md)** before claiming work: lanes **A** (web/UI), **B** (API/data), **Orchestrator** (root/CI/lockfile), plus hotspot sub-lanes **H1–H6**.
+2. **Pick a task** below (or add one with a new `EUSHOP-*` id). Add `docs/claims/EUSHOP-<lane>-<nnn>.yaml` (copy from [`claims/_template.yaml`](claims/_template.yaml); filename must match `id`) before substantive edits—**no overlapping `touches`** with another active claim, and **one active claim per hotspot** (enforced by `pnpm claims:check` in CI).
+3. **Run `pnpm verify`** after every 2–3 completed tasks per lane (same cadence as docs/agents.md).
 4. **One PR per branch**; rebase or merge `main` before final verify. Prefer **small PRs** so many agents can land serially without pain.
 
 ---
@@ -28,15 +28,15 @@ This document is the **operating queue** for humans and Cursor agents. It does *
 
 ---
 
-## Lane ownership (from AGENTS.md + PR guidance)
+## Lane ownership (from docs/agents.md + PR guidance)
 
 | Lane | Edit (single source of truth) | Read-only elsewhere | Typical PR size |
 |------|------------------------------|---------------------|-----------------|
-| **A — Web + UI** | `apps/web`, `packages/ui-web`, `packages/i18n`, `packages/design-tokens`, `packages/catalog-data` | All other paths | 1–2 screens/components or one locale batch |
+| **A — Web + UI** | `apps/web`, `packages/ui`, `packages/i18n`, `packages/tokens`, `packages/catalog` | All other paths | 1–2 screens/components or one locale batch |
 | **B — API + data** | `apps/api`, `apps/party`, `packages/api-router`, `packages/db`, `packages/auth`, `packages/validators`, `packages/geo` | All other paths | One router feature + tests, or one migration slice |
 | **O — Orchestrator** | Root configs, CI, `.env.example`, `README.md`, lockfile | N/A | One infra concern per PR |
 
-**Background agents:** run **up to 10** in parallel when **`pnpm claims:check`** passes (no overlapping `touches`, one active claim per **H1–H6** hotspot). See [AGENTS.md](../AGENTS.md).
+**Background agents:** run **up to 10** in parallel when **`pnpm claims:check`** passes (no overlapping `touches`, one active claim per **H1–H6** hotspot). See [docs/agents.md](agents.md).
 
 ---
 
@@ -82,7 +82,7 @@ Grep-friendly: `EUSHOP-A-`, `EUSHOP-B-`, `EUSHOP-O-`.
 
 ## Claim file (required)
 
-Copy [`claims/_template.yaml`](../claims/_template.yaml) to `claims/EUSHOP-<lane>-<nnn>.yaml` (filename = `id`). Lifecycle and hotspot rules: [`claims/README.md`](../claims/README.md).
+Copy [`docs/claims/_template.yaml`](claims/_template.yaml) to `docs/claims/EUSHOP-<lane>-<nnn>.yaml` (filename = `id`). Lifecycle and hotspot rules: [`docs/claims/README.md`](claims/README.md).
 
 Minimal example:
 
@@ -100,8 +100,8 @@ touches:
 
 ## Repo truth links (do not duplicate specs here)
 
-- [AGENTS.md](../AGENTS.md) — lanes, hotspots H1–H6, verify cadence, claim files
-- [`claims/README.md`](../claims/README.md) — claim file lifecycle
+- [docs/agents.md](agents.md) — lanes, hotspots H1–H6, verify cadence, claim files
+- [docs/claims/README.md](claims/README.md) — claim file lifecycle
 - [editorial.md](editorial.md) — copy inventory, voice, EN-only policy
 - [ops/environment.md](ops/environment.md) — env matrix
 - [eslint-next-migration.md](eslint-next-migration.md) — lint migration
@@ -231,4 +231,4 @@ Use this as the **north star** when the checkbox list feels fragmented. It does 
 
 ---
 
-_Last updated: playbook generated for Cursor parallel workflows. Align with [AGENTS.md](../AGENTS.md) always._
+_Last updated: playbook generated for Cursor parallel workflows. Align with [docs/agents.md](agents.md) always._

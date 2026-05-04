@@ -1,6 +1,6 @@
 /**
  * Shared Eushop theme — imported by Next.js apps before `@import 'tailwindcss'`.
- * Canonical palette mirrors `packages/design-tokens/src/index.ts`.
+ * Canonical palette mirrors `packages/tokens/src/index.ts`.
  */
 
 @theme {

@@ -1,4 +1,4 @@
-import { countryPalette } from '@eushop/design-tokens';
+import { countryPalette } from '@eushop/tokens';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';

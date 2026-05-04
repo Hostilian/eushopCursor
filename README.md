@@ -103,10 +103,10 @@ packages/
   api-router/      tRPC routers (per domain)
   db/              Drizzle schema, migrations, seed
   auth/            Better Auth instance
-  ui-web/          shared web primitives (Button, Badge, empty states, …)
-  design-tokens/   palette, type, radii, country palettes
+  ui/              shared web primitives (Button, Badge, empty states, …)
+  tokens/          palette, type, radii, country palettes
   validators/      Zod schemas reused everywhere
-  catalog-data/    EU food seed (~150 canonical items, growing)
+  catalog/         EU food seed (~150 canonical items, growing)
   i18n/            30+ locale codes (many EN stubs until translated); see docs/i18n-locale-matrix.md
   geo/             geohash + privacy helpers
   config/          shared eslint / tsconfig / prettier
@@ -114,7 +114,7 @@ packages/
 
 ## Parallel work (Cursor)
 
-For merge-safe multi-agent queues, hotspot files, and claim templates, use **[docs/cursor-parallel-backlog.md](docs/cursor-parallel-backlog.md)**. Editing lanes and verify cadence: **[AGENTS.md](AGENTS.md)**.
+For merge-safe multi-agent queues, hotspot files, and claim templates, use **[docs/cursor-parallel-backlog.md](docs/cursor-parallel-backlog.md)**. Full lane rules: **[docs/agents.md](docs/agents.md)** (root [`AGENTS.md`](AGENTS.md) is a short pointer).
 
 ## Public routes (web)
 
@@ -142,7 +142,7 @@ Start at **[docs/README.md](docs/README.md)** (hub) and **[docs/ops/README.md](d
 - **[docs/ops/verified-bringer-kyc.md](docs/ops/verified-bringer-kyc.md)** — KYC and admin badge tooling.
 - **[docs/ops/observability.md](docs/ops/observability.md)** — Sentry, PostHog EU, runbooks.
 - **GitHub Actions**: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) — optional manual deploy checklist for production-style hosts.
-- **GitHub Pages (optional static stub only)**: [`.github/workflows/pages.yml`](.github/workflows/pages.yml) publishes the small bundle under [`sites/gh-pages/`](sites/gh-pages/) — useful for a lightweight repo landing page, **not** the Next.js app (`apps/web` uses `output: 'standalone'`). Enable with **Settings → Pages → Build and deployment → GitHub Actions**, then run **Pages** or push changes under `sites/gh-pages/`. For the real product stack, use **[docs/ops/oss-self-hosted-deploy.md](docs/ops/oss-self-hosted-deploy.md)** (or the short redirect **[docs/ops/free-preview-deploy.md](docs/ops/free-preview-deploy.md)**).
+- **GitHub Pages (optional static stub only)**: [`.github/workflows/pages.yml`](.github/workflows/pages.yml) publishes the small bundle under [`infra/pages/`](infra/pages/) — useful for a lightweight repo landing page, **not** the Next.js app (`apps/web` uses `output: 'standalone'`). Enable with **Settings → Pages → Build and deployment → GitHub Actions**, then run **Pages** or push changes under `infra/pages/`. For the real product stack, use **[docs/ops/oss-self-hosted-deploy.md](docs/ops/oss-self-hosted-deploy.md)** (or the short redirect **[docs/ops/free-preview-deploy.md](docs/ops/free-preview-deploy.md)**).
 
 ### Static export note
 
@@ -205,7 +205,7 @@ Then open:
 
 ## Catalog seed
 
-The seed catalog (`packages/catalog-data`) still powers **niche taste-of-home foods**
+The seed catalog (`packages/catalog`) still powers **niche taste-of-home foods**
 and country editorial pages—Krówki, Stroopwafels, Mastiha, Liverwurst, Sült, Halloumi,
 and many more. That remains useful for finder-fee local listings; **trip / luggage**
 surfaces are orthogonal and keyed off routes and **slot** metadata.

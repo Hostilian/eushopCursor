@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@eushop/auth": "workspace:*",
-    "@eushop/catalog-data": "workspace:*",
+    "@eushop/catalog": "workspace:*",
     "@eushop/db": "workspace:*",
     "@eushop/geo": "workspace:*",
     "@eushop/validators": "workspace:*",

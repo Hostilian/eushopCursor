@@ -1,4 +1,4 @@
-# Optional static stub under sites/gh-pages/ — not the real Next.js app.
+# Optional static stub under infra/pages/ — not the real Next.js app.
 # For the real web + API stack, see docs/ops/oss-self-hosted-deploy.md (Coolify / self-hosted FOSS).
 # Publishes via Actions + artifact flow (not the legacy gh-pages git branch).
 name: Pages
@@ -7,7 +7,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'sites/gh-pages/**'
+      - 'infra/pages/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -32,12 +32,12 @@ jobs:
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          printf '%s\n' "{\"githubRepo\":\"https://github.com/${GITHUB_REPOSITORY}\"}" > sites/gh-pages/config.json
+          printf '%s\n' "{\"githubRepo\":\"https://github.com/${GITHUB_REPOSITORY}\"}" > infra/pages/config.json
 
       # v3.0.1
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
         with:
-          path: sites/gh-pages
+          path: infra/pages
 
   deploy:
     needs: build

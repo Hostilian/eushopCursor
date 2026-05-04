@@ -1,5 +1,5 @@
-import { COUNTRIES } from '@eushop/catalog-data';
-import { EmptyState, ErrorState } from '@eushop/ui-web';
+import { COUNTRIES } from '@eushop/catalog';
+import { EmptyState, ErrorState } from '@eushop/ui';
 import { ArrowRight, MapPin, Plane, Users } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';

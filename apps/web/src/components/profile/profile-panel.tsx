@@ -1,6 +1,6 @@
 'use client';
 
-import { COUNTRIES } from '@eushop/catalog-data';
+import { COUNTRIES } from '@eushop/catalog';
 import { SUPPORTED_LOCALES, localeMeta } from '@eushop/i18n';
 import { Download, Trash2 } from 'lucide-react';
 import Link from 'next/link';

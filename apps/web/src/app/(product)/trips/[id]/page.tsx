@@ -1,4 +1,4 @@
-import { COUNTRIES } from '@eushop/catalog-data';
+import { COUNTRIES } from '@eushop/catalog';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { ArrowRight, BadgeCheck, MapPin, Plane, Users } from 'lucide-react';

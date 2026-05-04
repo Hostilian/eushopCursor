@@ -2,8 +2,8 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
-import type { CountrySeed } from '@eushop/catalog-data/countries';
-import { countryPalette } from '@eushop/design-tokens';
+import type { CountrySeed } from '@eushop/catalog/countries';
+import { countryPalette } from '@eushop/tokens';
 
 export function CountryRail({ countries }: { countries: CountrySeed[] }) {
   const reduce = useReducedMotion();

@@ -1,11 +1,11 @@
 /**
  * Curated catalog fallbacks when the database is empty (e.g. before migrate + seed).
  *
- * Data comes from `@eushop/catalog-data` only. User-generated rows (listings, requests,
+ * Data comes from `@eushop/catalog` only. User-generated rows (listings, requests,
  * trips, messages) never use synthetic fallbacks — callers get `[]` or errors.
  */
 
-import { BRANDS, CATEGORIES, COUNTRIES, FOOD_ITEMS } from '@eushop/catalog-data';
+import { BRANDS, CATEGORIES, COUNTRIES, FOOD_ITEMS } from '@eushop/catalog';
 
 /** Run a DB query; on throw OR empty array, return the static fallback. */
 export async function withListFallback<T>(

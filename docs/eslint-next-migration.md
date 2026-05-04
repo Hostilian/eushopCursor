@@ -12,7 +12,7 @@ Next.js 16 will remove `next lint`. **`apps/web`** and **`apps/admin`** now use 
 
 ## Typecheck vs Vitest
 
-Packages `auth`, `geo`, `api-router` exclude `*.test.ts` from default `tsc` so CI typecheck does not require `vitest` types. Unit tests still run via `pnpm test:unit`. The repo also has a root [`tsconfig.tests.json`](../tsconfig.tests.json); run **`pnpm typecheck:tests`** when you want `tsc` over `*.test.ts` without pulling Vitest into each package’s main `tsconfig`.
+Packages `auth`, `geo`, `api-router` exclude `*.test.ts` from default `tsc` so CI typecheck does not require `vitest` types. Unit tests still run via `pnpm test:unit`. The repo also has [`.config/tsconfig.tests.json`](../.config/tsconfig.tests.json); run **`pnpm typecheck:tests`** when you want `tsc` over `*.test.ts` without pulling Vitest into each package’s main `tsconfig`.
 
 ## `declaration: false`
 

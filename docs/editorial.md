@@ -56,7 +56,7 @@ Trip offers → open asks → local listings (unless a page is listing-first by 
 - **"EU-first"** in brand prose. Use it only as an *infrastructure* claim ("Hosted in the EU by default — Hetzner Falkenstein, Cloudflare EU"). Never as a positioning headline.
 - **"Suitcase capacity is the new last-mile."** Retired hero motif. Replace with "The last-mile is already going somewhere." or route-first phrasing ("Trips already happening.", "Spare bag space, on routes already happening.").
 - **"Diaspora"** outside the whitelist above.
-- **"Pantry listings"** in marketing copy. Use "local listings" / "neighbourhood listings". The catalog category named **Pantry staples** in `packages/catalog-data` is a product taxonomy and stays as-is.
+- **"Pantry listings"** in marketing copy. Use "local listings" / "neighbourhood listings". The catalog category named **Pantry staples** in `packages/catalog` is a product taxonomy and stays as-is.
 - **"5 km cell"** in headlines, hero, empty states, mobile tabs, casual form copy. Keep on safety/privacy/handoff-protocol/permission/GDPR surfaces only.
 - Unsourced "two hundred million", "sixteen million" without definition; "Euromonitor 2024" in historical claims; duplicate opening stats across About vs Manifesto vs README.
 

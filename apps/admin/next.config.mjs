@@ -34,10 +34,10 @@ const nextConfig = {
   transpilePackages: [
     '@eushop/api-router',
     '@eushop/auth',
-    '@eushop/catalog-data',
+    '@eushop/catalog',
     '@eushop/db',
-    '@eushop/design-tokens',
-    '@eushop/ui-web',
+    '@eushop/tokens',
+    '@eushop/ui',
   ],
 };
 

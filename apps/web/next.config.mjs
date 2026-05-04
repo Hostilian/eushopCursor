@@ -60,11 +60,11 @@ const nextConfig = {
   transpilePackages: [
     '@eushop/api-router',
     '@eushop/auth',
-    '@eushop/catalog-data',
+    '@eushop/catalog',
     '@eushop/db',
-    '@eushop/design-tokens',
+    '@eushop/tokens',
     '@eushop/i18n',
-    '@eushop/ui-web',
+    '@eushop/ui',
     '@eushop/validators',
   ],
 };

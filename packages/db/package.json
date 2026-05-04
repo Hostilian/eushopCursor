@@ -19,7 +19,7 @@
     "seed": "tsx src/seed.ts"
   },
   "dependencies": {
-    "@eushop/catalog-data": "workspace:*",
+    "@eushop/catalog": "workspace:*",
     "drizzle-orm": "^0.36.4",
     "postgres": "^3.4.5"
   },

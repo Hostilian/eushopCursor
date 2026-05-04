@@ -1,8 +1,8 @@
 'use client';
 
-import { COUNTRIES } from '@eushop/catalog-data';
-import { countryPalette } from '@eushop/design-tokens';
-import { EmptyState as SharedEmptyState, ErrorState, LoadingState } from '@eushop/ui-web';
+import { COUNTRIES } from '@eushop/catalog';
+import { countryPalette } from '@eushop/tokens';
+import { EmptyState as SharedEmptyState, ErrorState, LoadingState } from '@eushop/ui';
 import { ArrowRight, Filter, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';

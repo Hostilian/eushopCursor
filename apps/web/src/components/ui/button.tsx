@@ -1,1 +1,1 @@
-export { Button, buttonVariants, type ButtonProps } from '@eushop/ui-web';
+export { Button, buttonVariants, type ButtonProps } from '@eushop/ui';

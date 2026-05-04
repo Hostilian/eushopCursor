@@ -1,5 +1,5 @@
-import { COUNTRIES } from '@eushop/catalog-data';
-import { countryPalette } from '@eushop/design-tokens';
+import { COUNTRIES } from '@eushop/catalog';
+import { countryPalette } from '@eushop/tokens';
 import { Link } from 'expo-router';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 

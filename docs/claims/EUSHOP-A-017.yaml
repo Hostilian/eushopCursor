@@ -5,9 +5,9 @@ branch: agent/a-017-prohibited-catalog
 owner: cursor-agent
 status: claimed
 touches:
-  - packages/catalog-data/src/prohibited.ts
-  - packages/catalog-data/src/prohibited.test.ts
-  - packages/catalog-data/src/index.ts
+  - packages/catalog/src/prohibited.ts
+  - packages/catalog/src/prohibited.test.ts
+  - packages/catalog/src/index.ts
 hotspot_sub_lane: null
 depends_on: []
 verify: pnpm typecheck && pnpm lint

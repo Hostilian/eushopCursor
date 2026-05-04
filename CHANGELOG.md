@@ -62,7 +62,7 @@ items at an agreed finder's fee, and the platform charges
 - `food_items` extended with `barcode`, `openFoodFactsId`, `imageVariants`,
   `verifiedAt`, `submittedById`. New tables `food_item_candidates`,
   `food_item_image_proposals`, `food_item_image_votes` for the UGC pipeline.
-- `packages/catalog-data/src/openfoodfacts/` — read-only CC-BY-SA client over
+- `packages/catalog/src/openfoodfacts/` — read-only CC-BY-SA client over
   the Open Food Facts public API. Inngest `import-openfoodfacts-batch` +
   daily cron to seed unverified rows for the moderation queue.
 - New tRPC procedures `catalog.proposeItem`, `catalog.proposeImage`,

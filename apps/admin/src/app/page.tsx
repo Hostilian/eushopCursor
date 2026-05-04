@@ -1,4 +1,4 @@
-import { CATEGORIES, COUNTRIES, FOOD_ITEMS, BRANDS, STATS } from '@eushop/catalog-data';
+import { CATEGORIES, COUNTRIES, FOOD_ITEMS, BRANDS, STATS } from '@eushop/catalog';
 import Link from 'next/link';
 import { api } from '../lib/trpc-server';
 
@@ -38,8 +38,8 @@ export default async function AdminHome() {
       <h1 className="text-ink mt-2 font-serif text-4xl">Catalog overview</h1>
       <p className="text-ink/70 mt-3">
         Live counts come from the database via tRPC. The seed catalog in{' '}
-        <code>packages/catalog-data</code> is the floor; everything above it is contributed by users
-        and approved through the moderation queue.
+        <code>packages/catalog</code> is the floor; everything above it is contributed by users and
+        approved through the moderation queue.
       </p>
 
       <ul className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-4">

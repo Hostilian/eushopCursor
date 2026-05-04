@@ -1,8 +1,8 @@
-@import '@eushop/design-tokens/tokens.css';
+@import '@eushop/tokens/tokens.css';
 @import 'tailwindcss';
 
-/* Scan shared UI so @eushop/ui-web utility classes are generated */
-@source "../../../../packages/ui-web/src";
+/* Scan shared UI so @eushop/ui utility classes are generated */
+@source "../../../../packages/ui/src";
 
 @layer utilities {
   .container-editorial {

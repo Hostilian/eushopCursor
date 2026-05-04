@@ -1,4 +1,4 @@
-import { STATS } from '@eushop/catalog-data';
+import { STATS } from '@eushop/catalog';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { isDemoModeEnabled } from '../../lib/demo-mode';
