@@ -1,0 +1,14 @@
+id: EUSHOP-O-012
+lane: O
+sub_lane: null
+branch: agent/o-012-ai-manifesto
+owner: cursor-codex-5-3
+status: claimed
+touches:
+  - AI_MANIFESTO.txt
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Add a root canonical AI manifesto file with mission, architecture, ops, and
+  agent-execution constraints. Touches are disjoint from active claims.
