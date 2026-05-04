@@ -10,7 +10,6 @@ touches:
   - docs/audit/mock-data-registry.md
   - docs/audit/package-inventory.md
   - docs/audit/schema-hardening-queue.md
-  - docs/handoffs/
   - .github/workflows/ci.yml
   - .github/workflows/db-migrate.yml
   - .github/workflows/deploy.yml

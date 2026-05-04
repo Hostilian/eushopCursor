@@ -6,8 +6,8 @@ owner: cursor-agent
 status: claimed
 touches:
   - README.md
-  - .env.example
   - docs/README.md
+  - docs/cursor-parallel-backlog.md
   - docs/editorial.md
   - docs/i18n-locale-matrix.md
   - docs/ops/deploy-runbook.md
@@ -16,7 +16,6 @@ touches:
   - docs/ops/zero-cost-stack.md
   - docs/ops/README.md
   - docs/ops/environment.md
-  - docs/audit/
   - docs/handoffs/
   - EUSHOP_CURSOR_AGENT_MASTERPLAN.md
   - apps/web/README.md
@@ -25,7 +24,6 @@ touches:
   - .github/workflows/pages.yml
   - scripts/i18n-bootstrap-locale.mjs
   - scripts/sync-i18n-missing-from-en.mjs
-  - package.json
   - claims/EUSHOP-O-015.yaml
 hotspot_sub_lane: null
 depends_on: []

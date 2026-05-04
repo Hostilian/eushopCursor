@@ -316,7 +316,7 @@ BETTER_AUTH_URL=http://localhost:3000
 - `apps/web/src/env.ts` — validates NEXT_PUBLIC_ vars at build time
 - Apps MUST crash with a clear message if required vars are missing
 
-**2.3.c** Document environment variables in `docs/README.md` (quick reference) and the full matrix in `docs/ops/environment.md` (content that lived in `docs/ENVIRONMENT.md` is merged into the docs hub). Include:
+**2.3.c** Document environment variables in `docs/README.md` (quick reference) and the full matrix in `docs/ops/environment.md` (legacy single-file env documentation is merged into the docs hub). Include:
 - Full variable reference table
 - Which vars are required vs optional per environment
 - How to generate secrets locally

@@ -5,8 +5,6 @@ branch: agent/a-020-public-readiness
 owner: cursor-agent
 status: claimed
 touches:
-  - packages/i18n/src/index.ts
-  - packages/i18n/src/messages/
   - apps/web/src/app/(marketing)/privacy/page.tsx
   - apps/web/src/app/(marketing)/help/page.tsx
   - apps/web/src/app/(marketing)/careers/page.tsx
@@ -15,7 +13,7 @@ touches:
   - apps/web/src/app/(product)/requests/new/page.tsx
   - apps/web/src/components/layout/nav.tsx
   - apps/web/src/components/layout/footer.tsx
-hotspot_sub_lane: H4-i18n
+hotspot_sub_lane: null
 depends_on: []
 verify: pnpm i18n:check && pnpm verify
 notes: >

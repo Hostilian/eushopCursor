@@ -1,6 +1,6 @@
 # Documentation
 
-One entry: **ops** ([ops/README.md](ops/README.md)), **agents** ([AGENTS.md](../AGENTS.md), [claims/README.md](../claims/README.md)), **audit registries** ([audit/](audit/)), **handoffs** ([handoffs/](handoffs/)), **planning** ([../EUSHOP_CURSOR_AGENT_MASTERPLAN.md](../EUSHOP_CURSOR_AGENT_MASTERPLAN.md)).
+One entry: **ops** ([ops/README.md](ops/README.md)), **agents** ([AGENTS.md](../AGENTS.md), [claims/README.md](../claims/README.md)), **audit** ([docs/audit/](audit/)), **handoffs** ([docs/handoffs/](handoffs/)), **editorial** ([editorial.md](editorial.md)), **planning** ([../EUSHOP_CURSOR_AGENT_MASTERPLAN.md](../EUSHOP_CURSOR_AGENT_MASTERPLAN.md)).
 
 ## Environment (quick reference)
 
