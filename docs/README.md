@@ -27,6 +27,7 @@ Branch protection (GitHub settings): [github-branch-protection.md](github-branch
 
 ### Operations quick links
 
+- [Zero-cost / SaaS inventory](ops/zero-cost-stack.md) — optional vs vendor integrations; honest limits
 - [Environment variables](ops/environment.md) — full matrix from `.env.example`
 - [Deploy runbook](ops/deploy-runbook.md) — migrate, search index, smoke checks
 - **Payments**: [Stripe Connect](ops/stripe-connect.md) (API + webhooks), [E2E / reconciliation matrix](ops/stripe-e2e-matrix.md), [reconciliation repair](ops/stripe-reconciliation-repair.md), [mobile parity](ops/mobile-payments-parity.md)

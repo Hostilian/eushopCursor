@@ -6,9 +6,12 @@ owner: cursor-agent
 status: claimed
 touches:
   - README.md
+  - .env.example
+  - docs/README.md
   - docs/ops/deploy-runbook.md
   - docs/ops/free-preview-deploy.md
   - docs/ops/oss-self-hosted-deploy.md
+  - docs/ops/zero-cost-stack.md
   - docs/ops/environment.md
   - apps/web/README.md
   - sites/gh-pages/index.html
@@ -19,6 +22,6 @@ hotspot_sub_lane: null
 depends_on: []
 verify: pnpm claims:check && pnpm verify
 notes: >
-  OSS-first deploy docs: Coolify-first self-hosted path, new oss-self-hosted-deploy.md,
-  free-preview-deploy.md as redirect; remove vercel.json and render.yaml; README,
-  runbook, gh-pages, pages.yml, environment.md, apps/web README aligned.
+  OSS-first deploy docs: Coolify-first self-hosted path, oss-self-hosted-deploy.md,
+  free-preview-deploy redirect; remove stray vercel.json/render.yaml; zero-cost-stack.md;
+  README, runbook, gh-pages, pages.yml, environment.md, apps/web README, docs/README aligned.

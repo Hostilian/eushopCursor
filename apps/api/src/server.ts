@@ -75,6 +75,9 @@ app.use(
       createContext({
         headers: req.headers,
         enqueueEvent: async (event) => {
+          // Match `enqueueEventFromEnv` in api-router: no cloud send without a key,
+          // so demo / self-host stacks without Inngest Cloud stay quiet.
+          if (!process.env.INNGEST_EVENT_KEY?.trim()) return;
           await inngest.send({ name: event.name as never, data: event.data as never });
         },
       }),

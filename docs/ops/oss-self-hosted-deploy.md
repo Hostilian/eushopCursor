@@ -1,5 +1,7 @@
 # OSS self-hosted deploy (Coolify-first)
 
+**SaaS / cost posture:** see **[zero-cost-stack.md](./zero-cost-stack.md)** — which integrations are optional, self-hostable, or vendor-locked, and what stays off until you set keys.
+
 Run the **real** stack — `@eushop/web` (Next.js 15) and `@eushop/api-server` (Hono + tRPC + Better Auth) — on **infrastructure you control**. This is the recommended path versus the optional [GitHub Pages static stub](../../sites/gh-pages/) (marketing shell only, no tRPC/auth parity).
 
 ## Why Coolify (primary)

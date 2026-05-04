@@ -2,6 +2,8 @@
 
 Copy from [`.env.example`](../../.env.example) and set **real** values per deployment (Coolify, Docker/Kubernetes, bare metal, etc.). Never commit secrets.
 
+**Cost / SaaS posture:** [zero-cost-stack.md](./zero-cost-stack.md) lists which variables are optional, which vendors are replaceable, and what cannot be free forever (cards, deliverability at scale).
+
 ## Required for a functioning marketplace
 
 | Variable | Used by | Production notes |
@@ -13,7 +15,7 @@ Copy from [`.env.example`](../../.env.example) and set **real** values per deplo
 | `NEXT_PUBLIC_SITE_URL` | Web, sitemap, OG | Canonical site URL, e.g. `https://eushop.eu`. |
 | `NEXT_PUBLIC_API_URL` | Web, admin (tRPC from browser) | Public API origin for `/trpc`. |
 | `MEILI_HOST` / `MEILI_MASTER_KEY` | API indexing | Production Meilisearch; rotate master key; run `pnpm search:index` after deploy/migrations when needed. |
-| `INNGEST_EVENT_KEY` / `INNGEST_SIGNING_KEY` | API, Inngest dashboard | Same event pipeline as configured in Inngest Cloud; signing key for `/api/inngest`. |
+| `INNGEST_EVENT_KEY` / `INNGEST_SIGNING_KEY` | API, Inngest dashboard | Same event pipeline as configured in Inngest Cloud; signing key for `/api/inngest`. Without `INNGEST_EVENT_KEY`, API and Next.js callers **do not** emit outbound events (safe no-op for demos). |
 
 ## Email, storage, realtime
 

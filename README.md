@@ -169,7 +169,7 @@ Prerequisites: **Node 20.11+**, **pnpm 9+**, **Docker Desktop**.
 
 Magic links: without `RESEND_API_KEY`, sign-in links are **logged to the API console** (use Mailhog at `:8025` when the stack is up). With `RESEND_API_KEY` and `EMAIL_FROM` set, magic links are sent via **Resend**.
 
-Background jobs: set **`INNGEST_EVENT_KEY`** in the root `.env` (it is already listed in `turbo.json` `globalEnv`). The API uses it to send events; **Next.js** (`apps/web`, `apps/admin`) uses the same key when Server Components / Server Actions call tRPC locally so flows like **`catalog.reindex` after UGC approval** and **`trip.offer.created`** are not silently dropped. If a key is missing, those calls no-op safely.
+Background jobs: set **`INNGEST_EVENT_KEY`** in the root `.env` (it is already listed in `turbo.json` `globalEnv`). **Next.js** (`apps/web`, `apps/admin`) uses the same key when Server Components / Server Actions call tRPC locally so flows like **`catalog.reindex` after UGC approval** and **`trip.offer.created`** are not silently dropped. The **API** also skips outbound Inngest sends when the key is unset. If a key is missing, those enqueue paths no-op safely (see [docs/ops/zero-cost-stack.md](docs/ops/zero-cost-stack.md)).
 
 ```bash
 pnpm install
