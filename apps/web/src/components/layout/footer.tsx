@@ -29,6 +29,15 @@ export function Footer() {
               <Link href="/how-it-works">{tc('howItWorks')}</Link>
             </li>
             <li>
+              <Link href="/help">{tc('help')}</Link>
+            </li>
+            <li>
+              <Link href="/contact">{tc('contact')}</Link>
+            </li>
+            <li>
+              <Link href="/careers">{tc('careers')}</Link>
+            </li>
+            <li>
               <Link href="/notifications">{t('nav.notifications')}</Link>
             </li>
             <li>

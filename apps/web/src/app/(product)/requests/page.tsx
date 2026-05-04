@@ -2,6 +2,7 @@ import { COUNTRIES } from '@eushop/catalog-data';
 import { countryPalette } from '@eushop/design-tokens';
 import { EmptyState, ErrorState } from '@eushop/ui-web';
 import { ArrowRight, MapPin, Sparkles } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { Footer } from '../../../components/layout/footer';
 import { Nav } from '../../../components/layout/nav';
@@ -30,6 +31,7 @@ type RequestRow = {
 };
 
 export default async function RequestsPage() {
+  const tr = await getTranslations('requestsPage');
   let liveRequests: RequestRow[] = [];
   let serviceError = false;
   try {
@@ -70,6 +72,19 @@ export default async function RequestsPage() {
             </Link>
           </Button>
         </div>
+
+        <section className="border-ink/10 bg-parchment/80 mt-10 max-w-3xl rounded-2xl border p-6 md:p-8">
+          <p className="text-ash text-xs tracking-widest uppercase">{tr('explainerEyebrow')}</p>
+          <h2 className="text-ink mt-2 font-serif text-2xl">{tr('explainerTitle')}</h2>
+          <p className="text-ink/75 mt-3 text-sm leading-relaxed">{tr('explainerBody')}</p>
+          <p className="text-ink/75 mt-3 text-sm leading-relaxed">{tr('explainerFees')}</p>
+          <p className="text-ink/75 mt-3 text-sm leading-relaxed">{tr('explainerModeration')}</p>
+          <p className="mt-4 text-sm">
+            <Link href={tr('faqLinkHref')} className="text-ink underline">
+              {tr('faqLink')}
+            </Link>
+          </p>
+        </section>
 
         {liveRequests.length > 0 ? (
           <ul className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">

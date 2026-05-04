@@ -1,3 +1,4 @@
+import { DEFAULT_LOCALE, isLocale, localeMeta, type Locale } from '@eushop/i18n';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
@@ -41,12 +42,15 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const locale = await getLocale();
+  const localeRaw = await getLocale();
+  const locale: Locale = isLocale(localeRaw) ? localeRaw : DEFAULT_LOCALE;
   const messages = await getMessages();
+  const dir = localeMeta[locale].dir;
 
   return (
     <html
       lang={locale}
+      dir={dir}
       className={`${inter.variable} ${fraunces.variable}`}
       suppressHydrationWarning
     >

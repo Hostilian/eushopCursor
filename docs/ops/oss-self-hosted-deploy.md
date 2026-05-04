@@ -2,6 +2,8 @@
 
 **SaaS / cost posture:** see **[zero-cost-stack.md](./zero-cost-stack.md)** — which integrations are optional, self-hostable, or vendor-locked, and what stays off until you set keys.
 
+**Public contact:** set `NEXT_PUBLIC_OPERATIONS_EMAIL` and optional `NEXT_PUBLIC_OPERATIONS_PHONE_E164` on the web service so `/contact`, `/help`, `/careers`, and `/imprint` can show an operations line (configure in your secret store — do not commit personal addresses to git).
+
 Run the **real** stack — `@eushop/web` (Next.js 15) and `@eushop/api-server` (Hono + tRPC + Better Auth) — on **infrastructure you control**. This is the recommended path versus the optional [GitHub Pages static stub](../../sites/gh-pages/) (marketing shell only, no tRPC/auth parity).
 
 ## Why Coolify (primary)

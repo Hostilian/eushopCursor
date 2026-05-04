@@ -15,6 +15,12 @@ const links = [
   { href: '/notifications', key: 'nav.notifications' },
 ] as const;
 
+const supportLinks = [
+  { href: '/help', key: 'nav.help' as const },
+  { href: '/contact', key: 'nav.contact' as const },
+  { href: '/careers', key: 'nav.careers' as const },
+] as const;
+
 const investorLinks = [
   { href: '/manifesto', key: 'nav.manifesto' as const },
   { href: '/traction', key: 'nav.traction' as const },
@@ -48,6 +54,15 @@ export function Nav() {
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
           {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="text-ink/80 hover:text-ink text-sm transition-colors"
+            >
+              {t(l.key)}
+            </Link>
+          ))}
+          {supportLinks.map((l) => (
             <Link
               key={l.href}
               href={l.href}
@@ -104,6 +119,16 @@ export function Nav() {
       >
         <nav className="container-editorial flex flex-col gap-1 py-4" aria-label="Mobile">
           {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className="text-ink hover:bg-parchment rounded-xl px-3 py-3 text-base font-medium"
+              onClick={() => setOpen(false)}
+            >
+              {t(l.key)}
+            </Link>
+          ))}
+          {supportLinks.map((l) => (
             <Link
               key={l.href}
               href={l.href}

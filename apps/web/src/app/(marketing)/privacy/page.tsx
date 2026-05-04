@@ -60,8 +60,18 @@ export default function PrivacyPage() {
           </ul>
           <h2 className="text-ink mt-10 font-serif text-2xl">Where the data lives</h2>
           <p>
-            Postgres &amp; Meilisearch on Hetzner Falkenstein, Germany. Media on Cloudflare R2 EU
-            region. Email via Resend EU. Analytics via self-hosted PostHog inside our cluster.
+            Typical production layout: Postgres and Meilisearch in the EU (e.g. Hetzner Falkenstein,
+            Germany), media on Cloudflare R2 in an EU region, and transactional email via Resend
+            (EU) when configured. Your deployment may differ—see the ops runbook.
+          </p>
+          <p>
+            <strong>Analytics (PostHog):</strong> We only initialise analytics after you opt in via
+            the consent banner, and only when{' '}
+            <code className="text-sm">NEXT_PUBLIC_POSTHOG_KEY</code> is set. You may point{' '}
+            <code className="text-sm">NEXT_PUBLIC_POSTHOG_HOST</code> at{' '}
+            <strong>EU PostHog Cloud</strong> or at a <strong>self-hosted PostHog</strong> instance
+            you operate—see <code className="text-sm">docs/ops/zero-cost-stack.md</code> for the
+            honest inventory and alternatives (Plausible, Matomo).
           </p>
           <p className="text-ash mt-10 text-xs">
             Last reviewed {new Date().toISOString().slice(0, 10)}

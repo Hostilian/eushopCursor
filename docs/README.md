@@ -3,6 +3,7 @@
 | Path | What it is |
 |------|------------|
 | **[ENVIRONMENT.md](ENVIRONMENT.md)** | Short pointer to the full env matrix (`docs/ops/environment.md`) |
+| **[i18n-locale-matrix.md](i18n-locale-matrix.md)** | Supported locales, RTL, bootstrap/sync scripts |
 | **[cursor-parallel-backlog.md](cursor-parallel-backlog.md)** | Merge-safe task queue for Cursor agents (lanes, hotspots, claim template) |
 | **[ops/](ops/)** | Production: env matrix, deploy runbook, Stripe Connect, KYC badge, observability |
 | [pre-2008-sources.md](pre-2008-sources.md) | Historic EU mobility citations (editorial / deck bibliography) |

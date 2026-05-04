@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { Footer } from '../../../../components/layout/footer';
 import { Nav } from '../../../../components/layout/nav';
@@ -14,7 +15,8 @@ export const metadata = {
   },
 };
 
-export default function NewRequestPage() {
+export default async function NewRequestPage() {
+  const t = await getTranslations('requestsNew');
   return (
     <>
       <Nav />
@@ -40,7 +42,8 @@ export default function NewRequestPage() {
           Set a max finder&apos;s fee, a radius, and we&rsquo;ll ping you the moment a matching
           listing lands within reach.
         </p>
-        <div className="mt-12 max-w-3xl">
+        <p className="text-ink/65 mt-6 max-w-2xl text-sm leading-relaxed">{t('explainerHint')}</p>
+        <div className="mt-8 max-w-3xl">
           <RequestForm />
         </div>
       </main>

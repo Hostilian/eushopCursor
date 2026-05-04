@@ -107,7 +107,7 @@ packages/
   design-tokens/   palette, type, radii, country palettes
   validators/      Zod schemas reused everywhere
   catalog-data/    EU food seed (~150 canonical items, growing)
-  i18n/            EN/DE/FR/ES/IT/PL launch translations
+  i18n/            30+ locale codes (many EN stubs until translated); see docs/i18n-locale-matrix.md
   geo/             geohash + privacy helpers
   config/          shared eslint / tsconfig / prettier
 ```
@@ -115,6 +115,10 @@ packages/
 ## Parallel work (Cursor)
 
 For merge-safe multi-agent queues, hotspot files, and claim templates, use **[docs/cursor-parallel-backlog.md](docs/cursor-parallel-backlog.md)**. Editing lanes and verify cadence: **[AGENTS.md](AGENTS.md)**.
+
+## Public routes (web)
+
+When the Next.js app is running: **`/help`** (FAQ), **`/contact`**, **`/careers`**, plus existing marketing and product surfaces. Configure operations contact via env (see Production checklist below).
 
 ## Security
 
@@ -129,6 +133,7 @@ Start at **[docs/README.md](docs/README.md)** for the full index. Essentials:
 - Set `BETTER_AUTH_SECRET`, `DATABASE_URL`, and all auth/API URLs for the target domain.
 - Leave `ENABLE_DEMO_MODE` unset in production unless you run a dedicated staging/demo host; `/traction` must stay real-only.
 - Set `NEXT_PUBLIC_LEGAL_*` and `NEXT_PUBLIC_PRESS_EMAIL` on the web app so `/imprint` and `/press` show counsel-approved text, not bracketed placeholders.
+- Set `NEXT_PUBLIC_OPERATIONS_EMAIL` (and optional `NEXT_PUBLIC_OPERATIONS_PHONE_E164`) so `/contact`, `/help`, `/careers`, and imprint show your operations line — **set only in deploy secrets**, never commit personal addresses to git.
 - Optional: `INVESTOR_ACCESS_TOKENS` for `/investors`; the route stays token-gated and is `Disallow` in `robots.txt`.
 
 - **[docs/ops/environment.md](docs/ops/environment.md)** — env matrix from `.env.example`, including `BETTER_AUTH_SECRET` (never use the admin build placeholder in live).

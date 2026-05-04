@@ -50,6 +50,7 @@ Document any staging-only URLs or CLI commands in your team wiki; keep this matr
 | `ENABLE_DEMO_MODE` | Set to `1` only on staging or controlled demos so `?demo=1` can show a labelled catalog showcase. Omit in production. |
 | `NEXT_PUBLIC_LEGAL_REGISTERED_NAME`, `NEXT_PUBLIC_LEGAL_REGISTERED_OFFICE`, `NEXT_PUBLIC_LEGAL_REGISTER_ID`, `NEXT_PUBLIC_LEGAL_VAT_ID`, `NEXT_PUBLIC_LEGAL_SUPERVISORY_NOTE` | Imprint (`/imprint`); required for launch copy (defaults are bracketed dev hints). |
 | `NEXT_PUBLIC_PRESS_EMAIL` | Press contact shown on `/press`; defaults to `press@eushop.eu` if unset. |
+| `NEXT_PUBLIC_OPERATIONS_EMAIL`, `NEXT_PUBLIC_OPERATIONS_PHONE_E164` | Shown on `/contact`, `/help`, `/careers`, and `/imprint` when set; use deploy secrets only. |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`, Apple vars | Social login when enabled. |
 
 ## Health checks

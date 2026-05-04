@@ -36,7 +36,10 @@
     "manifesto": "Manifest",
     "investors": "Investoren",
     "traction": "Zahlen",
-    "sources": "Quellen"
+    "sources": "Quellen",
+    "help": "Help",
+    "careers": "Careers",
+    "contact": "Contact"
   },
   "cta": {
     "signIn": "Anmelden",
@@ -67,7 +70,10 @@
     "roadmap": "Roadmap",
     "changelog": "Changelog",
     "dataExport": "Datenexport (DSGVO)",
-    "sources": "Quellen"
+    "sources": "Quellen",
+    "help": "Help & FAQ",
+    "careers": "Careers",
+    "contact": "Contact"
   },
   "kpi": {
     "euCountries": "Länder im Katalog",
@@ -392,5 +398,105 @@
     "proposeSubmit": "Zur Prüfung einreichen",
     "openFoodFactsShort": "via OFF",
     "useImageForAria": "Bild {n} für {name} verwenden"
+  },
+  "help": {
+    "metaTitle": "Help & FAQ · Eushop",
+    "title": "Help & frequently asked questions",
+    "subtitle": "How matching, safety, fees, and your data work on Eushop.",
+    "contactCta": "Contact & escalation",
+    "contactCtaBody": "For operations and trust & safety routing, use the contact page.",
+    "faq": {
+      "whatIsEushop": {
+        "q": "What is Eushop?",
+        "a": "Eushop is a discovery and messaging layer for private individuals: spare luggage slots on trips people already take, open requests for specific items, and neighbourhood finder-fee listings. We are not a courier, customs broker, or warehouse."
+      },
+      "matchingBasics": {
+        "q": "How does matching work?",
+        "a": "Trips, listings, and open requests are tied to places and corridors (countries, cities, geohash cells). Search and feeds surface what is near you or along a route; you agree details in chat. Automated matching signals may run in the background when jobs are configured."
+      },
+      "openRequests": {
+        "q": "What is an open request?",
+        "a": "A buyer posts what they want within a radius and optional max finder fee. Sellers and travellers with overlapping routes or nearby listings can respond. Descriptions must follow our content rules; obvious restricted topics are blocked server-side."
+      },
+      "fees": {
+        "q": "What fees does Eushop charge?",
+        "a": "On confirmed trip reservations we take a small platform fee: min(€1.50, 12% of the agreed slot fee). Local listing finder fees are agreed between you and the other party; read trip and listing screens for the exact breakdown before you confirm."
+      },
+      "payments": {
+        "q": "Do you hold my money?",
+        "a": "Many handoffs still settle off-platform or in person. Where Stripe Connect is enabled and keys are configured, card holds may apply for certain trip flows—if publishable keys are missing, that path is simply unavailable."
+      },
+      "privacyGeo": {
+        "q": "Do you store my exact address?",
+        "a": "No. Listings and requests use a privacy cell (approximate area). Exact coordinates may exist server-side for distance math but are not exposed as a street address in the product."
+      },
+      "demoMode": {
+        "q": "What is demo mode?",
+        "a": "On some staging hosts, ENABLE_DEMO_MODE can show a labelled catalogue showcase when the live marketplace is empty. It never replaces traction metrics on /traction, which stay database-backed."
+      },
+      "deleteAccount": {
+        "q": "How do I delete my account?",
+        "a": "From your profile you can export JSON (GDPR portability) and request permanent deletion. Cascading deletes remove listings, requests, and chats according to our retention policy."
+      },
+      "reporting": {
+        "q": "How do I report abuse or scams?",
+        "a": "Use in-app blocking where available and contact operations with links and screenshots. We prioritise safety issues; see the Safety pages for meet-up guidance."
+      },
+      "analytics": {
+        "q": "How do analytics and cookies work?",
+        "a": "Analytics only initialises after consent and when keys are configured. You may self-host PostHog or use EU PostHog Cloud; see docs/ops/zero-cost-stack.md for the full inventory."
+      },
+      "inngestJobs": {
+        "q": "What happens if background jobs are off?",
+        "a": "Without Inngest keys, scheduled notifications and some indexing workflows do not run in that environment. Core browsing and CRUD still work against Postgres."
+      },
+      "hrVolunteer": {
+        "q": "Are you hiring?",
+        "a": "We are early-stage. The careers page lists how to reach us for collaborations; there may be no open payroll roles yet."
+      },
+      "languages": {
+        "q": "Which languages are supported?",
+        "a": "The interface ships with many locale stubs (English strings until translated). Prefer reporting mistranslations via GitHub or email so we can prioritise real copy for your corridor."
+      },
+      "legalNotAdvice": {
+        "q": "Is this FAQ legal advice?",
+        "a": "No. It summarises product behaviour. For regulated topics (food safety, customs, taxes) consult qualified professionals in your jurisdiction."
+      }
+    }
+  },
+  "careers": {
+    "metaTitle": "Careers · Eushop",
+    "title": "Build with us",
+    "subtitle": "Small team, high craft, EU-first marketplace primitives.",
+    "body1": "Eushop connects diaspora corridors with honest tooling: trips, open asks, and local shares. We optimise for trust, privacy-preserving geo, and clear fees—not growth hacks.",
+    "body2": "We value shipping, writing, and operational rigour. If you believe in open layers for peer exchange, send a short note with what you would improve first.",
+    "openRoles": "Open roles",
+    "openRolesBody": "Roles are posted here as we open them. Until then, speculative applications are welcome via the contact channel configured for your deployment.",
+    "applyCta": "Apply / say hello"
+  },
+  "contact": {
+    "metaTitle": "Contact · Eushop",
+    "title": "Contact & escalation",
+    "subtitle": "Reach the operations inbox configured for this deployment.",
+    "responseTime": "We read every message; response time depends on team capacity.",
+    "operationsEmail": "Operations email",
+    "operationsPhone": "Operations phone (E.164)",
+    "notConfigured": "Not configured for this deployment. Set NEXT_PUBLIC_OPERATIONS_EMAIL (and optionally NEXT_PUBLIC_OPERATIONS_PHONE_E164) in your environment.",
+    "abuse": "Trust & safety",
+    "abuseBody": "For harassment, fraud, or illegal content reports, include URLs, user handles, and timestamps. See /safety for meet-up guidance.",
+    "safetyLink": "Safety overview",
+    "pressNote": "Press and media kits live on /press."
+  },
+  "requestsPage": {
+    "explainerEyebrow": "How it works",
+    "explainerTitle": "Open requests connect demand to supply.",
+    "explainerBody": "Post what you need within a radius and optional max finder fee. Travellers with spare capacity and neighbours with listings see your ask in discovery. Exact addresses stay private; we use approximate cells.",
+    "explainerFees": "You agree the handoff and payment method in chat unless in-app card capture is enabled for your environment.",
+    "explainerModeration": "Descriptions are checked against basic safety rules. Repeat abuse can lead to suspension.",
+    "faqLink": "Read the full FAQ",
+    "faqLinkHref": "/help"
+  },
+  "requestsNew": {
+    "explainerHint": "Be specific about product, quantity, and freshness. Avoid restricted or illegal items—see Help & FAQ."
   }
 }

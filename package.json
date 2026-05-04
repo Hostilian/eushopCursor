@@ -36,6 +36,8 @@
     "search:index": "pnpm --filter @eushop/api-server search:index",
     "lighthouse:ci": "npx --yes @lhci/cli@0.14.0 autorun",
     "i18n:check": "node ./scripts/check-i18n-keys.mjs",
+    "i18n:sync": "node ./scripts/sync-i18n-missing-from-en.mjs",
+    "i18n:bootstrap": "node ./scripts/i18n-bootstrap-locale.mjs",
     "api:dev:bun": "pnpm --filter @eushop/api-server dev:bun",
     "prepare": "husky || true"
   },

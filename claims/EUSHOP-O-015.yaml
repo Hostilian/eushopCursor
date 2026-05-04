@@ -8,6 +8,7 @@ touches:
   - README.md
   - .env.example
   - docs/README.md
+  - docs/i18n-locale-matrix.md
   - docs/ops/deploy-runbook.md
   - docs/ops/free-preview-deploy.md
   - docs/ops/oss-self-hosted-deploy.md
@@ -17,6 +18,9 @@ touches:
   - sites/gh-pages/index.html
   - sites/gh-pages/site.js
   - .github/workflows/pages.yml
+  - scripts/i18n-bootstrap-locale.mjs
+  - scripts/sync-i18n-missing-from-en.mjs
+  - package.json
   - claims/EUSHOP-O-015.yaml
 hotspot_sub_lane: null
 depends_on: []

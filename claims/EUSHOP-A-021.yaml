@@ -1,0 +1,13 @@
+id: EUSHOP-A-021
+lane: A
+sub_lane: null
+branch: agent/a-021-html-dir-rtl
+owner: cursor-agent
+status: claimed
+touches:
+  - apps/web/src/app/layout.tsx
+hotspot_sub_lane: H5-shell
+depends_on: []
+verify: pnpm verify
+notes: >
+  Set html dir from localeMeta for RTL locales (ar, fa, he).

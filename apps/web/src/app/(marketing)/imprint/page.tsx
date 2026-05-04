@@ -1,6 +1,9 @@
 import { Footer } from '../../../components/layout/footer';
 import { Nav } from '../../../components/layout/nav';
 
+const operationsEmail = process.env.NEXT_PUBLIC_OPERATIONS_EMAIL?.trim();
+const operationsPhone = process.env.NEXT_PUBLIC_OPERATIONS_PHONE_E164?.trim();
+
 const legalName =
   process.env.NEXT_PUBLIC_LEGAL_REGISTERED_NAME?.trim() ||
   '[e.g. Eushop Sàrl — configure NEXT_PUBLIC_LEGAL_REGISTERED_NAME]';
@@ -47,11 +50,28 @@ export default function ImprintPage() {
           </p>
 
           <h2 className="text-ink mt-10 font-serif text-2xl">Contact</h2>
+          {operationsEmail ? (
+            <p>
+              <strong className="text-ink">Operations (configured):</strong>{' '}
+              <a href={`mailto:${operationsEmail}`} className="text-ink underline">
+                {operationsEmail}
+              </a>
+            </p>
+          ) : null}
+          {operationsPhone ? (
+            <p>
+              <strong className="text-ink">Phone (configured):</strong>{' '}
+              <a href={`tel:${operationsPhone}`} className="text-ink underline">
+                {operationsPhone}
+              </a>
+            </p>
+          ) : null}
           <p>
             General:{' '}
             <a href="mailto:hello@eushop.eu" className="text-ink underline">
               hello@eushop.eu
-            </a>
+            </a>{' '}
+            (default mailbox; override with NEXT_PUBLIC_OPERATIONS_EMAIL when counsel approves.)
           </p>
           <p>
             Data protection:{' '}
