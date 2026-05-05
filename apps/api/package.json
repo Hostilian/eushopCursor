@@ -20,7 +20,7 @@
     "@eushop/geo": "workspace:*",
     "@eushop/validators": "workspace:*",
     "@hono/node-server": "^1.13.7",
-    "@hono/trpc-server": "^0.3.4",
+    "@hono/trpc-server": "^0.4.2",
     "@trpc/server": "^11.0.0-rc.660",
     "dotenv": "^16.4.7",
     "hono": "^4.6.14",
