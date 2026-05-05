@@ -8,7 +8,10 @@ import {
 } from '@eushop/db';
 import { verifyWebhookSignature } from '@eushop/api-router/lib/stripe';
 import { mapStripeEventTypeToFinancialKind } from '@eushop/api-router/lib/stripe-webhook-financial-kind';
-import { shouldProcessStripeWebhookEvent } from '@eushop/api-router/lib/stripe-webhook-idempotency';
+import {
+  reservationPaymentPatchForStripeEvent,
+  shouldProcessStripeWebhookEvent,
+} from '@eushop/api-router/lib/stripe-webhook-idempotency';
 import { eq } from 'drizzle-orm';
 import type { Context } from 'hono';
 
@@ -132,30 +135,14 @@ export async function handleStripeWebhook(c: Context): Promise<Response> {
       }
     }
 
-    if (
-      reservationId &&
-      (event.type === 'payment_intent.succeeded' ||
-        event.type === 'payment_intent.canceled' ||
-        event.type === 'charge.refunded' ||
-        event.type === 'charge.dispute.created')
-    ) {
-      const patch: Record<string, unknown> = { updatedAt: new Date() };
-      if (event.type === 'payment_intent.succeeded') {
-        patch.status = 'succeeded';
-        patch.capturedAt = new Date();
-      } else if (event.type === 'payment_intent.canceled') {
-        patch.status = 'canceled';
-        patch.cancelledAt = new Date();
-      } else if (event.type === 'charge.refunded') {
-        patch.status = 'refunded';
-        patch.refundedAt = new Date();
-      } else if (event.type === 'charge.dispute.created') {
-        patch.disputedAt = new Date();
+    if (reservationId) {
+      const patch = reservationPaymentPatchForStripeEvent(event.type);
+      if (patch) {
+        await db
+          .update(reservationPayments)
+          .set(patch)
+          .where(eq(reservationPayments.reservationId, reservationId));
       }
-      await db
-        .update(reservationPayments)
-        .set(patch)
-        .where(eq(reservationPayments.reservationId, reservationId));
     }
 
     if (event.type === 'payout.paid' && typeof obj.id === 'string') {

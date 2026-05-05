@@ -1,11 +1,49 @@
 'use client';
 
-import { Check, Image as ImageIcon, Link2, Plus, Search, Sparkles, Upload, X } from 'lucide-react';
+import type { RouterOutputs } from '@eushop/api-router';
+import { COUNTRIES } from '@eushop/catalog';
+import {
+  Check,
+  Image as ImageIcon,
+  LayoutGrid,
+  Link2,
+  Plus,
+  Search,
+  Sparkles,
+  Upload,
+  X,
+} from 'lucide-react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { trpc } from '../../lib/trpc';
 import { Button } from '../ui/button';
+
+type CatalogSearchHit = RouterOutputs['catalog']['searchWithSuggestions'][number];
+type BrowseItem = RouterOutputs['catalog']['browse']['items'][number];
+
+function browseItemToSearchHit(item: BrowseItem): CatalogSearchHit {
+  const images = [item.imageVariants?.large, item.imageVariants?.small, item.defaultImageUrl]
+    .filter((u): u is string => !!u)
+    .slice(0, 3);
+  return {
+    id: item.id,
+    slug: item.slug,
+    name: item.name,
+    originCountryIso2: item.originCountryIso2,
+    description: item.description,
+    imageVariants: item.imageVariants,
+    images,
+    source: 'local',
+    barcode: item.barcode ?? null,
+    openFoodFactsId: item.openFoodFactsId ?? null,
+  };
+}
+
+function flagEmojiForIso2(iso2: string) {
+  const c = COUNTRIES.find((x) => x.iso2 === iso2.toUpperCase());
+  return c?.flagEmoji ?? '🌍';
+}
 
 /**
  * Universal product picker. Replaces freeform "type a product name" textarea
@@ -71,6 +109,7 @@ export function ProductPicker({
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showProposeModal, setShowProposeModal] = useState(false);
+  const [showCatalogPics, setShowCatalogPics] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const setDebouncedQDeb = useMemo(() => debounce((s: string) => setDebouncedQ(s), 300), []);
@@ -86,7 +125,7 @@ export function ProductPicker({
   const fetchRemote = trpc.media.fetchRemoteImage.useMutation();
   const proposeItem = trpc.catalog.proposeItem.useMutation();
 
-  const selectHit = (hit: NonNullable<typeof search.data>[number], imageUrl?: string) => {
+  const selectHit = (hit: CatalogSearchHit, imageUrl?: string) => {
     const pickedImage = imageUrl ?? hit.images[0];
     onChange({
       foodItemId: hit.source === 'local' ? hit.id : undefined,
@@ -239,7 +278,7 @@ export function ProductPicker({
         <p className="text-ash text-xs">{t('emptyCatalogHint')}</p>
       ) : null}
 
-      <div className="border-ink/10 bg-bone/40 grid gap-3 rounded-2xl border p-4 sm:grid-cols-3">
+      <div className="border-ink/10 bg-bone/40 grid gap-3 rounded-2xl border p-4 sm:grid-cols-2 xl:grid-cols-4">
         <label className="border-ink/15 hover:border-ink/30 bg-paper flex cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-dashed p-4 text-center text-xs">
           <Upload className="text-ash h-4 w-4" />
           <span className="text-ink font-medium">
@@ -282,6 +321,15 @@ export function ProductPicker({
         </div>
         <button
           type="button"
+          onClick={() => setShowCatalogPics(true)}
+          className="border-ink/15 bg-paper hover:border-saffron-400 hover:bg-saffron-50/50 text-ink flex flex-col items-center justify-center gap-1 rounded-xl border border-dashed p-4 text-center text-xs transition-colors"
+        >
+          <LayoutGrid className="text-saffron-700 h-4 w-4" />
+          <span className="font-medium">{t('pics')}</span>
+          <span className="text-ash text-[10px]">{t('picsHint')}</span>
+        </button>
+        <button
+          type="button"
           onClick={() => setShowProposeModal(true)}
           className="border-saffron-300 bg-saffron-50 hover:border-saffron-500 text-saffron-900 flex flex-col items-center justify-center gap-1 rounded-xl border border-dashed p-4 text-center text-xs"
         >
@@ -313,10 +361,22 @@ export function ProductPicker({
 
       {error ? <p className="text-danger text-xs">{error}</p> : null}
 
+      {showCatalogPics ? (
+        <CatalogPicsGallery
+          onClose={() => setShowCatalogPics(false)}
+          onPick={(hit, url) => {
+            selectHit(hit, url);
+            setShowCatalogPics(false);
+          }}
+        />
+      ) : null}
+
       {showProposeModal ? (
         <ProposeItemModal
           initialName={query}
           categoryOptions={proposeCategoryOptions}
+          attachedPhotos={value.photos}
+          onOpenPics={() => setShowCatalogPics(true)}
           onCancel={() => setShowProposeModal(false)}
           onSubmit={async (input) => {
             try {
@@ -339,14 +399,120 @@ export function ProductPicker({
   );
 }
 
+function CatalogPicsGallery({
+  onClose,
+  onPick,
+}: {
+  onClose: () => void;
+  onPick: (hit: CatalogSearchHit, imageUrl?: string) => void;
+}) {
+  const t = useTranslations('productPicker');
+  const browse = trpc.catalog.browse.useQuery({ limit: 60 }, { staleTime: 60_000 });
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  return (
+    <div
+      className="bg-ink/40 fixed inset-0 z-[60] flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="catalog-pics-title"
+      onClick={onClose}
+    >
+      <div
+        className="bg-paper border-ink/10 flex max-h-[min(720px,85vh)] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="border-ink/10 flex shrink-0 items-start justify-between gap-3 border-b px-5 py-4">
+          <div className="min-w-0">
+            <h2 id="catalog-pics-title" className="text-ink font-serif text-2xl">
+              {t('picsModalTitle')}
+            </h2>
+            <p className="text-ash mt-1 max-w-prose text-xs leading-relaxed">
+              {t('picsModalBody')}
+            </p>
+          </div>
+          <Button type="button" variant="ghost" size="sm" onClick={onClose} className="shrink-0">
+            {t('picsClose')}
+          </Button>
+        </div>
+        <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+          {browse.isLoading ? (
+            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <li
+                  key={i}
+                  className="bg-bone border-ink/8 aspect-square animate-pulse rounded-2xl border"
+                />
+              ))}
+            </ul>
+          ) : browse.data?.items.length ? (
+            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+              {browse.data.items.map((item) => {
+                const hit = browseItemToSearchHit(item);
+                const src = hit.images[0];
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      onClick={() => onPick(hit, src)}
+                      className="border-ink/10 group bg-bone hover:border-saffron-400 relative aspect-square w-full overflow-hidden rounded-2xl border text-left transition-colors"
+                      aria-label={t('picsUseFor', { name: item.name })}
+                    >
+                      {src ? (
+                        <Image
+                          src={src}
+                          alt=""
+                          fill
+                          sizes="(max-width: 768px) 45vw, 200px"
+                          className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                          unoptimized
+                        />
+                      ) : (
+                        <div className="grain flex h-full w-full flex-col items-center justify-center gap-2 p-3 text-center">
+                          <span className="text-2xl leading-none" aria-hidden>
+                            {flagEmojiForIso2(item.originCountryIso2)}
+                          </span>
+                          <span className="text-ink line-clamp-4 font-serif text-[11px] leading-snug font-medium tracking-tight">
+                            {item.name}
+                          </span>
+                        </div>
+                      )}
+                      <span className="bg-ink/75 text-paper pointer-events-none absolute inset-x-0 bottom-0 line-clamp-2 px-2 py-1.5 font-serif text-[11px] leading-snug opacity-0 transition-opacity group-hover:opacity-100">
+                        {item.name}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <p className="text-ash text-sm">{t('picsEmpty')}</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ProposeItemModal({
   initialName,
   categoryOptions,
+  attachedPhotos,
+  onOpenPics,
   onCancel,
   onSubmit,
 }: {
   initialName: string;
   categoryOptions: { slug: string; name: string }[];
+  attachedPhotos: { url: string }[];
+  onOpenPics: () => void;
   onCancel: () => void;
   onSubmit: (input: {
     name: string;
@@ -378,13 +544,13 @@ function ProposeItemModal({
             placeholder={t('proposeNamePlaceholder')}
           />
         </label>
-        <div className="grid grid-cols-2 gap-3">
-          <label className="block">
+        <div className="grid min-w-0 grid-cols-1 gap-3 min-[420px]:grid-cols-2">
+          <label className="min-w-0">
             <span className="text-ink text-sm font-medium">{t('proposeCategory')}</span>
             <select
               value={categorySlug}
               onChange={(e) => setCategorySlug(e.target.value)}
-              className="form-input mt-1 w-full"
+              className="form-input mt-1 w-full min-w-0 rounded-2xl py-2.5"
             >
               {(categoryOptions.length
                 ? categoryOptions
@@ -396,15 +562,57 @@ function ProposeItemModal({
               ))}
             </select>
           </label>
-          <label className="block">
+          <label className="min-w-0">
             <span className="text-ink text-sm font-medium">{t('proposeOriginIso2')}</span>
             <input
               value={iso}
-              onChange={(e) => setIso(e.target.value.toUpperCase().slice(0, 2))}
-              className="form-input mt-1 w-full"
+              onChange={(e) =>
+                setIso(
+                  e.target.value
+                    .replaceAll(/[^A-Za-z]/g, '')
+                    .toUpperCase()
+                    .slice(0, 2),
+                )
+              }
+              className="form-input border-saffron-300/60 focus:border-saffron-500 mt-1 w-full min-w-0 rounded-2xl py-2.5 font-mono text-sm tracking-[0.35em]"
               placeholder={t('proposeOriginPlaceholder')}
+              maxLength={2}
+              spellCheck={false}
+              autoCapitalize="characters"
+              inputMode="text"
+              autoComplete="off"
             />
           </label>
+        </div>
+        <div className="border-ink/10 bg-bone/40 rounded-2xl border p-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-ink text-xs font-medium">{t('proposePhotosStrip')}</span>
+            <Button type="button" variant="outline" size="sm" onClick={onOpenPics}>
+              <LayoutGrid className="mr-1 h-3.5 w-3.5" />
+              {t('proposeOpenPics')}
+            </Button>
+          </div>
+          {attachedPhotos.length > 0 ? (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {attachedPhotos.map((p, idx) => (
+                <div
+                  key={p.url + idx}
+                  className="border-ink/10 relative h-14 w-14 overflow-hidden rounded-xl border"
+                >
+                  <Image
+                    src={p.url}
+                    alt=""
+                    fill
+                    sizes="56px"
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-ash mt-2 text-[11px] leading-relaxed">{t('picsHint')}</p>
+          )}
         </div>
         <label className="block">
           <span className="text-ink text-sm font-medium">{t('proposeDescription')}</span>

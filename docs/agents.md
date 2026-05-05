@@ -2,6 +2,8 @@
 
 Run **up to 10** background Cursor agents in parallel **only** when `pnpm claims:check` passes: no overlapping `touches` between active claims and **at most one active claim per hotspot sub-lane** (see below).
 
+**Human orchestration (daily routine, env, PR hygiene):** [human-alignment-checklist.md](./human-alignment-checklist.md).
+
 ## Top lanes (who may edit what)
 
 | Lane | Edit | Read-only |

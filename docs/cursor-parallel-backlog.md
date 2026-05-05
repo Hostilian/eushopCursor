@@ -160,8 +160,8 @@ Add a **claim YAML** in `docs/claims/` when starting work (see above). IDs are s
 
 ### Phase 6 — Tech debt
 
-- [ ] `[B]` **EUSHOP-B-011** Vitest: webhook branch tests (pure helpers only).
-- [ ] `[B]` **EUSHOP-B-012** Vitest: reservation state guard / fee edge cases.
+- [x] `[B]` **EUSHOP-B-011** Vitest: webhook branch tests (pure helpers only). _(added reservation payment patch helper branch coverage in `stripe-webhook-idempotency.test.ts` and wired route to helper.)_
+- [x] `[B]` **EUSHOP-B-012** Vitest: reservation state guard / fee edge cases. _(expanded guard coverage for cancelled/rejected/refunded states and fee rounding/cap edge tests.)_
 - [ ] `[O]` **EUSHOP-O-006** Dependabot: tune groups / ignore major bumps policy (doc only or config).
 - [ ] `[A]` **EUSHOP-A-012** Storybook or visual regression — only if repo already has pattern (avoid scope creep).
 
@@ -170,7 +170,7 @@ Add a **claim YAML** in `docs/claims/` when starting work (see above). IDs are s
 - [ ] `[A]` **EUSHOP-A-013** Accessibility pass: one flow (trips list or discover).
 - [x] `[A]` **EUSHOP-A-014** SEO: metadata for one dynamic route pattern. _(trip detail `twitter` card; listings OG/Twitter earlier)_
 - [ ] `[A]` **EUSHOP-A-015** Remove dead components (grep + delete) — one directory.
-- [ ] `[A]` **EUSHOP-A-016** Consistent `loading.tsx` / `error.tsx` under `(product)` where missing.
+- [x] `[A]` **EUSHOP-A-016** Consistent `loading.tsx` / `error.tsx` under `(product)` where missing. _(added route-level fallbacks for dynamic detail pages: categories, countries, items, listings, messages, trips.)_
 - [ ] `[A]` **EUSHOP-A-017** Image `next/image` remotePatterns audit vs `R2_PUBLIC_URL`.
 - [ ] `[A]` **EUSHOP-A-018** Cookie consent + PostHog: verify no load before consent.
 - [ ] `[A]` **EUSHOP-A-019** Profile: payouts card copy alignment with [stripe-connect.md](ops/stripe-connect.md).
@@ -182,7 +182,7 @@ Add a **claim YAML** in `docs/claims/` when starting work (see above). IDs are s
 
 ### Lane B — API quick wins (unscheduled)
 
-- [ ] `[B]` **EUSHOP-B-013** `trips` router: extract fee/capture helpers for readability (no behaviour change).
+- [x] `[B]` **EUSHOP-B-013** `trips` router: extract fee/capture helpers for readability (no behaviour change). _(extracted minimum agreed-fee validation helper in `trips.ts` to reduce inline mutation complexity.)_
 - [ ] `[B]` **EUSHOP-B-014** `listings` router: pagination cursor consistency.
 - [ ] `[B]` **EUSHOP-B-015** `requests` router: validate input edge cases.
 - [x] `[B]` **EUSHOP-B-016** `notifications` router: batch size limits. _(list `limit` optional, default 50, max 100.)_

@@ -1,0 +1,15 @@
+id: EUSHOP-A-042
+lane: A
+sub_lane: null
+branch: agent/a-042-product-picker-pics
+owner: cursor-agent
+status: in_review
+touches:
+  - apps/web/src/components/catalog/product-picker.tsx
+  - packages/i18n/src/messages/*.json
+  - docs/handoffs/2026-05-05.md
+hotspot_sub_lane: H4-i18n
+depends_on: []
+verify: pnpm claims:check && pnpm verify
+notes: >
+  Product picker: propose modal layout + catalog "Pics" gallery (browse); i18n sync from en.

@@ -1,0 +1,19 @@
+id: EUSHOP-B-029
+lane: B
+sub_lane: null
+branch: agent/b-029-webhook-and-guard-tests
+owner: cursor-agent
+status: claimed
+touches:
+  - apps/api/src/routes/stripe-webhook.ts
+  - packages/api-router/src/lib/stripe-webhook-idempotency.ts
+  - packages/api-router/src/lib/stripe-webhook-idempotency.test.ts
+  - packages/api-router/src/lib/trip-reservation-guards.test.ts
+  - packages/validators/src/platform-fee.test.ts
+  - docs/cursor-parallel-backlog.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Backlog B-011/B-012: add pure helper branch tests and fee/guard edge-case coverage,
+  plus wire existing webhook route to helper to keep behavior branch-tested.

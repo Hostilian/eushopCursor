@@ -68,7 +68,7 @@ regulated payments.
 
 Hosted in the EU by default — Hetzner Falkenstein, CDN via Cloudflare EU.
 
-**Show friends the real app (not the Pages stub):** self-host **Coolify** (MIT) on a VPS and run **web** + **API** as separate services from this repo — step-by-step in **[docs/ops/oss-self-hosted-deploy.md](docs/ops/oss-self-hosted-deploy.md)** (FOSS stack; VPS is typically low cost — see doc for honest “no free lunch at scale” notes). GitHub Pages here is only an **optional static stub**, not the product.
+**Show friends the real app (not the Pages stub):** self-host **Coolify** (MIT) on a VPS and run **web** + **API** as separate services from this repo — step-by-step in **[docs/ops/oss-self-hosted-deploy.md](docs/ops/oss-self-hosted-deploy.md)** (FOSS stack; VPS is typically low cost — see doc for honest “no free lunch at scale” notes). **If you will not use a VPS:** see **[docs/ops/hosting-alternatives.md](docs/ops/hosting-alternatives.md)** (what “OSS Vercel-like” means vs managed PaaS). GitHub Pages here is only an **optional static stub**, not the product.
 
 ## Stack (validated 2026)
 

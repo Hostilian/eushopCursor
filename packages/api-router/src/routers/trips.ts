@@ -62,6 +62,20 @@ function publicTrip(row: TripOfferRow, sellerBadges: string[] | null = null) {
   return { ...rest, originPoint, destinationPoint, sellerBadges: sellerBadges ?? [] };
 }
 
+function assertAgreedFeeMeetsTripMinimum(opts: {
+  tripDefaultPerSlotFee: string;
+  agreedFinderFee: number;
+  currency: string;
+}): void {
+  const defaultFeeNumber = Number(opts.tripDefaultPerSlotFee);
+  if (Number.isFinite(defaultFeeNumber) && opts.agreedFinderFee + 1e-6 < defaultFeeNumber) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: `Minimum slot fee for this trip is ${opts.currency} ${defaultFeeNumber.toFixed(2)}`,
+    });
+  }
+}
+
 export const tripsRouter = router({
   /** Search trips by route (country/city pair + optional date window). */
   byRoute: publicProcedure.input(tripSearchInput).query(async ({ ctx, input }) => {
@@ -302,13 +316,11 @@ export const tripsRouter = router({
     }
 
     // Enforce floor: buyer's offer must meet the seller's per-slot fee.
-    const defaultFeeNumber = Number(trip.defaultPerSlotFee);
-    if (Number.isFinite(defaultFeeNumber) && input.agreedFinderFee + 1e-6 < defaultFeeNumber) {
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: `Minimum slot fee for this trip is ${trip.currency} ${defaultFeeNumber.toFixed(2)}`,
-      });
-    }
+    assertAgreedFeeMeetsTripMinimum({
+      tripDefaultPerSlotFee: trip.defaultPerSlotFee,
+      agreedFinderFee: input.agreedFinderFee,
+      currency: trip.currency,
+    });
 
     // Atomically decrement slots_available and bail if exhausted.
     const [updated] = await ctx.db

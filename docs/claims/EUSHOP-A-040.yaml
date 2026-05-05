@@ -1,0 +1,14 @@
+id: EUSHOP-A-040
+lane: A
+sub_lane: null
+branch: agent/a-040-trip-route-map
+owner: cursor-agent
+status: claimed
+touches:
+  - apps/web/src/components/trips/trip-route-map.tsx
+  - apps/web/src/app/(product)/trips/[id]/page.tsx
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm claims:check && pnpm --filter @eushop/web typecheck && pnpm --filter @eushop/web lint
+notes: >
+  Trip detail: flights-style SVG route map from public origin/destination points; copy in-component until H4 free for tripDetail strings.

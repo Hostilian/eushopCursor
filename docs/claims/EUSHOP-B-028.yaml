@@ -1,0 +1,15 @@
+id: EUSHOP-B-028
+lane: B
+sub_lane: null
+branch: agent/b-028-trips-helper-refactor
+owner: cursor-agent
+status: claimed
+touches:
+  - packages/api-router/src/routers/trips.ts
+  - docs/cursor-parallel-backlog.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Backlog B-013: extract fee/capture helper functions from trips router for readability,
+  no behavior change and disjoint from active B claims on validators/notifications.

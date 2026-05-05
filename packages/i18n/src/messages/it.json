@@ -398,7 +398,16 @@
     "proposeSubmitting": "Invio…",
     "proposeSubmit": "Invia per revisione",
     "openFoodFactsShort": "via OFF",
-    "useImageForAria": "Usa immagine {n} per {name}"
+    "useImageForAria": "Usa immagine {n} per {name}",
+    "pics": "Pics",
+    "picsHint": "Browse the EU catalog gallery",
+    "picsModalTitle": "Catalog photos",
+    "picsModalBody": "Tap a product to use its photo for your listing or proposal. Items without a photo yet show a styled card from our seed catalog.",
+    "picsEmpty": "No catalog rows yet.",
+    "picsClose": "Close",
+    "picsUseFor": "Use photo for {name}",
+    "proposePhotosStrip": "Photos you attach (from search, upload, or Pics)",
+    "proposeOpenPics": "Open Pics gallery"
   },
   "help": {
     "metaTitle": "Help & FAQ · Eushop",

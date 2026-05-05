@@ -8,7 +8,9 @@ import { Footer } from '../../../../components/layout/footer';
 import { Nav } from '../../../../components/layout/nav';
 import { Badge } from '../../../../components/ui/badge';
 import { Button } from '../../../../components/ui/button';
+import { PayoutReadinessCallout } from '../../../../components/payments/payout-readiness-callout';
 import { ReservationForm } from '../../../../components/trips/reservation-form';
+import { TripRouteMap } from '../../../../components/trips/trip-route-map';
 import { api } from '../../../../lib/trpc-server';
 
 export const dynamic = 'force-dynamic';
@@ -50,6 +52,7 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
   const tDetail = await getTranslations('tripDetail');
   const tNav = await getTranslations('nav');
   const tTrips = await getTranslations('trips');
+  const tRes = await getTranslations('reservations');
 
   let bundle: Awaited<ReturnType<Awaited<ReturnType<typeof api>>['trips']['byId']>> | null = null;
   let outageMessage: string | null = null;
@@ -91,6 +94,7 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
     <>
       <Nav />
       <main id="main-content" className="container-editorial pt-12 pb-32">
+        {bundle.viewerIsSeller ? <PayoutReadinessCallout /> : null}
         <nav aria-label="Breadcrumb" className="text-ash text-xs">
           <ol className="flex items-center gap-2">
             <li>
@@ -143,6 +147,18 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
                 <MapPin className="h-3 w-3" /> {to?.name}
               </Badge>
             </div>
+
+            {'originPoint' in trip && 'destinationPoint' in trip ? (
+              <TripRouteMap
+                origin={trip.originPoint as { lat: number; lng: number }}
+                destination={trip.destinationPoint as { lat: number; lng: number }}
+                originCity={trip.originCity}
+                destinationCity={trip.destinationCity}
+                originEmoji={from?.flagEmoji}
+                destinationEmoji={to?.flagEmoji}
+              />
+            ) : null}
+
             {trip.notes ? (
               <p className="text-ink/80 mt-8 max-w-2xl text-pretty whitespace-pre-line">
                 {trip.notes}
@@ -151,20 +167,23 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
 
             <div className="mt-10">
               <h2 className="text-ink font-serif text-2xl">
-                {bundle.viewerIsSeller ? 'Reservations on this trip' : 'Your reservations'}
+                {bundle.viewerIsSeller ? tDetail('reservationsHeading') : tRes('heading')}
               </h2>
               {summary ? (
                 <p className="text-ash mt-2 text-sm">
                   {summary.confirmed + summary.pending} active reservation
                   {summary.confirmed + summary.pending === 1 ? '' : 's'} · {summary.confirmed}{' '}
-                  confirmed · {summary.pending} pending
-                  {summary.completed > 0 ? ` · ${summary.completed} completed` : ''}
+                  {tDetail('summaryConfirmed').toLowerCase()} · {summary.pending}{' '}
+                  {tDetail('summaryPending').toLowerCase()}
+                  {summary.completed > 0
+                    ? ` · ${summary.completed} ${tDetail('summaryCompleted').toLowerCase()}`
+                    : ''}
                 </p>
               ) : null}
               {reservations.length === 0 ? (
                 <p className="text-ash mt-2 text-sm">
                   {bundle.viewerIsSeller
-                    ? 'No reservations yet. Buyers will appear here as they book.'
+                    ? 'No reservations yet. Buyers will appear here when they book.'
                     : 'You have no reservations on this trip yet.'}
                 </p>
               ) : (
@@ -177,7 +196,9 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
                       <span className="text-ink font-medium">
                         {r.qty}× {r.freeformText}
                       </span>
-                      <span className="text-ash text-xs tracking-widest uppercase">{r.status}</span>
+                      <span className="text-ash text-xs tracking-wide">
+                        {reservationStatusLabel(tRes, r.status)}
+                      </span>
                       <span className="text-saffron-700 text-xs">
                         €{Number(r.agreedFinderFee).toFixed(2)}
                       </span>
@@ -226,4 +247,26 @@ function formatDate(d: Date | string) {
     month: 'short',
     year: 'numeric',
   });
+}
+
+function reservationStatusLabel(
+  t: Awaited<ReturnType<typeof getTranslations>>,
+  status: string,
+): string {
+  switch (status) {
+    case 'pending':
+      return t('statusPending');
+    case 'confirmed':
+      return t('statusConfirmed');
+    case 'completed':
+      return t('statusCompleted');
+    case 'cancelled':
+      return t('statusCancelled');
+    case 'refunded':
+      return t('statusRefunded');
+    case 'seller-rejected':
+      return t('statusSellerRejected');
+    default:
+      return status;
+  }
 }

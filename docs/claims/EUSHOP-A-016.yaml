@@ -1,0 +1,26 @@
+id: EUSHOP-A-016
+lane: A
+sub_lane: null
+branch: agent/a-016-product-route-fallbacks
+owner: cursor-agent
+status: claimed
+touches:
+  - apps/web/src/app/(product)/categories/[slug]/loading.tsx
+  - apps/web/src/app/(product)/categories/[slug]/error.tsx
+  - apps/web/src/app/(product)/countries/[iso2]/loading.tsx
+  - apps/web/src/app/(product)/countries/[iso2]/error.tsx
+  - apps/web/src/app/(product)/items/[slug]/loading.tsx
+  - apps/web/src/app/(product)/items/[slug]/error.tsx
+  - apps/web/src/app/(product)/listings/[id]/loading.tsx
+  - apps/web/src/app/(product)/listings/[id]/error.tsx
+  - apps/web/src/app/(product)/messages/[id]/loading.tsx
+  - apps/web/src/app/(product)/messages/[id]/error.tsx
+  - apps/web/src/app/(product)/trips/[id]/loading.tsx
+  - apps/web/src/app/(product)/trips/[id]/error.tsx
+  - docs/cursor-parallel-backlog.md
+hotspot_sub_lane: H5-shell
+depends_on: []
+verify: pnpm verify
+notes: >
+  Backlog A-016: add route-level loading/error fallbacks to dynamic (product) routes
+  using existing shared product shell components.

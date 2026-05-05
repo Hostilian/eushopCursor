@@ -80,4 +80,18 @@ describe('reservationMonetaryFieldsFromAgreedEuros', () => {
     expect(out.finderFeeCents).toBe(333);
     expect(out.agreedFinderFee).toBe('3.33');
   });
+
+  it('caps platform fee for large agreed fees', () => {
+    const out = reservationMonetaryFieldsFromAgreedEuros(99.99);
+    expect(out.finderFeeCents).toBe(9999);
+    expect(out.platformFeeCents).toBe(PLATFORM_FEE_CAP_CENTS);
+    expect(out.platformFee).toBe('1.50');
+  });
+
+  it('rounds half-cent finder fees upward before fee math', () => {
+    const out = reservationMonetaryFieldsFromAgreedEuros(0.105);
+    expect(out.finderFeeCents).toBe(11);
+    expect(out.agreedFinderFee).toBe('0.11');
+    expect(out.platformFeeCents).toBe(calculatePlatformFeeCents(11));
+  });
 });

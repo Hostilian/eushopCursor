@@ -8,6 +8,7 @@ Single index for production and staging runbooks. **Canonical env matrix:** [env
 | [zero-cost-stack.md](zero-cost-stack.md) | Optional vs vendor integrations; honest limits |
 | [oss-self-hosted-deploy.md](oss-self-hosted-deploy.md) | Coolify-first real stack |
 | [free-preview-deploy.md](free-preview-deploy.md) | Short redirect to OSS deploy |
+| [hosting-alternatives.md](hosting-alternatives.md) | Coolify vs “no VPS” managed options |
 | [deploy-runbook.md](deploy-runbook.md) | Migrate, search index, smoke checks |
 | [hosting-contract.md](hosting-contract.md) | Build/start contract for any host |
 | [build-runtime.md](build-runtime.md) | Meili/Redis and `pnpm build` |

@@ -5,3 +5,5 @@
 This filename is kept so existing links and bookmarks keep working. The previous “Vercel + Render” shortcut is **not** the recommended path: proprietary dashboards, spin-down/cold-start limits, and a mismatch with the project’s **EU self-hosted** production posture (README).
 
 **What to do instead:** read [oss-self-hosted-deploy.md](./oss-self-hosted-deploy.md), provision a small VPS, install **Coolify** (MIT), and run **web** and **api** as separate services from the same Git repo.
+
+**If you will not use a VPS:** read **[hosting-alternatives.md](./hosting-alternatives.md)** — it names **Coolify** as the OSS Vercel-like layer (still needs a Linux host), and lists **managed** PaaS options when you want someone else to run the servers (different tradeoffs; not “free OSS compute”).
