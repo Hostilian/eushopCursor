@@ -91,6 +91,12 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Readiness index integrity check
+        run: pnpm readiness:index:check
+
+      - name: Readiness status vocabulary check
+        run: pnpm readiness:status:check
+
       - name: i18n key parity
         run: pnpm i18n:check
 

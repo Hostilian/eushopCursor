@@ -5,7 +5,57 @@ branch: agent/o-012-30-day-readiness-implementation
 owner: cursor-codex-5.3
 status: claimed
 touches:
+  - docs/README.md
+  - docs/readiness/README.md
   - docs/readiness/30-day-master.md
+  - docs/readiness/master-toc.md
+  - docs/readiness/dependency-graph.md
+  - docs/readiness/archive-and-retention-policy.md
+  - docs/readiness/monthly-cleanup-checklist.md
+  - docs/readiness/onboarding-quickstart.md
+  - docs/readiness/onboarding-checklist.md
+  - docs/readiness/faq-and-troubleshooting.md
+  - docs/readiness/triage-decision-aid.md
+  - docs/readiness/command-center-dashboard.md
+  - docs/readiness/weekly-dashboard-snapshot-template.md
+  - docs/readiness/dashboard-autofill-playbook.md
+  - docs/readiness/ten-minute-update-routine.md
+  - docs/readiness/quarterly-maturity-model.md
+  - docs/readiness/quarterly-maturity-assessment-template.md
+  - docs/readiness/quarterly-improvement-roadmap-template.md
+  - docs/readiness/drill-scenario-library.md
+  - docs/readiness/pre-mortem-template.md
+  - docs/readiness/weekly-exec-brief-template.md
+  - docs/readiness/handover-continuity-template.md
+  - docs/readiness/absence-coverage-playbook.md
+  - docs/readiness/decision-audit-trail-index.md
+  - docs/readiness/dependency-change-impact-checklist.md
+  - docs/readiness/release-freeze-protocol.md
+  - docs/readiness/hotfix-protocol.md
+  - docs/readiness/daily-status-update-template.md
+  - docs/readiness/escalation-contact-matrix.md
+  - docs/readiness/announcement-checklist.md
+  - docs/readiness/policy-compliance-checklist.md
+  - docs/readiness/policy-exception-request-template.md
+  - docs/readiness/policy-exception-review-log.md
+  - docs/readiness/automation-inventory.md
+  - docs/readiness/automation-safety-checklist.md
+  - docs/readiness/automation-change-log.md
+  - docs/readiness/data-contract-checklist.md
+  - docs/readiness/metric-anomaly-response-playbook.md
+  - docs/readiness/kpi-source-of-truth-register.md
+  - docs/readiness/security-control-evidence-matrix.md
+  - docs/readiness/vulnerability-triage-playbook.md
+  - docs/readiness/security-signoff-checklist.md
+  - docs/readiness/slo-breach-response-template.md
+  - docs/readiness/error-budget-policy.md
+  - docs/readiness/reliability-review-checklist.md
+  - docs/readiness/critical-journey-acceptance-matrix.md
+  - docs/readiness/ux-regression-checklist.md
+  - docs/readiness/launch-copy-consistency-checklist.md
+  - docs/readiness/partner-readiness-checklist.md
+  - docs/readiness/support-playbook-template.md
+  - docs/readiness/launch-kpi-target-sheet.md
   - docs/readiness/risk-register.md
   - docs/readiness/owner-matrix.md
   - docs/readiness/critical-journeys.md
@@ -20,6 +70,48 @@ touches:
   - docs/readiness/incident-drill-report.md
   - docs/readiness/go-no-go-decision.md
   - docs/readiness/day30-exec-summary.md
+  - docs/readiness/gate-matrix.md
+  - docs/readiness/readiness-scorecard.md
+  - docs/readiness/business-kpi-bridge.md
+  - docs/readiness/security-data-framework.md
+  - docs/readiness/slo-and-incident-policy.md
+  - docs/readiness/governance-cadence.md
+  - docs/readiness/execution-checklist.md
+  - docs/readiness/artifact-status-board.md
+  - docs/readiness/evidence-log.md
+  - docs/readiness/owner-action-register.md
+  - docs/readiness/kickoff-brief.md
+  - docs/readiness/weekly-review-template.md
+  - docs/readiness/weekly-review-2026-W19.md
+  - docs/readiness/weekly-review-2026-W20.md
+  - docs/readiness/weekly-review-2026-W21.md
+  - docs/readiness/signoff-packet-template.md
+  - docs/readiness/rc-command-runbook.md
+  - docs/readiness/meeting-calendar-2026-05.md
+  - docs/readiness/leadership-dashboard-snapshot.md
+  - docs/readiness/go-no-go-meeting-script.md
+  - docs/readiness/go-no-go-decision-tree.md
+  - docs/readiness/incident-comms-template-pack.md
+  - docs/readiness/operator-cockpit.md
+  - docs/readiness/daily-status-log-template.md
+  - docs/readiness/role-directory.md
+  - docs/readiness/raci-quick-reference.md
+  - docs/readiness/kpi-data-collection-playbook.md
+  - docs/readiness/weekly-evidence-checklist.md
+  - docs/readiness/day30-closeout-checklist.md
+  - docs/readiness/post-launch-transition-template.md
+  - docs/readiness/failure-modes-and-anti-patterns.md
+  - docs/readiness/prevention-checklist.md
+  - docs/readiness/minimum-viable-go-packet.md
+  - docs/readiness/go-packet-completeness-score.md
+  - docs/readiness/go-decision-minutes-template.md
+  - docs/readiness/go-conditions-liability-register.md
+  - docs/readiness/post-launch-incident-matrix.md
+  - docs/readiness/oncall-run-card.md
+  - docs/readiness/retro-24h-template.md
+  - docs/readiness/retro-7d-template.md
+  - docs/readiness/retro-30d-template.md
+  - docs/readiness/lessons-to-actions-tracker.md
 hotspot_sub_lane: null
 depends_on: []
 verify: pnpm claims:check && pnpm verify

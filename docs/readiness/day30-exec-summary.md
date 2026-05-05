@@ -1,50 +1,56 @@
 # Day-30 Executive Readiness Summary
 
-## Executive statement
-
 This summary captures readiness posture at day 30, launch recommendation, and next-30-day priorities.
 
-## 1) Outcome against objectives
+## 1) Outcome snapshot
 
-| Objective | Status | Evidence |
-| --- | --- | --- |
-| Single source of readiness truth | complete | `30-day-master.md`, owner matrix, risk register |
-| Stable release baseline | complete | claims and verify gate definitions, rehearsal templates |
-| Security/privacy launch readiness | complete | security checklist and go/no-go controls |
-| Product/GTM/ops alignment | complete | critical journeys, KPI dictionary, GTM and runbook artifacts |
+- Overall readiness status: in_progress until final Gate 4 review.
+- Recommended next decision: in_progress (conditional release after Gate 4 evidence close).
+- Top 3 wins:
+  1. End-to-end readiness operating system published and linked.
+  2. Tiered gates and owner accountability standardized.
+  3. Security/data and KPI-to-business frameworks integrated into release governance.
 
-## 2) Readiness scorecard
+## 2) KPI performance
 
-| Dimension | Score (1-5) | Notes |
-| --- | --- | --- |
-| Product readiness |  |  |
-| Engineering readiness |  |  |
-| Security/privacy readiness |  |  |
-| Reliability/SRE readiness |  |  |
-| GTM/CS readiness |  |  |
-| Ops/legal/finance readiness |  |  |
+| KPI domain | Current | Target | Trend | Status | Owner action |
+| --- | --- | --- | --- | --- | --- |
+| Delivery | Baseline gate commands passed (2026-05-05) | scorecard targets | improving | in_progress | Engineering lead to publish week-4 snapshot |
+| Reliability | Drill evidence not yet executed | scorecard targets | flat | in_progress | QA/SRE lead to attach drill metrics |
+| Security | Baseline checklist done; sign-off in_progress | scorecard targets | improving | in_progress | Security lead to finalize checklist sign-off |
+| Data quality | Event/consent evidence collection started | scorecard targets | flat | in_progress | Data lead to attach consent/event evidence |
+| Business | KPI bridge ready; live movement in_progress | quarterly bridge targets | flat | in_progress | Product/GTM to confirm launch KPI baseline |
 
-## 3) Open risks and commitments
+## 3) Risk posture
 
-| Risk | Severity | Owner | Mitigation due date |
-| --- | --- | --- | --- |
-| _Fill in_ |  |  |  |
+- Open P0 risks: none recorded at summary draft time.
+- Open P1 risks: cross-lane merge pressure in RC week, consent evidence completion.
+- Exceptions with expiry: R7 narrative caveat expires 2026-06-17.
+- Biggest unresolved dependency: final rehearsal and drill evidence completion.
 
-## 4) Launch recommendation
+## 4) Execution quality
 
-- Recommendation: `GO` or `NO-GO`
-- Conditions: _Any required conditions before launch_
-- Rollback owner: _Name and team_
+- Claims/hotspot compliance: enabled via `claims:check` gates; no current violations.
+- CI stability summary: in_progress with week-4 consolidated report.
+- Incident performance summary (MTTR, recurrence, drill score): in_progress with drill execution.
+- Test backfill completion for P0/P1: no active post-incident backfill violations recorded yet.
 
-## 5) Next 30 days (post-launch)
+## 5) Business readiness linkage
 
-1. Close residual P1 issues and remove temporary mitigations.
-2. Improve funnel telemetry quality and KPI automation.
-3. Raise operational maturity with one additional drill cycle.
-4. Prioritize top user-reported frictions by severity and frequency.
+- North-star KPI movement: baseline set in `business-kpi-bridge.md`, week-4 values in_progress.
+- Activation and retention signal: in_progress with final launch baseline extraction.
+- Support burden trend: in_progress with CS weekly report.
+- Launch narrative confidence: medium-high with explicit caveats on mobile payments parity.
 
-## 6) Leadership asks
+## 6) Next 30-day priorities
 
-- Confirm resourcing for support and on-call coverage.
-- Approve scope freeze for first post-launch stabilization sprint.
-- Approve risk acceptance list and review date.
+1. Close remaining P1 items and retire temporary mitigations.
+2. Automate KPI and consent evidence extraction for weekly readiness reviews.
+3. Execute one additional incident drill cycle and publish remediation closure.
+
+## 7) Decision
+
+- Decision: in_progress until Gate 4.
+- Conditions: no active P0, all P1 owned with ETA, full rehearsal/drill evidence attached.
+- Accountable owner: Engineering lead (with QA/SRE and Ops co-sign).
+- Review date: 2026-06-03.

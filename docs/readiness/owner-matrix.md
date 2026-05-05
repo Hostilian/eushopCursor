@@ -12,6 +12,26 @@
 | GTM/CS readiness | GTM lead | CS lead | Messaging consistency, launch collateral, support readiness | SLA adherence |
 | Ops/legal/finance readiness | Operations lead | Legal/finance partner | Deploy/rollback, legal text completeness, escalation process | Drill pass score |
 
+## Away-window named assignment map
+
+Use these named role aliases while the core team is away so every scheduled action still has an accountable owner.
+
+| Role alias | Covers | Escalates to |
+| --- | --- | --- |
+| `pm-duty` | Program manager decisions and evidence consolidation | `eng-duty` |
+| `eng-duty` | Engineering gate ownership and technical approvals | `ops-duty` |
+| `sec-duty` | Security/privacy checklist and exception control | `eng-duty` |
+| `qa-duty` | Journey validation, rehearsal, and drill scoring | `eng-duty` |
+| `data-duty` | KPI/event evidence and consent verification | `pm-duty` |
+| `gtm-duty` | Messaging truth checks and support SLA alignment | `pm-duty` |
+| `ops-duty` | Rollback ownership and runbook execution authority | `eng-duty` |
+
+### Current assignment start date
+
+- Effective from: `2026-05-05`
+- Coverage mode: `away-window`
+- Rule: no `ready` task may remain ownerless; if alias owner is unavailable, fallback is the `Escalates to` owner.
+
 ## Decision rights
 
 - Product scope changes: Product lead (consult Eng, QA, GTM).

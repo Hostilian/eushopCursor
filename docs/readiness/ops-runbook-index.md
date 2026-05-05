@@ -34,7 +34,7 @@ This index links required runbooks for release, incident response, and legal/ops
 
 ## Weekly ops review checklist
 
-- [ ] All runbook links open and match current deployment model.
+- [ ] All runbook links are valid and match current deployment model.
 - [ ] Rollback owner assigned for each critical surface.
 - [ ] On-call contact chain validated.
 - [ ] Known incident classes mapped to a runbook entry.

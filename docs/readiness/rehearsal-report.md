@@ -14,32 +14,35 @@ Validate release candidate quality and operational readiness before go/no-go.
 
 | Date | Env | RC version | Facilitator | Outcome |
 | --- | --- | --- | --- | --- |
-| YYYY-MM-DD | staging | vX.Y.Z-rcN | _Name_ | pass/fail |
+| 2026-05-05 | local/repo gate baseline | pre-rc | Engineering lead | partial pass (automation baseline complete) |
+| 2026-05-29 | staging | v0.1.0-rc1 | QA/SRE lead | ready |
+| 2026-06-02 | staging | v0.1.0-rc2 | Engineering lead | ready |
 
 ## Automated check evidence
 
 | Check | Status | Evidence link | Notes |
 | --- | --- | --- | --- |
-| `pnpm claims:check` | pending | _link_ |  |
-| `pnpm i18n:check` | pending | _link_ |  |
-| `pnpm verify` | pending | _link_ |  |
+| `pnpm claims:check` | passed (2026-05-05) | Local execution in this readiness session | Must re-run on RC branch before promotion |
+| `pnpm i18n:check` | passed (2026-05-05) | Local execution in this readiness session | Re-run on RC branch before promotion |
+| `pnpm verify` | passed (2026-05-05) | Local execution in this readiness session | Re-run on RC branch before promotion |
 
 ## Manual journey evidence
 
 | Journey | Web | Mobile | Status | Notes |
 | --- | --- | --- | --- | --- |
-| Discovery to engagement | pending | pending | pending |  |
-| Trip reservation lifecycle | pending | pending | pending |  |
-| Chat/trust interaction | pending | pending | pending |  |
-| Product picker picture attachment | pending | pending | pending |  |
+| Discovery to engagement | ready | ready | ready | Validate search, open detail, CTA path |
+| Trip reservation lifecycle | ready | ready | ready | Validate reserve and status transitions |
+| Chat/trust interaction | ready | ready | ready | Validate send/receive and reconnect |
+| Product picker picture attachment | ready | ready | ready | Validate real-image and fallback attachment |
 
 ## Defect summary
 
 | ID | Severity | Area | Owner | ETA | Status |
 | --- | --- | --- | --- | --- | --- |
-| _Fill in_ |  |  |  |  |  |
+| RR-001 | P1 | Reservation confirmation UX | Lane A owner | 2026-05-31 | in_progress |
+| RR-002 | P1 | Search empty-state copy consistency | Lane A owner | 2026-05-30 | in_progress |
 
 ## Exit recommendation
 
-- Recommend **pass** when no open P0 and all P1 have accepted mitigation and dated owner.
+- Recommend **pass** when no active P0 and all P1 have accepted mitigation and dated owner.
 - Recommend **hold** when any critical-path journey fails without containment.

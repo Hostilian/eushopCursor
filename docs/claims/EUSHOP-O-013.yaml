@@ -5,17 +5,75 @@ branch: agent/o-013-12-month-readiness-execution
 owner: cursor-codex-5.3
 status: claimed
 touches:
-  - docs/readiness/readiness-scorecard.md
-  - docs/readiness/gate-matrix.md
-  - docs/readiness/slo-and-incident-policy.md
-  - docs/readiness/security-data-framework.md
-  - docs/readiness/governance-cadence.md
-  - docs/readiness/business-kpi-bridge.md
-  - docs/readiness/go-no-go-decision.md
-  - docs/readiness/day30-exec-summary.md
-  - docs/README.md
-  - README.md
   - .github/PULL_REQUEST_TEMPLATE/readiness-gate.md
+  - .github/pull_request_template.md
+  - .github/workflows/ci.yml
+  - README.md
+  - docs/README.md
+  - docs/readiness/30-day-master.md
+  - docs/readiness/README.md
+  - docs/readiness/archive-and-retention-policy.md
+  - docs/readiness/artifact-status-board.md
+  - docs/readiness/away-operations-playbook.md
+  - docs/readiness/business-kpi-bridge.md
+  - docs/readiness/daily-status-log-template.md
+  - docs/readiness/day30-closeout-checklist.md
+  - docs/readiness/day30-exec-summary.md
+  - docs/readiness/dependency-graph.md
+  - docs/readiness/evidence-log.md
+  - docs/readiness/execution-checklist.md
+  - docs/readiness/failure-modes-and-anti-patterns.md
+  - docs/readiness/final-return-checklist.md
+  - docs/readiness/gate-matrix.md
+  - docs/readiness/go-conditions-liability-register.md
+  - docs/readiness/go-no-go-decision.md
+  - docs/readiness/go-no-go-meeting-script.md
+  - docs/readiness/governance-cadence.md
+  - docs/readiness/incident-drill-report.md
+  - docs/readiness/kickoff-brief.md
+  - docs/readiness/kpi-data-collection-playbook.md
+  - docs/readiness/leadership-dashboard-snapshot.md
+  - docs/readiness/lessons-to-actions-tracker.md
+  - docs/readiness/meeting-calendar-2026-05.md
+  - docs/readiness/minimum-viable-go-packet.md
+  - docs/readiness/monthly-cleanup-checklist.md
+  - docs/readiness/onboarding-quickstart.md
+  - docs/readiness/oncall-run-card.md
+  - docs/readiness/operator-cockpit.md
+  - docs/readiness/ops-runbook-index.md
+  - docs/readiness/owner-action-register.md
+  - docs/readiness/owner-matrix.md
+  - docs/readiness/prevention-checklist.md
+  - docs/readiness/raci-quick-reference.md
+  - docs/readiness/rc-command-runbook.md
+  - docs/readiness/readiness-scorecard.md
+  - docs/readiness/rehearsal-report.md
+  - docs/readiness/return-handoff-onepager.md
+  - docs/readiness/risk-register.md
+  - docs/readiness/role-directory.md
+  - docs/readiness/security-data-framework.md
+  - docs/readiness/security-privacy-checklist.md
+  - docs/readiness/signoff-packet-2026-06-03.md
+  - docs/readiness/signoff-packet-template.md
+  - docs/readiness/slo-and-incident-policy.md
+  - docs/readiness/status-vocabulary.md
+  - docs/readiness/vocabulary-lock-report.md
+  - docs/readiness/master-toc.md
+  - docs/readiness/readiness-command-matrix.md
+  - docs/readiness/doctor-latest.md
+  - docs/readiness/weekly-evidence-checklist.md
+  - docs/readiness/weekly-review-2026-W19.md
+  - docs/readiness/weekly-review-2026-W20.md
+  - docs/readiness/weekly-review-2026-W21.md
+  - docs/readiness/weekly-review-2026-W22.md
+  - docs/readiness/weekly-review-template.md
+  - docs/readiness/final-return-checklist.md
+  - docs/readiness/return-handoff-onepager.md
+  - package.json
+  - scripts/readiness-doctor.mjs
+  - scripts/check-readiness-index-links.mjs
+  - scripts/check-readiness-status-vocab.mjs
+  - scripts/check-readiness-doctor-freshness.mjs
 hotspot_sub_lane: null
 depends_on: []
 verify: pnpm claims:check && pnpm verify

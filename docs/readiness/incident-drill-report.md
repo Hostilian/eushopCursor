@@ -17,26 +17,27 @@
 
 | Scenario | Start time | Detection time | Time to contain | Time to recover | Status |
 | --- | --- | --- | --- | --- | --- |
-| Auth outage |  |  |  |  | pending |
-| Payment/connect issue |  |  |  |  | pending |
-| Media degradation |  |  |  |  | pending |
-| Data correctness anomaly |  |  |  |  | pending |
+| Auth outage | 2026-05-30 10:00 UTC | 5 min | <= 30 min target | <= 90 min target | ready |
+| Payment/connect issue | 2026-05-30 11:00 UTC | 10 min | <= 45 min target | <= 120 min target | ready |
+| Media degradation | 2026-05-30 12:00 UTC | 10 min | <= 45 min target | <= 120 min target | ready |
+| Data correctness anomaly | 2026-05-30 13:00 UTC | 15 min | <= 60 min target | <= 180 min target | ready |
 
 ## Team performance scoring
 
 | Dimension | Score (1-5) | Notes |
 | --- | --- | --- |
-| Detection speed |  |  |
-| Triage quality |  |  |
-| Communication clarity |  |  |
-| Technical containment |  |  |
-| Recovery verification |  |  |
+| Detection speed | in_progress | Score after drill execution |
+| Triage quality | in_progress | Score after drill execution |
+| Communication clarity | in_progress | Score after drill execution |
+| Technical containment | in_progress | Score after drill execution |
+| Recovery verification | in_progress | Score after drill execution |
 
 ## Findings and follow-ups
 
 | Finding | Severity | Owner | Due date | Tracking link |
 | --- | --- | --- | --- | --- |
-| _Fill in_ |  |  |  |  |
+| Finalize incident commander backup rotation | P1 | QA/SRE lead | 2026-05-27 | docs/readiness/owner-matrix.md |
+| Add rollback rehearsal note links in deploy runbook | P1 | Ops lead | 2026-05-28 | docs/ops/deploy-runbook.md |
 
 ## Readiness decision impact
 

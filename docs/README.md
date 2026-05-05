@@ -2,6 +2,23 @@
 
 One entry: **ops** ([ops/README.md](ops/README.md)), **agents** ([agents.md](agents.md), [claims/README.md](claims/README.md)), **audit** ([audit/](audit/)), **handoffs** ([handoffs/](handoffs/)), **editorial** ([editorial.md](editorial.md)), **planning** ([masterplan.md](masterplan.md)). **Open engineering tasks** use IDs in [cursor-parallel-backlog.md](cursor-parallel-backlog.md); **release-quality bar** is [masterplan.md](masterplan.md) Part 12 plus merge/cadence in [human-alignment-checklist.md](human-alignment-checklist.md).
 
+## Readiness Program (12-month + 30-day execution)
+
+Use these docs as the implementation package for readiness governance, gates, and KPI linkage:
+
+| Path | What it is |
+|------|------------|
+| [readiness/readiness-scorecard.md](readiness/readiness-scorecard.md) | Weekly/monthly/quarterly readiness scorecard and escalation rules |
+| [readiness/gate-matrix.md](readiness/gate-matrix.md) | Tiered CI/release/security controls by risk and hotspot |
+| [readiness/slo-and-incident-policy.md](readiness/slo-and-incident-policy.md) | SLO targets, incident taxonomy, and required post-incident test backfill |
+| [readiness/security-data-framework.md](readiness/security-data-framework.md) | Security baseline, secret governance, dependency SLA, and data observability |
+| [readiness/governance-cadence.md](readiness/governance-cadence.md) | Daily/weekly/monthly/quarterly operating cadence and decision log model |
+| [readiness/business-kpi-bridge.md](readiness/business-kpi-bridge.md) | Engineering initiative to business KPI traceability with quarterly targets |
+| [readiness/go-no-go-decision.md](readiness/go-no-go-decision.md) | Release decision template with gate results and risk acceptance |
+| [readiness/day30-exec-summary.md](readiness/day30-exec-summary.md) | Executive summary template for milestone closeout |
+
+Readiness program docs are indexed in [readiness/README.md](readiness/README.md).
+
 ## Environment (quick reference)
 
 The **canonical variable matrix** is [ops/environment.md](ops/environment.md). Read it before changing `.env.example` or deploy templates.

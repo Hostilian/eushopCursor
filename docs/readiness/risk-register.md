@@ -24,7 +24,7 @@
 
 | Week | New risks | Closed risks | Re-scored | Notes |
 | --- | --- | --- | --- | --- |
-| Week 1 |  |  |  |  |
+| Week 1 | 0 | 0 | R2 reviewed (still P0), R5 reviewed (still P1) | Baseline risk review completed with owners and mitigations confirmed |
 | Week 2 |  |  |  |  |
 | Week 3 |  |  |  |  |
 | Week 4 |  |  |  |  |
@@ -32,5 +32,5 @@
 ## Escalation rules
 
 - Escalate to release gate immediately when any P0 risk has no mitigation owner.
-- Do not proceed with go/no-go if any P0 remains open.
+- Do not proceed with go/no-go if any P0 remains active.
 - Record all risk score changes in `docs/readiness/30-day-master.md` decision log.

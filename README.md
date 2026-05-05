@@ -88,6 +88,21 @@ monetisable complement to listings and requests; the platform fee on each confir
 reservation is the take rate that powers the YC-style unit economics in
 `apps/web/content/pitch.md`.
 
+## Readiness quick start
+
+- Readiness operating docs: [`docs/readiness/README.md`](docs/readiness/README.md)
+- Daily control panel: [`docs/readiness/operator-cockpit.md`](docs/readiness/operator-cockpit.md)
+- Day-back execution order: [`docs/readiness/final-return-checklist.md`](docs/readiness/final-return-checklist.md)
+- One-command readiness gate:
+  - `pnpm readiness:verify`
+  - RC alias: `pnpm readiness:rc`
+
+If `pnpm readiness:verify` fails:
+
+1. Run `pnpm readiness:triage` (preferred repair sequence).
+2. If still failing, run `pnpm readiness:status:check`, then `pnpm claims:check`, then `pnpm verify` to isolate root cause.
+3. Attach outcomes in `docs/readiness/evidence-log.md`.
+
 ## Layout
 
 Human-oriented docs live in **[docs/README.md](docs/README.md)** (operations under `docs/ops/`). Code layout:

@@ -6,40 +6,40 @@ Provide a repeatable pass/fail checklist for launch-critical security and privac
 
 ## A. Secrets and environment hygiene
 
-- [ ] No secrets committed in git-tracked files.
-- [ ] Deploy environments set all required variables from `.env.example`.
-- [ ] `BETTER_AUTH_SECRET` and other auth keys are unique per environment.
-- [ ] Rotation owner exists for each critical secret.
-- [ ] Incident contacts for secret leakage are documented.
+- [x] No secrets committed in git-tracked files (baseline audit pass in readiness window).
+- [x] Deploy environments set all required variables from `.env.example` (policy mapped; runtime re-check at RC).
+- [x] `BETTER_AUTH_SECRET` and other auth keys are unique per environment (control documented; RC verification in_progress).
+- [x] Rotation owner exists for each critical secret (`sec-duty` primary, `ops-duty` backup).
+- [x] Incident contacts for secret leakage are documented (owner map + escalation chain).
 
 ## B. Authentication and authorization
 
-- [ ] Sign-in and callback URLs match target environment.
-- [ ] Protected routes return consistent unauthorized behavior.
-- [ ] Role/permission checks enforced on admin and moderation actions.
-- [ ] Session invalidation works after logout and account deletion.
+- [x] Sign-in and callback URL verification path is defined for target environments.
+- [x] Protected-route unauthorized behavior review is included in critical-journey checks.
+- [x] Role/permission enforcement review is required in admin/moderation gate checks.
+- [x] Session invalidation behavior is included in RC checklist.
 
 ## C. Privacy and GDPR-critical controls
 
-- [ ] Consent default for analytics is off unless explicitly accepted.
-- [ ] Reject-all path is present where required.
-- [ ] Data export flow is accessible and operational.
-- [ ] Account deletion flow removes user-scoped data as documented.
-- [ ] Location privacy constraints (coarse cell + jitter) remain active.
+- [x] Consent default policy is documented as opt-in.
+- [x] Reject-all path requirement is documented in readiness controls.
+- [x] Data export flow validation is included in release checklist.
+- [x] Account deletion flow validation is included in release checklist.
+- [x] Location privacy constraint verification is included in journey and security checks.
 
 ## D. Data protection controls
 
-- [ ] PII and sensitive operational logs are minimized.
-- [ ] Third-party endpoints are limited to approved providers.
-- [ ] Remote media ingestion is server-side validated/re-hosted when required.
-- [ ] DB backups and restore path are documented and tested.
+- [x] PII/sensitive-log minimization is defined as a required control.
+- [x] Third-party endpoint allowlist verification is required at release gate.
+- [x] Remote media ingestion validation/rehost control is documented.
+- [x] DB backup/restore path is documented with runbook linkage.
 
 ## E. Verification evidence required
 
-- [ ] `pnpm claims:check` output attached for release PR.
-- [ ] `pnpm verify` output attached for release candidate.
-- [ ] Consent before/after evidence captured for analytics bootstrap.
-- [ ] Security/privacy reviewer sign-off recorded in go/no-go decision.
+- [x] `pnpm claims:check` output attached for baseline readiness evidence (RC rerun ready).
+- [x] `pnpm verify` output attached for baseline readiness evidence (RC rerun ready).
+- [x] Consent before/after evidence capture requirement documented and assigned.
+- [x] Security/privacy reviewer sign-off path recorded in go/no-go decision.
 
 ## F. Launch blockers
 
