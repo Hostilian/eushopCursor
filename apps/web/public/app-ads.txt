@@ -1,0 +1,10 @@
+# Eushop does not run ads in the mobile app.
+# This file is published at https://eushop.eu/app-ads.txt to satisfy the
+# Google Play app-ads.txt check and to block any future scammer who tries
+# to impersonate eu.eushop.app on an ad network.
+#
+# If we ever introduce advertising, this file will list every authorised
+# seller per the IAB Tech Lab spec:
+#   https://iabtechlab.com/wp-content/uploads/2019/03/app-ads.txt-v1.0-final.pdf
+#
+# Last reviewed: 2026-05-05

@@ -1,0 +1,30 @@
+id: EUSHOP-A-043
+lane: A
+sub_lane: null
+branch: agent/a-043-web-a11y-hydration-polish
+owner: cursor-agent
+status: claimed
+touches:
+  - apps/web/src/components/trips/trip-offer-form.tsx
+  - apps/web/src/app/(marketing)/privacy/page.tsx
+  - apps/web/src/app/(marketing)/terms/page.tsx
+  - apps/web/src/app/(marketing)/imprint/page.tsx
+  - apps/web/src/app/(product)/sign-in/page.tsx
+  - apps/web/src/app/account/delete/page.tsx
+  - apps/web/src/components/layout/footer.tsx
+  - apps/web/src/components/auth/sign-in-form.tsx
+  - apps/web/src/components/discover/route-planner.tsx
+  - apps/web/src/components/discover/travel-corridors.tsx
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Cross-cutting cosmetic + a11y polish: stable composite key + meaningful alt
+  in trip-offer-form (replaces key={idx}), build-time `LAST_REVIEWED` constant
+  on privacy/terms/account-delete (kills hydration-mismatch risk on UTC
+  midnight), `suppressHydrationWarning` on the footer year, missing
+  `id="main-content"` on imprint and sign-in pages so the layout skip-link
+  works on every route, full Nav/Footer chrome on the Play-Store-required
+  account-delete landing page, idiomatic `typeof window !== 'undefined'` guard
+  in sign-in-form, and `rel="noopener noreferrer"` on every `target="_blank"`
+  link in route-planner / travel-corridors / sign-in-form.

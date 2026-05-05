@@ -17,6 +17,7 @@ export function ChatView({ conversationId }: { conversationId: string }) {
   );
   const send = trpc.messaging.send.useMutation();
   const [body, setBody] = useState('');
+  const [confirmBlockOpen, setConfirmBlockOpen] = useState(false);
   const utils = trpc.useUtils();
   const scrollerRef = useRef<HTMLDivElement>(null);
 
@@ -113,13 +114,7 @@ export function ChatView({ conversationId }: { conversationId: string }) {
                   size="sm"
                   className="border-oxide/30 text-oxide hover:bg-oxide/5 gap-1.5"
                   disabled={blockUser.isPending}
-                  onClick={() => {
-                    if (
-                      window.confirm('Block this user? You will not be able to message each other.')
-                    ) {
-                      blockUser.mutate({ userId: peerId });
-                    }
-                  }}
+                  onClick={() => setConfirmBlockOpen(true)}
                 >
                   <UserX className="h-3.5 w-3.5" />
                   Block
@@ -128,6 +123,36 @@ export function ChatView({ conversationId }: { conversationId: string }) {
             </div>
           )}
         </div>
+        {confirmBlockOpen ? (
+          <div className="border-oxide/20 bg-oxide/5 mt-3 rounded-2xl border px-4 py-3">
+            <p className="text-ink text-sm">
+              Block this user? You will not be able to message each other.
+            </p>
+            <div className="mt-3 flex gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={blockUser.isPending}
+                onClick={() => setConfirmBlockOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                className="bg-oxide text-paper hover:bg-oxide/90"
+                disabled={blockUser.isPending}
+                onClick={() => {
+                  blockUser.mutate({ userId: peerId });
+                  setConfirmBlockOpen(false);
+                }}
+              >
+                Confirm block
+              </Button>
+            </div>
+          </div>
+        ) : null}
         {theyBlocked ? (
           <p className="border-oxide/20 bg-oxide/5 text-ink mt-3 rounded-2xl border px-4 py-3 text-sm">
             This person has blocked you. You cannot send new messages here.

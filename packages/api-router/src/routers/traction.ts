@@ -26,39 +26,40 @@ export const tractionRouter = router({
       countriesActive: 0,
     };
     try {
-      const [u] = await ctx.db.select({ c: sql<number>`count(*)::int` }).from(users);
-      const [p] = await ctx.db.select({ c: sql<number>`count(*)::int` }).from(profiles);
-      const [l] = await ctx.db.select({ c: sql<number>`count(*)::int` }).from(listings);
-      const [r] = await ctx.db.select({ c: sql<number>`count(*)::int` }).from(requests);
-      const [t] = await ctx.db.select({ c: sql<number>`count(*)::int` }).from(tripOffers);
-      const activeSellerRows = await ctx.db.execute<{ c: number }>(sql`
-        select count(*)::int as c
-        from (
-          select seller_id from trip_offers
-          union
-          select seller_id from listings
-        ) as sellers
-      `);
-      const [rc] = await ctx.db
-        .select({ c: sql<number>`count(*)::int` })
-        .from(tripReservations)
-        .where(sql`status = 'confirmed'`);
-      const [rcd] = await ctx.db
-        .select({ c: sql<number>`count(*)::int` })
-        .from(tripReservations)
-        .where(sql`status = 'completed'`);
-      const [gmv] = await ctx.db
-        .select({
-          gross: sql<number>`coalesce(sum(agreed_finder_fee * 100)::int, 0)`,
-          fee: sql<number>`coalesce(sum(platform_fee * 100)::int, 0)`,
-        })
-        .from(tripReservations)
-        .where(sql`status IN ('completed','confirmed')`);
-      const [countries] = await ctx.db
-        .select({
-          c: sql<number>`count(distinct origin_country_iso2)::int + count(distinct destination_country_iso2)::int`,
-        })
-        .from(tripOffers);
+      const [[u], [p], [l], [r], [t], activeSellerRows, [reservationCounts], [gmv], [countries]] =
+        await Promise.all([
+          ctx.db.select({ c: sql<number>`count(*)::int` }).from(users),
+          ctx.db.select({ c: sql<number>`count(*)::int` }).from(profiles),
+          ctx.db.select({ c: sql<number>`count(*)::int` }).from(listings),
+          ctx.db.select({ c: sql<number>`count(*)::int` }).from(requests),
+          ctx.db.select({ c: sql<number>`count(*)::int` }).from(tripOffers),
+          ctx.db.execute<{ c: number }>(sql`
+          select count(*)::int as c
+          from (
+            select seller_id from trip_offers
+            union
+            select seller_id from listings
+          ) as sellers
+        `),
+          ctx.db
+            .select({
+              confirmed: sql<number>`count(*) filter (where status = 'confirmed')::int`,
+              completed: sql<number>`count(*) filter (where status = 'completed')::int`,
+            })
+            .from(tripReservations),
+          ctx.db
+            .select({
+              gross: sql<number>`coalesce(sum(agreed_finder_fee * 100)::int, 0)`,
+              fee: sql<number>`coalesce(sum(platform_fee * 100)::int, 0)`,
+            })
+            .from(tripReservations)
+            .where(sql`status IN ('completed','confirmed')`),
+          ctx.db
+            .select({
+              c: sql<number>`count(distinct origin_country_iso2)::int + count(distinct destination_country_iso2)::int`,
+            })
+            .from(tripOffers),
+        ]);
 
       const activeSellers =
         (
@@ -74,8 +75,8 @@ export const tractionRouter = router({
         requests: r?.c ?? 0,
         tripsPosted: t?.c ?? 0,
         activeSellers,
-        reservationsConfirmed: rc?.c ?? 0,
-        reservationsCompleted: rcd?.c ?? 0,
+        reservationsConfirmed: reservationCounts?.confirmed ?? 0,
+        reservationsCompleted: reservationCounts?.completed ?? 0,
         gmvCents: gmv?.gross ?? 0,
         platformFeeCents: gmv?.fee ?? 0,
         countriesActive: countries?.c ?? 0,
@@ -102,13 +103,34 @@ export const tractionRouter = router({
               date_trunc('week', now()),
               '1 week'
             ) AS week
+          ),
+          user_counts AS (
+            SELECT date_trunc('week', created_at) AS week, count(*)::int AS signups
+            FROM users
+            WHERE created_at >= date_trunc('week', now()) - (${weeks - 1} || ' weeks')::interval
+            GROUP BY 1
+          ),
+          trip_counts AS (
+            SELECT date_trunc('week', created_at) AS week, count(*)::int AS trips
+            FROM trip_offers
+            WHERE created_at >= date_trunc('week', now()) - (${weeks - 1} || ' weeks')::interval
+            GROUP BY 1
+          ),
+          reservation_counts AS (
+            SELECT date_trunc('week', created_at) AS week, count(*)::int AS reservations
+            FROM trip_reservations
+            WHERE created_at >= date_trunc('week', now()) - (${weeks - 1} || ' weeks')::interval
+            GROUP BY 1
           )
           SELECT
             to_char(s.week, 'IYYY-IW') AS week,
-            (SELECT count(*)::int FROM users WHERE date_trunc('week', created_at) = s.week) AS signups,
-            (SELECT count(*)::int FROM trip_offers WHERE date_trunc('week', created_at) = s.week) AS trips,
-            (SELECT count(*)::int FROM trip_reservations WHERE date_trunc('week', created_at) = s.week) AS reservations
+            coalesce(u.signups, 0)::int AS signups,
+            coalesce(t.trips, 0)::int AS trips,
+            coalesce(r.reservations, 0)::int AS reservations
           FROM series s
+          LEFT JOIN user_counts u ON u.week = s.week
+          LEFT JOIN trip_counts t ON t.week = s.week
+          LEFT JOIN reservation_counts r ON r.week = s.week
           ORDER BY s.week ASC
         `);
       const list =

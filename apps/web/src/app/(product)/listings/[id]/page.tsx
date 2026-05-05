@@ -1,5 +1,6 @@
 import { ErrorState } from '@eushop/ui';
 import type { Metadata } from 'next';
+import { cache } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,7 +12,7 @@ import { api } from '../../../../lib/trpc-server';
 
 type ListingBundle = Awaited<ReturnType<Awaited<ReturnType<typeof api>>['listings']['byId']>>;
 
-async function fetchListing(
+const fetchListing = cache(async function fetchListing(
   id: string,
 ): Promise<{ data: ListingBundle | null; serviceError: boolean }> {
   try {
@@ -24,7 +25,7 @@ async function fetchListing(
     }
     return { data: null, serviceError: true };
   }
-}
+});
 
 export async function generateMetadata({
   params,
@@ -81,6 +82,9 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
 
   const title = data.freeformName ?? 'Listing';
   const photo = data.photos[0]?.url;
+  const shouldUseUnoptimizedImage = Boolean(
+    photo?.startsWith('data:') || photo?.startsWith('blob:'),
+  );
 
   return (
     <>
@@ -108,7 +112,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                unoptimized
+                unoptimized={shouldUseUnoptimizedImage}
               />
             ) : null}
           </div>

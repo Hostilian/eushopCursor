@@ -3,6 +3,7 @@ import { countryPalette } from '@eushop/tokens';
 import { EmptyState } from '@eushop/ui';
 import type { Metadata } from 'next';
 import { ArrowRight, MapPin } from 'lucide-react';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Footer } from '../../../../components/layout/footer';
@@ -10,6 +11,7 @@ import { Nav } from '../../../../components/layout/nav';
 import { Badge } from '../../../../components/ui/badge';
 import { Button } from '../../../../components/ui/button';
 import { CountryHero } from '../../../../components/country/country-hero';
+import { getCountryLegalFramework } from '../../../../lib/legal-frameworks';
 
 /** See items/[slug]/page — static prerender of many ISO routes fails on Windows workers. */
 export const dynamic = 'force-dynamic';
@@ -37,12 +39,17 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
   const { iso2 } = await params;
   const country = COUNTRIES.find((c) => c.iso2.toLowerCase() === iso2.toLowerCase());
   if (!country) notFound();
+  // Per-request CSP nonce — middleware sets `script-src 'self' 'nonce-…'`,
+  // so without this attribute the JSON-LD <script> below is blocked in
+  // production and we lose Google rich results.
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   const palette = countryPalette[country.iso2] ?? {
     primary: '#3B2F22',
     accent: '#FAF7F2',
     ink: '#1A1612',
   };
   const items = FOOD_ITEMS.filter((i) => i.originCountryIso2 === country.iso2);
+  const legal = getCountryLegalFramework(country.iso2);
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://eushop.eu';
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -164,6 +171,37 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
           )}
         </section>
 
+        {legal ? (
+          <section className="container-editorial border-ink/10 mt-20 rounded-3xl border bg-white p-8">
+            <p className="text-ash text-xs tracking-widest uppercase">Legal framework</p>
+            <h2 className="text-ink mt-2 font-serif text-3xl">
+              {legal.countryName}: compliance baseline
+            </h2>
+            <ul className="text-ink/80 mt-4 ml-5 list-disc space-y-2">
+              <li>
+                <strong>Privacy:</strong> {legal.privacyFramework}
+              </li>
+              <li>
+                <strong>Commerce:</strong> {legal.commerceFramework}
+              </li>
+              <li>
+                <strong>Food transfer:</strong> {legal.foodSafetyFramework}
+              </li>
+              <li>
+                <strong>Authority contact:</strong>{' '}
+                <a
+                  href={legal.authorityUrl}
+                  rel="noopener noreferrer"
+                  className="text-ink underline"
+                >
+                  {legal.authorityName}
+                </a>
+              </li>
+            </ul>
+            <p className="text-ink/70 mt-4 text-sm">{legal.note}</p>
+          </section>
+        ) : null}
+
         <section
           className="container-editorial mt-32 rounded-[2.5rem] p-12"
           style={{ background: palette.primary, color: palette.accent }}
@@ -188,6 +226,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
       <Footer />
       <script
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
     </>

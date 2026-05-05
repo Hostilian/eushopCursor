@@ -291,6 +291,59 @@ describe('catalogRouter.adminReviewFoodItemCandidate', () => {
   });
 });
 
+describe('catalogRouter.browse (static fallback pagination)', () => {
+  /**
+   * Regression for the "180 issues" duplicate-key bug in the picker grid.
+   *
+   * Previously the static fallback ignored `input.cursor` AND emitted a
+   * non-undefined `nextCursor` whenever the slice happened to match
+   * `input.limit`, so React Query's `useInfiniteQuery` refetched the same
+   * page forever and React logged a duplicate-key warning per row per
+   * render — quickly stacking into the dev-overlay's hundreds.
+   */
+  it('walks the catalog forward and finally returns nextCursor: undefined', async () => {
+    const stubs = makeStubs() as any;
+    const ctx = makeCtx(stubs);
+    ctx.db.select = vi.fn(() => {
+      throw new Error('DB unavailable — exercising fallback');
+    });
+
+    const caller = callerFactory(ctx as any);
+    const seen = new Set<string>();
+    let cursor: string | undefined;
+    let pages = 0;
+    while (pages < 50) {
+      const page: any = await caller.browse({ limit: 24, cursor } as any);
+      for (const item of page.items) {
+        expect(seen.has(item.id)).toBe(false);
+        seen.add(item.id);
+      }
+      pages += 1;
+      if (!page.nextCursor) break;
+      cursor = page.nextCursor;
+    }
+    expect(seen.size).toBeGreaterThan(0);
+    expect(pages).toBeGreaterThan(0);
+    expect(pages).toBeLessThan(50);
+  });
+
+  it('emits a static| cursor that the next call accepts', async () => {
+    const stubs = makeStubs() as any;
+    const ctx = makeCtx(stubs);
+    ctx.db.select = vi.fn(() => {
+      throw new Error('DB unavailable');
+    });
+    const caller = callerFactory(ctx as any);
+    const first: any = await caller.browse({ limit: 1 } as any);
+    expect(first.items).toHaveLength(1);
+    if (first.nextCursor) {
+      expect(first.nextCursor).toMatch(/^static\|/);
+      const second: any = await caller.browse({ limit: 1, cursor: first.nextCursor } as any);
+      expect(second.items[0]?.id).not.toBe(first.items[0].id);
+    }
+  });
+});
+
 describe('catalogRouter.adminReviewFoodItemImageProposal', () => {
   it('rejects when the proposal is not pending', async () => {
     const stubs = makeStubs() as any;

@@ -1,0 +1,15 @@
+id: EUSHOP-B-032
+lane: B
+sub_lane: null
+branch: agent/b-032-api-perf-pass
+owner: cursor-codex-5.3
+status: claimed
+touches:
+  - packages/api-router/src/context.ts
+  - packages/api-router/src/routers/traction.ts
+hotspot_sub_lane: H2-context
+depends_on: []
+verify: pnpm claims:check && pnpm --filter @eushop/api typecheck
+notes: >
+  Reduce public-route latency by skipping unnecessary auth session lookups and
+  make traction metrics reads more efficient with fewer round-trips.

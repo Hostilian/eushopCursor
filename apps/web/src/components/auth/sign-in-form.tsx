@@ -9,8 +9,8 @@ type Status = 'idle' | 'sending' | 'sent' | 'error';
 const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
 function isLocalDevHostname(): boolean {
-  if (typeof globalThis.window === 'undefined') return false;
-  const host = globalThis.window.location.hostname;
+  if (typeof window === 'undefined') return false;
+  const host = window.location.hostname;
   return host === 'localhost' || host === '127.0.0.1';
 }
 
@@ -72,7 +72,7 @@ export function SignInForm() {
             <a
               href="http://localhost:8025"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="underline underline-offset-2"
             >
               {t('mailhogLink')}

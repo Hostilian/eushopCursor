@@ -374,7 +374,14 @@ export function ProductPicker({
               key={p.url + idx}
               className="group bg-bone relative h-20 w-20 overflow-hidden rounded-xl"
             >
-              <Image src={p.url} alt="" fill sizes="80px" className="object-cover" unoptimized />
+              <Image
+                src={p.url}
+                alt={value.freeformName ?? ''}
+                fill
+                sizes="80px"
+                className="object-cover"
+                unoptimized
+              />
               <button
                 type="button"
                 onClick={() => removePhoto(idx)}
@@ -460,10 +467,20 @@ function CatalogPicsGallery({
   const [countryFilter, setCountryFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [sortMode, setSortMode] = useState<'name-asc' | 'name-desc'>('name-asc');
-  const browseItems = useMemo(
-    () => browse.data?.pages.flatMap((page) => page.items) ?? [],
-    [browse.data],
-  );
+  const browseItems = useMemo(() => {
+    // Dedupe by id even if the API ever sends overlapping pages (defence in
+    // depth: the server fallback now honors `cursor` and terminates, but a
+    // single bug there used to flood React with duplicate `<li key={item.id}>`
+    // and stack hundreds of dev warnings within seconds).
+    const pages = browse.data?.pages ?? [];
+    const byId = new Map<string, BrowseItem>();
+    for (const page of pages) {
+      for (const item of page.items) {
+        if (!byId.has(item.id)) byId.set(item.id, item);
+      }
+    }
+    return Array.from(byId.values());
+  }, [browse.data]);
   const availableCountryIso2 = useMemo(
     () =>
       Array.from(new Set(browseItems.map((item) => item.originCountryIso2))).sort((a, b) =>
@@ -493,10 +510,22 @@ function CatalogPicsGallery({
     return () => document.removeEventListener('keydown', onKey);
   }, [onClose]);
 
+  // Auto-fetch up to MAX_AUTO_PAGES so the gallery feels infinite without
+  // us cooking the network on a runaway server (the previous unconditional
+  // version was the trigger for the duplicate-key flood). Past the cap, the
+  // user taps the "Load more" button below the grid.
+  const MAX_AUTO_PAGES = 3;
   useEffect(() => {
     if (!browse.hasNextPage || browse.isFetchingNextPage) return;
+    const pagesLoaded = browse.data?.pages.length ?? 0;
+    if (pagesLoaded >= MAX_AUTO_PAGES) return;
     void browse.fetchNextPage();
-  }, [browse.hasNextPage, browse.isFetchingNextPage, browse.fetchNextPage]);
+  }, [
+    browse.hasNextPage,
+    browse.isFetchingNextPage,
+    browse.fetchNextPage,
+    browse.data?.pages.length,
+  ]);
 
   const content = (() => {
     if (browse.isLoading) {
@@ -513,34 +542,50 @@ function CatalogPicsGallery({
     }
     if (!filteredItems.length) return <p className="text-ash text-sm">{t('picsEmpty')}</p>;
     return (
-      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-        {filteredItems.map((item) => {
-          const hit = browseItemToSearchHit(item);
-          const src = hit.images[0] ?? fallbackImageForItem(item.name, item.originCountryIso2);
-          return (
-            <li key={item.id}>
-              <button
-                type="button"
-                onClick={() => onPick(hit, src)}
-                className="border-ink/10 group bg-bone hover:border-saffron-400 relative aspect-square w-full overflow-hidden rounded-2xl border text-left transition-colors"
-                aria-label={t('picsUseFor', { name: item.name })}
-              >
-                <Image
-                  src={src}
-                  alt=""
-                  fill
-                  sizes="(max-width: 768px) 45vw, 200px"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                  unoptimized
-                />
-                <span className="bg-ink/75 text-paper pointer-events-none absolute inset-x-0 bottom-0 line-clamp-2 px-2 py-1.5 font-serif text-[11px] leading-snug opacity-0 transition-opacity group-hover:opacity-100">
-                  {item.name}
-                </span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+      <>
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+          {filteredItems.map((item) => {
+            const hit = browseItemToSearchHit(item);
+            const src = hit.images[0] ?? fallbackImageForItem(item.name, item.originCountryIso2);
+            return (
+              <li key={item.id}>
+                <button
+                  type="button"
+                  onClick={() => onPick(hit, src)}
+                  className="border-ink/10 group bg-bone hover:border-saffron-400 relative aspect-square w-full overflow-hidden rounded-2xl border text-left transition-colors"
+                  aria-label={t('picsUseFor', { name: item.name })}
+                >
+                  <Image
+                    src={src}
+                    alt=""
+                    fill
+                    sizes="(max-width: 768px) 45vw, 200px"
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                    unoptimized
+                  />
+                  <span className="bg-ink/75 text-paper pointer-events-none absolute inset-x-0 bottom-0 line-clamp-2 px-2 py-1.5 font-serif text-[11px] leading-snug opacity-0 transition-opacity group-hover:opacity-100">
+                    {item.name}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+        {browse.hasNextPage ? (
+          <div className="mt-4 flex justify-center">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => void browse.fetchNextPage()}
+              disabled={browse.isFetchingNextPage}
+              aria-label={t('picsLoadMoreAria')}
+            >
+              {browse.isFetchingNextPage ? t('uploading') : t('picsLoadMore')}
+            </Button>
+          </div>
+        ) : null}
+      </>
     );
   })();
 

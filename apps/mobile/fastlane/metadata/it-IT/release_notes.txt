@@ -1,0 +1,11 @@
+[needs translation: Italiano (it-IT)]
+
+# Source (en-US):
+# First public release.
+# 
+# • Trip offers, local listings, and open asks on one map.
+# • Magic-link sign-in (no passwords).
+# • In-app chat with public-handoff guidance.
+# • 5 km privacy cells for every pin.
+# • Hosted in the EU.
+# 

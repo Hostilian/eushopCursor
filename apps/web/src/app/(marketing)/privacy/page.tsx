@@ -1,7 +1,21 @@
 import { Footer } from '../../../components/layout/footer';
 import { Nav } from '../../../components/layout/nav';
+import {
+  getAllCountryLegalFrameworks,
+  getCountryLegalFramework,
+} from '../../../lib/legal-frameworks';
 
-export default function PrivacyPage() {
+const LAST_REVIEWED = '2026-05-05';
+
+export default async function PrivacyPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ country?: string }>;
+}) {
+  const { country } = await searchParams;
+  const selected = country ? getCountryLegalFramework(country) : null;
+  const allFrameworks = getAllCountryLegalFrameworks();
+
   return (
     <>
       <Nav />
@@ -55,7 +69,103 @@ export default function PrivacyPage() {
               any time.
             </li>
             <li>
-              <strong>Lodge a complaint:</strong> contact your national supervisory authority.
+              <strong>Lodge a complaint:</strong> contact your national supervisory authority. We
+              link the country directory below.
+            </li>
+          </ul>
+          <h2 className="text-ink mt-10 font-serif text-2xl">Country legal frameworks</h2>
+          <p>
+            Eushop supports country-specific legal contexts. Pick your country code to review the
+            applicable privacy, consumer, and food-transfer framework before listing or reserving.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {allFrameworks.map((entry) => (
+              <a
+                key={entry.iso2}
+                href={`/privacy?country=${entry.iso2}`}
+                className={`rounded-full border px-3 py-1 text-xs tracking-widest uppercase ${
+                  selected?.iso2 === entry.iso2
+                    ? 'border-ink bg-ink text-paper'
+                    : 'border-ink/20 text-ink/70'
+                }`}
+              >
+                {entry.iso2}
+              </a>
+            ))}
+          </div>
+          {selected ? (
+            <div className="border-ink/10 mt-6 rounded-2xl border bg-white p-6">
+              <p className="text-ash text-xs tracking-widest uppercase">
+                {selected.countryName} ({selected.iso2})
+              </p>
+              <ul className="mt-3 ml-5 list-disc space-y-2">
+                <li>
+                  <strong>Privacy:</strong> {selected.privacyFramework}
+                </li>
+                <li>
+                  <strong>Commerce:</strong> {selected.commerceFramework}
+                </li>
+                <li>
+                  <strong>Food transfer:</strong> {selected.foodSafetyFramework}
+                </li>
+                <li>
+                  <strong>Authority:</strong>{' '}
+                  <a
+                    href={selected.authorityUrl}
+                    rel="noopener noreferrer"
+                    className="text-ink underline"
+                  >
+                    {selected.authorityName}
+                  </a>
+                </li>
+              </ul>
+              <p className="text-ink/70 mt-3 text-sm">{selected.note}</p>
+            </div>
+          ) : (
+            <p className="text-ink/70 mt-4 text-sm">
+              Add <code className="text-sm">?country=DE</code> (or any supported ISO2 code) to view
+              country-specific legal framing.
+            </p>
+          )}
+          <h2 className="text-ink mt-10 font-serif text-2xl">Mobile app (iOS + Android)</h2>
+          <p>
+            The Eushop mobile app (bundle <code className="text-sm">eu.eushop.app</code>) collects
+            the same data as the web app, with these mobile-specific clauses:
+          </p>
+          <ul className="ml-5 list-disc space-y-1">
+            <li>
+              <strong>Camera &amp; photo library:</strong> only when you tap "Add photo" on a
+              listing or profile. Images are uploaded to our EU object storage and shown in the
+              listing or your profile only.
+            </li>
+            <li>
+              <strong>Approximate location:</strong> we request only the coarse permission (Android{' '}
+              <code className="text-sm">ACCESS_COARSE_LOCATION</code>, iOS{' '}
+              <code className="text-sm">When In Use</code>). Pins are deterministically jittered
+              inside a 5 km cell before they leave your device.
+            </li>
+            <li>
+              <strong>Push notifications:</strong> we register an Expo push token tied to your
+              account so we can send new-message and trip-reservation alerts. Revoke at any time in
+              your device settings or by deleting your account.
+            </li>
+            <li>
+              <strong>Crash reports:</strong> when Sentry is configured we send anonymized stack
+              traces (no message content, no contact info) to our EU Sentry instance to help fix
+              bugs. This is part of operating the service and is not optional.
+            </li>
+            <li>
+              <strong>App Tracking Transparency (iOS):</strong> Eushop never requests the IDFA and
+              never tracks you across other apps. We declare this in the Privacy Nutrition Label as
+              "Data Used to Track You: None".
+            </li>
+            <li>
+              <strong>Android Advertising ID:</strong> never read. We do not link Play install
+              campaigns to your account.
+            </li>
+            <li>
+              <strong>OTA updates:</strong> small JavaScript-bundle updates are delivered via Expo
+              Updates over HTTPS. Native code changes always require a fresh store build.
             </li>
           </ul>
           <h2 className="text-ink mt-10 font-serif text-2xl">Where the data lives</h2>
@@ -73,9 +183,7 @@ export default function PrivacyPage() {
             you operate—see <code className="text-sm">docs/ops/zero-cost-stack.md</code> for the
             honest inventory and alternatives (Plausible, Matomo).
           </p>
-          <p className="text-ash mt-10 text-xs">
-            Last reviewed {new Date().toISOString().slice(0, 10)}
-          </p>
+          <p className="text-ash mt-10 text-xs">Last reviewed {LAST_REVIEWED}</p>
         </article>
       </main>
       <Footer />

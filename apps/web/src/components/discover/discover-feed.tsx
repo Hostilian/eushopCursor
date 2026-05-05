@@ -21,6 +21,11 @@ const FRESHNESS = [
   { v: 'shelf-stable', l: 'Shelf-stable' },
 ] as const;
 
+const COUNTRY_OPTIONS = [
+  { v: null as string | null, l: 'All' },
+  ...COUNTRIES.map((c) => ({ v: c.iso2, l: `${c.flagEmoji} ${c.iso2}` })),
+].slice(0, 14);
+
 export function DiscoverFeed() {
   const [country, setCountry] = useState<string | null>(null);
   const [radius, setRadius] = useState<number>(25);
@@ -38,7 +43,7 @@ export function DiscoverFeed() {
         | 'shelf-stable'
         | undefined,
     },
-    { staleTime: 30_000 },
+    { staleTime: 30_000, placeholderData: (previousData) => previousData },
   );
 
   const items = useMemo(() => query.data ?? [], [query.data]);
@@ -102,14 +107,7 @@ export function DiscoverFeed() {
       <aside className="md:col-span-3">
         <div className="sticky top-24 space-y-8">
           <FilterBlock label="Country">
-            <Pills
-              value={country}
-              onChange={setCountry}
-              options={[
-                { v: null, l: 'All' },
-                ...COUNTRIES.map((c) => ({ v: c.iso2, l: `${c.flagEmoji} ${c.iso2}` })),
-              ].slice(0, 14)}
-            />
+            <Pills value={country} onChange={setCountry} options={COUNTRY_OPTIONS} />
           </FilterBlock>
           <FilterBlock label="Radius">
             <div className="flex flex-wrap gap-2">
@@ -210,18 +208,22 @@ interface ListingLike {
 
 function ListingCard({ listing }: { listing: ListingLike }) {
   const palette = countryPalette[listing.countryIso2] ?? { primary: '#3B2F22', accent: '#FAF7F2' };
+  const imageUrl = listing.photos[0]?.url;
+  const shouldUseUnoptimizedImage = Boolean(
+    imageUrl?.startsWith('data:') || imageUrl?.startsWith('blob:'),
+  );
   return (
     <li className="group border-ink/10 bg-porcelain overflow-hidden rounded-3xl border transition-all hover:-translate-y-1 hover:shadow-lg">
       <div
         className="relative aspect-[4/3] overflow-hidden"
         style={{ background: palette.primary }}
       >
-        {listing.photos[0] ? (
+        {imageUrl ? (
           <Image
-            src={listing.photos[0].url}
+            src={imageUrl}
             alt=""
             fill
-            unoptimized
+            unoptimized={shouldUseUnoptimizedImage}
             sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />

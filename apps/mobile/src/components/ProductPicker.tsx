@@ -150,10 +150,17 @@ export function ProductPicker({ value, onChange }: Readonly<Props>) {
     }
   };
 
-  const browseItems = useMemo(
-    () => browseGallery.data?.pages.flatMap((page) => page.items) ?? [],
-    [browseGallery.data],
-  );
+  const browseItems = useMemo(() => {
+    // Dedupe by id even if the API ever sends overlapping pages (web mirror).
+    const pages = browseGallery.data?.pages ?? [];
+    const byId = new Map<string, BrowseItem>();
+    for (const page of pages) {
+      for (const item of page.items) {
+        if (!byId.has(item.id)) byId.set(item.id, item);
+      }
+    }
+    return Array.from(byId.values());
+  }, [browseGallery.data]);
   const availableCountryIso2 = useMemo(
     () =>
       Array.from(new Set(browseItems.map((item) => item.originCountryIso2))).sort((a, b) =>
@@ -162,14 +169,20 @@ export function ProductPicker({ value, onChange }: Readonly<Props>) {
     [browseItems],
   );
 
+  // Auto-fetch up to MAX_AUTO_PAGES (web mirror). Past the cap the user
+  // taps a "Load more" affordance — we never run away on a busted server.
+  const MAX_AUTO_PAGES = 3;
   useEffect(() => {
     if (!picsOpen || !browseGallery.hasNextPage || browseGallery.isFetchingNextPage) return;
+    const pagesLoaded = browseGallery.data?.pages.length ?? 0;
+    if (pagesLoaded >= MAX_AUTO_PAGES) return;
     void browseGallery.fetchNextPage();
   }, [
     picsOpen,
     browseGallery.hasNextPage,
     browseGallery.isFetchingNextPage,
     browseGallery.fetchNextPage,
+    browseGallery.data?.pages.length,
   ]);
 
   const renderSearchHit = (hit: CatalogSearchHit) => (
@@ -242,35 +255,58 @@ export function ProductPicker({ value, onChange }: Readonly<Props>) {
       );
     }
     return (
-      <View className="flex-row flex-wrap pb-4" style={{ gap: tileGap }}>
-        {galleryItems.map((item) => {
-          const hit = browseItemToSearchHit(item);
-          const src = hit.images[0] ?? fallbackImageForItem(item.name, item.originCountryIso2);
-          return (
+      <View>
+        <View className="flex-row flex-wrap pb-4" style={{ gap: tileGap }}>
+          {galleryItems.map((item) => {
+            const hit = browseItemToSearchHit(item);
+            const src = hit.images[0] ?? fallbackImageForItem(item.name, item.originCountryIso2);
+            return (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => {
+                  onSelect(hit, src);
+                  setPicsOpen(false);
+                }}
+                style={{ width: tile, height: tile }}
+                className="border-ink/10 bg-bone overflow-hidden rounded-2xl border"
+              >
+                {src ? (
+                  <Image source={{ uri: src }} contentFit="cover" style={{ flex: 1 }} />
+                ) : (
+                  <View className="flex-1 items-center justify-center gap-1 p-1">
+                    <Text accessible={false} className="text-2xl">
+                      {flagEmojiForIso2(item.originCountryIso2)}
+                    </Text>
+                    <Text
+                      className="text-ink text-center text-[10px] leading-snug"
+                      numberOfLines={4}
+                    >
+                      {item.name}
+                    </Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+        {browseGallery.hasNextPage ? (
+          <View className="items-center pb-4">
             <TouchableOpacity
-              key={item.id}
-              onPress={() => {
-                onSelect(hit, src);
-                setPicsOpen(false);
-              }}
-              style={{ width: tile, height: tile }}
-              className="border-ink/10 bg-bone overflow-hidden rounded-2xl border"
+              accessibilityRole="button"
+              disabled={browseGallery.isFetchingNextPage}
+              onPress={() => void browseGallery.fetchNextPage()}
+              className="border-ink/15 rounded-full border px-5 py-2"
             >
-              {src ? (
-                <Image source={{ uri: src }} contentFit="cover" style={{ flex: 1 }} />
+              {browseGallery.isFetchingNextPage ? (
+                <ActivityIndicator />
               ) : (
-                <View className="flex-1 items-center justify-center gap-1 p-1">
-                  <Text accessible={false} className="text-2xl">
-                    {flagEmojiForIso2(item.originCountryIso2)}
-                  </Text>
-                  <Text className="text-ink text-center text-[10px] leading-snug" numberOfLines={4}>
-                    {item.name}
-                  </Text>
-                </View>
+                <Text className="text-ink text-sm">
+                  {t(['productPicker', 'picsLoadMore'], 'Load more')}
+                </Text>
               )}
             </TouchableOpacity>
-          );
-        })}
+          </View>
+        ) : null}
       </View>
     );
   })();

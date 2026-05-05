@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Eushop adaptive icon monochrome">
+  <title>Eushop adaptive icon monochrome</title>
+  <g transform="translate(512 512)">
+    <path d="M -200 40 C -120 -120, 120 120, 200 -40"
+          fill="none"
+          stroke="#000000"
+          stroke-width="42"
+          stroke-linecap="round"/>
+    <circle cx="-200" cy="40" r="30" fill="#000000"/>
+    <circle cx="200" cy="-40" r="30" fill="#000000"/>
+  </g>
+</svg>

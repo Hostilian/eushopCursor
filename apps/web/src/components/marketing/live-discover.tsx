@@ -73,7 +73,9 @@ export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  unoptimized
+                  unoptimized={
+                    hero.photos[0].url.startsWith('data:') || hero.photos[0].url.startsWith('blob:')
+                  }
                 />
               ) : null}
               <div className="from-ink/70 absolute inset-0 bg-gradient-to-t via-transparent to-transparent" />
@@ -111,7 +113,9 @@ export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
                         fill
                         className="object-cover"
                         sizes="64px"
-                        unoptimized
+                        unoptimized={
+                          l.photos[0].url.startsWith('data:') || l.photos[0].url.startsWith('blob:')
+                        }
                       />
                     ) : null}
                   </div>

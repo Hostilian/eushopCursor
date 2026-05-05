@@ -23,10 +23,22 @@ function readAnalyticsConsent(): boolean {
   }
 }
 
+function runWhenIdle(task: () => void): void {
+  if (typeof window === 'undefined') return;
+  if ('requestIdleCallback' in window) {
+    const idleCallback = window.requestIdleCallback as (cb: () => void) => number;
+    idleCallback(task);
+    return;
+  }
+  window.setTimeout(task, 1);
+}
+
 export function Providers({ children }: { children: ReactNode }) {
   useEffect(() => {
-    void initWebSentry('client');
-    if (readAnalyticsConsent()) initPostHog();
+    runWhenIdle(() => {
+      void initWebSentry('client');
+      if (readAnalyticsConsent()) initPostHog();
+    });
   }, []);
   const [queryClient] = useState(
     () =>
@@ -44,9 +56,7 @@ export function Providers({ children }: { children: ReactNode }) {
     trpc.createClient({
       links: [
         loggerLink({
-          enabled: (opts) =>
-            (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') ||
-            opts.direction === 'down',
+          enabled: () => process.env.NODE_ENV !== 'production' && typeof window !== 'undefined',
         }),
         httpBatchLink({
           url: `${apiUrl}/trpc`,

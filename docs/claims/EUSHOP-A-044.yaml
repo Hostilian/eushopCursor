@@ -1,0 +1,18 @@
+id: EUSHOP-A-044
+lane: A
+sub_lane: null
+branch: agent/a-044-csp-nonce-jsonld
+owner: cursor-agent
+status: claimed
+touches:
+  - apps/web/src/app/(product)/items/[slug]/page.tsx
+  - apps/web/src/app/(product)/countries/[iso2]/page.tsx
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Production CSP correctness: read the per-request nonce from the `x-nonce`
+  header set by middleware.ts and pass it to the JSON-LD `<script>` tags on
+  the item and country pages. Without this, production silently drops our
+  structured data because `script-src 'self' 'nonce-...' 'strict-dynamic'`
+  blocks unsigned inline scripts, and Google rich results disappear.

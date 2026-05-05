@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Eushop adaptive icon foreground">
+  <title>Eushop adaptive icon foreground</title>
+  <defs>
+    <linearGradient id="route" x1="0" y1="0.5" x2="1" y2="0.5">
+      <stop offset="0" stop-color="#1A1612"/>
+      <stop offset="1" stop-color="#3B2F22"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(512 512)">
+    <path d="M -200 40 C -120 -120, 120 120, 200 -40"
+          fill="none"
+          stroke="url(#route)"
+          stroke-width="42"
+          stroke-linecap="round"/>
+    <circle cx="-200" cy="40" r="34" fill="#B8860B"/>
+    <circle cx="-200" cy="40" r="16" fill="#FAF7F2"/>
+    <circle cx="200" cy="-40" r="34" fill="#1A1612"/>
+    <circle cx="200" cy="-40" r="16" fill="#FAF7F2"/>
+  </g>
+</svg>

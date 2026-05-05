@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { Footer } from '../components/layout/footer';
@@ -12,11 +13,15 @@ import { CategoryShelf } from '../components/marketing/category-shelf';
 import { EditorialBlock } from '../components/marketing/editorial-block';
 import { KpiStrip } from '../components/marketing/kpi-strip';
 import { LiveDiscover, type LiveListingCard } from '../components/marketing/live-discover';
-import { MobilePreview } from '../components/marketing/mobile-preview';
 import { api } from '../lib/trpc-server';
 import { isDemoModeEnabled } from '../lib/demo-mode';
 import { showcaseListings } from '../lib/showcase';
 import { COUNTRIES } from '@eushop/catalog';
+
+const MobilePreview = dynamic(
+  () => import('../components/marketing/mobile-preview').then((module) => module.MobilePreview),
+  { ssr: false },
+);
 
 function showcaseCards(): LiveListingCard[] {
   return showcaseListings().map((s) => ({
@@ -31,15 +36,17 @@ function showcaseCards(): LiveListingCard[] {
 }
 
 export default async function HomePage() {
-  const t = await getTranslations();
-  const demo = await isDemoModeEnabled();
+  const [t, demo] = await Promise.all([getTranslations(), isDemoModeEnabled()]);
   let categories: Awaited<ReturnType<Awaited<ReturnType<typeof api>>['catalog']['categories']>> =
     [];
   let liveCards: LiveListingCard[] = [];
   try {
     const trpc = await api();
-    categories = await trpc.catalog.categories();
-    const recent = await trpc.listings.recent({ limit: 12 });
+    const [categoriesRaw, recent] = await Promise.all([
+      trpc.catalog.categories(),
+      trpc.listings.recent({ limit: 12 }),
+    ]);
+    categories = categoriesRaw;
     liveCards = recent.map((r) => ({
       id: r.id,
       freeformName: r.freeformName,

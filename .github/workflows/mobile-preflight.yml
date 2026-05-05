@@ -1,0 +1,77 @@
+name: Mobile preflight
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/mobile/**'
+      - 'packages/api-router/**'
+      - 'packages/validators/**'
+      - 'packages/i18n/**'
+      - 'packages/ui-mobile/**'
+      - 'docs/ops/mobile-*.md'
+      - '.github/workflows/mobile-preflight.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'apps/mobile/**'
+      - 'packages/api-router/**'
+      - 'packages/validators/**'
+      - 'packages/i18n/**'
+      - 'packages/ui-mobile/**'
+      - 'docs/ops/mobile-*.md'
+      - '.github/workflows/mobile-preflight.yml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preflight:
+    name: app.json + assets + metadata + screenshots + compliance
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # We need the full history so the version-monotonicity check can
+          # find the most recent `mobile-v*` tag.
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build mobile assets
+        run: pnpm --filter @eushop/mobile assets:build
+
+      - name: Verify mobile assets
+        run: pnpm --filter @eushop/mobile assets:check
+
+      - name: Generate marketing screenshots
+        run: pnpm --filter @eushop/mobile screenshots
+
+      - name: Mobile preflight (everything)
+        run: pnpm --filter @eushop/mobile preflight
+
+      - name: Mobile typecheck
+        run: pnpm --filter @eushop/mobile typecheck
+
+      - name: Upload assets + screenshots artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-publish-bundle
+          path: |
+            apps/mobile/assets/*.png
+            apps/mobile/fastlane/screenshots/**/*.png
+            apps/mobile/fastlane/metadata/**/*.txt
+          retention-days: 14

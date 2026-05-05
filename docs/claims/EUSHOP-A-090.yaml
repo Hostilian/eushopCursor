@@ -1,0 +1,15 @@
+id: EUSHOP-A-090
+lane: A
+sub_lane: null
+branch: agent/a-090-country-legal-mobile
+owner: cursor-codex-5.3
+status: claimed
+touches:
+  - apps/mobile/app/consent.tsx
+  - apps/mobile/src/lib/legal-frameworks.ts
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm --filter @eushop/mobile typecheck
+notes: >
+  Align mobile consent/legal copy with country-specific legal frameworks to match
+  the web implementation without touching hotspot files.

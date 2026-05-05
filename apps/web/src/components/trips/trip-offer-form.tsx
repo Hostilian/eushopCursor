@@ -326,13 +326,15 @@ export function TripOfferForm() {
           <ul className="mt-3 flex flex-wrap gap-2">
             {intended.map((it, idx) => (
               <li
-                key={idx}
+                // Stable identity from server id when present, freeform name
+                // otherwise — array index would shuffle keys on remove.
+                key={`${it.foodItemId ?? it.freeformName}-${it.photo ?? 'np'}`}
                 className="border-ink/10 bg-paper inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs"
               >
                 {it.photo ? (
                   <Image
                     src={it.photo}
-                    alt=""
+                    alt={it.freeformName}
                     width={20}
                     height={20}
                     className="h-5 w-5 rounded-full object-cover"

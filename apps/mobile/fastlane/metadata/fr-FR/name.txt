@@ -1,0 +1,5 @@
+[needs translation: Français (fr-FR)]
+
+# Source (en-US):
+# Eushop — Trips & Open Asks
+# 

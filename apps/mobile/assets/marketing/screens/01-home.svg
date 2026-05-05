@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 2796" preserveAspectRatio="xMidYMid slice" role="img">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FAF7F2"/>
+      <stop offset="1" stop-color="#EFE5D2"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F7F1E6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1290" height="2796" fill="url(#bg)"/>
+  <g transform="translate(80 200)" font-family="Georgia, 'Times New Roman', serif">
+    <text x="0" y="0" font-size="32" letter-spacing="6" fill="#3B2F22" fill-opacity="0.6">FRESH NEAR YOU</text>
+    <text x="0" y="120" font-size="120" font-weight="600" fill="#1A1612">Get something</text>
+    <text x="0" y="260" font-size="120" font-weight="600" fill="#1A1612">from somewhere.</text>
+    <text x="0" y="370" font-size="42" fill="#1A1612" fill-opacity="0.7">Trips, locals, and open asks on one map.</text>
+  </g>
+  <g transform="translate(80 700)">
+    <rect width="1130" height="650" rx="48" fill="url(#card)" stroke="#1A1612" stroke-opacity="0.08" stroke-width="2"/>
+    <g transform="translate(48 48)" font-family="Georgia, serif">
+      <text x="0" y="0" font-size="28" letter-spacing="4" fill="#9A9081">TODAY</text>
+      <text x="0" y="80" font-size="64" font-weight="600" fill="#1A1612">Munich &#146; Warsaw</text>
+      <text x="0" y="140" font-size="36" fill="#3B2F22" fill-opacity="0.75">May 14 &#183; 6 bag slots &#183; agreed at &#172;12 / slot</text>
+      <g transform="translate(0 200)">
+        <rect width="1034" height="280" rx="32" fill="#1A1612"/>
+        <text x="60" y="100" font-size="48" fill="#FAF7F2" font-weight="500">Kr&#243;wki, half tin</text>
+        <text x="60" y="170" font-size="36" fill="#FAF7F2" fill-opacity="0.75">Goetheplatz &#183; &#172;3 &#183; public handoff</text>
+        <circle cx="900" cy="140" r="60" fill="#B8860B"/>
+        <circle cx="900" cy="140" r="28" fill="#FAF7F2"/>
+      </g>
+    </g>
+  </g>
+  <g transform="translate(80 1500)" font-family="Georgia, serif">
+    <text x="0" y="0" font-size="42" font-weight="500" fill="#1A1612">Three primitives.</text>
+    <text x="0" y="60" font-size="42" font-weight="500" fill="#1A1612">One network.</text>
+    <g transform="translate(0 130)">
+      <rect width="350" height="260" rx="32" fill="#FFFFFF" stroke="#1A1612" stroke-opacity="0.08"/>
+      <text x="36" y="80" font-size="28" letter-spacing="3" fill="#9A9081">TRIPS</text>
+      <text x="36" y="160" font-size="44" font-weight="600" fill="#1A1612">Spare</text>
+      <text x="36" y="210" font-size="44" font-weight="600" fill="#1A1612">capacity.</text>
+    </g>
+    <g transform="translate(390 130)">
+      <rect width="350" height="260" rx="32" fill="#FFFFFF" stroke="#1A1612" stroke-opacity="0.08"/>
+      <text x="36" y="80" font-size="28" letter-spacing="3" fill="#9A9081">LOCALS</text>
+      <text x="36" y="160" font-size="44" font-weight="600" fill="#1A1612">Finder</text>
+      <text x="36" y="210" font-size="44" font-weight="600" fill="#1A1612">fees.</text>
+    </g>
+    <g transform="translate(780 130)">
+      <rect width="350" height="260" rx="32" fill="#FFFFFF" stroke="#1A1612" stroke-opacity="0.08"/>
+      <text x="36" y="80" font-size="28" letter-spacing="3" fill="#9A9081">OPEN ASKS</text>
+      <text x="36" y="160" font-size="44" font-weight="600" fill="#1A1612">Matches,</text>
+      <text x="36" y="210" font-size="44" font-weight="600" fill="#1A1612">on tap.</text>
+    </g>
+  </g>
+  <g transform="translate(80 2640)" font-family="Georgia, serif">
+    <text x="0" y="0" font-size="28" letter-spacing="6" fill="#3B2F22" fill-opacity="0.55">EUSHOP &#183; HOSTED IN THE EU</text>
+  </g>
+</svg>

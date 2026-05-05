@@ -47,7 +47,13 @@ export function enqueueEventFromEnv(): EnqueueEvent | undefined {
 }
 
 export async function createContext({ headers, enqueueEvent }: CreateContextOptions) {
-  const session = await auth.api.getSession({ headers }).catch(() => null);
+  // Skip session lookup when request has no auth hints.
+  const cookieHeader = headers.get('cookie');
+  const authHeader = headers.get('authorization');
+  const shouldResolveSession = Boolean(cookieHeader?.trim() || authHeader?.trim());
+  const session = shouldResolveSession
+    ? await auth.api.getSession({ headers }).catch(() => null)
+    : null;
   const user: CtxUser | null = session?.user
     ? {
         id: session.user.id,

@@ -6,7 +6,7 @@ export default function SignInPage() {
   return (
     <>
       <Nav />
-      <main className="container-editorial pt-16 pb-32">
+      <main id="main-content" className="container-editorial pt-16 pb-32">
         <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-2">
           <div>
             <p className="text-ash text-xs tracking-widest uppercase">Welcome back</p>

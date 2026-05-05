@@ -1,0 +1,19 @@
+id: EUSHOP-B-031
+lane: B
+sub_lane: null
+branch: agent/b-031-catalog-browse-fallback-cursor
+owner: cursor-agent
+status: claimed
+touches:
+  - packages/api-router/src/routers/catalog.ts
+  - packages/api-router/src/routers/catalog.test.ts
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm test:unit -- packages/api-router/src/routers/catalog.test.ts
+notes: >
+  Catalog browse static-fallback honors `input.cursor` and terminates with
+  `nextCursor: undefined` once the catalog is exhausted. Fixes the
+  duplicate-React-key avalanche in the picker grid that produced 180+ dev
+  console issues, by stopping useInfiniteQuery's fetch loop at the source.
+  Two regression tests guarantee the walk terminates and the static| cursor
+  is accepted on the next call.

@@ -1,0 +1,5 @@
+[needs translation: Polski (pl-PL)]
+
+# Source (en-US):
+# Get something. Bring something
+# 

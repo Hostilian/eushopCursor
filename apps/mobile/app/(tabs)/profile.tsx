@@ -3,6 +3,8 @@ import * as Notifications from 'expo-notifications';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { getCountryLegalFramework } from '../../src/lib/legal-frameworks';
+import { getConsent } from '../../src/lib/observability';
 import { trpc } from '../../src/lib/trpc';
 
 export default function ProfileScreen() {
@@ -10,6 +12,7 @@ export default function ProfileScreen() {
   const me = trpc.profile.me.useQuery(undefined, { retry: false });
   const registerDevice = trpc.notifications.registerDevice.useMutation();
   const [status, setStatus] = useState<string>('idle');
+  const [legalCountryLabel, setLegalCountryLabel] = useState<string>('Not set');
   const sessionExpired =
     me.error?.data?.code === 'UNAUTHORIZED' ||
     /unauthorized|session/i.test(me.error?.message ?? '');
@@ -35,6 +38,16 @@ export default function ProfileScreen() {
       }
     })();
   }, [me.data]);
+
+  useEffect(() => {
+    void (async () => {
+      const consent = await getConsent();
+      if (!consent?.legalCountryIso2) return;
+      const legal = getCountryLegalFramework(consent.legalCountryIso2);
+      if (!legal) return;
+      setLegalCountryLabel(`${legal.countryName} (${legal.iso2})`);
+    })();
+  }, []);
 
   if (me.isLoading) {
     return (
@@ -89,6 +102,21 @@ export default function ProfileScreen() {
         <Text className="text-ash text-xs tracking-widest uppercase">Notifications</Text>
         <Text className="text-ink/80 mt-2 text-sm">Push status: {status}</Text>
       </View>
+
+      <View className="border-ink/10 bg-porcelain mt-4 rounded-3xl border p-6">
+        <Text className="text-ash text-xs tracking-widest uppercase">Legal framework</Text>
+        <Text className="text-ink mt-2 font-serif text-xl">{legalCountryLabel}</Text>
+        <Text className="text-ink/70 mt-1 text-sm">
+          This country controls the legal baseline shown in your privacy choices.
+        </Text>
+      </View>
+
+      <TouchableOpacity
+        className="border-ink/10 mt-4 self-start rounded-full border px-5 py-2.5"
+        onPress={() => router.push('/consent')}
+      >
+        <Text className="text-ink text-sm">Privacy choices / legal country</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity
         className="border-danger/40 mt-8 self-start rounded-full border px-5 py-2.5"

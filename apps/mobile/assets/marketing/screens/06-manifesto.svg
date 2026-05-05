@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 2796" preserveAspectRatio="xMidYMid slice" role="img">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1A1612"/>
+      <stop offset="1" stop-color="#3B2F22"/>
+    </linearGradient>
+  </defs>
+  <rect width="1290" height="2796" fill="url(#bg)"/>
+  <g transform="translate(80 280)" font-family="Georgia, serif">
+    <text x="0" y="0" font-size="32" letter-spacing="6" fill="#FAF7F2" fill-opacity="0.55">MANIFESTO</text>
+    <text x="0" y="160" font-size="160" font-weight="600" fill="#FAF7F2">Privacy</text>
+    <text x="0" y="320" font-size="160" font-weight="600" fill="#FAF7F2">by design.</text>
+    <text x="0" y="430" font-size="42" fill="#FAF7F2" fill-opacity="0.7">5 km privacy cells. Deterministic jitter.</text>
+    <text x="0" y="490" font-size="42" fill="#FAF7F2" fill-opacity="0.7">No precise address ever leaves your phone.</text>
+  </g>
+  <g transform="translate(80 1000)">
+    <g>
+      <rect width="1130" height="240" rx="48" fill="#FAF7F2" fill-opacity="0.08"/>
+      <text x="48" y="80" font-size="28" letter-spacing="3" fill="#FAF7F2" fill-opacity="0.6" font-family="Georgia, serif">HOSTED IN THE EU</text>
+      <text x="48" y="160" font-size="56" font-weight="500" fill="#FAF7F2" font-family="Georgia, serif">Hetzner Falkenstein.</text>
+      <text x="48" y="220" font-size="56" font-weight="500" fill="#FAF7F2" font-family="Georgia, serif">Cloudflare EU.</text>
+    </g>
+    <g transform="translate(0 280)">
+      <rect width="1130" height="240" rx="48" fill="#FAF7F2" fill-opacity="0.08"/>
+      <text x="48" y="80" font-size="28" letter-spacing="3" fill="#FAF7F2" fill-opacity="0.6" font-family="Georgia, serif">HONEST PRICING</text>
+      <text x="48" y="160" font-size="56" font-weight="500" fill="#FAF7F2" font-family="Georgia, serif">min(&#172;1.50, 12% of finder fee).</text>
+      <text x="48" y="220" font-size="56" font-weight="500" fill="#FAF7F2" font-family="Georgia, serif">Nothing more.</text>
+    </g>
+    <g transform="translate(0 560)">
+      <rect width="1130" height="240" rx="48" fill="#FAF7F2" fill-opacity="0.08"/>
+      <text x="48" y="80" font-size="28" letter-spacing="3" fill="#FAF7F2" fill-opacity="0.6" font-family="Georgia, serif">GDPR BY BASELINE</text>
+      <text x="48" y="160" font-size="56" font-weight="500" fill="#FAF7F2" font-family="Georgia, serif">One-click export.</text>
+      <text x="48" y="220" font-size="56" font-weight="500" fill="#FAF7F2" font-family="Georgia, serif">One-click delete.</text>
+    </g>
+  </g>
+  <g transform="translate(80 2640)" font-family="Georgia, serif">
+    <text x="0" y="0" font-size="28" letter-spacing="6" fill="#FAF7F2" fill-opacity="0.55">EUSHOP &#183; OPEN PEER LAYER FOR EU CORRIDORS</text>
+  </g>
+</svg>

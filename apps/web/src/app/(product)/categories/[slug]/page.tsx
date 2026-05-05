@@ -8,7 +8,11 @@ import { Footer } from '../../../../components/layout/footer';
 import { Nav } from '../../../../components/layout/nav';
 import { Button } from '../../../../components/ui/button';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 86_400;
+
+export function generateStaticParams(): Array<{ slug: string }> {
+  return CATEGORIES.map((category) => ({ slug: category.slug }));
+}
 
 export async function generateMetadata({
   params,

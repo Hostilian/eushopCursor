@@ -3,6 +3,7 @@ import { OPEN_FOOD_FACTS_ATTRIBUTION } from '@eushop/catalog/openfoodfacts';
 import type { RouterOutputs } from '@eushop/api-router';
 import { countryPalette } from '@eushop/tokens';
 import { ArrowRight, MapPin, Tag } from 'lucide-react';
+import { headers } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -21,6 +22,8 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const item = FOOD_ITEMS.find((i) => i.slug === slug);
   if (!item) notFound();
+  // Per-request CSP nonce — see countries/[iso2]/page.tsx for rationale.
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   const country = COUNTRIES.find((c) => c.iso2 === item.originCountryIso2);
   const palette = countryPalette[item.originCountryIso2] ?? {
     primary: '#3B2F22',
@@ -209,6 +212,7 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
       <Footer />
       <script
         type="application/ld+json"
+        nonce={nonce}
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
     </>

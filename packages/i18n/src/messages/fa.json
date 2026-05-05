@@ -422,7 +422,9 @@
     "picsClose": "Close",
     "picsUseFor": "Use photo for {name}",
     "proposePhotosStrip": "Photos you attach (from search, upload, or Pics)",
-    "proposeOpenPics": "Open Pics gallery"
+    "proposeOpenPics": "Open Pics gallery",
+    "picsLoadMore": "Load more",
+    "picsLoadMoreAria": "Load more catalog photos"
   },
   "help": {
     "metaTitle": "Help & FAQ · Eushop",

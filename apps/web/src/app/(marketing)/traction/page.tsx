@@ -51,8 +51,12 @@ export default async function TractionPage() {
 
   try {
     const trpc = await api();
-    counts = await trpc.traction.liveCounts();
-    weekly = await trpc.traction.weeklyGrowth({ weeks: 12 });
+    const [nextCounts, nextWeekly] = await Promise.all([
+      trpc.traction.liveCounts(),
+      trpc.traction.weeklyGrowth({ weeks: 12 }),
+    ]);
+    counts = nextCounts;
+    weekly = nextWeekly;
   } catch (err) {
     liveError = err instanceof Error ? err.message : 'Unknown error';
   }

@@ -1,0 +1,5 @@
+[needs translation: Polski (pl-PL)]
+
+# Source (en-US):
+# trips,luggage,sharing,europe,deliveries,community,marketplace,routes,errands,corridors,EU
+# 

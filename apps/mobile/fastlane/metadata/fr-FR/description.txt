@@ -1,0 +1,36 @@
+[needs translation: Français (fr-FR)]
+
+# Source (en-US):
+# Get something from somewhere. Bring something for someone.
+# 
+# Eushop is the open peer layer for trips, locals, and open asks: spare luggage capacity on routes people are already taking, finder-fee shares between locals, and open asks that notify matching supply.
+# 
+# Three primitives, one network:
+# 
+# • Trip offers. A verified user announces a trip ("Munich → Warsaw, May 14, 6 bag slots"), each slot reservable at an agreed fee per slot.
+# • Open asks. A buyer posts what they want; matching trips and listings in the same corridor or radius light it up automatically.
+# • Local listings. Neighbourhood-scale finder-fee posts ("half a tin of Krówki, €3, pickup at Goetheplatz") with privacy-preserving 5 km cell discovery.
+# 
+# Why Eushop
+# 
+# • Privacy by design. Pins are deterministically jittered inside a 5 km cell. Your home address is never shared.
+# • Profiles you can trust. Verified-bringer badge, public exchange history, in-app chat, public-handoff guidance.
+# • Hosted in the EU. Hetzner Falkenstein and Cloudflare EU. GDPR is a baseline, not a feature.
+# • Honest pricing. Small platform fee on each confirmed reservation: min(€1.50, 12% of finder fee). Settlement of the goods stays between you and the other party.
+# 
+# What Eushop is not
+# 
+# • Not customs, freight, or regulated payments.
+# • Not a courier service, not an employer, not a delivery platform.
+# • Not surveillance — we do not track you across other apps and never request the iOS IDFA.
+# 
+# Who it is for
+# 
+# EU diaspora corridors first — Polish, Romanian, Italian, Greek, Turkish, German communities moving between home and where they live now. The primitives travel anywhere people travel.
+# 
+# Available languages: English, Deutsch, Français, Polski, Español, Italiano (more coming as community translators ship them).
+# 
+# Privacy: https://eushop.eu/privacy
+# Terms: https://eushop.eu/terms
+# Imprint: https://eushop.eu/imprint
+# 

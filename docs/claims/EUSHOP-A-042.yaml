@@ -18,8 +18,16 @@ touches:
   - scripts/pictures-smoke-check.mjs
   - .github/workflows/ci.yml
 hotspot_sub_lane: H4-i18n
-depends_on: []
+depends_on: [EUSHOP-B-031]
 verify: pnpm claims:check && pnpm verify
 notes: >
   Product picker: web + mobile Pics gallery (catalog.browse); propose modal polish (web); i18n;
   changelog; alignment doc + backlog + editorial touch-ups.
+
+  Amended to add a Map-based dedupe of `browseItems` and a hard-capped
+  auto-fetch loop (MAX_AUTO_PAGES + explicit "Load more" button) in both web
+  and mobile pickers. Defence in depth for the duplicate-React-key flood that
+  produced the "180 issues" dev-overlay; the root cause is fixed server-side
+  in EUSHOP-B-031. Adds `picsLoadMore` / `picsLoadMoreAria` i18n keys (synced
+  to all 35 locales) and extends scripts/pictures-smoke-check.mjs with
+  regression assertions for the dedupe + cap.

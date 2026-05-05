@@ -1,0 +1,5 @@
+[needs translation: Español (es-ES)]
+
+# Source (en-US):
+# Get something. Bring something
+# 

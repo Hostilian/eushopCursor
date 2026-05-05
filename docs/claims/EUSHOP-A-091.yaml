@@ -1,0 +1,21 @@
+id: EUSHOP-A-091
+lane: A
+sub_lane: null
+branch: agent/a-091-web-perf-pass
+owner: cursor-codex-5.3
+status: claimed
+touches:
+  - apps/web/src/app/page.tsx
+  - apps/web/src/providers.tsx
+  - apps/web/src/app/(product)/listings/[id]/page.tsx
+  - apps/web/src/app/(product)/categories/[slug]/page.tsx
+  - apps/web/src/app/(marketing)/traction/page.tsx
+  - apps/web/src/app/(product)/requests/page.tsx
+  - apps/web/src/components/discover/discover-feed.tsx
+  - apps/web/src/components/marketing/live-discover.tsx
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm claims:check && pnpm --filter @eushop/web typecheck && pnpm --filter @eushop/web lint
+notes: >
+  Balanced performance pass for web: parallelize independent server work and
+  reduce client/provider overhead without changing product behavior.

@@ -179,6 +179,7 @@ function renderInline(text: string): ReactNode[] {
 
 export function MarkdownArticle({ source }: { source: string }) {
   const blocks = tokenize(source);
+  /* eslint-disable react/no-array-index-key -- tokenizer output is deterministic and this renderer is static-only */
   return (
     <article className="text-ink/85 max-w-2xl space-y-5 text-base leading-relaxed text-pretty">
       {blocks.map((block, i) => {
@@ -271,4 +272,5 @@ export function MarkdownArticle({ source }: { source: string }) {
       })}
     </article>
   );
+  /* eslint-enable react/no-array-index-key */
 }

@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Footer } from '../../../components/layout/footer';
 import { Nav } from '../../../components/layout/nav';
 
+const LAST_REVIEWED = '2026-05-05';
+
 export default function TermsPage() {
   return (
     <>
@@ -31,7 +33,15 @@ export default function TermsPage() {
             You alone are responsible for the safety, quality and legality of any food you share or
             buy. Always check seals, expiry dates, allergens and import restrictions. Some products
             (raw dairy, certain meats, alcohol above local thresholds) may be restricted in your
-            country — it is on you to know.
+            country — it is on you to know. We publish country-specific legal baselines in{' '}
+            <Link href="/countries" className="text-ink underline underline-offset-4">
+              the country directory
+            </Link>{' '}
+            and on{' '}
+            <Link href="/privacy" className="text-ink underline underline-offset-4">
+              the privacy page
+            </Link>
+            .
           </p>
 
           <h2 className="text-ink mt-10 font-serif text-2xl">
@@ -75,9 +85,7 @@ export default function TermsPage() {
             alongside in-app reporting tools.
           </p>
 
-          <p className="text-ash mt-10 text-xs">
-            Last reviewed {new Date().toISOString().slice(0, 10)}
-          </p>
+          <p className="text-ash mt-10 text-xs">Last reviewed {LAST_REVIEWED}</p>
         </article>
       </main>
       <Footer />

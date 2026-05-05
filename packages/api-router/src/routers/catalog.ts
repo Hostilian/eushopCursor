@@ -226,7 +226,12 @@ export const catalogRouter = router({
         return { items: rows, nextCursor };
       },
       () => {
-        const items = fallbackItems((it) => {
+        // Static-fallback cursor format: `static|<id>`. We must honor it (and
+        // return `nextCursor: undefined` once exhausted) — otherwise React
+        // Query's `useInfiniteQuery` happily refetches the same page forever,
+        // surfacing as "Encountered two children with the same key" warnings
+        // in the picker grid. See the regression test in catalog.test.ts.
+        const all = fallbackItems((it) => {
           if (input.countryIso2 && it.originCountryIso2 !== input.countryIso2) return false;
           if (input.categorySlug && it.categorySlug !== input.categorySlug) return false;
           if (input.brandSlug && it.brandSlug !== input.brandSlug) return false;
@@ -235,11 +240,20 @@ export const catalogRouter = router({
             return it.name.toLowerCase().includes(q) || it.description.toLowerCase().includes(q);
           }
           return true;
-        }).slice(0, input.limit);
-        return {
-          items,
-          nextCursor: items.length === input.limit ? items.at(-1)?.id : undefined,
-        };
+        });
+        let startIdx = 0;
+        if (input.cursor) {
+          const sep = input.cursor.indexOf('|');
+          const idPart = sep >= 0 ? input.cursor.slice(sep + 1) : input.cursor;
+          const found = all.findIndex((x) => x.id === idPart);
+          startIdx = found >= 0 ? found + 1 : 0;
+        }
+        const items = all.slice(startIdx, startIdx + input.limit);
+        const last = items.at(-1);
+        const moreAhead = startIdx + items.length < all.length;
+        const nextCursor =
+          items.length === input.limit && moreAhead && last ? `static|${last.id}` : undefined;
+        return { items, nextCursor };
       },
     ),
   ),

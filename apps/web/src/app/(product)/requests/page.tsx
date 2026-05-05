@@ -33,7 +33,7 @@ type RequestRow = {
 };
 
 export default async function RequestsPage() {
-  const tr = await getTranslations('requestsPage');
+  const [tr, demo] = await Promise.all([getTranslations('requestsPage'), isDemoModeEnabled()]);
   let liveRequests: RequestRow[] = [];
   let serviceError = false;
   try {
@@ -50,7 +50,6 @@ export default async function RequestsPage() {
   } catch {
     serviceError = true;
   }
-  const demo = await isDemoModeEnabled();
   const demoRequests = liveRequests.length === 0 && !serviceError && demo ? showcaseRequests() : [];
 
   return (

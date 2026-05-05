@@ -35,6 +35,8 @@ const requiredKeys = [
   'picsModalBody',
   'picsEmpty',
   'picsClose',
+  'picsLoadMore',
+  'picsLoadMoreAria',
   'picsUseFor',
   'proposePhotosStrip',
   'proposeOpenPics',
@@ -61,13 +63,33 @@ const checks = [
   },
   { ok: web.includes('fetchNextPage'), msg: 'web picker gallery missing page fetching' },
   {
+    ok: web.includes('new Map<string, BrowseItem>'),
+    msg: 'web picker must dedupe browseItems by id (regression guard for duplicate React keys)',
+  },
+  {
+    ok: web.includes('MAX_AUTO_PAGES'),
+    msg: 'web picker must cap auto-fetch pages (regression guard for runaway useInfiniteQuery)',
+  },
+  {
     ok: mobile.includes('catalog.browse.useInfiniteQuery'),
     msg: 'mobile picker gallery must use infinite pagination',
   },
   { ok: mobile.includes('fallbackImageForItem('), msg: 'mobile picker fallback image helper missing' },
   { ok: mobile.includes('fetchNextPage'), msg: 'mobile picker gallery missing page fetching' },
+  {
+    ok: mobile.includes('new Map<string, BrowseItem>'),
+    msg: 'mobile picker must dedupe browseItems by id (regression guard for duplicate React keys)',
+  },
+  {
+    ok: mobile.includes('MAX_AUTO_PAGES'),
+    msg: 'mobile picker must cap auto-fetch pages (regression guard for runaway useInfiniteQuery)',
+  },
   { ok: router.includes('browse: publicProcedure'), msg: 'catalog.browse procedure missing' },
   { ok: router.includes('nextCursor'), msg: 'catalog.browse nextCursor missing' },
+  {
+    ok: router.includes('input.cursor') && router.includes('static|'),
+    msg: 'catalog.browse fallback must honor input.cursor and emit a static| sentinel (regression guard for infinite useInfiniteQuery loop)',
+  },
 ];
 
 const failed = checks.filter((c) => !c.ok);

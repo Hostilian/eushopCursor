@@ -28,7 +28,7 @@ export default function ImprintPage() {
   return (
     <>
       <Nav />
-      <main className="container-editorial pt-16 pb-32">
+      <main id="main-content" className="container-editorial pt-16 pb-32">
         <p className="text-ash text-xs tracking-widest uppercase">Impressum / Imprint</p>
         <h1 className="text-ink mt-3 font-serif text-5xl md:text-6xl">Legal disclosure</h1>
         <article className="prose prose-stone text-ink/80 mt-12 max-w-xl leading-relaxed">

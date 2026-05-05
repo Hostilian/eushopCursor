@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1290 2796" preserveAspectRatio="xMidYMid slice" role="img">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FAF7F2"/>
+      <stop offset="1" stop-color="#EFE5D2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1290" height="2796" fill="url(#bg)"/>
+  <g transform="translate(80 220)" font-family="Georgia, serif">
+    <text x="0" y="0" font-size="32" letter-spacing="6" fill="#3B2F22" fill-opacity="0.6">PUBLISH A TRIP</text>
+    <text x="0" y="120" font-size="120" font-weight="600" fill="#1A1612">You&#x2019;re going</text>
+    <text x="0" y="260" font-size="120" font-weight="600" fill="#1A1612">anyway.</text>
+    <text x="0" y="370" font-size="42" fill="#1A1612" fill-opacity="0.7">Take a few extra slots. Earn an honest</text>
+    <text x="0" y="430" font-size="42" fill="#1A1612" fill-opacity="0.7">finder fee. Settle in person.</text>
+  </g>
+  <g transform="translate(80 800)">
+    <rect width="1130" height="1100" rx="48" fill="#FFFFFF" stroke="#1A1612" stroke-opacity="0.08" stroke-width="2"/>
+    <g transform="translate(80 100)" font-family="Georgia, serif">
+      <text x="0" y="0" font-size="38" letter-spacing="3" fill="#9A9081">FROM</text>
+      <rect x="0" y="40" width="970" height="120" rx="32" fill="#FAF7F2" stroke="#1A1612" stroke-opacity="0.12"/>
+      <text x="36" y="120" font-size="56" fill="#1A1612">Munich, DE</text>
+      <text x="0" y="220" font-size="38" letter-spacing="3" fill="#9A9081">TO</text>
+      <rect x="0" y="260" width="970" height="120" rx="32" fill="#FAF7F2" stroke="#1A1612" stroke-opacity="0.12"/>
+      <text x="36" y="340" font-size="56" fill="#1A1612">Warsaw, PL</text>
+      <text x="0" y="440" font-size="38" letter-spacing="3" fill="#9A9081">DEPARTURE</text>
+      <rect x="0" y="480" width="970" height="120" rx="32" fill="#FAF7F2" stroke="#1A1612" stroke-opacity="0.12"/>
+      <text x="36" y="560" font-size="56" fill="#1A1612">Wed, May 14, 18:30</text>
+      <g transform="translate(0 660)">
+        <text x="0" y="0" font-size="38" letter-spacing="3" fill="#9A9081">SLOTS</text>
+        <text x="600" y="0" font-size="38" letter-spacing="3" fill="#9A9081">FEE / SLOT</text>
+        <rect x="0" y="40" width="500" height="120" rx="32" fill="#FAF7F2" stroke="#1A1612" stroke-opacity="0.12"/>
+        <text x="36" y="120" font-size="56" fill="#1A1612">6</text>
+        <rect x="600" y="40" width="370" height="120" rx="32" fill="#FAF7F2" stroke="#1A1612" stroke-opacity="0.12"/>
+        <text x="636" y="120" font-size="56" fill="#1A1612">&#172;12</text>
+      </g>
+      <g transform="translate(0 860)">
+        <rect width="970" height="100" rx="50" fill="#1A1612"/>
+        <text x="485" y="65" text-anchor="middle" font-size="40" fill="#FAF7F2" font-weight="500">Publish trip</text>
+      </g>
+    </g>
+  </g>
+  <g transform="translate(80 2050)" font-family="Georgia, serif">
+    <text x="0" y="0" font-size="42" font-weight="500" fill="#1A1612">A small platform fee on each</text>
+    <text x="0" y="60" font-size="42" font-weight="500" fill="#1A1612">confirmed reservation.</text>
+    <text x="0" y="140" font-size="38" fill="#1A1612" fill-opacity="0.7">min(&#172;1.50, 12% of finder fee). Settlement</text>
+    <text x="0" y="190" font-size="38" fill="#1A1612" fill-opacity="0.7">stays between you and the other party.</text>
+  </g>
+  <g transform="translate(80 2640)" font-family="Georgia, serif">
+    <text x="0" y="0" font-size="28" letter-spacing="6" fill="#3B2F22" fill-opacity="0.55">EUSHOP &#183; INTRODUCTIONS, NOT FREIGHT</text>
+  </g>
+</svg>
