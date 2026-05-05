@@ -25,3 +25,7 @@ Source: [`apps/web/src/app/(marketing)/roadmap/page.tsx`](../../apps/web/src/app
 - **Reputation**: photo-first profiles, exchange history, badges.
 - **Offline / maps**: cell maps, richer item graph.
 - **Retailer / exports**: opt-in where product fits.
+
+---
+
+Stretch engineering items (PWA, catalog metrics API, dependabot policy, public API ADR) stay in [cursor-parallel-backlog.md](cursor-parallel-backlog.md) **Stretch** until slotted.

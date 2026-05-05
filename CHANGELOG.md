@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.5 — 2026-05-05 — Admin polish and session/accessibility UX
+
+- **Admin**: improved read-only scanability for listings/payments tables (captions, column scopes, hover affordances) in `apps/admin`.
+- **Mobile**: profile screen now distinguishes expired auth sessions from signed-out state and prompts a clear “sign in again” action.
+- **Web**: trips feed accessibility pass with explicit list labelling and locale-aware departure date formatting via `Intl.DateTimeFormat`.
+- **Ops docs**: added `docs/ops/branch-protection-checklist.md` for safer GitHub merge policy setup.
+
+## 0.2.4 — 2026-05-05 — Product picker catalog gallery
+
+- **Web**: [`ProductPicker`](apps/web/src/components/catalog/product-picker.tsx) — **Pics** opens a scrollable gallery from `catalog.browse` (tap to select product + photo); propose-product modal layout and ISO2 field; in-modal photo strip and link to Pics; picker toolbar grid supports four actions on wide screens.
+- **Mobile**: [`ProductPicker`](apps/mobile/src/components/ProductPicker.tsx) — same **Pics** entry point and bottom-sheet gallery from `catalog.browse` (EN copy in-component for now).
+- **i18n**: `productPicker` strings for Pics / gallery / proposal photo strip (synced across locales from `en.json`).
+
 ## 0.2.3 — 2026-05-02 — Post-0.2.2 backlog remainder
 
 - **Legal / product**: [`docs/ops/terms-privacy-payments-review.md`](docs/ops/terms-privacy-payments-review.md); Terms/Privacy updated for trip checkout, Stripe, refunds/chargebacks; reservations + pay step copy with `/terms` anchors.

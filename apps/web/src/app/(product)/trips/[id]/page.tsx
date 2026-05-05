@@ -171,10 +171,11 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
               </h2>
               {summary ? (
                 <p className="text-ash mt-2 text-sm">
-                  {summary.confirmed + summary.pending} active reservation
-                  {summary.confirmed + summary.pending === 1 ? '' : 's'} · {summary.confirmed}{' '}
-                  {tDetail('summaryConfirmed').toLowerCase()} · {summary.pending}{' '}
-                  {tDetail('summaryPending').toLowerCase()}
+                  {tDetail('activeReservationCount', {
+                    count: summary.confirmed + summary.pending,
+                  })}{' '}
+                  · {summary.confirmed} {tDetail('summaryConfirmed').toLowerCase()} ·{' '}
+                  {summary.pending} {tDetail('summaryPending').toLowerCase()}
                   {summary.completed > 0
                     ? ` · ${summary.completed} ${tDetail('summaryCompleted').toLowerCase()}`
                     : ''}
@@ -183,8 +184,8 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
               {reservations.length === 0 ? (
                 <p className="text-ash mt-2 text-sm">
                   {bundle.viewerIsSeller
-                    ? 'No reservations yet. Buyers will appear here when they book.'
-                    : 'You have no reservations on this trip yet.'}
+                    ? tDetail('sellerReservationsEmpty')
+                    : tDetail('buyerReservationsEmpty')}
                 </p>
               ) : (
                 <ul className="border-ink/10 mt-4 divide-y rounded-2xl border bg-white">
@@ -211,17 +212,16 @@ export default async function TripDetailPage({ params }: { params: Promise<{ id:
 
           <aside className="md:col-span-5">
             <div className="border-ink/10 bg-porcelain sticky top-24 space-y-5 rounded-3xl border p-6">
-              <p className="text-ash text-xs tracking-widest uppercase">Reserve a slot</p>
+              <p className="text-ash text-xs tracking-widest uppercase">
+                {tDetail('reserveAsideEyebrow')}
+              </p>
               {trip.slotsAvailable === 0 ? (
                 <div>
-                  <p className="text-ink font-serif text-2xl">All slots taken.</p>
-                  <p className="text-ash mt-2 text-sm">
-                    Post a request and we&apos;ll notify you when this traveller — or the next one
-                    on the route — opens a new trip.
-                  </p>
+                  <p className="text-ink font-serif text-2xl">{tDetail('reserveFullTitle')}</p>
+                  <p className="text-ash mt-2 text-sm">{tDetail('reserveFullBody')}</p>
                   <Button asChild variant="primary" className="mt-4">
                     <Link href="/requests/new">
-                      Post a request <ArrowRight className="ml-1 h-4 w-4" />
+                      {tDetail('reserveRequestCta')} <ArrowRight className="ml-1 h-4 w-4" />
                     </Link>
                   </Button>
                 </div>

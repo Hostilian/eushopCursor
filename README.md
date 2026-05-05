@@ -143,6 +143,7 @@ Start at **[docs/README.md](docs/README.md)** (hub) and **[docs/ops/README.md](d
 - **[docs/ops/observability.md](docs/ops/observability.md)** — Sentry, PostHog EU, runbooks.
 - **GitHub Actions**: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) — optional manual deploy checklist for production-style hosts.
 - **GitHub Pages (optional static stub only)**: [`.github/workflows/pages.yml`](.github/workflows/pages.yml) publishes the small bundle under [`infra/pages/`](infra/pages/) — useful for a lightweight repo landing page, **not** the Next.js app (`apps/web` uses `output: 'standalone'`). Enable with **Settings → Pages → Build and deployment → GitHub Actions**, then run **Pages** or push changes under `infra/pages/`. For the real product stack, use **[docs/ops/oss-self-hosted-deploy.md](docs/ops/oss-self-hosted-deploy.md)** (or the short redirect **[docs/ops/free-preview-deploy.md](docs/ops/free-preview-deploy.md)**).
+- **Short public URL while developing** (Cloudflare Tunnel): quick `*.trycloudflare.com` links are random; for a stable `demo.yourdomain` style hostname see **[docs/ops/local-demo-custom-domain.md](docs/ops/local-demo-custom-domain.md)**.
 
 ### Static export note
 

@@ -148,8 +148,14 @@ export default function TripDetailScreen() {
         {trip.originCity} → {trip.destinationCity}
       </Text>
       <Text className="text-ash mt-2 text-sm">
-        Departs {new Date(trip.departAt).toLocaleDateString()} · {trip.slotsAvailable}/
-        {trip.slotsTotal} slots
+        {formatMessage(t(['trips', 'departs'], 'Departs {when}'), {
+          when: new Date(trip.departAt).toLocaleDateString(),
+        })}{' '}
+        ·{' '}
+        {formatMessage(t(['trips', 'slotsBadge'], '{available}/{total} slots'), {
+          available: String(trip.slotsAvailable),
+          total: String(trip.slotsTotal),
+        })}
       </Text>
       {trip.sellerBadges?.includes('verified_bringer') ? (
         <Text className="text-saffron-700 mt-2 text-xs font-semibold tracking-wide uppercase">

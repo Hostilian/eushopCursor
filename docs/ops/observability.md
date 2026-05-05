@@ -10,6 +10,15 @@
 
 - Use `POSTHOG_KEY` / `NEXT_PUBLIC_POSTHOG_KEY` and EU `POSTHOG_HOST` (default in `.env.example`).
 - **Consent-first:** [`apps/web/src/providers.tsx`](../../apps/web/src/providers.tsx) only calls `initPostHog()` when `localStorage` (`eushop.consent.v1`) already has `analytics: true`; [`consent-banner.tsx`](../../apps/web/src/components/layout/consent-banner.tsx) calls `initPostHog()` when the user taps **Accept analytics**. Do not initialize before that.
+- **Release check:** With analytics keys present, load the site in a private window — verify Network tab shows **no** `posthog.com` requests until consent is accepted (maps backlog **EUSHOP-A-018**).
+
+## Rate limits (API)
+
+Per-IP sliding windows in [`apps/api/src/rate-limit.ts`](../../apps/api/src/rate-limit.ts): `API_RATE_LIMIT_PER_MIN` (default **240**) on `/trpc`, `API_AUTH_RATE_LIMIT_PER_MIN` (**60**) on auth-heavy routes, looser limits on `/health` and Inngest. Router-level caps also apply (e.g. [`packages/api-router/src/routers/media.ts`](../../packages/api-router/src/routers/media.ts) `rateLimited` scopes). Tune env vars when prod traffic exceeds assumptions (**EUSHOP-B-006**).
+
+## Abuse reports
+
+User reports land via [`trust.report`](../../packages/api-router/src/routers/trust.ts) → `reports` table; operators use admin **Users & moderation** (`trust.moderationQueue`) and [`audit`](../../apps/admin/src/app/audit/page.tsx) (**EUSHOP-B-007**). Escalation workflow stays product/legal owned — keep DB review under 24h SLA when queue is non-empty.
 
 ## Runbooks (quick)
 

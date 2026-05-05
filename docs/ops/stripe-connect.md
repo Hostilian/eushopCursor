@@ -45,6 +45,20 @@ Input: `connectOnboardingInput` from `@eushop/validators` (country ISO2, return/
 - **Profile:** [`apps/web/src/components/profile/profile-payouts-card.tsx`](../../apps/web/src/components/profile/profile-payouts-card.tsx) calls `startConnectOnboarding` / `myConnectAccount` so sellers can finish Express onboarding and refresh status.
 - **Reservation checkout:** when `trips.reserve` returns `paymentClientSecret`, [`apps/web/src/components/trips/reservation-payment-step.tsx`](../../apps/web/src/components/trips/reservation-payment-step.tsx) mounts Stripe `Elements` + `PaymentElement` and confirms the PaymentIntent (`NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` required in the browser).
 
+## `reservation_payments.status` (mirror of Stripe PaymentIntent)
+
+The column stores **`PaymentIntent.status`** from Stripe (e.g. `requires_payment_method`, `requires_confirmation`, `requires_action`, `processing`, `requires_capture`, `succeeded`, `canceled`). Webhooks **merge** `payment_intent.*` payloads so any transition Stripe emits updates this row; `trips.confirmReservation` / cancel paths also stamp the latest `capturePaymentIntent` / `cancelPaymentIntent` status.
+
+| Stripe signal | Local row |
+|----------------|-----------|
+| PI created on reserve | Initial `pi.status` (often `requires_payment_method` until Elements confirms) |
+| Buyer confirms card (manual capture) | Typically `requires_capture` until seller captures |
+| `payment_intent.succeeded` webhook | `succeeded` (+ timestamps from [`reservationPaymentPatchForStripeEvent`](../../packages/api-router/src/lib/stripe-webhook-idempotency.ts)) |
+| Seller capture via API | Updated from Stripe API response |
+| Cancel / refund / dispute | Patched from webhook helper + `disputed_at` when applicable |
+
+Use admin **Payments** or SQL — not only webhook snapshots — when reconciling edge cases.
+
 ## Trips: money flow
 
 Implemented in [`packages/api-router/src/routers/trips.ts`](../../packages/api-router/src/routers/trips.ts):

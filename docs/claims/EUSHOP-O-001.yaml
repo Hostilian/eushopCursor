@@ -1,0 +1,25 @@
+﻿id: EUSHOP-O-001
+lane: O
+sub_lane: null
+branch: docs/local-demo-tunnel-domain
+owner: cursor
+status: claimed
+touches:
+  - docs/ops/local-demo-custom-domain.md
+  - docs/ops/hosting-alternatives.md
+  - docs/ops/README.md
+  - scripts/cloudflare-quick-tunnel.ps1
+  - scripts/cloudflared/tunnel-config.example.yml
+  - scripts/demo-smoke.ps1
+  - scripts/demo-up.ps1
+  - scripts/demo-down.ps1
+  - scripts/demo-status.ps1
+  - scripts/demo-env-sync.ps1
+  - .env.example
+  - README.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm claims:check
+notes: >
+  Document that trycloudflare quick tunnels cannot use custom hostnames; add named-tunnel
+  path and config template for short meaningful demo domains.

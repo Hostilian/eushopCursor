@@ -43,6 +43,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Detect picture-flow changes
+        id: pictures_changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            pictures:
+              - 'apps/web/src/components/catalog/product-picker.tsx'
+              - 'apps/mobile/src/components/ProductPicker.tsx'
+              - 'packages/api-router/src/routers/catalog.ts'
+              - 'packages/i18n/src/messages/**/*.json'
+              - 'scripts/pictures-smoke-check.mjs'
+              - 'package.json'
+
       - uses: pnpm/action-setup@v4
         with:
           version: 9
@@ -56,8 +69,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .turbo
-          key: turbo-${{ runner.os }}-build-${{ github.sha }}
+          key: turbo-${{ runner.os }}-build-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.ref_name }}
           restore-keys: |
+            turbo-${{ runner.os }}-build-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
             turbo-${{ runner.os }}-build-
 
       - name: Install
@@ -79,6 +93,10 @@ jobs:
 
       - name: i18n key parity
         run: pnpm i18n:check
+
+      - name: Product pictures smoke check
+        if: github.event_name == 'push' || steps.pictures_changes.outputs.pictures == 'true'
+        run: pnpm pictures:check
 
       - name: Claims overlap check
         run: pnpm claims:check
@@ -137,9 +155,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .turbo
-          key: turbo-${{ runner.os }}-e2e-${{ github.sha }}
+          key: turbo-${{ runner.os }}-e2e-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-${{ github.ref_name }}
           restore-keys: |
+            turbo-${{ runner.os }}-e2e-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
             turbo-${{ runner.os }}-e2e-
+            turbo-${{ runner.os }}-build-${{ hashFiles('pnpm-lock.yaml', 'turbo.json') }}-
             turbo-${{ runner.os }}-build-
 
       - name: Cache Playwright browsers

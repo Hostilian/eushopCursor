@@ -64,6 +64,10 @@ Trip offers → open asks → local listings (unless a page is listing-first by 
 
 The public About page pulls from the `about` namespace in `packages/i18n/src/messages/*.json`. The hero pulls from `tagline` and `hero.*`; the trips index pulls from `trips.*`. When translating, keep trip vs listing vs platform-fee wording — and the canonical triplet — consistent with this table rather than literal English.
 
+### Glossary maintenance (orchestrator)
+
+After each marketing-page i18n migration or fee-model copy change, cross-check this term table against new strings (**EUSHOP-O-003**) and run `pnpm i18n:check`.
+
 ---
 
 ## 3. i18n: intentionally English-only surfaces
@@ -77,7 +81,7 @@ Product UX that often stays English until translated:
 - ~~Chat input placeholder (`chat-view.tsx`)~~ — uses `chat.placeholder` / `chat.placeholderUnavailable`.
 - ~~Mobile chat placeholders (`app/chat/[id].tsx`)~~ — reads `chat.*` from `@eushop/i18n` `en.json` (device locale wiring can map to `loadMessages` later).
 - ~~Search bar placeholder (`search-client.tsx`)~~ — uses `search.placeholder` and `search.inputAriaLabel` from i18n.
-- ~~`ProductPicker`: **search field** uses `productPicker.searchPlaceholder` (all six locales); other picker/modal strings still English — migrate incrementally.~~ — main picker + propose modal strings live under `productPicker.*` in all six locales.
+- ~~`ProductPicker`: **search field** uses `productPicker.searchPlaceholder` (all six locales); other picker/modal strings still English — migrate incrementally.~~ — Web picker + propose modal strings live under `productPicker.*` across **all** locale JSONs synced from `en`. Mobile `ProductPicker` still uses **EN-only** placeholders for the trip flow until wired to `loadMessages` (see backlog **A-007**).
 - Trip / listing / request form hints and placeholders (domain-specific examples).
 - Admin app (operator console) — typically English-only.
 

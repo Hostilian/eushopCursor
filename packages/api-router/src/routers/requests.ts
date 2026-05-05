@@ -125,8 +125,17 @@ export const requestsRouter = router({
       where: eq(requests.id, input.requestId),
     });
     if (!req) throw new TRPCError({ code: 'NOT_FOUND' });
-    const anchor = decode(req.cellGeohash);
-    const cells = neighborsWithinRadius(anchor, req.radiusKm);
+    if (req.buyerId !== ctx.user.id) throw new TRPCError({ code: 'FORBIDDEN' });
+    let anchor: { lat: number; lng: number };
+    try {
+      anchor = decode(req.cellGeohash);
+    } catch {
+      throw new TRPCError({ code: 'BAD_REQUEST', message: 'Request location is invalid' });
+    }
+    const rawRadius = Number(req.radiusKm);
+    const radiusKm =
+      Number.isFinite(rawRadius) && rawRadius >= 1 && rawRadius <= 500 ? rawRadius : 50;
+    const cells = neighborsWithinRadius(anchor, radiusKm);
     const conditions = [eq(listings.status, 'live'), inArray(listings.cellGeohash, cells)];
     if (req.foodItemId) {
       conditions.push(eq(listings.foodItemId, req.foodItemId));

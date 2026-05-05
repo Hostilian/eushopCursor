@@ -18,6 +18,7 @@ export const tractionRouter = router({
       listings: 0,
       requests: 0,
       tripsPosted: 0,
+      activeSellers: 0,
       reservationsConfirmed: 0,
       reservationsCompleted: 0,
       gmvCents: 0,
@@ -30,6 +31,14 @@ export const tractionRouter = router({
       const [l] = await ctx.db.select({ c: sql<number>`count(*)::int` }).from(listings);
       const [r] = await ctx.db.select({ c: sql<number>`count(*)::int` }).from(requests);
       const [t] = await ctx.db.select({ c: sql<number>`count(*)::int` }).from(tripOffers);
+      const activeSellerRows = await ctx.db.execute<{ c: number }>(sql`
+        select count(*)::int as c
+        from (
+          select seller_id from trip_offers
+          union
+          select seller_id from listings
+        ) as sellers
+      `);
       const [rc] = await ctx.db
         .select({ c: sql<number>`count(*)::int` })
         .from(tripReservations)
@@ -51,12 +60,20 @@ export const tractionRouter = router({
         })
         .from(tripOffers);
 
+      const activeSellers =
+        (
+          activeSellerRows as unknown as {
+            rows?: Array<{ c: number }>;
+          }
+        ).rows?.[0]?.c ?? 0;
+
       return {
         signups: u?.c ?? 0,
         profiles: p?.c ?? 0,
         listings: l?.c ?? 0,
         requests: r?.c ?? 0,
         tripsPosted: t?.c ?? 0,
+        activeSellers,
         reservationsConfirmed: rc?.c ?? 0,
         reservationsCompleted: rcd?.c ?? 0,
         gmvCents: gmv?.gross ?? 0,

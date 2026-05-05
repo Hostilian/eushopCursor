@@ -10,6 +10,9 @@ export default function ProfileScreen() {
   const me = trpc.profile.me.useQuery(undefined, { retry: false });
   const registerDevice = trpc.notifications.registerDevice.useMutation();
   const [status, setStatus] = useState<string>('idle');
+  const sessionExpired =
+    me.error?.data?.code === 'UNAUTHORIZED' ||
+    /unauthorized|session/i.test(me.error?.message ?? '');
 
   useEffect(() => {
     if (!me.data) return;
@@ -44,15 +47,21 @@ export default function ProfileScreen() {
     return (
       <View className="bg-paper flex-1 items-center justify-center p-10">
         <Ionicons name="person-circle-outline" size={56} color="#9A9081" />
-        <Text className="text-ink mt-3 font-serif text-2xl">Sign in</Text>
+        <Text className="text-ink mt-3 font-serif text-2xl">
+          {sessionExpired ? 'Session expired' : 'Sign in'}
+        </Text>
         <Text className="text-ash mt-1 text-center text-sm">
-          We email you a magic link — no passwords ever.
+          {sessionExpired
+            ? 'Your login session timed out on this device. Sign in again to keep browsing and messaging.'
+            : 'We email you a magic link — no passwords ever.'}
         </Text>
         <TouchableOpacity
           className="bg-ink mt-6 rounded-full px-6 py-3"
           onPress={() => router.push('/sign-in')}
         >
-          <Text className="text-paper font-medium">Sign in</Text>
+          <Text className="text-paper font-medium">
+            {sessionExpired ? 'Sign in again' : 'Sign in'}
+          </Text>
         </TouchableOpacity>
       </View>
     );

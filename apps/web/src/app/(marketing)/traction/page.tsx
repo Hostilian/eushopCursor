@@ -39,6 +39,7 @@ export default async function TractionPage() {
     listings: 0,
     requests: 0,
     tripsPosted: 0,
+    activeSellers: 0,
     reservationsConfirmed: 0,
     reservationsCompleted: 0,
     gmvCents: 0,
@@ -62,6 +63,7 @@ export default async function TractionPage() {
     { label: 'Listings posted', value: formatInt(counts.listings) },
     { label: 'Open requests', value: formatInt(counts.requests) },
     { label: 'Trips posted', value: formatInt(counts.tripsPosted) },
+    { label: 'Active sellers (trips + listings)', value: formatInt(counts.activeSellers) },
     {
       label: 'Reservations confirmed',
       value: formatInt(counts.reservationsConfirmed),

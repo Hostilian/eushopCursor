@@ -1,0 +1,28 @@
+id: EUSHOP-O-012
+lane: O
+sub_lane: null
+branch: agent/o-012-30-day-readiness-implementation
+owner: cursor-codex-5.3
+status: claimed
+touches:
+  - docs/readiness/30-day-master.md
+  - docs/readiness/risk-register.md
+  - docs/readiness/owner-matrix.md
+  - docs/readiness/critical-journeys.md
+  - docs/readiness/system-dependency-map.md
+  - docs/readiness/security-privacy-checklist.md
+  - docs/readiness/test-matrix.md
+  - docs/readiness/kpi-dictionary.md
+  - docs/readiness/event-taxonomy.md
+  - docs/readiness/gtm-playbook.md
+  - docs/readiness/ops-runbook-index.md
+  - docs/readiness/rehearsal-report.md
+  - docs/readiness/incident-drill-report.md
+  - docs/readiness/go-no-go-decision.md
+  - docs/readiness/day30-exec-summary.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm claims:check && pnpm verify
+notes: >
+  Implement all 30-day readiness plan deliverables as docs under docs/readiness
+  with phased gates, ownership, and operational evidence.

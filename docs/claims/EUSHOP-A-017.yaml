@@ -1,0 +1,15 @@
+id: EUSHOP-A-017
+lane: A
+sub_lane: null
+branch: agent/a-017-image-remote-patterns-audit
+owner: cursor-codex-5.3
+status: claimed
+touches:
+  - apps/web/next.config.mjs
+  - docs/cursor-parallel-backlog.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Audit and harden Next.js image remotePatterns for R2/public media host alignment
+  without touching i18n or shell hotspots.

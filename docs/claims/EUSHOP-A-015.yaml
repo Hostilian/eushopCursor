@@ -1,0 +1,14 @@
+id: EUSHOP-A-015
+lane: A
+sub_lane: null
+branch: agent/a-015-remove-dead-web-card
+owner: cursor-codex-5.3
+status: claimed
+touches:
+  - apps/web/src/components/ui/card.tsx
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Remove unused web UI card component (no imports/usages) as a small dead-code cleanup
+  that avoids hotspot lanes and active claim path overlap.

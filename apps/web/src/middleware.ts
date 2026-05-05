@@ -17,7 +17,7 @@ function generateNonce(): string {
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
   let bin = '';
-  for (const b of bytes) bin += String.fromCharCode(b);
+  for (const b of bytes) bin += String.fromCodePoint(b);
   return btoa(bin);
 }
 
@@ -33,6 +33,8 @@ function buildCsp(nonce: string): string {
     "font-src 'self' data:",
     "connect-src 'self' https: http://localhost:* http://127.0.0.1:* ws: wss:",
     "frame-src 'self' https://www.openstreetmap.org https://*.openstreetmap.org",
+    "object-src 'none'",
+    "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
   ].join('; ');

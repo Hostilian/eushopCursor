@@ -1,6 +1,6 @@
 # Documentation
 
-One entry: **ops** ([ops/README.md](ops/README.md)), **agents** ([agents.md](agents.md), [claims/README.md](claims/README.md)), **audit** ([docs/audit/](audit/)), **handoffs** ([docs/handoffs/](handoffs/)), **editorial** ([editorial.md](editorial.md)), **planning** ([masterplan.md](masterplan.md)).
+One entry: **ops** ([ops/README.md](ops/README.md)), **agents** ([agents.md](agents.md), [claims/README.md](claims/README.md)), **audit** ([audit/](audit/)), **handoffs** ([handoffs/](handoffs/)), **editorial** ([editorial.md](editorial.md)), **planning** ([masterplan.md](masterplan.md)). **Open engineering tasks** use IDs in [cursor-parallel-backlog.md](cursor-parallel-backlog.md); **release-quality bar** is [masterplan.md](masterplan.md) Part 12 plus merge/cadence in [human-alignment-checklist.md](human-alignment-checklist.md).
 
 ## Environment (quick reference)
 
@@ -32,6 +32,7 @@ The **canonical variable matrix** is [ops/environment.md](ops/environment.md). R
 | [eslint-next-migration.md](eslint-next-migration.md) | Move off `next lint` |
 | [github-branch-protection.md](github-branch-protection.md) | GitHub settings |
 | [roadmap-epics.md](roadmap-epics.md) | Planning buckets |
+| [human-alignment-checklist.md](human-alignment-checklist.md) | Verify cadence, claims, product-pictures assurance |
 
 ### Apps
 

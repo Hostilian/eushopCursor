@@ -1208,7 +1208,7 @@ Generate OpenAPI spec from tRPC routes (use `trpc-openapi` or similar):
 - [ ] CI/CD pipeline runs on every PR
 - [ ] DB migrations run in CI
 - [ ] Sentry/error tracking configured
-- [ ] All 3 languages (EN/PL/RO) have complete translations
+- [ ] **i18n:** registered locales stay key-complete (`pnpm i18n:check`); **tier-A human LQA** (`de`, `pl`, `cs`) and upward tiers per [`docs/i18n-locale-matrix.md`](i18n-locale-matrix.md) before paid marketing in those corridors (34 locales in repo — many non-EN files are EN stubs until translated)
 - [ ] `README.md` Quick Start works from scratch
 
 ---

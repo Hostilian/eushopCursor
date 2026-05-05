@@ -192,7 +192,10 @@
     "verifiedBringer": "Bringer verificato",
     "today": "today",
     "tomorrow": "tomorrow",
-    "inDays": "in {days} days"
+    "inDays": "in {days} days",
+    "listSubtitle": "People sharing spare slots in their next trip home.",
+    "postShort": "Post",
+    "loading": "Loading trips…"
   },
   "tripDetail": {
     "back": "Tutti i viaggi",
@@ -211,7 +214,14 @@
     "summaryConfirmed": "Confirmed",
     "summaryCompleted": "Completed",
     "summaryCancelled": "Cancelled",
-    "verifiedBringer": "Bringer verificato"
+    "verifiedBringer": "Bringer verificato",
+    "reserveAsideEyebrow": "Reserve a slot",
+    "reserveFullTitle": "All slots taken.",
+    "reserveFullBody": "Post a request and we’ll notify you when this traveller — or the next one on the route — opens a new trip.",
+    "reserveRequestCta": "Post a request",
+    "sellerReservationsEmpty": "No reservations yet. Buyers will appear here when they book.",
+    "buyerReservationsEmpty": "You have no reservations on this trip yet.",
+    "activeReservationCount": "{count, plural, one {# active reservation} other {# active reservations}}"
   },
   "tripForm": {
     "metaTitle": "Post a trip · Eushop",
@@ -354,6 +364,11 @@
     "title": "Product log",
     "subtitle": "High-signal releases for operators and investors.",
     "entries": [
+      {
+        "date": "2026-05-05",
+        "title": "Catalog photo gallery in product picker",
+        "body": "Pics: browse up to 60 catalog rows in a modal and tap to attach a product photo. Propose-product flow shows attached photos, clearer category/origin layout, and safer ISO2 input. Placeholder tiles when seed items have no image yet."
+      },
       {
         "date": "2026-05-02",
         "title": "Trip marketplace + sell-ready surface",

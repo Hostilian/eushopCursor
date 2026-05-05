@@ -1,0 +1,18 @@
+# Copy to %USERPROFILE%\.cloudflared\config.yml (or config.yaml) and replace placeholders.
+# Docs: docs/ops/local-demo-custom-domain.md
+#
+# After `cloudflared tunnel create eushop-demo`, note the tunnel UUID and credentials path:
+#   Windows: C:\Users\<you>\.cloudflared\<UUID>.json
+#
+# Create DNS records in Cloudflare (CNAME) from demo.yourdomain.com -> <UUID>.cfargotunnel.com
+# (and same for api-demo) via Zero Trust → Tunnels → Public hostnames, or `cloudflared tunnel route dns`.
+
+tunnel: REPLACE_WITH_TUNNEL_UUID
+credentials-file: C:\Users\YOU\.cloudflared\REPLACE_WITH_TUNNEL_UUID.json
+
+ingress:
+  - hostname: demo.yourdomain.com
+    service: http://127.0.0.1:3000
+  - hostname: api-demo.yourdomain.com
+    service: http://127.0.0.1:3001
+  - service: http_status:404

@@ -1,0 +1,16 @@
+id: EUSHOP-A-024
+lane: A
+sub_lane: null
+branch: agent/a-024-admin-readonly-polish
+owner: cursor-agent
+status: claimed
+touches:
+  - apps/admin/src/app/payments/page.tsx
+  - apps/admin/src/app/listings/page.tsx
+  - docs/cursor-parallel-backlog.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Polish admin read-only tables and spacing without API changes; disjoint from
+  existing active claims that do not touch apps/admin.

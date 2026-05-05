@@ -6,10 +6,20 @@ owner: cursor-agent
 status: in_review
 touches:
   - apps/web/src/components/catalog/product-picker.tsx
+  - apps/mobile/src/components/ProductPicker.tsx
   - packages/i18n/src/messages/*.json
   - docs/handoffs/2026-05-05.md
+  - docs/human-alignment-checklist.md
+  - docs/cursor-parallel-backlog.md
+  - docs/editorial.md
+  - docs/ops/README.md
+  - CHANGELOG.md
+  - package.json
+  - scripts/pictures-smoke-check.mjs
+  - .github/workflows/ci.yml
 hotspot_sub_lane: H4-i18n
 depends_on: []
 verify: pnpm claims:check && pnpm verify
 notes: >
-  Product picker: propose modal layout + catalog "Pics" gallery (browse); i18n sync from en.
+  Product picker: web + mobile Pics gallery (catalog.browse); propose modal polish (web); i18n;
+  changelog; alignment doc + backlog + editorial touch-ups.

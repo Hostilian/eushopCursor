@@ -38,6 +38,7 @@
     "i18n:check": "node ./scripts/check-i18n-keys.mjs",
     "i18n:sync": "node ./scripts/sync-i18n-missing-from-en.mjs",
     "i18n:bootstrap": "node ./scripts/i18n-bootstrap-locale.mjs",
+    "pictures:check": "node ./scripts/pictures-smoke-check.mjs",
     "api:dev:bun": "pnpm --filter @eushop/api-server dev:bun",
     "prepare": "husky || true"
   },

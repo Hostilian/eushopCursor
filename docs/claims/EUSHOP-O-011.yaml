@@ -1,0 +1,15 @@
+id: EUSHOP-O-011
+lane: O
+sub_lane: null
+branch: agent/o-011-branch-protection-checklist
+owner: cursor-agent
+status: claimed
+touches:
+  - docs/ops/branch-protection-checklist.md
+  - docs/cursor-parallel-backlog.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm claims:check && pnpm verify
+notes: >
+  Add practical GitHub branch-protection settings checklist for safer merges,
+  no root config changes.

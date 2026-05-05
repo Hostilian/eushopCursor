@@ -8,8 +8,22 @@ const monorepoRoot = path.join(__dirname, '../..');
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
-/** Optional extra hostname for user media (e.g. custom R2 public domain). */
-const extraImageHost = process.env.NEXT_PUBLIC_MEDIA_HOSTNAME?.trim();
+function toHostname(value) {
+  const raw = value?.trim();
+  if (!raw) {
+    return null;
+  }
+  const candidate = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+  try {
+    return new URL(candidate).hostname || null;
+  } catch {
+    return null;
+  }
+}
+
+/** Optional extra hostname for user media (custom host or R2 public URL fallback). */
+const mediaHostname =
+  toHostname(process.env.NEXT_PUBLIC_MEDIA_HOSTNAME) ?? toHostname(process.env.R2_PUBLIC_URL);
 
 /**
  * Content-Security-Policy is now applied per-request from `src/middleware.ts`
@@ -47,11 +61,11 @@ const nextConfig = {
       // with attribution on the item page.
       { protocol: 'https', hostname: 'static.openfoodfacts.org' },
       { protocol: 'https', hostname: 'images.openfoodfacts.org' },
-      ...(extraImageHost
+      ...(mediaHostname && mediaHostname !== 'media.eushop.eu'
         ? [
             {
               protocol: 'https',
-              hostname: extraImageHost.replace(/^https?:\/\//, '').split('/')[0],
+              hostname: mediaHostname,
             },
           ]
         : []),

@@ -1,0 +1,16 @@
+id: EUSHOP-A-013
+lane: A
+sub_lane: null
+branch: agent/a-013-trips-a11y-pass
+owner: cursor-agent
+status: claimed
+touches:
+  - apps/web/src/app/(product)/trips/page.tsx
+  - docs/cursor-parallel-backlog.md
+  - CHANGELOG.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm claims:check && pnpm verify
+notes: >
+  Accessibility polish for trips list flow: clearer list semantics and locale-aware
+  departure formatting without touching shell/i18n hotspots.

@@ -1,6 +1,6 @@
 # Mock / slop registry (Part 1.2)
 
-Scan date: 2026-05-04 (ripgrep `mock|placeholder` in `*.ts,*.tsx`; TODO/FIXME sample).
+Scan date: 2026-05-05 (ripgrep `mock|placeholder` in `*.ts,*.tsx`; TODO/FIXME sample refreshed).
 
 ## REMOVE / review (legitimate test doubles)
 
@@ -22,11 +22,11 @@ Scan date: 2026-05-04 (ripgrep `mock|placeholder` in `*.ts,*.tsx`; TODO/FIXME sa
 
 ## TODO / FIXME (non-doc)
 
-| file | note |
-|------|------|
-| `packages/tokens/src/index.ts` | single hit — verify if comment |
-| `apps/web/.../handoff-protocol/page.tsx` | editorial |
-| `trips-confirm-reservation.test.ts` | test file |
+Refresh status (2026-05-05):
+
+- No active `TODO`/`FIXME` hits in `packages/tokens/src/index.ts`.
+- No active `TODO`/`FIXME` hits in `apps/web/src/app/**`.
+- Remaining TODO-style text is in documentation/planning only (expected).
 
 ## Investor metrics (`REPLACE-WITH-REAL` gate)
 

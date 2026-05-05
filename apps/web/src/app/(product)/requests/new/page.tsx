@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { Footer } from '../../../../components/layout/footer';
 import { Nav } from '../../../../components/layout/nav';
+import { PayoutReadinessCallout } from '../../../../components/payments/payout-readiness-callout';
 import { RequestForm } from '../../../../components/requests/request-form';
 
 export const metadata = {
@@ -43,6 +44,7 @@ export default async function NewRequestPage() {
           listing lands within reach.
         </p>
         <p className="text-ink/65 mt-6 max-w-2xl text-sm leading-relaxed">{t('explainerHint')}</p>
+        <PayoutReadinessCallout />
         <div className="mt-8 max-w-3xl">
           <RequestForm />
         </div>

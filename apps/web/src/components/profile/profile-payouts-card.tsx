@@ -13,7 +13,7 @@ export function ProfilePayoutsCard({
   countryIso2,
 }: {
   /** From profile — required to anchor the Connect account country. */
-  countryIso2: string | null | undefined;
+  readonly countryIso2: string | null | undefined;
 }) {
   const caps = trpc.payments.capabilities.useQuery();
   const account = trpc.payments.myConnectAccount.useQuery();
@@ -26,7 +26,8 @@ export function ProfilePayoutsCard({
       <div className="border-ink/10 bg-porcelain rounded-3xl border p-6">
         <p className="text-ash text-xs tracking-widest uppercase">Payouts</p>
         <p className="text-ink/80 mt-3 text-sm">
-          Card holds for trip reservations are not active in this environment (Stripe keys unset).
+          Stripe Connect is disabled in this environment, so reservations can still be created but
+          no card hold is authorized.
         </p>
       </div>
     );
@@ -34,14 +35,14 @@ export function ProfilePayoutsCard({
 
   const row = account.data?.account;
   const status = row?.status ?? 'none';
-  const canOnboard = Boolean(countryIso2 && countryIso2.length === 2);
+  const canOnboard = countryIso2?.length === 2;
 
   return (
     <div className="border-ink/10 bg-porcelain rounded-3xl border p-6">
       <p className="text-ash text-xs tracking-widest uppercase">Payouts · Stripe Connect</p>
       <p className="text-ink/80 mt-3 text-sm">
-        Connect your bank so buyers can authorize the slot fee + platform fee when they reserve a
-        trip you posted.
+        Finish Stripe Connect onboarding so reservation payment intents can authorize on reserve and
+        capture after you confirm.
       </p>
       <div className="mt-3 flex flex-wrap gap-2">
         <Badge variant={status === 'active' ? 'accent' : 'soft'}>{status}</Badge>
@@ -63,10 +64,10 @@ export function ProfilePayoutsCard({
           disabled={!canOnboard || start.isPending}
           onClick={() => {
             setError(null);
-            const origin = typeof window !== 'undefined' ? window.location.origin : '';
+            const origin = globalThis.window?.location.origin ?? '';
             if (!countryIso2) {
               setError(
-                'Set your home or current country first so Stripe knows which account rules apply.',
+                'Set your home/current country first so Stripe can apply the correct onboarding rules.',
               );
               return;
             }

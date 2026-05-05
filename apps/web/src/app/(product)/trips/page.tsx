@@ -1,7 +1,7 @@
 import { COUNTRIES } from '@eushop/catalog';
 import { EmptyState, ErrorState } from '@eushop/ui';
 import { ArrowRight, MapPin, Plane, Users } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { Footer } from '../../../components/layout/footer';
 import { Nav } from '../../../components/layout/nav';
@@ -43,6 +43,7 @@ type TripsT = Awaited<ReturnType<typeof getTranslations<'trips'>>>;
 
 export default async function TripsPage() {
   const t = await getTranslations('trips');
+  const locale = await getLocale();
   let trips: TripRow[] = [];
   let serviceError = false;
   try {
@@ -75,7 +76,7 @@ export default async function TripsPage() {
         </div>
 
         {trips.length > 0 ? (
-          <ul className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <ul className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3" aria-label={t('heading')}>
             {trips.map((trip) => (
               <TripCard
                 key={trip.id}
@@ -84,7 +85,7 @@ export default async function TripsPage() {
                 fromCity={trip.originCity}
                 toIso={trip.destinationCountryIso2}
                 toCity={trip.destinationCity}
-                departText={formatDeparture(trip.departAt, t)}
+                departText={formatDeparture(trip.departAt, t, locale)}
                 slotsTotal={trip.slotsTotal}
                 slotsAvailable={trip.slotsAvailable}
                 feePerSlot={Number(trip.defaultPerSlotFee)}
@@ -100,7 +101,7 @@ export default async function TripsPage() {
             ))}
           </ul>
         ) : demoTrips.length > 0 ? (
-          <ul className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <ul className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3" aria-label={t('heading')}>
             {demoTrips.map((trip) => (
               <TripCard
                 key={trip.id}
@@ -109,7 +110,7 @@ export default async function TripsPage() {
                 fromCity={trip.originCity}
                 toIso={trip.destinationCountryIso2}
                 toCity={trip.destinationCity}
-                departText={formatDeparture(trip.departAt, t)}
+                departText={formatDeparture(trip.departAt, t, locale)}
                 slotsTotal={trip.slotsTotal}
                 slotsAvailable={trip.slotsAvailable}
                 feePerSlot={Number(trip.defaultPerSlotFee)}
@@ -185,7 +186,10 @@ function TripCard({
   const from = COUNTRIES.find((c) => c.iso2 === fromIso);
   const to = COUNTRIES.find((c) => c.iso2 === toIso);
   return (
-    <li className="border-ink/10 bg-porcelain group flex flex-col gap-5 rounded-3xl border p-6 transition-all hover:-translate-y-1 hover:shadow-md">
+    <li
+      className="border-ink/10 bg-porcelain group flex flex-col gap-5 rounded-3xl border p-6 transition-all hover:-translate-y-1 hover:shadow-md"
+      aria-label={`${fromCity} to ${toCity}`}
+    >
       <div className="text-ink flex items-center gap-3 font-serif text-2xl">
         <span>
           {from?.flagEmoji} {fromCity}
@@ -257,7 +261,7 @@ function EmptyTrips({ t }: { t: TripsT }) {
   );
 }
 
-function formatDeparture(d: Date | string, t: TripsT): string {
+function formatDeparture(d: Date | string, t: TripsT, locale: string): string {
   const date = d instanceof Date ? d : new Date(d);
   const ms = date.getTime() - Date.now();
   if (ms <= 0) return t('today');
@@ -265,5 +269,5 @@ function formatDeparture(d: Date | string, t: TripsT): string {
   if (days === 0) return t('today');
   if (days === 1) return t('tomorrow');
   if (days < 14) return t('inDays', { days });
-  return date.toLocaleDateString(undefined, { day: '2-digit', month: 'short' });
+  return new Intl.DateTimeFormat(locale, { day: '2-digit', month: 'short' }).format(date);
 }

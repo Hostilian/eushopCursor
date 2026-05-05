@@ -1,0 +1,15 @@
+id: EUSHOP-O-010
+lane: O
+sub_lane: null
+branch: agent/o-010-third-party-notices-audit
+owner: cursor-codex-5.3
+status: claimed
+touches:
+  - docs/ops/third-party-notices-audit.md
+  - docs/ops/README.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Add a concise third-party notices audit doc for current ship posture and link it from
+  ops README without touching orchestrator hotspots or active claim paths.

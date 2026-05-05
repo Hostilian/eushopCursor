@@ -16,9 +16,20 @@ import {
   uuidIdParam,
 } from '@eushop/validators';
 import { TRPCError } from '@trpc/server';
-import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
+import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import { brands, categories, foodItems, listings } from '@eushop/db';
 import { protectedProcedure, publicProcedure, router } from '../trpc';
+
+function parseCursorTuple(cursor?: string) {
+  if (!cursor) return null;
+  const sep = cursor.indexOf('|');
+  const tsPart = sep >= 0 ? cursor.slice(0, sep) : cursor;
+  const idPart = sep >= 0 ? cursor.slice(sep + 1) : '';
+  if (!idPart) return null;
+  const cursorDate = new Date(tsPart);
+  if (Number.isNaN(cursorDate.valueOf())) return null;
+  return { createdAtIso: cursorDate.toISOString(), id: idPart };
+}
 
 function publicListing<T extends { id: string; cellGeohash: string; location?: unknown }>(row: T) {
   const { location: _omit, ...rest } = row as unknown as Record<string, unknown> & {
@@ -32,6 +43,7 @@ function publicListing<T extends { id: string; cellGeohash: string; location?: u
 export const listingsRouter = router({
   near: publicProcedure.input(listingSearchInput).query(async ({ ctx, input }) => {
     const conditions = [eq(listings.status, 'live' as const)];
+    const cursor = parseCursorTuple(input.cursor);
 
     if (input.countryIso2) conditions.push(eq(listings.countryIso2, input.countryIso2));
 
@@ -41,7 +53,7 @@ export const listingsRouter = router({
     }
 
     if (input.q) {
-      const pattern = `%${input.q.replace(/[%_]/g, '')}%`;
+      const pattern = `%${input.q.replaceAll('%', '').replaceAll('_', '')}%`;
       conditions.push(
         sql`(${listings.freeformName} ILIKE ${pattern} OR ${listings.notes} ILIKE ${pattern})`,
       );
@@ -75,14 +87,20 @@ export const listingsRouter = router({
       }
     }
 
+    if (cursor) {
+      conditions.push(
+        sql`(${listings.createdAt}, ${listings.id}::text) < (${cursor.createdAtIso}, ${cursor.id})`,
+      );
+    }
+
     try {
       const rows = await ctx.db
         .select()
         .from(listings)
         .where(and(...conditions))
-        .orderBy(desc(listings.createdAt))
+        .orderBy(desc(listings.createdAt), desc(listings.id))
         .limit(input.limit);
-      return rows.filter((r) => r.status === 'live').map(publicListing);
+      return rows.map(publicListing);
     } catch (e) {
       // DB unreachable in development. Real users see no synthetic listings —
       // the surfaces are responsible for showing inviting empty states. We
@@ -96,7 +114,7 @@ export const listingsRouter = router({
     const row = await ctx.db.query.listings.findFirst({
       where: and(eq(listings.id, input.id), eq(listings.status, 'live' as const)),
     });
-    if (!row || row.status !== 'live') throw new TRPCError({ code: 'NOT_FOUND' });
+    if (!row) throw new TRPCError({ code: 'NOT_FOUND' });
     let item = null;
     if (row.foodItemId) {
       item = await ctx.db.query.foodItems.findFirst({
@@ -195,9 +213,9 @@ export const listingsRouter = router({
         .select()
         .from(listings)
         .where(eq(listings.status, 'live'))
-        .orderBy(desc(listings.createdAt))
+        .orderBy(desc(listings.createdAt), desc(listings.id))
         .limit(limit);
-      return rows.filter((r) => r.status === 'live').map(publicListing);
+      return rows.map(publicListing);
     } catch (e) {
       console.error('[listings.recent] DB read failed', e);
       return [];
@@ -210,9 +228,9 @@ export const listingsRouter = router({
         .select()
         .from(listings)
         .where(and(eq(listings.status, 'live'), eq(listings.countryIso2, input.iso2)))
-        .orderBy(asc(listings.createdAt))
+        .orderBy(desc(listings.createdAt), desc(listings.id))
         .limit(input.limit);
-      return rows.filter((r) => r.status === 'live').map(publicListing);
+      return rows.map(publicListing);
     } catch (e) {
       console.error('[listings.byCountry] DB read failed', e);
       return [];

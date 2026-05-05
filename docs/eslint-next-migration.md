@@ -9,6 +9,7 @@ Next.js 16 will remove `next lint`. **`apps/web`** and **`apps/admin`** now use 
 ## Follow-ups
 
 - Tighten to `--max-warnings=0` per package once baseline is clean.
+- **`@eushop/mobile`** still uses a **lint no-op** script; replace with `eslint` + shared flat config when React Native rules are wired (**EUSHOP-O-005**).
 
 ## Typecheck vs Vitest
 

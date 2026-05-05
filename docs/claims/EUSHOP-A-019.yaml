@@ -1,0 +1,15 @@
+id: EUSHOP-A-019
+lane: A
+sub_lane: null
+branch: agent/a-019-profile-payout-copy
+owner: cursor-codex-5.3
+status: claimed
+touches:
+  - apps/web/src/components/profile/profile-payouts-card.tsx
+  - docs/cursor-parallel-backlog.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Align payouts card wording with Stripe Connect runbook terminology so sellers
+  see accurate reserve/capture behavior and setup preconditions.

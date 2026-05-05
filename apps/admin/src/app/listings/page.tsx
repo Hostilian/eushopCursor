@@ -45,36 +45,63 @@ export default async function AdminListingsPage({
           <p className="text-ink/70 text-sm">No live listings right now.</p>
         </div>
       ) : (
-        <ul className="divide-ink/10 border-ink/10 divide-y rounded-2xl border bg-white">
-          {rows.map((r) => (
-            <li
-              key={r.id}
-              className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm"
-            >
-              <span className="text-ink font-medium">{r.freeformName ?? r.id}</span>
-              <span className="text-ash">
-                {r.approximateCity} · €{r.finderFee}
-              </span>
-              <div className="flex flex-wrap items-center gap-2">
-                <Link
-                  href={`${webBase}/listings/${r.id}`}
-                  className="text-saffron-700 text-xs underline"
-                >
-                  Open in web
-                </Link>
-                <form action={adminRemoveListing} className="inline">
-                  <input type="hidden" name="listingId" value={r.id} />
-                  <button
-                    type="submit"
-                    className="text-danger hover:bg-danger/10 rounded-full border border-red-200 px-3 py-1 text-xs"
-                  >
-                    Remove from feed
-                  </button>
-                </form>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <div className="border-ink/10 overflow-x-auto rounded-2xl border bg-white shadow-sm">
+          <table className="w-full min-w-[780px] text-left text-sm">
+            <caption className="sr-only">
+              Active public listings with city, finder fee, and moderation actions.
+            </caption>
+            <thead className="bg-porcelain/80 text-ash text-xs tracking-widest uppercase">
+              <tr>
+                <th scope="col" className="px-4 py-3 font-medium">
+                  Listing
+                </th>
+                <th scope="col" className="px-4 py-3 font-medium">
+                  City
+                </th>
+                <th scope="col" className="px-4 py-3 font-medium">
+                  Finder fee
+                </th>
+                <th scope="col" className="px-4 py-3 font-medium">
+                  View
+                </th>
+                <th scope="col" className="px-4 py-3 font-medium">
+                  Moderation
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-ink/10 divide-y">
+              {rows.map((r) => (
+                <tr key={r.id} className="hover:bg-porcelain/40">
+                  <td className="px-4 py-3">
+                    <p className="text-ink font-medium">{r.freeformName ?? 'Untitled listing'}</p>
+                    <p className="text-ash mt-1 font-mono text-xs">{r.id}</p>
+                  </td>
+                  <td className="text-ash px-4 py-3">{r.approximateCity ?? '—'}</td>
+                  <td className="text-ink px-4 py-3">€{r.finderFee}</td>
+                  <td className="px-4 py-3">
+                    <Link
+                      href={`${webBase}/listings/${r.id}`}
+                      className="text-saffron-700 text-xs underline"
+                    >
+                      Open in web
+                    </Link>
+                  </td>
+                  <td className="px-4 py-3">
+                    <form action={adminRemoveListing} className="inline">
+                      <input type="hidden" name="listingId" value={r.id} />
+                      <button
+                        type="submit"
+                        className="text-danger hover:bg-danger/10 rounded-full border border-red-200 px-3 py-1 text-xs"
+                      >
+                        Remove from feed
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

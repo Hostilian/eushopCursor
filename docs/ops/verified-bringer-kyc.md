@@ -12,7 +12,7 @@ The schema also includes **`kyc_sessions`** ([`packages/db/src/schema/payments.t
 
 ## Environment (vendor integration)
 
-Placeholders in [`.env.example`](../../.env.example): `VERIFF_API_KEY`, `VERIFF_BASE_URL`, `VERIFF_WEBHOOK_SECRET` (rename for Onfido if you switch vendors).
+The API reads **`KYC_VENDOR`** (`veriff` \| `onfido` \| `manual`, default `manual`) from [`trust.startKyc`](../../packages/api-router/src/routers/trust.ts). Placeholders in [`.env.example`](../../.env.example): **`KYC_VENDOR`**, `VERIFF_API_KEY`, `VERIFF_BASE_URL`, optional **Onfido** token when you wire `onfido`. Add **`VERIFF_WEBHOOK_SECRET`** when you expose a webhook route for automated decisions (see Future automation).
 
 ## Future automation
 

@@ -2,6 +2,7 @@
 .SYNOPSIS
   Expose a local HTTP port over HTTPS using Cloudflare's quick tunnel (trycloudflare.com).
   No Cloudflare account required. Your PC must stay on; URL is public — share only with people you trust.
+  The hostname is always random (e.g. word-word-word.trycloudflare.com). For a short stable name, see docs/ops/local-demo-custom-domain.md.
 
 .DESCRIPTION
   Run this script in its own window and leave it open (do not pipe cloudflared through Select-Object etc. — that closes the tunnel and may show a bogus exit code on Windows).
@@ -28,6 +29,11 @@
 .EXAMPLE
   .\scripts\cloudflare-quick-tunnel.ps1
   .\scripts\cloudflare-quick-tunnel.ps1 -Port 3001
+
+  # For two-tunnel lifecycle automation (session file + status + shutdown):
+  #   .\scripts\demo-up.ps1 -SyncWebEnv
+  #   .\scripts\demo-status.ps1
+  #   .\scripts\demo-down.ps1
 #>
 param(
   [int] $Port = 3000

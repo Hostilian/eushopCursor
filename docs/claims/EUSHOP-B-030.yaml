@@ -1,0 +1,16 @@
+id: EUSHOP-B-030
+lane: B
+sub_lane: null
+branch: agent/b-030-listings-requests-validation
+owner: cursor-agent
+status: claimed
+touches:
+  - packages/api-router/src/routers/listings.ts
+  - packages/api-router/src/routers/requests.ts
+  - docs/cursor-parallel-backlog.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Backlog B-014/B-015: make listings pagination cursor behavior consistent and
+  tighten requests router input/authorization edge handling without hotspot overlap.

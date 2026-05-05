@@ -42,6 +42,7 @@ export default function TractionScreen() {
             <KpiTile label="Listings" value={summary.data.listings} />
             <KpiTile label="Requests" value={summary.data.requests} />
             <KpiTile label="Trips" value={summary.data.tripsPosted} />
+            <KpiTile label="Active sellers" value={summary.data.activeSellers} />
             <KpiTile label="Confirmed" value={summary.data.reservationsConfirmed} />
             <KpiTile label="Completed" value={summary.data.reservationsCompleted} />
           </View>

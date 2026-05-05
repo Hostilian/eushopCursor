@@ -16,6 +16,17 @@ async function run() {
     sortableAttributes: ['createdAt'],
     rankingRules: ['words', 'typo', 'proximity', 'attribute', 'sort', 'exactness'],
     typoTolerance: { enabled: true, minWordSizeForTypos: { oneTypo: 4, twoTypos: 8 } },
+    synonyms: {
+      pierogi: ['pirogi', 'vareniki'],
+      pirogi: ['pierogi', 'vareniki'],
+      ajvar: ['ajvara'],
+      burek: ['byrek'],
+      cevapcici: ['cevapi', 'ćevapi'],
+      passata: ['passata di pomodoro'],
+      gochujang: ['kochujang'],
+      yoghurt: ['yogurt'],
+      paprika: ['bell pepper'],
+    },
     pagination: { maxTotalHits: 2000 },
   });
 

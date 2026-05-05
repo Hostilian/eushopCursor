@@ -107,22 +107,39 @@ export default async function AdminPaymentsPage({
             <p className="text-ink/70 text-sm">No reservation payment rows yet.</p>
           </div>
         ) : (
-          <div className="border-ink/10 overflow-x-auto rounded-2xl border bg-white">
+          <div className="border-ink/10 overflow-x-auto rounded-2xl border bg-white shadow-sm">
             <table className="w-full min-w-[720px] text-left text-sm">
+              <caption className="sr-only">
+                Reservation payments reconciliation rows with status and Stripe IDs.
+              </caption>
               <thead className="bg-porcelain/80 text-ash text-xs tracking-widest uppercase">
                 <tr>
-                  <th className="px-3 py-2 font-medium">Reservation</th>
-                  <th className="px-3 py-2 font-medium">Status</th>
-                  <th className="px-3 py-2 font-medium">PI</th>
-                  <th className="px-3 py-2 font-medium">Total €</th>
-                  <th className="px-3 py-2 font-medium">Platform €</th>
-                  <th className="px-3 py-2 font-medium">Captured</th>
-                  <th className="px-3 py-2 font-medium">Updated</th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Reservation
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Status
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    PI
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Total €
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Platform €
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Captured
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Updated
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-ink/10 divide-y">
                 {reservationRows.map((r) => (
-                  <tr key={r.id}>
+                  <tr key={r.id} className="hover:bg-porcelain/40">
                     <td className="px-3 py-2 font-mono text-xs">{r.reservationId}</td>
                     <td className="px-3 py-2">{r.status}</td>
                     <td className="px-3 py-2 font-mono text-xs">
@@ -165,23 +182,42 @@ export default async function AdminPaymentsPage({
             <p className="text-ink/70 text-sm">No payout rows yet.</p>
           </div>
         ) : (
-          <div className="border-ink/10 overflow-x-auto rounded-2xl border bg-white">
+          <div className="border-ink/10 overflow-x-auto rounded-2xl border bg-white shadow-sm">
             <table className="w-full min-w-[640px] text-left text-sm">
+              <caption className="sr-only">
+                Trip payout rows with gross, fee, net, and transfer status.
+              </caption>
               <thead className="bg-porcelain/80 text-ash text-xs tracking-widest uppercase">
                 <tr>
-                  <th className="px-3 py-2 font-medium">Trip</th>
-                  <th className="px-3 py-2 font-medium">Seller</th>
-                  <th className="px-3 py-2 font-medium">Status</th>
-                  <th className="px-3 py-2 font-medium">Gross</th>
-                  <th className="px-3 py-2 font-medium">Fee</th>
-                  <th className="px-3 py-2 font-medium">Net</th>
-                  <th className="px-3 py-2 font-medium">Transfer id</th>
-                  <th className="px-3 py-2 font-medium">Updated</th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Trip
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Seller
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Status
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Gross
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Fee
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Net
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Transfer id
+                  </th>
+                  <th scope="col" className="px-3 py-2 font-medium">
+                    Updated
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-ink/10 divide-y">
                 {payoutRows.map((p) => (
-                  <tr key={p.id}>
+                  <tr key={p.id} className="hover:bg-porcelain/40">
                     <td className="px-3 py-2 font-mono text-xs">{p.tripOfferId}</td>
                     <td className="px-3 py-2 font-mono text-xs">{p.sellerId}</td>
                     <td className="px-3 py-2">{p.status}</td>

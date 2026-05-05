@@ -56,6 +56,8 @@ Most serious cloud **VM** offers still ask for **identity + payment verification
 | ---- | --------------------------- |
 | **GitHub Pages** for the repo’s **static stub** under `infra/pages/` | **No** — marketing mirror only; not `apps/web` + API + auth. |
 | **Temporary public URL** while your dev machine runs (e.g. **Cloudflare Tunnel**, **ngrok**) | **Demo only** — your PC must be on during the demo; not production. |
+| **Linux on hardware you already own** (old PC, Raspberry Pi) at home | **Yes, in principle** — you install Coolify/Docker there; scaling and reliability are limited unless you invest time. |
+| **Someone else’s server** (friend, club, university lab) | Depends on their rules — not something this repo can automate. |
 
 #### Quick tunnel from Windows (Cloudflare `trycloudflare.com`, no account)
 
@@ -63,9 +65,9 @@ Most serious cloud **VM** offers still ask for **identity + payment verification
 2. From the repo root, start the app (see README): e.g. `pnpm dev:web` (web only on `:3000`) or `pnpm dev:web-api` (web `:3000` + API `:3001` when DB/env are ready).
 3. In another terminal: [`scripts/cloudflare-quick-tunnel.ps1`](../../scripts/cloudflare-quick-tunnel.ps1) — default exposes `:3000`. Use `-Port 3001` for the API when you need the full stack; follow the script header for **two tunnels** + `apps/web/.env.local` (`NEXT_PUBLIC_API_URL`, `BETTER_AUTH_URL`, `NEXT_PUBLIC_SITE_URL`).
 
-The printed `https://*.trycloudflare.com` link is **world-readable** while the tunnel runs — treat it like a password for demos only.
-| **Linux on hardware you already own** (old PC, Raspberry Pi) at home | **Yes, in principle** — you install Coolify/Docker there; scaling and reliability are limited unless you invest time. |
-| **Someone else’s server** (friend, club, university lab) | Depends on their rules — not something this repo can automate. |
+The printed `https://*.trycloudflare.com` link is **world-readable** while the tunnel runs — treat it like a password for demos only. Quick tunnels **always** use a **random** subdomain; you **cannot** rename them to something short or branded.
+
+**Short, stable demo URL:** use a **named Cloudflare Tunnel** + DNS on a **domain you control** (small yearly cost). Step-by-step: **[local-demo-custom-domain.md](./local-demo-custom-domain.md)** — copy [`scripts/cloudflared/tunnel-config.example.yml`](../../scripts/cloudflared/tunnel-config.example.yml) as a starting `config.yml`.
 
 There is **no reputable** “sign up with email only, get a forever free production VPS with no card” pattern for this stack—anything claiming that is usually a scam or unusable for real workloads.
 
@@ -76,6 +78,7 @@ There is **no reputable** “sign up with email only, get a forever free product
 | **FOSS control plane, Vercel-like workflows** | **Coolify** (or CapRover / Dokku) on **Linux you control** (VPS recommended). |
 | **No paid VPS, still want a Linux VM** | Cloud **free tier** VM **if** you can pass signup (often **card on file**)—see Oracle/AWS/GCP docs. |
 | **No billing account at all** | Home Linux hardware, tunnel demos from your PC, or GitHub Pages static stub only—see subsection above. |
+| **Short branded demo URL (Tunnel)** | Named tunnel + your domain — [local-demo-custom-domain.md](./local-demo-custom-domain.md). |
 | **No VPS, click-hosted** | Managed PaaS + managed DB — **not** “the OSS alternative”; different tradeoffs. |
 | **Marketing-only static site** | Optional GitHub Pages stub under `infra/pages/` — **not** the full product. |
 

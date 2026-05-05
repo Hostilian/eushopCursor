@@ -147,6 +147,9 @@
     "feePerSlot": "€{fee} per slot",
     "reserveCta": "Reserve a slot",
     "showcaseCta": "Showcase trip",
+    "listSubtitle": "People sharing spare slots in their next trip home.",
+    "postShort": "Post",
+    "loading": "Loading trips…",
     "verifiedBringer": "Verified bringer",
     "today": "today",
     "tomorrow": "tomorrow",
@@ -169,7 +172,14 @@
     "summaryConfirmed": "Confirmed",
     "summaryCompleted": "Completed",
     "summaryCancelled": "Cancelled",
-    "verifiedBringer": "Verified bringer"
+    "verifiedBringer": "Verified bringer",
+    "reserveAsideEyebrow": "Reserve a slot",
+    "reserveFullTitle": "All slots taken.",
+    "reserveFullBody": "Post a request and we’ll notify you when this traveller — or the next one on the route — opens a new trip.",
+    "reserveRequestCta": "Post a request",
+    "sellerReservationsEmpty": "No reservations yet. Buyers will appear here when they book.",
+    "buyerReservationsEmpty": "You have no reservations on this trip yet.",
+    "activeReservationCount": "{count, plural, one {# active reservation} other {# active reservations}}"
   },
   "tripForm": {
     "metaTitle": "Post a trip · Eushop",
@@ -219,7 +229,7 @@
     "statusSellerRejected": "Declined by traveller",
     "feeLabel": "Agreed fee €{fee}",
     "platformFeeLabel": "Platform fee €{fee}",
-    "qty": "{qty} item(s)",
+    "qty": "{qty, plural, one {# item} other {# items}}",
     "paymentsNotice": "Online trip payments use a card hold until the traveller confirms. Refunds, disputes and chargebacks follow our Terms and your card issuer.",
     "paymentsTermsLink": "Terms: payments and disputes"
   },
@@ -251,7 +261,7 @@
   },
   "reservationPayment": {
     "cardTitle": "Card authorization",
-    "holdExplainer": "We place a hold for the slot fee plus Eushop’s small platform fee. Nothing is captured until the traveller confirms your booking.",
+    "holdExplainer": "We place a hold for the slot fee plus Eushop’s platform fee: min(€1.50, 12% of the slot fee). Nothing is captured until the traveller confirms your booking.",
     "disputesNote": "Chargebacks and refunds are handled under card-network rules; see Terms.",
     "termsLink": "Terms: refunds and disputes",
     "authorizeHold": "Authorize hold",
@@ -343,7 +353,7 @@
     "feeInputLabel": "Your offer (EUR)",
     "agreedSlotFeeLabel": "Agreed slot fee",
     "platformFeeShortLabel": "Eushop platform fee",
-    "feeFootnote": "Charged when the seller confirms your reservation. Card holds and Stripe checkout are on the web today when Connect is enabled for the route.",
+    "feeFootnote": "Total hold = slot fee + platform fee (min €1.50 or 12% of the slot fee, whichever is lower). Charged when the traveller confirms. Card holds and Stripe checkout are on the web when Connect is enabled for the route.",
     "reserveCta": "Reserve this slot",
     "reserving": "Reserving…"
   },
@@ -354,6 +364,11 @@
     "title": "Product log",
     "subtitle": "High-signal releases for operators and investors.",
     "entries": [
+      {
+        "date": "2026-05-05",
+        "title": "Catalog photo gallery in product picker",
+        "body": "Pics: browse up to 60 catalog rows in a modal and tap to attach a product photo. Propose-product flow shows attached photos, clearer category/origin layout, and safer ISO2 input. Placeholder tiles when seed items have no image yet."
+      },
       {
         "date": "2026-05-02",
         "title": "Trip marketplace + sell-ready surface",

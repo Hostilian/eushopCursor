@@ -15,6 +15,139 @@ import {
 import { eq } from 'drizzle-orm';
 import type { Context } from 'hono';
 
+type StripeObject = Record<string, unknown>;
+
+function asString(value: unknown): string | null {
+  return typeof value === 'string' ? value : null;
+}
+
+function parseMoneyFields(obj: StripeObject): {
+  amountCents: string | null;
+  currency: string | null;
+} {
+  const amountCents = typeof obj.amount === 'number' ? String(obj.amount) : null;
+  const currency = typeof obj.currency === 'string' ? String(obj.currency).toUpperCase() : null;
+  return { amountCents, currency };
+}
+
+async function findReservationIdForPaymentIntent(paymentIntentId: string): Promise<string | null> {
+  const [pay] = await db
+    .select({ reservationId: reservationPayments.reservationId })
+    .from(reservationPayments)
+    .where(eq(reservationPayments.stripePaymentIntentId, paymentIntentId))
+    .limit(1);
+  return pay?.reservationId ?? null;
+}
+
+async function resolveReservationId(eventType: string, obj: StripeObject): Promise<string | null> {
+  const metadata = obj.metadata;
+  if (metadata && typeof metadata === 'object') {
+    const reservationFromMeta = asString((metadata as Record<string, unknown>).reservationId);
+    if (reservationFromMeta) return reservationFromMeta;
+  }
+
+  const paymentIntentRef = asString(obj.payment_intent);
+  if (paymentIntentRef) {
+    const fromPaymentRef = await findReservationIdForPaymentIntent(paymentIntentRef);
+    if (fromPaymentRef) return fromPaymentRef;
+  }
+
+  if (eventType.startsWith('payment_intent.')) {
+    const piId = asString(obj.id);
+    if (piId) {
+      const fromPi = await findReservationIdForPaymentIntent(piId);
+      if (fromPi) return fromPi;
+    }
+  }
+
+  return null;
+}
+
+function connectAccountStatusForUpdate(input: {
+  chargesEnabled: boolean;
+  payoutsEnabled: boolean;
+  detailsSubmitted: boolean;
+}): 'active' | 'restricted' | 'pending' {
+  if (input.chargesEnabled && input.payoutsEnabled) return 'active';
+  if (input.detailsSubmitted) return 'restricted';
+  return 'pending';
+}
+
+async function handleAccountUpdated(obj: StripeObject): Promise<void> {
+  const stripeAccountId = asString(obj.id);
+  if (!stripeAccountId) return;
+  const [row] = await db
+    .select()
+    .from(connectAccounts)
+    .where(eq(connectAccounts.stripeAccountId, stripeAccountId))
+    .limit(1);
+  if (!row) return;
+
+  const chargesEnabled = Boolean(obj.charges_enabled);
+  const payoutsEnabled = Boolean(obj.payouts_enabled);
+  const detailsSubmitted = Boolean(obj.details_submitted);
+  const requirementsRaw = obj.requirements;
+  const requirements =
+    requirementsRaw && typeof requirementsRaw === 'object'
+      ? (requirementsRaw as { currently_due?: string[]; disabled_reason?: string | null })
+      : {};
+
+  await db
+    .update(connectAccounts)
+    .set({
+      chargesEnabled,
+      payoutsEnabled,
+      detailsSubmitted,
+      requirementsCurrentlyDue: requirements.currently_due ?? [],
+      requirementsDisabledReason: requirements.disabled_reason ?? null,
+      status: connectAccountStatusForUpdate({ chargesEnabled, payoutsEnabled, detailsSubmitted }),
+      updatedAt: new Date(),
+    })
+    .where(eq(connectAccounts.id, row.id));
+}
+
+async function applyReservationPaymentPatch(
+  eventType: string,
+  obj: StripeObject,
+  reservationId: string,
+): Promise<void> {
+  const patch = reservationPaymentPatchForStripeEvent(eventType);
+  const piStatus = eventType.startsWith('payment_intent.') ? asString(obj.status) : null;
+  if (!patch && !piStatus) return;
+
+  const merged: {
+    status?: string;
+    capturedAt?: Date;
+    cancelledAt?: Date;
+    refundedAt?: Date;
+    disputedAt?: Date;
+    updatedAt: Date;
+  } = { updatedAt: new Date() };
+  if (patch) Object.assign(merged, patch);
+  if (piStatus) merged.status = piStatus;
+  await db
+    .update(reservationPayments)
+    .set(merged)
+    .where(eq(reservationPayments.reservationId, reservationId));
+}
+
+async function handlePayoutStatus(eventType: string, obj: StripeObject): Promise<void> {
+  const payoutId = asString(obj.id);
+  if (!payoutId) return;
+  if (eventType === 'payout.paid') {
+    await db
+      .update(payouts)
+      .set({ status: 'paid', updatedAt: new Date() })
+      .where(eq(payouts.stripeTransferId, payoutId));
+  }
+  if (eventType === 'payout.failed') {
+    await db
+      .update(payouts)
+      .set({ status: 'failed', updatedAt: new Date() })
+      .where(eq(payouts.stripeTransferId, payoutId));
+  }
+}
+
 /**
  * Stripe webhook handler.
  *
@@ -43,8 +176,8 @@ export async function handleStripeWebhook(c: Context): Promise<Response> {
     return c.json({ error: 'Bad signature' }, 400);
   }
 
-  const obj = event.data.object as Record<string, unknown>;
-  const stripeObjectId = (obj.id as string | undefined) ?? null;
+  const obj = event.data.object as StripeObject;
+  const stripeObjectId = asString(obj.id);
 
   // Idempotency: skip if this event id has already been recorded.
   const existing = await db
@@ -60,33 +193,8 @@ export async function handleStripeWebhook(c: Context): Promise<Response> {
   if (!kind) {
     console.info('[stripe webhook] unhandled', event.type);
   }
-  let amountCents: string | null = null;
-  let currency: string | null = null;
-  let reservationId: string | null = null;
-
-  // Pull amount/currency from the Stripe object when present.
-  if (typeof obj.amount === 'number') amountCents = String(obj.amount);
-  if (typeof obj.currency === 'string') currency = String(obj.currency).toUpperCase();
-
-  // Map back to a reservation via metadata.reservationId or the stored PI id.
-  const meta = (obj.metadata as Record<string, string> | undefined) ?? undefined;
-  if (meta?.reservationId) reservationId = meta.reservationId;
-  if (!reservationId && typeof obj.payment_intent === 'string') {
-    const [pay] = await db
-      .select({ reservationId: reservationPayments.reservationId })
-      .from(reservationPayments)
-      .where(eq(reservationPayments.stripePaymentIntentId, obj.payment_intent as string))
-      .limit(1);
-    if (pay) reservationId = pay.reservationId;
-  }
-  if (!reservationId && typeof obj.id === 'string' && event.type.startsWith('payment_intent.')) {
-    const [pay] = await db
-      .select({ reservationId: reservationPayments.reservationId })
-      .from(reservationPayments)
-      .where(eq(reservationPayments.stripePaymentIntentId, obj.id as string))
-      .limit(1);
-    if (pay) reservationId = pay.reservationId;
-  }
+  const { amountCents, currency } = parseMoneyFields(obj);
+  const reservationId = await resolveReservationId(event.type, obj);
 
   console.info(
     '[stripe webhook]',
@@ -101,62 +209,9 @@ export async function handleStripeWebhook(c: Context): Promise<Response> {
 
   // Side effects per type.
   try {
-    if (event.type === 'account.updated' && typeof obj.id === 'string') {
-      const [row] = await db
-        .select()
-        .from(connectAccounts)
-        .where(eq(connectAccounts.stripeAccountId, obj.id as string))
-        .limit(1);
-      if (row) {
-        const chargesEnabled = Boolean(obj.charges_enabled);
-        const payoutsEnabled = Boolean(obj.payouts_enabled);
-        const detailsSubmitted = Boolean(obj.details_submitted);
-        const reqs =
-          (obj.requirements as
-            | { currently_due?: string[]; disabled_reason?: string | null }
-            | undefined) ?? {};
-        await db
-          .update(connectAccounts)
-          .set({
-            chargesEnabled,
-            payoutsEnabled,
-            detailsSubmitted,
-            requirementsCurrentlyDue: reqs.currently_due ?? [],
-            requirementsDisabledReason: reqs.disabled_reason ?? null,
-            status:
-              chargesEnabled && payoutsEnabled
-                ? 'active'
-                : detailsSubmitted
-                  ? 'restricted'
-                  : 'pending',
-            updatedAt: new Date(),
-          })
-          .where(eq(connectAccounts.id, row.id));
-      }
-    }
-
-    if (reservationId) {
-      const patch = reservationPaymentPatchForStripeEvent(event.type);
-      if (patch) {
-        await db
-          .update(reservationPayments)
-          .set(patch)
-          .where(eq(reservationPayments.reservationId, reservationId));
-      }
-    }
-
-    if (event.type === 'payout.paid' && typeof obj.id === 'string') {
-      await db
-        .update(payouts)
-        .set({ status: 'paid', updatedAt: new Date() })
-        .where(eq(payouts.stripeTransferId, obj.id as string));
-    }
-    if (event.type === 'payout.failed' && typeof obj.id === 'string') {
-      await db
-        .update(payouts)
-        .set({ status: 'failed', updatedAt: new Date() })
-        .where(eq(payouts.stripeTransferId, obj.id as string));
-    }
+    if (event.type === 'account.updated') await handleAccountUpdated(obj);
+    if (reservationId) await applyReservationPaymentPatch(event.type, obj, reservationId);
+    await handlePayoutStatus(event.type, obj);
   } catch (e) {
     console.error('[stripe webhook] side-effect failure', event.type, e);
   }

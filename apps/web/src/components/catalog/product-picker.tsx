@@ -45,6 +45,33 @@ function flagEmojiForIso2(iso2: string) {
   return c?.flagEmoji ?? '🌍';
 }
 
+function countryNameForIso2(iso2: string) {
+  const c = COUNTRIES.find((x) => x.iso2 === iso2.toUpperCase());
+  return c?.name ?? iso2.toUpperCase();
+}
+
+function fallbackImageForItem(name: string, originCountryIso2: string) {
+  const flag = flagEmojiForIso2(originCountryIso2);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#f4efe7"/>
+<stop offset="100%" stop-color="#e8dfd2"/>
+</linearGradient>
+</defs>
+<rect width="800" height="800" fill="url(#bg)"/>
+<circle cx="680" cy="120" r="140" fill="#c9770020"/>
+<circle cx="120" cy="700" r="170" fill="#9a908120"/>
+<text x="72" y="170" font-size="88" font-family="ui-serif, Georgia, serif">${flag}</text>
+<foreignObject x="72" y="240" width="656" height="450">
+<div xmlns="http://www.w3.org/1999/xhtml" style="font-family: ui-serif, Georgia, serif; color: #2e271f; font-size: 44px; line-height: 1.2; font-weight: 600;">
+${name.replaceAll(/[<&>]/g, '')}
+</div>
+</foreignObject>
+</svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
 /**
  * Universal product picker. Replaces freeform "type a product name" textarea
  * with a guided flow:
@@ -101,7 +128,7 @@ export function ProductPicker({
   onChange,
   purpose = 'listing',
   proposeCategoryOptions = [],
-}: Props) {
+}: Readonly<Props>) {
   const t = useTranslations('productPicker');
   const [query, setQuery] = useState(value.freeformName ?? '');
   const [debouncedQ, setDebouncedQ] = useState(query);
@@ -126,7 +153,8 @@ export function ProductPicker({
   const proposeItem = trpc.catalog.proposeItem.useMutation();
 
   const selectHit = (hit: CatalogSearchHit, imageUrl?: string) => {
-    const pickedImage = imageUrl ?? hit.images[0];
+    const pickedImage =
+      imageUrl ?? hit.images[0] ?? fallbackImageForItem(hit.name, hit.originCountryIso2);
     onChange({
       foodItemId: hit.source === 'local' ? hit.id : undefined,
       freeformName: hit.name,
@@ -274,7 +302,7 @@ export function ProductPicker({
         </ul>
       ) : null}
 
-      {debouncedQ.length >= 2 && search.data && search.data.length === 0 ? (
+      {debouncedQ.length >= 2 && search.data?.length === 0 ? (
         <p className="text-ash text-xs">{t('emptyCatalogHint')}</p>
       ) : null}
 
@@ -402,12 +430,60 @@ export function ProductPicker({
 function CatalogPicsGallery({
   onClose,
   onPick,
-}: {
+}: Readonly<{
   onClose: () => void;
   onPick: (hit: CatalogSearchHit, imageUrl?: string) => void;
-}) {
+}>) {
   const t = useTranslations('productPicker');
-  const browse = trpc.catalog.browse.useQuery({ limit: 60 }, { staleTime: 60_000 });
+  const categories = trpc.catalog.categories.useQuery(undefined, { staleTime: 300_000 });
+  const browse = trpc.catalog.browse.useInfiniteQuery(
+    { limit: 60 },
+    {
+      staleTime: 60_000,
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    },
+  );
+  const skeletonKeys = [
+    'sk1',
+    'sk2',
+    'sk3',
+    'sk4',
+    'sk5',
+    'sk6',
+    'sk7',
+    'sk8',
+    'sk9',
+    'sk10',
+    'sk11',
+    'sk12',
+  ];
+  const [countryFilter, setCountryFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [sortMode, setSortMode] = useState<'name-asc' | 'name-desc'>('name-asc');
+  const browseItems = useMemo(
+    () => browse.data?.pages.flatMap((page) => page.items) ?? [],
+    [browse.data],
+  );
+  const availableCountryIso2 = useMemo(
+    () =>
+      Array.from(new Set(browseItems.map((item) => item.originCountryIso2))).sort((a, b) =>
+        a.localeCompare(b),
+      ),
+    [browseItems],
+  );
+  const filteredItems = useMemo(() => {
+    const byCountry =
+      countryFilter === 'all'
+        ? browseItems
+        : browseItems.filter((item) => item.originCountryIso2 === countryFilter);
+    const byCategory =
+      categoryFilter === 'all'
+        ? byCountry
+        : byCountry.filter((item) => item.categoryId === categoryFilter);
+    return [...byCategory].sort((a, b) =>
+      sortMode === 'name-asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name),
+    );
+  }, [browseItems, countryFilter, categoryFilter, sortMode]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -417,17 +493,70 @@ function CatalogPicsGallery({
     return () => document.removeEventListener('keydown', onKey);
   }, [onClose]);
 
+  useEffect(() => {
+    if (!browse.hasNextPage || browse.isFetchingNextPage) return;
+    void browse.fetchNextPage();
+  }, [browse.hasNextPage, browse.isFetchingNextPage, browse.fetchNextPage]);
+
+  const content = (() => {
+    if (browse.isLoading) {
+      return (
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+          {skeletonKeys.map((key) => (
+            <li
+              key={key}
+              className="bg-bone border-ink/8 aspect-square animate-pulse rounded-2xl border"
+            />
+          ))}
+        </ul>
+      );
+    }
+    if (!filteredItems.length) return <p className="text-ash text-sm">{t('picsEmpty')}</p>;
+    return (
+      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+        {filteredItems.map((item) => {
+          const hit = browseItemToSearchHit(item);
+          const src = hit.images[0] ?? fallbackImageForItem(item.name, item.originCountryIso2);
+          return (
+            <li key={item.id}>
+              <button
+                type="button"
+                onClick={() => onPick(hit, src)}
+                className="border-ink/10 group bg-bone hover:border-saffron-400 relative aspect-square w-full overflow-hidden rounded-2xl border text-left transition-colors"
+                aria-label={t('picsUseFor', { name: item.name })}
+              >
+                <Image
+                  src={src}
+                  alt=""
+                  fill
+                  sizes="(max-width: 768px) 45vw, 200px"
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  unoptimized
+                />
+                <span className="bg-ink/75 text-paper pointer-events-none absolute inset-x-0 bottom-0 line-clamp-2 px-2 py-1.5 font-serif text-[11px] leading-snug opacity-0 transition-opacity group-hover:opacity-100">
+                  {item.name}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  })();
+
   return (
-    <div
-      className="bg-ink/40 fixed inset-0 z-[60] flex items-center justify-center p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="catalog-pics-title"
-      onClick={onClose}
-    >
-      <div
-        className="bg-paper border-ink/10 flex max-h-[min(720px,85vh)] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
+    <div className="bg-ink/40 fixed inset-0 z-[60] flex items-center justify-center p-4">
+      <button
+        type="button"
+        aria-label={t('picsClose')}
+        className="absolute inset-0"
+        onClick={onClose}
+      />
+      <dialog
+        open
+        aria-modal="true"
+        aria-labelledby="catalog-pics-title"
+        className="bg-paper border-ink/10 relative flex max-h-[min(720px,85vh)] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border p-0 shadow-2xl"
       >
         <div className="border-ink/10 flex shrink-0 items-start justify-between gap-3 border-b px-5 py-4">
           <div className="min-w-0">
@@ -443,60 +572,43 @@ function CatalogPicsGallery({
           </Button>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
-          {browse.isLoading ? (
-            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-              {Array.from({ length: 12 }).map((_, i) => (
-                <li
-                  key={i}
-                  className="bg-bone border-ink/8 aspect-square animate-pulse rounded-2xl border"
-                />
+          <div className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
+            <select
+              value={countryFilter}
+              onChange={(e) => setCountryFilter(e.target.value)}
+              className="form-input w-full rounded-xl py-2 text-xs"
+            >
+              <option value="all">All countries</option>
+              {availableCountryIso2.map((iso2) => (
+                <option key={iso2} value={iso2}>
+                  {flagEmojiForIso2(iso2)} {countryNameForIso2(iso2)}
+                </option>
               ))}
-            </ul>
-          ) : browse.data?.items.length ? (
-            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-              {browse.data.items.map((item) => {
-                const hit = browseItemToSearchHit(item);
-                const src = hit.images[0];
-                return (
-                  <li key={item.id}>
-                    <button
-                      type="button"
-                      onClick={() => onPick(hit, src)}
-                      className="border-ink/10 group bg-bone hover:border-saffron-400 relative aspect-square w-full overflow-hidden rounded-2xl border text-left transition-colors"
-                      aria-label={t('picsUseFor', { name: item.name })}
-                    >
-                      {src ? (
-                        <Image
-                          src={src}
-                          alt=""
-                          fill
-                          sizes="(max-width: 768px) 45vw, 200px"
-                          className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                          unoptimized
-                        />
-                      ) : (
-                        <div className="grain flex h-full w-full flex-col items-center justify-center gap-2 p-3 text-center">
-                          <span className="text-2xl leading-none" aria-hidden>
-                            {flagEmojiForIso2(item.originCountryIso2)}
-                          </span>
-                          <span className="text-ink line-clamp-4 font-serif text-[11px] leading-snug font-medium tracking-tight">
-                            {item.name}
-                          </span>
-                        </div>
-                      )}
-                      <span className="bg-ink/75 text-paper pointer-events-none absolute inset-x-0 bottom-0 line-clamp-2 px-2 py-1.5 font-serif text-[11px] leading-snug opacity-0 transition-opacity group-hover:opacity-100">
-                        {item.name}
-                      </span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <p className="text-ash text-sm">{t('picsEmpty')}</p>
-          )}
+            </select>
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              className="form-input w-full rounded-xl py-2 text-xs"
+            >
+              <option value="all">All categories</option>
+              {(categories.data ?? []).map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+            <select
+              value={sortMode}
+              onChange={(e) => setSortMode(e.target.value as 'name-asc' | 'name-desc')}
+              className="form-input w-full rounded-xl py-2 text-xs"
+            >
+              <option value="name-asc">Sort: Name A-Z</option>
+              <option value="name-desc">Sort: Name Z-A</option>
+            </select>
+          </div>
+          {content}
         </div>
-      </div>
+      </dialog>
     </div>
   );
 }
@@ -508,7 +620,7 @@ function ProposeItemModal({
   onOpenPics,
   onCancel,
   onSubmit,
-}: {
+}: Readonly<{
   initialName: string;
   categoryOptions: { slug: string; name: string }[];
   attachedPhotos: { url: string }[];
@@ -520,7 +632,7 @@ function ProposeItemModal({
     originCountryIso2: string;
     description?: string;
   }) => Promise<void>;
-}) {
+}>) {
   const t = useTranslations('productPicker');
   const [name, setName] = useState(initialName);
   const [categorySlug, setCategorySlug] = useState(categoryOptions[0]?.slug ?? 'snacks');

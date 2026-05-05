@@ -1,0 +1,15 @@
+id: EUSHOP-B-018
+lane: B
+sub_lane: null
+branch: agent/b-018-mobile-session-expiry
+owner: cursor-agent
+status: claimed
+touches:
+  - apps/mobile/app/(tabs)/profile.tsx
+  - docs/cursor-parallel-backlog.md
+hotspot_sub_lane: null
+depends_on: []
+verify: pnpm verify
+notes: >
+  Improve mobile client session-expiry messaging when protected profile query
+  returns unauthorized, without auth protocol changes.
