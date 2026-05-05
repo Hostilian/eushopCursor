@@ -15,7 +15,7 @@ export type LiveListingCard = {
   point: { lat: number; lng: number };
 };
 
-export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
+export function LiveDiscover({ listings }: Readonly<{ listings: LiveListingCard[] }>) {
   const slice = listings.slice(0, 6);
   const hero = slice[0];
 
@@ -69,10 +69,11 @@ export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
               {hero.photos[0]?.url ? (
                 <Image
                   src={hero.photos[0].url}
-                  alt=""
+                  alt={`${hero.freeformName ?? 'Listing'} in ${hero.approximateCity}`}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                   sizes="(max-width: 1024px) 100vw, 50vw"
+                  priority
                   unoptimized={
                     hero.photos[0].url.startsWith('data:') || hero.photos[0].url.startsWith('blob:')
                   }
@@ -109,7 +110,7 @@ export function LiveDiscover({ listings }: { listings: LiveListingCard[] }) {
                     {l.photos[0]?.url ? (
                       <Image
                         src={l.photos[0].url}
-                        alt=""
+                        alt={`${l.freeformName ?? 'Listing'} in ${l.approximateCity}`}
                         fill
                         className="object-cover"
                         sizes="64px"

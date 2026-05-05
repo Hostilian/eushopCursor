@@ -55,6 +55,12 @@ jobs:
               - 'packages/i18n/src/messages/**/*.json'
               - 'scripts/pictures-smoke-check.mjs'
               - 'package.json'
+            csp_jsonld:
+              - 'apps/web/src/app/(product)/items/[slug]/page.tsx'
+              - 'apps/web/src/app/(product)/countries/[iso2]/page.tsx'
+              - 'apps/web/src/middleware.ts'
+              - 'scripts/csp-jsonld-smoke-check.mjs'
+              - 'package.json'
 
       - uses: pnpm/action-setup@v4
         with:
@@ -103,6 +109,10 @@ jobs:
       - name: Product pictures smoke check
         if: github.event_name == 'push' || steps.pictures_changes.outputs.pictures == 'true'
         run: pnpm pictures:check
+
+      - name: CSP JSON-LD nonce smoke check
+        if: github.event_name == 'push' || steps.pictures_changes.outputs.csp_jsonld == 'true'
+        run: pnpm csp:check
 
       - name: Claims overlap check
         run: pnpm claims:check

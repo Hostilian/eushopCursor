@@ -45,8 +45,9 @@
     "readiness:status:check": "node ./scripts/check-readiness-status-vocab.mjs",
     "readiness:triage": "pnpm readiness:status:check && pnpm claims:check && pnpm verify",
     "readiness:rc": "pnpm readiness:verify",
-    "readiness:verify": "pnpm readiness:index:check && pnpm readiness:status:check && pnpm claims:check && pnpm i18n:check && pnpm pictures:check && pnpm verify",
+    "readiness:verify": "pnpm readiness:index:check && pnpm readiness:status:check && pnpm claims:check && pnpm i18n:check && pnpm pictures:check && pnpm csp:check && pnpm verify",
     "pictures:check": "node ./scripts/pictures-smoke-check.mjs",
+    "csp:check": "node ./scripts/csp-jsonld-smoke-check.mjs",
     "api:dev:bun": "pnpm --filter @eushop/api-server dev:bun",
     "prepare": "husky || true"
   },

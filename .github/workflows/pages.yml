@@ -6,9 +6,6 @@ name: Pages
 on:
   push:
     branches: [main]
-    paths:
-      - 'infra/pages/**'
-      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:

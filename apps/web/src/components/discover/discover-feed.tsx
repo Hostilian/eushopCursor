@@ -153,7 +153,7 @@ export function DiscoverFeed() {
   );
 }
 
-function FilterBlock({ label, children }: { label: string; children: React.ReactNode }) {
+function FilterBlock({ label, children }: Readonly<{ label: string; children: React.ReactNode }>) {
   return (
     <div>
       <p className="text-ash text-xs tracking-widest uppercase">{label}</p>
@@ -166,11 +166,11 @@ function Pills<T extends string | null>({
   value,
   onChange,
   options,
-}: {
+}: Readonly<{
   value: T;
   onChange: (v: T) => void;
   options: { v: T; l: string }[];
-}) {
+}>) {
   return (
     <div className="flex flex-wrap gap-2">
       {options.map((o) => (
@@ -206,7 +206,7 @@ interface ListingLike {
   km?: number;
 }
 
-function ListingCard({ listing }: { listing: ListingLike }) {
+function ListingCard({ listing }: Readonly<{ listing: ListingLike }>) {
   const palette = countryPalette[listing.countryIso2] ?? { primary: '#3B2F22', accent: '#FAF7F2' };
   const imageUrl = listing.photos[0]?.url;
   const shouldUseUnoptimizedImage = Boolean(
@@ -221,7 +221,7 @@ function ListingCard({ listing }: { listing: ListingLike }) {
         {imageUrl ? (
           <Image
             src={imageUrl}
-            alt=""
+            alt={`${listing.freeformName ?? 'Listing'} in ${listing.approximateCity}`}
             fill
             unoptimized={shouldUseUnoptimizedImage}
             sizes="(max-width: 768px) 100vw, 33vw"

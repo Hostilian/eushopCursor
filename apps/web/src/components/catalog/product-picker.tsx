@@ -557,7 +557,7 @@ function CatalogPicsGallery({
                 >
                   <Image
                     src={src}
-                    alt=""
+                    alt={item.name}
                     fill
                     sizes="(max-width: 768px) 45vw, 200px"
                     className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
@@ -758,7 +758,7 @@ function ProposeItemModal({
                 >
                   <Image
                     src={p.url}
-                    alt=""
+                    alt="Attached proposal photo"
                     fill
                     sizes="56px"
                     className="object-cover"
