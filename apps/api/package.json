@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@eushop/config": "workspace:*",
-    "@types/node": "^22.10.0",
-    "typescript": "^5.7.2"
+    "@types/node": "^25.9.3",
+    "typescript": "^6.0.3"
   }
 }
