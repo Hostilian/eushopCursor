@@ -83,6 +83,9 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: Security audit dependencies
+        run: pnpm audit --audit-level=high
+
       - name: Init Postgres extensions
         run: |
           PGPASSWORD=eushop psql -h localhost -U eushop -d eushop \
