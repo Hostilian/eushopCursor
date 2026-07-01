@@ -40,6 +40,26 @@ const nextConfig = {
   // Typed route validator can false-fail against generated `routes.d.ts` in some Next 15.5
   // builds; Link hrefs are still checked at compile time via string literals in practice.
   typedRoutes: false,
+  async rewrites() {
+    return [
+      {
+        source: '/v2',
+        destination: 'http://localhost:3002/v2',
+      },
+      {
+        source: '/v2/:path*',
+        destination: 'http://localhost:3002/v2/:path*',
+      },
+      {
+        source: '/v3',
+        destination: '/v3/index.html',
+      },
+      {
+        source: '/v3/',
+        destination: '/v3/index.html',
+      },
+    ];
+  },
   async headers() {
     const fallbackHeaders = [
       { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },

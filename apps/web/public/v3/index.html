@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EuShop — Find Your Favourite EU Specialty Foods</title>
+  <meta name="description" content="EuShop connects you with locals who have your favourite European specialty foods — chocolates, candies, liverwurst, stroopwafels and more. Browse by country, find a local source, pay a small finder's fee." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" id="nav-logo-link">
+        <span class="logo-stars">★★★</span>
+        <span class="logo-text">EuShop</span>
+        <span class="logo-stars">★★★</span>
+      </a>
+      <div class="nav-links">
+        <a href="#browse" class="nav-link" id="nav-browse">Browse</a>
+        <a href="#listings" class="nav-link" id="nav-listings">Listings</a>
+        <a href="#request" class="nav-link" id="nav-request">Requests</a>
+        <a href="#catalog" class="nav-link" id="nav-catalog">Catalog</a>
+        <a href="#my-listings" class="nav-link" id="nav-my">My Listings</a>
+        <button class="dark-mode-toggle" id="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+        <button class="nav-cta" id="nav-post-btn" onclick="openPostModal()">+ Post a Listing</button>
+      </div>
+      <button class="nav-hamburger" id="nav-hamburger" onclick="toggleMobileMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#browse" onclick="toggleMobileMenu()">Browse</a>
+      <a href="#listings" onclick="toggleMobileMenu()">Listings</a>
+      <a href="#request" onclick="toggleMobileMenu()">Requests</a>
+      <a href="#catalog" onclick="toggleMobileMenu()">Catalog</a>
+      <a href="#my-listings" onclick="toggleMobileMenu()">My Listings</a>
+      <button onclick="openPostModal(); toggleMobileMenu()">+ Post a Listing</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-stars-bg" id="hero-stars-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge" id="hero-badge">🇪🇺 Community Food Finder</div>
+      <h1 class="hero-title" id="hero-title">
+        Find the Food<br /><span class="hero-gradient">You Grew Up With</span>
+      </h1>
+      <p class="hero-subtitle" id="hero-subtitle">
+        Stroopwafels from Amsterdam. Mozartkugeln from Vienna. Túró Rudi from Budapest.<br />
+        Locals share their specialty foods — you find them, pay a small finder's fee.
+      </p>
+      <div class="hero-actions" id="hero-actions">
+        <a href="#browse" class="btn-primary" id="hero-browse-btn">Browse by Country</a>
+        <button class="btn-secondary" id="hero-post-btn" onclick="openPostModal()">Share Your Foods</button>
+      </div>
+      <div class="hero-stats" id="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="stat-countries">27</span>
+          <span class="stat-label">EU Countries</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number" id="stat-foods">200+</span>
+          <span class="stat-label">Specialty Foods</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number" id="stat-listings">—</span>
+          <span class="stat-label">Active Listings</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-flags-scroll" id="hero-flags-scroll">
+      <div class="flags-track" id="flags-track"></div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-badge">Simple Process</span>
+        <h2 class="section-title">How EuShop Works</h2>
+        <p class="section-subtitle">Three easy steps to find or share EU specialty foods</p>
+      </div>
+      <div class="steps-grid" id="steps-grid">
+        <div class="step-card" id="step-1">
+          <div class="step-icon">🔍</div>
+          <div class="step-number">01</div>
+          <h3>Browse by Country</h3>
+          <p>Pick any EU country and explore its iconic specialty foods — from chocolates and candies to cured meats and traditional sweets.</p>
+        </div>
+        <div class="step-card" id="step-2">
+          <div class="step-icon">📍</div>
+          <div class="step-number">02</div>
+          <h3>Find a Local Source</h3>
+          <p>See listings from people in your area who have the food you're looking for at home. They share their approximate location so you can connect.</p>
+        </div>
+        <div class="step-card" id="step-3">
+          <div class="step-icon">💶</div>
+          <div class="step-number">03</div>
+          <h3>Pay the Finder's Fee</h3>
+          <p>Agree on a finder's fee directly with the lister. They set their own price — you get the taste of home you've been craving.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BROWSE BY COUNTRY -->
+  <section class="browse-section" id="browse">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-badge">27 Countries</span>
+        <h2 class="section-title">Browse by Country</h2>
+        <p class="section-subtitle">Click a country to filter listings and explore its specialty foods</p>
+      </div>
+      <div class="search-bar-wrap">
+        <input type="text" id="country-search" class="country-search-input" placeholder="🔍  Search country or food name..." oninput="filterCountries(this.value)" />
+      </div>
+      <div class="countries-grid" id="countries-grid">
+        <!-- populated by JS -->
+      </div>
+      <div class="active-filter" id="active-filter" style="display:none;">
+        <span id="active-filter-label"></span>
+        <button onclick="clearCountryFilter()" id="clear-filter-btn">✕ Clear filter</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENTLY VIEWED -->
+  <div class="recently-viewed-bar" id="recently-viewed-bar" style="display:none">
+    <div class="section-container" style="padding-top:1rem;padding-bottom:1rem">
+      <div class="rv-header">
+        <span class="rv-title">🕒 Recently Viewed</span>
+        <button class="rv-clear" onclick="clearRecentlyViewed()">Clear</button>
+      </div>
+      <div class="rv-track" id="rv-track"></div>
+    </div>
+  </div>
+
+  <!-- LISTINGS -->
+  <section class="listings-section" id="listings">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-badge">Community Listings</span>
+        <h2 class="section-title">Available Now</h2>
+        <p class="section-subtitle">Browse real listings from people sharing their home country's specialty foods</p>
+      </div>
+      <div class="listings-toolbar" id="listings-toolbar">
+        <div class="filter-chips" id="filter-chips">
+          <button class="chip active" id="chip-all" onclick="filterListings('all', this)">All</button>
+          <button class="chip" id="chip-chocolate" onclick="filterListings('chocolate', this)">🍫 Chocolate</button>
+          <button class="chip" id="chip-candy" onclick="filterListings('candy', this)">🍬 Candy</button>
+          <button class="chip" id="chip-savory" onclick="filterListings('savory', this)">🥩 Savory</button>
+          <button class="chip" id="chip-biscuit" onclick="filterListings('biscuit', this)">🍪 Biscuits</button>
+          <button class="chip" id="chip-sweet" onclick="filterListings('sweet', this)">🍰 Sweet</button>
+          <button class="chip" id="chip-drink" onclick="filterListings('drink', this)">🍶 Drinks</button>
+          <button class="chip" id="chip-favs" onclick="filterListings('favs', this)">❤️ Saved</button>
+        </div>
+        <div class="listings-toolbar-right">
+          <select class="sort-select" id="sort-select" onchange="renderListings()">
+            <option value="newest">Newest first</option>
+            <option value="fee-asc">Fee: Low to High</option>
+            <option value="fee-desc">Fee: High to Low</option>
+            <option value="country">By Country</option>
+          </select>
+          <button class="btn-post-listing" id="post-listing-btn" onclick="openPostModal()">+ Post Your Listing</button>
+        </div>
+      </div>
+      <div class="listings-search-bar">
+        <input type="text" id="listings-search" class="listings-search-input" placeholder="🔍  Search listings by food, location or country..." oninput="renderListings()" />
+        <div class="fee-filter">
+          <label for="fee-max">Max fee: <strong id="fee-max-label">€50</strong></label>
+          <input type="range" id="fee-max" min="1" max="100" value="50" step="1" oninput="updateFeeLabel(); renderListings()" />
+        </div>
+      </div>
+      <div class="listings-grid" id="listings-grid">
+        <!-- populated by JS -->
+      </div>
+      <div class="empty-state" id="listings-empty" style="display:none;">
+        <div class="empty-icon">🍽️</div>
+        <h3>No listings yet for this filter</h3>
+        <p>Be the first to share something from your home country!</p>
+        <button class="btn-primary" onclick="openPostModal()">Post a Listing</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- REQUEST A FOOD -->
+  <section class="request-section" id="request">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-badge">Can't find it?</span>
+        <h2 class="section-title">Request a Food</h2>
+        <p class="section-subtitle">Post what you're looking for — locals who have it will find you</p>
+      </div>
+      <div class="request-split">
+        <div class="request-form-side">
+          <form class="request-form" id="request-form" onsubmit="submitRequest(event)">
+            <div class="form-group">
+              <label for="req-food">What food are you looking for? *</label>
+              <input type="text" id="req-food" placeholder="e.g. Ptasie Mleczko, Mozartkugeln, Tayto…" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="req-country">Country of origin *</label>
+                <select id="req-country" required>
+                  <option value="">Any EU country…</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="req-location">Your location *</label>
+                <input type="text" id="req-location" placeholder="e.g. Hackney, London" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="req-contact">Your contact *</label>
+              <input type="text" id="req-contact" placeholder="email or WhatsApp" required />
+            </div>
+            <div class="form-group">
+              <label for="req-note">Extra notes</label>
+              <textarea id="req-note" placeholder="Any details — specific brand, amount needed, willing to pay up to…" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn-submit" id="req-submit-btn">📣 Post My Request</button>
+          </form>
+        </div>
+        <div class="request-list-side">
+          <h3 class="request-list-title">Open Requests <span id="req-count">0</span></h3>
+          <div class="requests-list" id="requests-list">
+            <div class="req-empty">No open requests yet. Be the first!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MY LISTINGS -->
+  <section class="my-listings-section" id="my-listings">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-badge">Your Listings</span>
+        <h2 class="section-title">My Listings</h2>
+        <p class="section-subtitle">Manage everything you've posted</p>
+      </div>
+      <div class="my-listings-grid" id="my-listings-grid">
+        <div class="my-empty-state" id="my-listings-empty">
+          <div class="empty-icon">🏠</div>
+          <p>You haven't posted any listings yet.</p>
+          <button class="btn-primary" onclick="openPostModal()">Post Your First Listing</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOD CATALOG -->
+  <section class="catalog-section" id="catalog">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-badge">The Full Catalog</span>
+        <h2 class="section-title">EU Specialty Foods A–Z</h2>
+        <p class="section-subtitle">A curated database of iconic niche foods from every EU country</p>
+      </div>
+      <div class="catalog-search-wrap">
+        <input type="text" id="catalog-search" class="country-search-input" placeholder="🔍  Search foods, countries, or types..." oninput="filterCatalog(this.value)" />
+      </div>
+      <div class="catalog-grid" id="catalog-grid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- POST MODAL -->
+  <div class="modal-overlay" id="post-modal" onclick="closePostModalOutside(event)">
+    <div class="modal-box" id="modal-box">
+      <button class="modal-close" id="modal-close-btn" onclick="closePostModal()">✕</button>
+      <div class="modal-header">
+        <div class="modal-icon">🏠</div>
+        <h2>Share Your Food</h2>
+        <p>List a specialty food you have at home and set your finder's fee</p>
+      </div>
+      <form class="post-form" id="post-form" onsubmit="submitListing(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-name">Your Name / Nickname *</label>
+            <input type="text" id="form-name" placeholder="e.g. Marta from Kraków" required />
+          </div>
+          <div class="form-group">
+            <label for="form-country">Your Home Country *</label>
+            <select id="form-country" required onchange="populateFoodSuggestions()">
+              <option value="">Select country…</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="form-food">Food Item *</label>
+          <input type="text" id="form-food" placeholder="e.g. Wedel Dark Chocolate, Ptasie Mleczko…" required list="food-suggestions" />
+          <datalist id="food-suggestions"></datalist>
+        </div>
+        <div class="form-group">
+          <label>Pick an Emoji Icon</label>
+          <div class="emoji-picker" id="emoji-picker"></div>
+          <input type="hidden" id="form-emoji" value="🍫" />
+        </div>
+        <div class="form-group">
+          <label for="form-description">Description</label>
+          <textarea id="form-description" placeholder="Tell buyers more — how much you have, where you got it, why it's special…" rows="3"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-location">Approximate Location *</label>
+            <input type="text" id="form-location" placeholder="e.g. Hackney, London / Wedding, Berlin" required />
+          </div>
+          <div class="form-group">
+            <label for="form-fee">Finder's Fee (€) *</label>
+            <input type="number" id="form-fee" placeholder="e.g. 5" min="1" max="500" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-contact">Contact (email or WhatsApp) *</label>
+            <input type="text" id="form-contact" placeholder="your@email.com or +44 7700…" required />
+          </div>
+          <div class="form-group">
+            <label for="form-category">Category *</label>
+            <select id="form-category" required>
+              <option value="">Select…</option>
+              <option value="chocolate">🍫 Chocolate</option>
+              <option value="candy">🍬 Candy</option>
+              <option value="biscuit">🍪 Biscuits & Wafers</option>
+              <option value="savory">🥩 Savory & Cured</option>
+              <option value="sweet">🍰 Sweet & Pastry</option>
+              <option value="drink">🍶 Drinks & Liqueurs</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-qty">Quantity available</label>
+            <input type="number" id="form-qty" placeholder="e.g. 3" min="1" value="1" />
+          </div>
+          <div class="form-group">
+            <label>Delivery / Collection</label>
+            <div class="delivery-toggle" id="delivery-toggle">
+              <button type="button" class="dtoggle active" id="dtoggle-collection" onclick="setDelivery('collection')">📦 Collection</button>
+              <button type="button" class="dtoggle" id="dtoggle-delivery" onclick="setDelivery('delivery')">🚗 Deliver</button>
+              <button type="button" class="dtoggle" id="dtoggle-both" onclick="setDelivery('both')">✅ Both</button>
+            </div>
+            <input type="hidden" id="form-delivery" value="collection" />
+          </div>
+        </div>
+        <button type="submit" class="btn-submit" id="form-submit-btn">✓ Post My Listing</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DETAIL MODAL -->
+  <div class="modal-overlay" id="detail-modal" onclick="closeDetailModalOutside(event)">
+    <div class="modal-box detail-modal-box" id="detail-modal-box">
+      <button class="modal-close" id="detail-close-btn" onclick="closeDetailModal()">✕</button>
+      <div id="detail-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- BACK TO TOP -->
+  <button class="back-to-top" id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+  <!-- COOKIE BANNER -->
+  <div class="cookie-banner" id="cookie-banner">
+    <span class="cookie-icon">🍪</span>
+    <p>We use cookies — ironically, the digital kind, not the Dutch <em>pepernoten</em> kind. <strong>This is a EU app after all.</strong></p>
+    <button class="cookie-accept" id="cookie-accept" onclick="acceptCookies()">Accept all cookies 🍪</button>
+    <button class="cookie-decline" id="cookie-decline" onclick="acceptCookies()">Just the pepernoten</button>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section" id="testimonials">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-badge">Community Stories</span>
+        <h2 class="section-title">People Who Found Their Taste of Home</h2>
+        <p class="section-subtitle">Real stories from EuShop members across Europe</p>
+      </div>
+      <div class="testimonials-grid" id="testimonials-grid"></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-badge">Questions</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+      </div>
+      <div class="faq-list" id="faq-list"></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="logo-stars">★★★</span>
+        <span class="logo-text">EuShop</span>
+        <span class="logo-stars">★★★</span>
+      </div>
+      <p class="footer-tagline">Connecting EU food lovers across borders</p>
+      <div class="footer-links">
+        <a href="#browse">Browse</a>
+        <a href="#listings">Listings</a>
+        <a href="#request">Requests</a>
+        <a href="#catalog">Catalog</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="footer-eu-stars" id="footer-eu-stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+      <p class="footer-copy">© 2025 EuShop · Community-powered · No commercial affiliation with the EU 🇪🇺</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

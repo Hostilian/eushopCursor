@@ -80,6 +80,26 @@ export function Nav() {
               {t(l.key)}
             </Link>
           ))}
+          <div className="flex items-center gap-1 border-l pl-4 border-ink/10">
+            <Link
+              href="/"
+              className="text-[10px] font-bold tracking-wider uppercase border border-ink bg-ink text-paper rounded px-1.5 py-0.5"
+            >
+              V1
+            </Link>
+            <Link
+              href="/v2"
+              className="text-[10px] font-bold tracking-wider uppercase border border-ink/20 hover:border-ink rounded px-1.5 py-0.5 text-ash hover:text-ink transition-all"
+            >
+              V2
+            </Link>
+            <Link
+              href="/v3"
+              className="text-[10px] font-bold tracking-wider uppercase border border-ink/20 hover:border-ink rounded px-1.5 py-0.5 text-ash hover:text-ink transition-all"
+            >
+              V3
+            </Link>
+          </div>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -148,6 +168,30 @@ export function Nav() {
               {t(l.key)}
             </Link>
           ))}
+          <div className="flex flex-wrap items-center gap-2 px-3 py-3 border-t border-ink/10 mt-2">
+            <span className="text-xs text-ash tracking-widest uppercase">Version:</span>
+            <Link
+              href="/"
+              className="text-xs font-bold tracking-wider uppercase border border-ink bg-ink text-paper rounded px-2 py-0.5"
+              onClick={() => setOpen(false)}
+            >
+              V1
+            </Link>
+            <Link
+              href="/v2"
+              className="text-xs font-bold tracking-wider uppercase border border-ink/20 hover:border-ink rounded px-2 py-0.5 text-ash hover:text-ink transition-all"
+              onClick={() => setOpen(false)}
+            >
+              V2
+            </Link>
+            <Link
+              href="/v3"
+              className="text-xs font-bold tracking-wider uppercase border border-ink/20 hover:border-ink rounded px-2 py-0.5 text-ash hover:text-ink transition-all"
+              onClick={() => setOpen(false)}
+            >
+              V3
+            </Link>
+          </div>
           <div className="border-ink/10 mt-4 flex flex-col gap-2 border-t pt-4">
             <Button asChild variant="outline" className="w-full justify-center">
               <Link href="/sign-in" onClick={() => setOpen(false)}>

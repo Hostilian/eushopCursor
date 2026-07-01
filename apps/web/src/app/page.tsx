@@ -18,10 +18,7 @@ import { isDemoModeEnabled } from '../lib/demo-mode';
 import { showcaseListings } from '../lib/showcase';
 import { COUNTRIES } from '@eushop/catalog';
 
-const MobilePreview = dynamic(
-  () => import('../components/marketing/mobile-preview').then((module) => module.MobilePreview),
-  { ssr: false },
-);
+import { MobilePreview } from '../components/marketing/mobile-preview';
 
 function showcaseCards(): LiveListingCard[] {
   return showcaseListings().map((s) => ({
