@@ -39,7 +39,7 @@
     "react-dom": "19.2.5",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.6.0",
-    "zod": "^3.23.8"
+    "zod": "^4.4.3"
   },
   "optionalDependencies": {
     "@sentry/nextjs": "^8.45.0",
