@@ -52,11 +52,11 @@ const nextConfig = {
       },
       {
         source: '/v3',
-        destination: '/v3/index.html',
+        destination: 'http://localhost:8085',
       },
       {
-        source: '/v3/',
-        destination: '/v3/index.html',
+        source: '/v3/:path*',
+        destination: 'http://localhost:8085/:path*',
       },
     ];
   },
