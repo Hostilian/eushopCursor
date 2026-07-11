@@ -18,6 +18,6 @@
   "devDependencies": {
     "@eushop/config": "workspace:*",
     "@types/ngeohash": "^0.6.8",
-    "typescript": "^5.7.2"
+    "typescript": "^7.0.2"
   }
 }
